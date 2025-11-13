@@ -4,7 +4,7 @@ First off, thank you for considering contributing to Engineering Log! It's peopl
 
 ## Where do I go from here?
 
-If you've noticed a bug or have a feature request, [make one](https://github.com/alextorresruiz/stdlib/issues/new)! It's generally best if you get confirmation of your bug or approval for your feature request this way before starting to code.
+If you've noticed a bug or have a feature request, [make one](https://github.com/Excoriate/engineering-log/issues/new)! It's generally best if you get confirmation of your bug or approval for your feature request this way before starting to code.
 
 ### Fork & create a branch
 
@@ -27,10 +27,10 @@ At this point, you should switch back to your main branch and make sure it's up 
 ```sh
 git remote add upstream git@github.com:Excoriate/engineering-log.git
 git checkout main
-git pull upstream master
+git pull upstream main
 ```
 
-Then update your feature branch from your local copy of master, and push it!
+Then update your feature branch from your local copy of main, and push it!
 
 ```sh
 git checkout 38-add-awesome-new-feature

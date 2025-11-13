@@ -1,15 +1,15 @@
 ---
-name: "🐛 Bug Report for Repository Template"
-description: "Report a bug or issue with the repository template or its components"
-title: "[BUG] Engineering Log: Brief description"
+name: "🐛 Bug Report"
+description: "Report a bug or issue with Engineering Log or its components"
+title: "[BUG] Brief description"
 labels: [bug, needs-triage]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for reporting a bug with our repository template! Please fill out the sections below to help us understand and fix the issue.
+        Thank you for reporting a bug with Engineering Log! Please fill out the sections below to help us understand and fix the issue.
 
-        **Note**: This template is designed for AI-assisted development workflows. Please include context about your development environment and AI tools if relevant.
+        **Note**: This repository focuses on engineering analysis and documentation. Please include context about your environment and any relevant tools.
 
   - type: textarea
     id: description
@@ -54,17 +54,16 @@ body:
   - type: dropdown
     id: component
     attributes:
-      label: 📦 Template Component
-      description: Which part of the repository template is affected?
+      label: 📦 Repository Component
+      description: Which part of the repository is affected?
       options:
-        - "Documentation Content"
+        - "Documentation Content (docs/)"
+        - "Cursor Rules (.cursor/rules/)"
         - "GitHub Workflows"
-        - "AI Integration (.claude, .cursor)"
-        - "Context Engineering"
-        - "Issue Templates"
+        - "Issue/PR Templates"
         - "Repository Configuration"
-        - "Automation Scripts"
-        - "Development Workflow"
+        - "Markdown Formatting"
+        - "Analysis Protocols"
         - "Other (please specify)"
     validations:
       required: true
@@ -121,7 +120,7 @@ body:
           required: true
         - label: I have included all necessary information above
           required: true
-        - label: I have tested this with the latest version of the template
+        - label: I have tested this with the latest version of the repository
           required: true
         - label: I am willing to help test the fix once it's available
           required: false

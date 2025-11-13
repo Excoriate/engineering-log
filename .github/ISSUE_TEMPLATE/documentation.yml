@@ -1,15 +1,15 @@
 ---
-name: "📚 Documentation Issue for Repository Template"
-description: "Report an issue with repository template documentation or request documentation improvements"
-title: "[DOCS] Engineering Log: Brief description"
+name: "📚 Documentation Issue"
+description: "Report an issue with Engineering Log documentation or request documentation improvements"
+title: "[DOCS] Brief description"
 labels: [documentation, needs-triage]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for helping improve our repository template documentation! Please fill out the sections below to help us understand the documentation issue.
+        Thank you for helping improve Engineering Log documentation! Please fill out the sections below to help us understand the documentation issue.
 
-        **Note**: This includes documentation for AI integration, context engineering, and development workflows.
+        **Note**: This includes documentation for engineering analysis, troubleshooting logs, and technical documentation standards.
 
   - type: dropdown
     id: issue_type
@@ -44,14 +44,13 @@ body:
       description: Which documentation section is affected?
       options:
         - "README.md"
-        - "Context Engineering Documentation"
-        - "AI Integration Guides"
+        - "How-To Guides (docs/01_how_to/)"
+        - "Cursor Rules Documentation"
         - "GitHub Workflows Documentation"
         - "Issue Templates Documentation"
-        - "Configuration Documentation"
-        - "Development Setup"
-        - "API/Usage Examples"
-        - "Troubleshooting"
+        - "Repository Configuration"
+        - "Analysis Protocols"
+        - "Visual Aids Documentation"
         - "Contributing Guidelines"
         - "Other (please specify)"
     validations:
@@ -112,7 +111,7 @@ body:
         - "AI Tool Users (Claude, Cursor, etc.)"
         - "Repository Administrators"
         - "Contributors/Maintainers"
-        - "Template Users"
+        - "Repository Users"
         - "All Users"
 
   - type: textarea

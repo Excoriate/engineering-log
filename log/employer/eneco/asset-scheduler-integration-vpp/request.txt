@@ -1,0 +1,99 @@
+Hi platform!
+We (apollo asset scheduling) want to use the keyvault of VPP that contains the connection string to service bus as we want to connect with it. How should we best approach this, can we use this vault to connect to SB and how can we use the vault (presenting current standards we might want to apply)?
+15 replies
+
+
+Roel van de Grint
+  Tuesday at 12:49 PM
+@alex.torres jumping in because this was an ongoing discussion.
+@Alex Shmyga is this now all ticked off to be okay?
+:+1::skin-tone-2:
+1
+
+12:53
+@martijn.meijer let's make sure we're all aligned before we work on this.
+If this moves forward, we'll decide what the correct setup will be. Probably something like:
+If we can do RBAC and Key based auth at the same time, we use rbac. Then the connectionstring contains no secrets and you can commit it to your configuration.
+Otherwise:
+A new connection(string) for asset scheduling with scoped access to the required topics.
+That connectionstring then goes into the asset scheduling keyvault, which your services will have access to.
+:+1:
+1
+
+12:54
+@thomas.obrien @Ricardo Duncan FYI.
+
+
+Martijn Meijer
+  Tuesday at 12:56 PM
+ah alrighty, hopelefully RBAC works, we then need to use "azure-identity" I suppose?
+
+
+Roel van de Grint
+  Tuesday at 12:57 PM
+Yes, be aware there are more changes needed if this moves forward. Data plane of Servicebus is not managed through terraform in the current situation, which makes things brittle.
+
+
+Martijn Meijer
+  Tuesday at 12:59 PM
+hmm, ok so you wouldnt be able to assign access on specific topics or something?
+
+
+Roel van de Grint
+  Tuesday at 1:02 PM
+Not without assuming they exist. But before we move forward let's confirm this is all OK. (edited)
+:+1:
+1
+
+
+
+Alex Shmyga
+:face_with_thermometer:  Tuesday at 1:57 PM
+@Alex Shmyga is this now all ticked off to be okay?
+Conceptually yes, but details like connectivity to ServiceBus  (RBAC) and etc.. should be addressed in more details in this ADR or another more technical
+
+
+Martijn Meijer
+  Tuesday at 3:53 PM
+is there an ADR?
+
+
+Roel van de Grint
+  Yesterday at 8:31 AM
+@martijn.meijer Currently, only your ADR exists. Pull request 148103: AS001 - Integrating Asset Scheduling with VPP - Repos We either need to add a bunch of information to that wrt authentication/authorization to topics on the bus.
+But since this will impact the other producers and consumers of the servicebus as well, I think we might want to write up a new one. I don't have time to do that right now. I'll check in with @alex.torres who is ops-of-the-week right now and see if he can spend time on it.
+
+
+Ricardo Duncan
+  Yesterday at 8:58 AM
+Thanks all, to confirm: these topics are owned by asset planning and asset scheduling should indeed only have access to allowed topics. The service bus consumer will be implemented in Python without any libraries that will auto-create topology/ topics. However there may be topics internal to asset scheduling later that will be owned by asset scheduling.
+
+
+Martijn Meijer
+  Yesterday at 9:51 AM
+True, we are fine with not being able to create topics. Being able to create subscriptions would be handy but not required either
+
+
+Martijn Meijer
+  Today at 10:10 AM
+Hi guys, can we have a timeline please on when we conclude on this decision? :pray:
+
+
+Martijn Meijer
+  Today at 12:55 PM
+@alex.torres is it possible you could see what we are looking at here?
+
+
+Alex Torres
+  Today at 1:02 PM
+@martijn.meijer - let me get the necessary context, and I’ll be back with you today. Just landing into this.
+:pray:
+1
+
+
+
+
+
+
+
+

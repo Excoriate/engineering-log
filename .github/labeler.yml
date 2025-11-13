@@ -11,23 +11,18 @@ documentation:
   - changed-files:
       - any-glob-to-any-file: ['README.md', 'docs/**/*.md', 'docs/**/*', '*.md']
 
-# Label for source code changes
-source:
-  - changed-files:
-      - any-glob-to-any-file: ['src/**/*.ts', 'src/**/*.js', 'src/**/*.json', 'src/**/*.md', 'main.ts']
-
 # Label for configuration changes / patches
 patch:
   - changed-files:
-      - any-glob-to-any-file: ['LICENSE', 'justfile', 'deno.json', 'deno.lock', '.github/labeler.yml', '.github/settings.yml', '.github/dependabot.yml', '.github/ISSUE_TEMPLATE/*', '.github/CODEOWNERS', '.github/*.yml', '.gitignore', '.gitattributes']
+      - any-glob-to-any-file: ['LICENSE', '.github/labeler.yml', '.github/settings.yml', '.github/dependabot.yml', '.github/ISSUE_TEMPLATE/*', '.github/CODEOWNERS', '.github/*.yml', '.gitignore', '.gitattributes', '.editorconfig']
 
-scripts:
+cursor-rules:
   - changed-files:
-      - any-glob-to-any-file: ['scripts/**/*']
+      - any-glob-to-any-file: ['.cursor/rules/**/*']
 
 config:
   - changed-files:
-      - any-glob-to-any-file: ['.env', '.env.example', 'deno.json', 'deno.lock', 'biome.json', '.nvmrc', '.pre-commit-config.yaml', '.shellcheckrc', '.gitattributes', '.gitignore', '.vscode/**/*']
+      - any-glob-to-any-file: ['.editorconfig', '.gitattributes', '.gitignore', '.vscode/**/*', '.cursor/**/*']
 
 meta:
   - changed-files:

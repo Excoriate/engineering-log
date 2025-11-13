@@ -1,15 +1,15 @@
 ---
-name: "🚀 Feature Request for Repository Template"
-description: "Suggest a new feature or enhancement for the repository template"
-title: "[FEATURE] Engineering Log: Brief description"
+name: "🚀 Feature Request"
+description: "Suggest a new feature or enhancement for Engineering Log"
+title: "[FEATURE] Brief description"
 labels: [enhancement, needs-triage]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for suggesting a feature for our repository template! Please fill out the sections below to help us understand your proposal.
+        Thank you for suggesting a feature for Engineering Log! Please fill out the sections below to help us understand your proposal.
 
-        **Note**: This template is designed for AI-assisted development workflows. Consider how your feature might enhance AI integration or developer productivity.
+        **Note**: This repository focuses on engineering analysis, troubleshooting logs, and technical documentation. Consider how your feature might enhance documentation, analysis workflows, or knowledge management.
 
   - type: textarea
     id: summary
@@ -48,17 +48,17 @@ body:
   - type: dropdown
     id: component
     attributes:
-      label: 📦 Template Component
-      description: Which part of the repository template should this feature enhance?
+      label: 📦 Repository Component
+      description: Which part of the repository should this feature enhance?
       options:
-        - "Documentation Content"
+        - "Documentation Content (docs/)"
+        - "Cursor Rules (.cursor/rules/)"
         - "GitHub Workflows"
-        - "AI Integration (.claude, .cursor)"
-        - "Context Engineering"
-        - "Issue Templates"
+        - "Issue/PR Templates"
         - "Repository Configuration"
-        - "Automation Scripts"
-        - "Development Workflow"
+        - "Analysis Protocols"
+        - "Visual Aids/Diagrams"
+        - "Scratchpad Organization"
         - "New Component"
         - "Other (please specify)"
     validations:
@@ -143,5 +143,5 @@ body:
           required: true
         - label: I have provided clear use cases and benefits
           required: true
-        - label: I have considered how this fits with the template's AI-assisted development focus
+        - label: I have considered how this fits with the repository's purpose (engineering logs and analysis)
           required: true
