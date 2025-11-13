@@ -1,0 +1,275 @@
+---
+title: "Markdown Formatting Standards (DEPRECATED)"
+description: "DEPRECATED: Use atomic rules: markdown-code-block-language.md, markdown-header-hierarchy.md, markdown-spacing.md, markdown-cross-references.md instead. This rule violated Single Responsibility Principle."
+globs: ["*.md", "*.markdown"]
+alwaysApply: false
+status: "deprecated"
+replacement_rules: ["markdown-code-block-language.md", "markdown-header-hierarchy.md", "markdown-spacing.md", "markdown-cross-references.md"]
+---
+
+# Documentation Markdown Formatting Standards (DEPRECATED)
+
+## ⚠️ DEPRECATION NOTICE
+
+**This rule is DEPRECATED** as of 2025-01-09 and has been replaced by four atomic, focused rules following Unix Philosophy principles:
+
+**Use these atomic rules instead:**
+- **[markdown-code-block-language.md](./markdown-code-block-language.md)** - Code block language specification only
+- **[markdown-header-hierarchy.md](./markdown-header-hierarchy.md)** - Header formatting and hierarchy only
+- **[markdown-spacing.md](./markdown-spacing.md)** - Spacing around markdown elements only
+- **[markdown-cross-references.md](./markdown-cross-references.md)** - Cross-document linking standards only
+
+## Reason for Deprecation
+
+This rule violated **Single Responsibility Principle** by covering FOUR distinct concerns:
+1. Code block language specification (separate formatting domain)
+2. Header hierarchy and formatting (separate structural domain)
+3. Spacing requirements (separate layout domain)
+4. Cross-document linking standards (separate referencing domain)
+
+**Unix Philosophy Violation:**
+- ❌ Did not do ONE thing well (did FOUR things)
+- ❌ Not composable (monolithic validation spanning unrelated concerns)
+- ❌ Not pipeable (mixed concerns prevent sequential application and clear pipeline)
+
+## Migration to Atomic Rules
+
+### Before (Deprecated - Monolithic):
+` ``text
+Single Rule: markdown-formatting.md
+├─ Validates code block languages
+├─ Validates header hierarchy
+├─ Validates spacing
+├─ Validates cross-document links
+└─ Mixed validation logic across unrelated domains
+` ``
+
+### After (Unix-Style - Atomic):
+` ``text
+Rule 1: markdown-code-block-language.md
+├─ Validates ONLY code block language specification
+├─ Focused validation logic
+└─ Composable with spacing rule
+
+Rule 2: markdown-header-hierarchy.md
+├─ Validates ONLY header formatting and hierarchy
+├─ Focused validation logic
+└─ Composable with spacing rule
+
+Rule 3: markdown-spacing.md
+├─ Validates ONLY spacing around elements
+├─ Focused validation logic
+└─ Composable with all formatting rules
+
+Rule 4: markdown-cross-references.md
+├─ Validates ONLY cross-document linking
+├─ Focused validation logic
+└─ Composable with file naming rule
+` ``
+
+## Benefits of Atomic Rules
+
+1. **Single Responsibility**: Each rule does ONE thing well
+2. **Independent Application**: Can apply code block validation without spacing checks
+3. **Better Error Messages**: Clearer violation reporting per domain
+4. **Easier Maintenance**: Update one rule without affecting others
+5. **Composability**: Rules work together through cross-references
+6. **Pipeability**: Clear pipeline from headers → spacing → code blocks → links
+
+## Action Required
+
+**If you relied on this rule:**
+1. The atomic replacement rules are automatically active
+2. No configuration changes needed
+3. Enhanced validation functionality available
+4. Better error messages and suggestions
+
+**No Breaking Changes:**
+- All validation still occurs
+- Enhanced with better separation of concerns
+- Improved user experience with focused rules
+
+---
+
+**For current formatting standards, see the replacement rules listed above.**
+
+## Original Description (Historical Reference)
+
+This rule enforced comprehensive markdown formatting standards to ensure consistent, high-quality documentation across all markdown files. The rule combined industry-standard markdownlint best practices with specific CLAUDE.md compliance guidelines to create maintainable, readable, and properly structured documentation.
+
+**Primary Focus Areas (DEPRECATED - now split across 4 rules):**
+- Code block language specification requirements → markdown-code-block-language.md
+- Header hierarchy and formatting standards → markdown-header-hierarchy.md
+- Spacing and indentation consistency → markdown-spacing.md
+- Cross-document linking standards → markdown-cross-references.md
+- Integration with existing CLAUDE.md style guidelines → All 4 replacement rules
+
+## Rule
+
+**MANDATORY FORMATTING REQUIREMENTS:**
+
+1. **Code Block Language Specification**
+   - Replace generic ` `` with ` ``markdown or specific language identifier
+   - Always specify language for fenced code blocks: ` ``javascript, ` ``bash, ` ``python, etc.
+   - Use ` ``markdown for markdown content examples
+   - Use ` ``text for plain text examples
+
+2. **Header Hierarchy Standards**
+   - Use proper markdown headers (#, ##, ###) following logical semantic hierarchy
+   - Headers MUST start at line beginning with no leading whitespace
+   - Follow consistent header level progression (don't skip levels)
+
+3. **Header Formatting Compliance**
+   - NEVER use **bold** or *italic* formatting for headers
+   - Headers must use hash symbols (#) not underline formatting
+   - Single space required between hash symbols and header text
+
+4. **Spacing Requirements**
+   - Include blank line between headers and content
+   - Include blank line before code blocks
+   - Include blank line after code blocks (except when ending file)
+   - No multiple consecutive blank lines (maximum one blank line)
+
+5. **Code Block Indentation**
+   - Ensure correct indentation when code blocks are nested in lists
+   - Maintain consistent indentation levels
+   - Use spaces for indentation, not tabs
+
+6. **List and Code Block Integration**
+   - Proper spacing around fenced code blocks within lists
+   - Maintain list context when including code examples
+   - Preserve list item continuation for multi-paragraph items
+
+7. **Cross-Document Linking**
+   - When referencing other documents, you MUST use proper, relative markdown links.
+   - Do not reference documents or sections by name alone.
+   - For referencing specific sections, use anchor links (e.g., `[Section Title](./path/to/file.md#section-title)`).
+
+## Implementation
+
+**IDE Integration:**
+
+- Automatically suggests language identifiers when typing ` ``
+- Highlights violations of header formatting standards
+- Provides real-time feedback on spacing requirements
+- Auto-corrects common formatting inconsistencies
+- Integrates with markdown preview for immediate validation
+
+## Examples
+
+### ✅ Correct Code Block Formatting
+
+` ``markdown
+# Proper Header
+
+This is content with proper spacing.
+
+` ``javascript
+function example() {
+  console.log("Language specified correctly");
+}
+` ``
+
+More content here.
+
+## Subheader
+
+- List item
+
+  ` ``bash
+  echo "Properly indented in list"
+  ` ``
+
+- Another item
+` ``
+
+### ❌ Incorrect Code Block Formatting
+
+` ``markdown
+#No space after hash
+
+**This should be a header**
+
+Content without spacing.
+` ``
+function badExample() {
+  console.log("No language specified");
+}
+` ``
+More content immediately after.
+
+###Skipped header level
+
+- List item
+` ``bash
+echo "Improper indentation"
+` ``
+` ``
+
+### File Structure Requirements
+
+` ``
+project/
+├── docs/
+│   ├── README.md          ✅ Follows standards
+│   ├── api-guide.md       ✅ Language-specified blocks
+│   └── old-docs.md        ❌ Needs formatting update
+├── .cursor/
+│   └── rules/
+│       └── docs-markdown-formatting.mdc
+└── CLAUDE.md              ✅ Source of standards
+` ``
+
+### Common Violations and Fixes
+
+**Generic Code Blocks:**
+` ``markdown
+❌ ` ``
+   code without language
+   ` ``
+
+✅ ` ``text
+   code with language specified
+   ` ``
+` ``
+
+**Header Violations:**
+` ``markdown
+❌ **Important Section**
+❌   # Indented Header
+❌ ###Skipped Level
+
+✅ # Important Section
+✅ ## Proper Subsection
+✅ ### Logical Progression
+` ``
+
+**Spacing Issues:**
+` ``markdown
+❌ # Header
+Content immediately following
+
+❌ Text before code
+` ``python
+code_without_spacing()
+` ``
+
+✅ # Header
+
+Content with proper spacing
+
+` ``python
+code_with_proper_spacing()
+` ``
+` ``
+
+**Cross-Document Linking:**
+` ``markdown
+❌ See the "Setup" section in the contribution guide.
+
+❌ Refer to CONTRIBUTING.md for more details.
+
+✅ See the [Setup section](./CONTRIBUTING.md#setup) for more details.
+
+✅ For more information, refer to the [contribution guide](./CONTRIBUTING.md).
+` ``

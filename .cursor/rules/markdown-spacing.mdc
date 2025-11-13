@@ -1,0 +1,148 @@
+---
+title: "Markdown Spacing Standards"
+description: "Enforce consistent spacing around headers, code blocks, lists, and paragraphs in markdown files"
+globs: ["**/*.md", "**/*.markdown"]
+alwaysApply: true
+---
+
+# Markdown Spacing Standards
+
+## Description
+
+This rule enforces consistent spacing conventions around markdown elements including headers, code blocks, lists, and paragraphs. Proper spacing improves readability and ensures consistent rendering across markdown processors.
+
+**Primary Focus**: Spacing consistency and blank line requirements
+
+## Rule
+
+**MANDATORY REQUIREMENTS:**
+
+1. **Header Spacing**
+   - REQUIRED: Blank line after headers before content
+   - REQUIRED: Blank line before headers (except first header in file)
+   - Example: Header → blank line → content
+
+2. **Code Block Spacing**
+   - REQUIRED: Blank line before code blocks
+   - REQUIRED: Blank line after code blocks (except at end of file)
+   - Exception: Code blocks within list items follow list indentation rules
+
+3. **Paragraph Spacing**
+   - PROHIBITED: Multiple consecutive blank lines (max 1 blank line)
+   - REQUIRED: Blank lines between paragraphs
+   - No trailing whitespace at end of lines
+
+4. **List Spacing**
+   - REQUIRED: Blank line before list starts
+   - REQUIRED: Blank line after list ends
+   - OPTIONAL: Blank lines between list items (for multi-paragraph items)
+
+5. **Indentation**
+   - REQUIRED: Use spaces (not tabs) for indentation
+   - REQUIRED: Consistent indentation levels (2 or 4 spaces)
+   - Code blocks in lists: Indent to align with list item content
+
+## Implementation
+
+- Real-time spacing validation during editing
+- Auto-formatting on save (optional)
+- Visual indicators for spacing violations
+- Batch formatting tool for entire files
+
+## Benefits
+
+1. **Readability**: Consistent spacing improves document scan ability
+2. **Rendering**: Prevents markdown processor rendering issues
+3. **Git Diffs**: Clean spacing reduces noise in version control
+4. **Consistency**: Uniform appearance across all documentation
+
+## Examples
+
+### ✅ Correct Spacing
+
+` ``markdown
+# Header
+
+This paragraph has proper spacing.
+
+## Subheader
+
+Content with blank line before.
+
+` ``bash
+echo "Code block with proper spacing"
+` ``
+
+Another paragraph after code block.
+
+- List item 1
+- List item 2
+
+Content after list.
+` ``
+
+### ❌ Incorrect Spacing
+
+` ``markdown
+# Header
+Content immediately after (NO BLANK LINE)
+
+## Subheader
+
+
+Multiple blank lines above (PROHIBITED)
+
+` ``bash
+echo "No blank line before"
+` ``
+Content immediately after code block
+
+- List with no blank line before
+- List item
+Content immediately after list (NO BLANK LINE)
+` ``
+
+### Code Blocks in Lists (Special Case)
+
+` ``markdown
+✅ CORRECT:
+- List item
+
+  ` ``bash
+  echo "Properly indented code block"
+  ` ``
+
+- Next list item
+
+❌ INCORRECT:
+- List item
+` ``bash
+echo "Code block not indented"
+` ``
+- Next list item
+` ``
+
+## Related Rules
+
+- [markdown-header-hierarchy.md](./markdown-header-hierarchy.md) - Header structure
+- [markdown-code-block-language.md](./markdown-code-block-language.md) - Code block formatting
+- [markdown-formatting.md](./markdown-formatting.md) - Original combined rule (DEPRECATED)
+
+## Pipeline Position
+
+**Prerequisites**:
+- [markdown-header-hierarchy.md](./markdown-header-hierarchy.md) - Headers must exist before spacing applied
+- [markdown-code-block-language.md](./markdown-code-block-language.md) - Code blocks must exist before spacing applied
+
+**Input Assumptions**:
+- Markdown file has headers and content
+- Code blocks and lists may be present
+
+**Output Guarantees**:
+- Blank lines before/after headers
+- Blank lines before/after code blocks
+- No multiple consecutive blank lines
+- Consistent spacing throughout document
+
+**Next Steps**:
+- [markdown-cross-references.md](./markdown-cross-references.md) - Add cross-document links

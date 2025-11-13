@@ -1,0 +1,347 @@
+---
+title: "Mermaid Diagram Conventions"
+description: "Standardized guide for creating and using Mermaid diagrams in documentation, including flowcharts, sequence diagrams, state diagrams, and architecture visualizations"
+globs: ["**/*.md", "**/*.markdown"]
+alwaysApply: true
+---
+
+# Mermaid Diagram Conventions
+
+## Description
+
+This rule provides a standardized guide for creating and using Mermaid diagrams within project documentation. Consistent and clear diagrams are crucial for effective communication of complex systems and workflows. All technical documentation requiring visual models should use the Mermaid syntax specified here.
+
+**Primary Focus**: Standardized diagram creation for technical visualization
+
+## Rule
+
+**MANDATORY DIAGRAM REQUIREMENTS:**
+
+1. **Diagram Type Selection**
+   - Use appropriate diagram type for the intended purpose
+   - Flowcharts for workflows, processes, or algorithms
+   - Sequence diagrams for component interactions over time
+   - State diagrams for object behavior and state transitions
+   - Architecture diagrams for system component visualization
+
+2. **Mermaid Code Block Format**
+   - MUST use ` ```mermaid ` code block identifier
+   - PROHIBITED: Generic code blocks without mermaid identifier
+   - Always include diagram content within mermaid code blocks
+
+3. **Diagram Naming and Clarity**
+   - Use descriptive titles where supported (journey, gantt, pie charts)
+   - Label nodes and components clearly
+   - Use consistent naming conventions across diagrams
+
+4. **Theme Compatibility**
+   - All diagrams support light and dark themes automatically
+   - No manual theme configuration required
+   - Diagrams adapt to UI preference automatically
+
+## Supported Diagram Types
+
+### Flowchart
+Flowcharts represent workflows, processes, or algorithms. Ideal for showing sequence of steps and decisions.
+
+```mermaid
+flowchart TB
+    A[User Creates Task] -->|CLI| B[Task Manager]
+    A -->|UI| B
+    B --> C{Valid Task?}
+    C -->|Yes| D[Save to MDTM]
+    C -->|No| E[Show Error]
+    D --> F[Update Index]
+    E --> A
+```
+
+### Sequence Diagram
+Sequence diagrams show how objects or components interact over time. Excellent for detailing message exchanges.
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant C as CLI
+    participant TM as Task Manager
+    participant FS as File System
+    U->>C: task create --title "New Feature"
+    C->>TM: CreateTask(metadata)
+    TM->>FS: WriteTaskFile()
+    FS-->>TM: Success
+    TM-->>C: Task Created
+    C-->>U: Display Task ID
+```
+
+### State Diagram
+State diagrams describe behavior of a single object, illustrating state sequences in response to events.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Created
+    Created --> InProgress: Start Work
+    InProgress --> Blocked: Hit Blocker
+    InProgress --> Completed: Finish Work
+    Blocked --> InProgress: Unblock
+    Completed --> [*]
+```
+
+### Gantt Chart
+Gantt charts provide visual timeline of tasks, durations, and dependencies for project planning.
+
+```mermaid
+gantt
+    title Task Timeline
+    dateFormat  YYYY-MM-DD
+    section Phase 1
+    Research           :done,    des1, 2025-05-01, 3d
+    Implementation     :active,  des2, 2025-05-04, 5d
+    Testing           :         des3, after des2, 3d
+    section Phase 2
+    Documentation     :         des4, after des3, 2d
+    Release          :         des5, after des4, 1d
+```
+
+### Class Diagram
+Class diagrams depict static structure of systems, showing classes, attributes, methods, and relationships.
+
+```mermaid
+classDiagram
+    Task <|-- FeatureTask
+    Task <|-- BugTask
+    Task : +string id
+    Task : +string title
+    Task : +string status
+    Task : +create()
+    Task : +update()
+    class FeatureTask{
+        +string[] requirements
+        +estimate()
+    }
+    class BugTask{
+        +string severity
+        +reproduce()
+    }
+```
+
+### Git Graph
+Git graphs visualize branching and merging history in Git repositories.
+
+```mermaid
+gitgraph
+    commit
+    commit
+    branch feature
+    checkout feature
+    commit
+    commit
+    checkout main
+    merge feature
+    commit
+```
+
+### Pie Chart
+Pie charts show proportional distribution of data in a single category.
+
+```mermaid
+pie title Task Distribution
+    "Features" : 45
+    "Bugs" : 30
+    "Documentation" : 15
+    "Chores" : 10
+```
+
+### Journey Diagram
+Journey diagrams map steps a user or process takes to accomplish a goal.
+
+```mermaid
+journey
+    title Developer's Task Workflow
+    section Creating Task
+      Think of idea: 5: Developer
+      Open CLI: 3: Developer
+      Create task: 5: Developer
+    section Implementation
+      Write code: 4: Developer
+      Run tests: 3: Developer
+      Fix issues: 2: Developer
+    section Review
+      Submit PR: 5: Developer
+      Get feedback: 3: Developer, Reviewer
+      Merge: 5: Developer
+```
+
+### Mindmap
+Mindmaps organize ideas hierarchically around a central concept.
+
+```mermaid
+mindmap
+  root((Scopecraft))
+    Tasks
+      Features
+      Bugs
+      Chores
+    UI
+      React
+      Tailwind
+      Mermaid
+    CLI
+      Commands
+      Options
+      Config
+    MCP
+      Handlers
+      Tools
+      Protocol
+```
+
+### Entity Relationship Diagram (ERD)
+ERDs model logical structure of databases, showing relationships between entities and attributes.
+
+```mermaid
+erDiagram
+    USER ||--o{ TASK : "creates"
+    USER {
+        string id PK
+        string name
+        string email
+    }
+    TASK {
+        string id PK
+        string title
+        string status
+        string user_id FK
+    }
+```
+
+### Requirement Diagram
+Requirement diagrams visualize system requirements and their relationships.
+
+```mermaid
+requirementDiagram
+    requirement test_req {
+    id: 1
+    text: the test text.
+    risk: high
+    verifymethod: test
+    }
+    element test_entity {
+    type: simulation
+    }
+    test_entity - satisfies -> test_req
+```
+
+### System Component Diagram
+Component diagrams visualize high-level architecture, showing how components and layers interact.
+
+```mermaid
+graph TD
+    subgraph "User Layer"
+        User([User])
+    end
+    subgraph "Frontend Layer"
+        WebApp[Web Application React]
+    end
+    subgraph "Backend Layer"
+        APIServer[API Server Node.js/Express]
+        AuthService[Authentication Service]
+    end
+    subgraph "Data Layer"
+        Database[PostgreSQL Database]
+        Cache[Redis Cache]
+    end
+    subgraph "External Services"
+        PaymentGateway[Payment Gateway Stripe]
+        EmailService[Email Service SendGrid]
+    end
+    User --> WebApp
+    WebApp -->|REST API| APIServer
+    APIServer --> AuthService
+    APIServer --> Database
+    APIServer --> Cache
+    APIServer -->|API Call| PaymentGateway
+    APIServer -->|API Call| EmailService
+```
+
+## Implementation
+
+**IDE Integration:**
+
+- Auto-complete for Mermaid syntax when typing ` ```mermaid `
+- Real-time diagram preview in markdown viewers
+- Syntax validation for Mermaid diagram code
+- Template suggestions based on diagram type
+- Theme-aware rendering (automatic light/dark adaptation)
+
+## Benefits
+
+1. **Visual Clarity**: Complex systems and workflows become easier to understand
+2. **Consistency**: Standardized diagram format across all documentation
+3. **Maintainability**: Text-based diagrams are version-control friendly
+4. **Accessibility**: Diagrams render in all markdown viewers and documentation platforms
+5. **Theme Support**: Automatic adaptation to light and dark UI preferences
+6. **Tooling**: Wide support in documentation generators and markdown processors
+
+## Examples
+
+### ✅ Correct Mermaid Diagram Usage
+
+```markdown
+## System Architecture
+
+Here's how the components interact:
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API
+    participant Database
+    Client->>API: Request Data
+    API->>Database: Query
+    Database-->>API: Results
+    API-->>Client: Response
+```
+```
+
+### ❌ Incorrect Diagram Usage
+
+```markdown
+## System Architecture
+
+Here's how the components interact:
+
+```
+sequenceDiagram
+    participant Client
+    participant API
+    participant Database
+```
+```
+
+**Violations:**
+- Missing `mermaid` language identifier
+- Diagram will not render correctly
+- No syntax highlighting or validation
+
+## Related Rules
+
+- [markdown-code-block-language.mdc](./markdown-code-block-language.mdc) - Code block language specification
+- [markdown-formatting.mdc](./markdown-formatting.mdc) - General markdown formatting standards
+
+## Pipeline Position
+
+**Prerequisites**: 
+- Markdown file with diagram content
+- Understanding of system/process to visualize
+
+**Input Assumptions**:
+- Content requires visual representation
+- Diagram type selected based on purpose
+
+**Output Guarantees**:
+- Properly formatted Mermaid code blocks
+- Theme-compatible diagram rendering
+- Consistent diagram style across documentation
+
+**Next Steps**:
+- Apply markdown formatting standards for spacing around diagrams
+- Ensure proper code block language specification compliance

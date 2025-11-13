@@ -1,0 +1,166 @@
+---
+title: "Directory Naming Standards"
+description: "Enforce directory naming convention: use underscores as word separators, lowercase only, ASCII-compatible"
+globs: ["**/*/"]
+alwaysApply: true
+---
+
+# Directory Naming Standards
+
+## Description
+
+This rule enforces consistent directory naming conventions across the entire repository. Directories MUST use underscores (`_`) as word separators, maintaining lowercase ASCII-only characters. This creates a clear visual distinction from file naming patterns and ensures universal compatibility.
+
+**Primary Focus Areas:**
+- Underscore word separators (`_`) for directories
+- Lowercase-only enforcement
+- ASCII character compatibility
+- Repository-wide consistency
+
+## Rule
+
+**MANDATORY DIRECTORY NAMING REQUIREMENTS:**
+
+1. **Word Separator Pattern**
+   - MUST use underscores (`_`) as word separators
+   - PROHIBITED: Dashes (`-`), spaces (` `), or camelCase
+   - Examples: `cursor_rules`, `github_workflows`, `test_fixtures`
+
+2. **Case Enforcement**
+   - MUST use lowercase exclusively
+   - PROHIBITED: Uppercase, CamelCase, PascalCase, or mixed case
+   - Rationale: Cross-platform compatibility, predictability
+
+3. **Character Set**
+   - MUST use only ASCII characters, numbers, and underscores
+   - PROHIBITED: Spaces, special characters, Unicode symbols
+   - Pattern: `^[a-z0-9_]+$` (lowercase alphanumeric + underscores)
+
+4. **Validation Scope**
+   - Applies to ALL directories in repository
+   - Includes: Top-level, nested subdirectories, hidden directories
+   - Exceptions: `.git`, `.github` (system/tool-specific conventions)
+
+## Implementation
+
+**Validation Mechanisms:**
+
+- Real-time validation during directory creation
+- Naming pattern enforcement before save operations
+- Automated scanning for non-compliant directories
+- Suggested corrections for violations
+
+**Validation Triggers:**
+- New directory creation anywhere in repository
+- Directory renaming operations
+- Repository structure scanning
+- Pre-commit hooks (optional enforcement)
+
+## Benefits
+
+1. **Visual Distinction**: Underscores visually distinguish directories from files (which use dashes)
+2. **Consistency**: Uniform pattern across entire codebase
+3. **Compatibility**: No shell escaping needed for directory names with underscores
+4. **Predictability**: Developers can anticipate directory naming without documentation
+
+## Examples
+
+### ✅ Correct Directory Names
+
+` ``text
+stdlib/
+├── cursor_rules/              ✅ Underscores, lowercase
+├── github_workflows/          ✅ Underscores, lowercase
+├── test_fixtures/             ✅ Underscores, lowercase
+├── api_documentation/         ✅ Underscores, lowercase
+├── utility_scripts/           ✅ Underscores, lowercase
+└── code_review_templates/     ✅ Multiple underscores, lowercase
+` ``
+
+### ❌ Incorrect Directory Names
+
+` ``text
+stdlib/
+├── cursor-rules/              ❌ Dashes (should use underscores)
+├── githubWorkflows/           ❌ CamelCase (should be github_workflows)
+├── test fixtures/             ❌ Space (should be test_fixtures)
+├── API_Documentation/         ❌ Capitalization (should be api_documentation)
+├── utility-scripts/           ❌ Dashes (should be utility_scripts)
+└── CodeReviewTemplates/       ❌ PascalCase (should be code_review_templates)
+` ``
+
+### Common Violations and Fixes
+
+**Dash Usage (Wrong Separator):**
+` ``text
+❌ cursor-rules/           →  ✅ cursor_rules/
+❌ github-workflows/       →  ✅ github_workflows/
+❌ test-fixtures/          →  ✅ test_fixtures/
+❌ api-docs/               →  ✅ api_docs/
+` ``
+
+**CamelCase Violations:**
+` ``text
+❌ testFixtures/           →  ✅ test_fixtures/
+❌ apiDocumentation/       →  ✅ api_documentation/
+❌ utilityScripts/         →  ✅ utility_scripts/
+❌ githubWorkflows/        →  ✅ github_workflows/
+` ``
+
+**Space and Capitalization:**
+` ``text
+❌ API Docs/               →  ✅ api_docs/
+❌ Test Fixtures/          →  ✅ test_fixtures/
+❌ Utility Scripts/        →  ✅ utility_scripts/
+❌ Code Review/            →  ✅ code_review/
+` ``
+
+### Validation Commands
+
+**Find Non-Compliant Directories:**
+` ``bash
+# Find directories with dashes
+find . -type d -name "*-*" | grep -v ".git"
+
+# Find directories with uppercase
+find . -type d | grep -E "[A-Z]"
+
+# Find directories with spaces
+find . -type d -name "* *"
+` ``
+
+**Batch Rename Non-Compliant Directories:**
+` ``bash
+# Convert dashes to underscores
+for dir in $(find . -type d -name "*-*" | grep -v ".git"); do
+  newname=$(echo "$dir" | sed 's/-/_/g')
+  mv "$dir" "$newname"
+done
+
+# Convert to lowercase
+for dir in $(find . -type d | grep -E "[A-Z]"); do
+  newname=$(echo "$dir" | tr '[:upper:]' '[:lower:]')
+  mv "$dir" "$newname"
+done
+` ``
+
+## Related Rules
+
+- [markdown-file-naming.md](./markdown-file-naming.md) - Complementary file naming standards (uses dashes)
+- [markdown-general-naming-convention.md](./markdown-general-naming-convention.md) - Original combined rule (DEPRECATED - use specific rules)
+
+## Pipeline Position
+
+**Prerequisites**: None (foundational naming rule)
+
+**Input Assumptions**:
+- Repository structure exists
+- User creating or renaming directories
+
+**Output Guarantees**:
+- All directories follow underscore pattern
+- All directories are lowercase
+- All directories are ASCII-compatible
+
+**Next Steps**:
+- [markdown-file-naming.md](./markdown-file-naming.md) - Apply file naming standards in compliant directories

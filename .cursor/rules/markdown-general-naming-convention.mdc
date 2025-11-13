@@ -1,0 +1,170 @@
+---
+title: "General Naming Convention Standards (DEPRECATED)"
+description: "DEPRECATED: Use markdown-directory-naming.md and markdown-file-naming.md instead. This rule covered two concerns and violated Single Responsibility Principle."
+globs: ["**/*"]
+alwaysApply: false
+status: "deprecated"
+replacement_rules: ["markdown-directory-naming.md", "markdown-file-naming.md"]
+---
+
+# General Naming Convention Standards (DEPRECATED)
+
+## ⚠️ DEPRECATION NOTICE
+
+**This rule is DEPRECATED** as of 2025-01-09 and has been split into two atomic, focused rules following Unix Philosophy principles:
+
+**Use these atomic rules instead:**
+- **[markdown-directory-naming.md](./markdown-directory-naming.md)** - Directory naming standards (underscores)
+- **[markdown-file-naming.md](./markdown-file-naming.md)** - Markdown file naming standards (dashes)
+
+**Reason for Deprecation:**
+This rule violated **Single Responsibility Principle** by covering TWO distinct concerns:
+1. Directory naming conventions (separate domain)
+2. File naming conventions (separate domain)
+
+**Migration Path:**
+- Apply `markdown-directory-naming.md` for directory naming validation
+- Apply `markdown-file-naming.md` for markdown file naming validation
+- Both rules are fully compliant with Unix Philosophy (composable, pipeable, single responsibility)
+
+---
+
+## Description (ARCHIVED)
+
+This rule enforces universal naming conventions across the entire repository to maintain consistency and clarity. Directories MUST use underscores as word separators, while markdown files MUST use dashes. This convention applies repository-wide, creating a clear visual distinction between directory and file naming patterns.
+
+**Primary Focus Areas:**
+- Directory naming with underscore separators
+- Markdown file naming with dash separators
+- Consistent lowercase usage
+- ASCII-only character enforcement
+
+**⚠️ For current standards, see replacement rules above.**
+
+## Rule
+
+**MANDATORY NAMING REQUIREMENTS:**
+
+1. **Directory Naming Convention**
+   - Use underscores (`_`) as word separators
+   - Examples: `cursor_rules`, `github_workflows`, `test_fixtures`
+   - Use lowercase exclusively
+   - Avoid dashes, spaces, or mixed case
+
+2. **Markdown File Naming Convention**
+   - Use dashes (`-`) as word separators
+   - Examples: `readme.md`, `contributing-guide.md`, `api-documentation.md`
+   - Use lowercase exclusively
+   - Avoid underscores, spaces, or mixed case
+
+3. **ASCII Compatibility**
+   - Use only ASCII characters, numbers, underscores (directories), and dashes (files)
+   - Avoid spaces, special characters, or Unicode symbols
+   - Maintain consistent lowercase
+
+4. **Consistency Enforcement**
+   - Apply pattern universally across entire repository
+   - Highlight violations during file/directory creation
+   - Suggest corrections for non-compliant names
+
+## Implementation
+
+**Cursor IDE Integration:**
+
+- Validates all directory and markdown file names against established patterns
+- Provides real-time feedback on naming violations
+- Suggests proper naming format during file/directory creation
+- Highlights existing non-compliant names for correction
+
+**Validation Triggers:**
+- Directory creation anywhere in repository
+- Markdown file creation anywhere in repository
+- File/directory renaming operations
+- Repository structure scanning
+
+## Benefits
+
+1. **Visual Distinction**: Clear separation between directories (underscores) and files (dashes)
+2. **Consistency**: Uniform naming conventions across entire codebase
+3. **Clarity**: Predictable patterns improve discoverability
+4. **Maintainability**: Easier navigation and repository organization
+
+## Examples
+
+### ✅ Correct Repository Structure
+
+` ``text
+stdlib/
+├── cursor_rules/              ✅ Directory with underscores
+│   ├── api-validation.md      ✅ Markdown file with dashes
+│   └── security-headers.md    ✅ Markdown file with dashes
+├── github_workflows/          ✅ Directory with underscores
+│   └── ci-pipeline.md         ✅ Markdown file with dashes
+├── test_fixtures/             ✅ Directory with underscores
+│   └── sample-data.md         ✅ Markdown file with dashes
+└── contributing-guide.md      ✅ Markdown file with dashes
+` ``
+
+### ❌ Incorrect Naming Patterns
+
+` ``text
+stdlib/
+├── cursor-rules/              ❌ Directory using dashes (should use underscores)
+│   ├── api_validation.md      ❌ Markdown file using underscores (should use dashes)
+│   └── Security Headers.md    ❌ Spaces and capitalization
+├── githubWorkflows/           ❌ CamelCase (should be lowercase with underscores)
+│   └── CI Pipeline.md         ❌ Spaces and capitalization
+├── test-fixtures/             ❌ Directory using dashes (should use underscores)
+│   └── sample_data.md         ❌ Markdown file using underscores (should use dashes)
+└── CONTRIBUTING.md            ❌ All caps (should be lowercase)
+` ``
+
+### Directory Naming Examples
+
+**✅ Correct:**
+- `cursor_rules`
+- `github_workflows`
+- `test_fixtures`
+- `api_documentation`
+- `utility_scripts`
+
+**❌ Incorrect:**
+- `cursor-rules` (uses dashes instead of underscores)
+- `githubWorkflows` (CamelCase instead of snake_case)
+- `test fixtures` (contains space)
+- `API_Documentation` (capitalization)
+- `utility-scripts` (dashes instead of underscores)
+
+### Markdown File Naming Examples
+
+**✅ Correct:**
+- `readme.md`
+- `contributing-guide.md`
+- `api-documentation.md`
+- `security-policy.md`
+- `code-of-conduct.md`
+
+**❌ Incorrect:**
+- `README.md` (capitalization)
+- `contributing_guide.md` (underscores instead of dashes)
+- `API Documentation.md` (spaces and capitalization)
+- `security.policy.md` (multiple dots before extension)
+- `codeOfConduct.md` (CamelCase)
+
+### Common Violations and Fixes
+
+**Directory Violations:**
+` ``text
+❌ cursor-rules/       →  ✅ cursor_rules/
+❌ testFixtures/       →  ✅ test_fixtures/
+❌ API Docs/           →  ✅ api_docs/
+❌ utility-scripts/    →  ✅ utility_scripts/
+` ``
+
+**Markdown File Violations:**
+` ``text
+❌ README.md           →  ✅ readme.md
+❌ contributing_guide.md  →  ✅ contributing-guide.md
+❌ API Reference.md    →  ✅ api-reference.md
+❌ code_of_conduct.md  →  ✅ code-of-conduct.md
+` ``

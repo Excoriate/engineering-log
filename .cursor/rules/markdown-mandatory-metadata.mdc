@@ -1,0 +1,245 @@
+---
+title: "Documentation Markdown Metadata Standards"
+description: "Enforce structured YAML frontmatter for all markdown documentation and include files to ensure consistency, findability, and LLM-friendly content organization"
+globs: ["docs/**/*.md", ".claude/rules/includes/**/*.md", ".cursor/rules/includes/**/*.md"]
+alwaysApply: true
+---
+
+# Documentation Markdown Metadata Standards
+
+## Description
+
+This rule enforces comprehensive YAML frontmatter metadata for all markdown files within the `docs/` directory and `.claude/rules/includes/` or `.cursor/rules/includes/` directories. This includes specifications, templates, guides, reference materials, protocols, and workflows. The standardized metadata structure enhances document discoverability, enables automated processing, and provides essential context for both human readers and AI systems.
+
+## Rule
+
+All markdown files in the `docs/` directory, `.claude/rules/includes/`, or `.cursor/rules/includes/` directories **MUST** include properly formatted YAML frontmatter with the following required fields:
+
+1. **title**: Clear, descriptive document title (string, required)
+2. **description**: Concise summary of document content and purpose (string, required)
+3. **version**: Semantic version number for document tracking (string, required)
+4. **status**: Document maturity level (string, required) - valid values: `draft`, `review`, `stable`, `deprecated`
+5. **category**: Document classification for organization (string, required) - examples: `overview`, `guide`, `reference`, `spec`, `template`, `protocol`, `workflow`
+6. **updated**: ISO 8601 date of last modification (string, required) - format: `YYYY-MM-DD`
+7. **authors**: List of document contributors (array, required) - minimum one author
+8. **related**: Cross-references to related documentation (array, optional) - relative paths to other docs
+
+### Frontmatter Structure Requirements
+
+- YAML frontmatter must be enclosed by triple dashes (`---`) at the beginning and end
+- Must be the first content in the file (no preceding content allowed)
+- Use spaces for indentation (tabs not permitted)
+- All string values containing special characters must be quoted
+- Arrays must use YAML list format with hyphens
+
+### Metadata Semantic Guidelines
+
+**CRITICAL**: Metadata should be structural and semantic, not implementation-specific:
+
+- ✅ **DO**: Describe what the document IS ("Workflow for implementing features through test-first development")
+- ❌ **DON'T**: Describe specific implementation details that change ("Load when user requests TDD on line 42")
+- ✅ **DO**: Use semantic category classification ("workflow", "protocol", "template")
+- ❌ **DON'T**: Include file paths, line numbers, or version-specific references in descriptions
+- ✅ **DO**: Focus on purpose, applicability, and discovery ("When to use this protocol")
+- ❌ **DON'T**: Hardcode conditional logic or trigger conditions in metadata fields
+
+**Rationale**: Metadata exists to help humans and AI systems discover and understand documents. It should remain valid even when file contents, references, or implementation details change.
+
+### File Path Validation
+
+- All paths in the `related` field must use relative references from the docs/ directory
+- Cross-directory references must use proper relative path syntax (e.g., `../category/file.md`)
+- File extensions must be included in all references
+
+## Implementation
+
+**IDE Integration:**
+- File pattern matching targets all markdown files within `docs/`, `.claude/rules/includes/`, and `.cursor/rules/includes/` directory structures
+- Global application (`alwaysApply: true`) ensures continuous enforcement across all documentation and include files
+- Real-time validation prevents incomplete metadata from being saved
+- Contextual suggestions based on document type and existing metadata patterns
+
+**Technical Enforcement:**
+1. **File Creation**: New markdown files in `docs/` or include directories trigger metadata template insertion
+2. **File Editing**: Missing or malformed frontmatter generates warnings
+3. **Content Review**: Incomplete metadata fields highlighted during editing
+4. **Reference Validation**: Broken or invalid `related` file paths flagged
+5. **Semantic Validation**: Metadata descriptions are checked for implementation-specific details that should be in document content instead
+
+**Automated Workflow Integration:**
+- Template generation for required frontmatter fields
+- Auto-population of `updated` field with current date
+- Validation of `status` and `category` enum values
+- Relative path completion for `related` field references
+
+## Benefits
+
+### Content Organization
+- **Systematic Classification**: Consistent categorization enables efficient content discovery
+- **Version Tracking**: Document versioning supports change management and rollback capabilities
+- **Status Awareness**: Clear maturity indicators guide appropriate document usage
+
+### Discoverability Enhancement
+- **Search Optimization**: Structured metadata improves search accuracy and filtering
+- **Content Relationships**: Cross-references create navigable documentation networks
+- **LLM Context**: Rich metadata provides essential context for AI-powered documentation tools
+
+### Maintenance Efficiency
+- **Update Tracking**: Timestamp metadata enables freshness monitoring and maintenance scheduling
+- **Responsibility Clarity**: Author attribution establishes ownership and contact points
+- **Automation Support**: Standardized structure enables automated validation and processing
+
+## Examples
+
+### ✅ Correct Implementation
+
+` ``markdown
+---
+title: "API Authentication Guide"
+description: "Comprehensive guide for implementing secure API authentication with JWT tokens and OAuth2 flows"
+version: "2.1"
+status: "stable"
+category: "guide"
+updated: "2025-01-09"
+authors: ["security-team", "api-team"]
+related:
+  - ../../reference/api-endpoints.md
+  - ../security-best-practices.md
+  - ../../specs/oauth2-implementation.md
+---
+
+# API Authentication Guide
+
+[Document content follows...]
+` ``
+
+### ✅ Minimal Valid Example
+
+` ``markdown
+---
+title: "Quick Start Checklist"
+description: "Essential steps for project initialization"
+version: "1.0"
+status: "draft"
+category: "template"
+updated: "2025-01-09"
+authors: ["system"]
+related: []
+---
+
+# Quick Start Checklist
+
+[Document content follows...]
+` ``
+
+### ❌ Incorrect Implementations
+
+**Missing Required Fields:**
+` ``markdown
+---
+title: "Incomplete Guide"
+description: "Missing version and other required fields"
+updated: "2025-01-09"
+---
+` ``
+
+**Invalid Status Value:**
+` ``markdown
+---
+title: "Bad Status Example"
+description: "Uses invalid status value"
+version: "1.0"
+status: "incomplete"  # Invalid - must be draft, review, stable, or deprecated
+category: "guide"
+updated: "2025-01-09"
+authors: ["author"]
+---
+` ``
+
+**Malformed Related References:**
+` ``markdown
+---
+title: "Bad References"
+description: "Invalid path references"
+version: "1.0"
+status: "stable"
+category: "guide"
+updated: "2025-01-09"
+authors: ["author"]
+related:
+  - /absolute/path/not-allowed.md  # Invalid - must use relative paths
+  - broken-reference  # Invalid - missing file extension
+---
+` ``
+
+### ✅ Include File Example (Protocol)
+
+` ``markdown
+---
+title: "Core Operational Prohibitions"
+description: "Foundational prohibitions for AI agents: never assume business logic, never commit secrets"
+version: "3.0"
+status: "stable"
+category: "protocol"
+updated: "2025-10-10"
+authors: ["security-team", "platform-engineering"]
+related:
+  - ../protocols/prohibited-dangerous-actions.md
+  - ../../../CLAUDE.md
+---
+
+# Core Operational Prohibitions
+
+[Protocol content follows...]
+` ``
+
+### ✅ Include File Example (Workflow)
+
+` ``markdown
+---
+title: "Test-Driven Development (TDD) Workflow"
+description: "Structured workflow for implementing features through test-first development, ensuring comprehensive test coverage and verifiable implementation quality"
+version: "2.0"
+status: "stable"
+category: "workflow"
+updated: "2025-10-10"
+authors: ["engineering-team", "quality-assurance"]
+related:
+  - ../templates/internal-reasoning-process.md
+  - ../workflows/workflow-visual-feedback-1.md
+---
+
+# Test-Driven Development (TDD) Workflow
+
+[Workflow content follows...]
+` ``
+
+### Directory Structure Visualization
+
+` ``
+docs/
+├── ai/
+│   ├── 00-overview/
+│   │   └── this_repo.md          ✅ Requires frontmatter
+│   └── 02-templates/
+│       └── this_repo.md          ✅ Requires frontmatter
+└── specs/
+    └── api-specification.md      ✅ Requires frontmatter
+
+.claude/rules/includes/
+├── protocols/
+│   ├── never-do-this.md          ✅ Requires frontmatter
+│   └── prohibited-dangerous-actions.md  ✅ Requires frontmatter
+├── templates/
+│   └── internal-reasoning-process.md  ✅ Requires frontmatter
+└── workflows/
+    ├── workflow-test-driven-development-simple.md  ✅ Requires frontmatter
+    └── workflow-visual-feedback-1.md  ✅ Requires frontmatter
+` ``
+
+**Non-Documentation Files (Rule Does Not Apply):**
+` ``
+README.md                          ❌ Root level - no frontmatter required
+CONTRIBUTING.md                    ❌ Root level - no frontmatter required
+src/components/README.md           ❌ Source code - no frontmatter required
+` ``

@@ -1,0 +1,115 @@
+---
+title: "Markdown Header Hierarchy Standards"
+description: "Enforce proper markdown header formatting and semantic hierarchy standards"
+globs: ["**/*.md", "**/*.markdown"]
+alwaysApply: true
+---
+
+# Markdown Header Hierarchy Standards
+
+## Description
+
+This rule enforces proper markdown header formatting and semantic hierarchy. Headers MUST use hash symbols (#) with correct hierarchy progression, proper formatting, and consistent spacing conventions.
+
+**Primary Focus**: Header structure and formatting compliance
+
+## Rule
+
+**MANDATORY REQUIREMENTS:**
+
+1. **Header Syntax**
+   - MUST: Use hash symbols (# ## ###) for headers
+   - PROHIBITED: Underline-style headers (==== or ----)
+   - PROHIBITED: Bold text as headers (**Header Text**)
+   - REQUIRED: Single space between hash symbols and header text
+
+2. **Semantic Hierarchy**
+   - MUST: Follow logical level progression (don't skip levels)
+   - Example: # → ## → ### (NOT # → ###)
+   - MUST: Start headers at line beginning (no leading whitespace)
+   - RECOMMENDED: One H1 (#) per document (document title)
+
+3. **Formatting Standards**
+   - PROHIBITED: Italic or bold formatting in header text
+   - PROHIBITED: Trailing punctuation (periods, colons) in headers
+   - RECOMMENDED: Sentence case for headers (not Title Case or ALL CAPS)
+
+## Implementation
+
+- Real-time validation of header syntax during typing
+- Hierarchy level checking with skip-level warnings
+- Auto-correction for common header formatting errors
+- Outline view integration showing document structure
+
+## Benefits
+
+1. **Semantic Structure**: Clear document hierarchy for readers and parsers
+2. **Accessibility**: Screen readers rely on proper header hierarchy
+3. **Navigation**: Table of contents generation requires correct headers
+4. **Consistency**: Uniform header styling across documentation
+
+## Examples
+
+### ✅ Correct Header Hierarchy
+
+` ``markdown
+# Document Title
+
+Introduction paragraph.
+
+## Section 1
+
+Section content.
+
+### Subsection 1.1
+
+Subsection content.
+
+### Subsection 1.2
+
+More subsection content.
+
+## Section 2
+
+Another section.
+` ``
+
+### ❌ Incorrect Header Patterns
+
+` ``markdown
+**Section Title**          ❌ Bold text, not a header
+
+  # Indented Header        ❌ Leading whitespace
+
+###Skipped Level           ❌ Jumped from H1 to H3, no space after ###
+
+# Header With Period.      ❌ Trailing punctuation
+
+## ALLCAPS HEADER           ❌ All caps (use sentence case)
+
+Section Title
+=============              ❌ Underline style (use # instead)
+` ``
+
+## Related Rules
+
+- [markdown-spacing.md](./markdown-spacing.md) - Spacing around headers
+- [markdown-code-block-language.md](./markdown-code-block-language.md) - Code blocks in documentation
+- [markdown-formatting.md](./markdown-formatting.md) - Original combined rule (DEPRECATED)
+
+## Pipeline Position
+
+**Prerequisites**: None (foundational formatting rule)
+
+**Input Assumptions**:
+- Markdown file exists
+- Contains headers
+
+**Output Guarantees**:
+- All headers use hash symbol syntax
+- Headers follow semantic hierarchy
+- No skipped levels in header structure
+- Proper spacing after hash symbols
+
+**Next Steps**:
+- [markdown-spacing.md](./markdown-spacing.md) - Apply spacing standards around headers

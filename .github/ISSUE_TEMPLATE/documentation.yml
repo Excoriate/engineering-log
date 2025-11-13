@@ -1,0 +1,149 @@
+---
+name: "📚 Documentation Issue for Repository Template"
+description: "Report an issue with repository template documentation or request documentation improvements"
+title: "[DOCS] Engineering Log: Brief description"
+labels: [documentation, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve our repository template documentation! Please fill out the sections below to help us understand the documentation issue.
+
+        **Note**: This includes documentation for AI integration, context engineering, and development workflows.
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: 📋 Documentation Issue Type
+      description: What type of documentation issue is this?
+      options:
+        - "Missing Documentation"
+        - "Incorrect Information"
+        - "Unclear Instructions"
+        - "Outdated Content"
+        - "Grammar/Spelling Error"
+        - "Formatting Issue"
+        - "Example/Code Sample Issue"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Issue Description
+      description: Provide a clear and concise description of the documentation problem.
+      placeholder: "The documentation issue is..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: 📦 Documentation Section
+      description: Which documentation section is affected?
+      options:
+        - "README.md"
+        - "Context Engineering Documentation"
+        - "AI Integration Guides"
+        - "GitHub Workflows Documentation"
+        - "Issue Templates Documentation"
+        - "Configuration Documentation"
+        - "Development Setup"
+        - "API/Usage Examples"
+        - "Troubleshooting"
+        - "Contributing Guidelines"
+        - "Other (please specify)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: 📍 Specific Location
+      description: Provide links or specific locations where the documentation issue exists.
+      placeholder: |
+        - File: docs/path/to/file.md
+        - Section: "Getting Started"
+        - Line numbers: 25-30
+        - URL: https://github.com/...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ✅ Expected Documentation
+      description: What should the documentation say or include?
+      placeholder: "The documentation should explain..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: ❌ Current Documentation
+      description: What does the current documentation say (if applicable)? Quote the problematic text.
+      placeholder: "Currently, the documentation states..."
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 🎯 Use Case Context
+      description: Describe the context or scenario where you encountered this documentation issue.
+      placeholder: "I was trying to... when I found this documentation issue..."
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 💡 Suggested Improvement
+      description: If you have specific suggestions for how to improve the documentation, please share them.
+      placeholder: "I suggest we add/change/clarify..."
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: 👥 Target Audience
+      description: Who would benefit most from fixing this documentation issue?
+      multiple: true
+      options:
+        - "New Users (First-time setup)"
+        - "Developers (Implementation)"
+        - "AI Tool Users (Claude, Cursor, etc.)"
+        - "Repository Administrators"
+        - "Contributors/Maintainers"
+        - "Template Users"
+        - "All Users"
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📝 Additional Context
+      description: Add any other context, screenshots, or information about the documentation issue.
+      placeholder: "Any additional information that might be helpful..."
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: 🛠️ Contribution Willingness
+      description: How can you help improve this documentation?
+      options:
+        - label: I would be willing to help write the improved documentation
+          required: false
+        - label: I can review and provide feedback on documentation changes
+          required: false
+        - label: I can help test the documentation with real use cases
+          required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: ✅ Pre-submission Checklist
+      description: Please confirm you have completed these steps
+      options:
+        - label: I have searched existing issues to ensure this is not a duplicate
+          required: true
+        - label: I have provided specific location information for the documentation issue
+          required: true
+        - label: I have clearly described what the documentation should contain
+          required: true

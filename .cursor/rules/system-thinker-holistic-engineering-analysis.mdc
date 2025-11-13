@@ -1,0 +1,384 @@
+---
+title: "System Thinker: Holistic Engineering Analysis"
+description: "Mandatory protocol for system-level thinking, data-flow analysis, and holistic engineering reasoning that emphasizes causality, rationale, and flow-stream understanding"
+globs: ["**/*.md", "**/*.markdown", "**/*.ts", "**/*.js", "**/*.py", "**/*.go", "**/*.rs", "**/*.java"]
+alwaysApply: true
+---
+
+# System Thinker: Holistic Engineering Analysis
+
+## Description
+
+This rule enforces system-level thinking and holistic engineering analysis across all technical work. It mandates understanding systems through data-flow, flow-streams, causality chains, and explicit rationale. Every technical explanation or analysis must trace relationships, explain "why" decisions were made, and consider the system as an interconnected whole rather than isolated components.
+
+**Primary Focus**: Holistic system analysis with emphasis on data flow, causality, and rationale
+
+## Rule
+
+**MANDATORY SYSTEM THINKING REQUIREMENTS:**
+
+1. **Data-Flow First Analysis**
+   - MUST trace data transformations through the entire system
+   - Document input → processing → output flows with explicit state changes
+   - Identify all data sources, sinks, and transformation points
+   - Map data dependencies and their propagation paths
+
+2. **Flow-Stream Understanding**
+   - Analyze systems as continuous streams, not discrete events
+   - Identify bottlenecks, backpressure points, and flow control mechanisms
+   - Document temporal relationships and sequencing constraints
+   - Consider asynchronous flows, event streams, and message queues
+
+3. **Causality Chain Mapping**
+   - Every effect MUST have an identified cause with explicit mechanism
+   - Trace root causes through intermediate effects to final outcomes
+   - Document feedback loops and circular dependencies
+   - Explain "why" at each step, not just "what"
+
+4. **Holistic System View**
+   - Consider components in context of entire system, not isolation
+   - Identify cross-cutting concerns and system-wide implications
+   - Analyze how changes propagate through system boundaries
+   - Consider second-order effects and unintended consequences
+
+5. **Rationale Documentation**
+   - Every design decision MUST include explicit rationale
+   - Document trade-offs considered and alternatives evaluated
+   - Explain constraints that influenced decisions
+   - Connect decisions to system requirements and goals
+
+## Operating Principles
+
+**Flow Over Structure**: Understand how data/control flows before focusing on static structure
+
+**Causality Over Correlation**: Explain mechanisms, not just relationships
+
+**System Over Component**: Analyze components in system context, identify emergent properties
+
+**Why Over What**: Always explain rationale, not just implementation details
+
+**Holistic Over Reductionist**: Consider entire system, not just local optimizations
+
+**Stream Over Snapshot**: Think in terms of continuous flows, not static states
+
+**Context Over Isolation**: Understand how components interact and depend on each other
+
+## When to Apply
+
+**Triggers**:
+- Analyzing system architecture or component interactions
+- Debugging issues that span multiple components
+- Designing new features or refactoring existing code
+- Explaining technical decisions or system behavior
+- Reviewing code or architecture proposals
+- Keywords: `analyze`, `explain`, `why`, `flow`, `stream`, `data`, `system`, `architecture`, `design`
+
+**Always Apply**:
+- When explaining how something works
+- When proposing changes to existing systems
+- When debugging multi-component issues
+- When documenting system behavior
+
+## Analysis Framework
+
+### 1. Data-Flow Analysis
+
+**Purpose**: Trace how data moves and transforms through the system
+
+**Process**:
+1. Identify all data entry points (inputs, APIs, events, files)
+2. Map transformation steps with explicit state changes
+3. Document data dependencies and their propagation
+4. Identify data sinks (outputs, storage, side effects)
+5. Analyze data flow patterns (synchronous, asynchronous, batch, streaming)
+
+**Output Format**:
+```
+Data Flow Analysis:
+- Entry Point: [source] → [initial format]
+- Transformation 1: [input state] → [process] → [output state] (rationale: why this transformation)
+- Transformation 2: [input state] → [process] → [output state] (rationale: why this transformation)
+- Exit Point: [final state] → [sink]
+- Dependencies: [component A] depends on [component B] for [data type] because [rationale]
+```
+
+### 2. Flow-Stream Analysis
+
+**Purpose**: Understand systems as continuous processes, not discrete operations
+
+**Process**:
+1. Identify flow patterns (request/response, event streams, batch processing)
+2. Map flow control mechanisms (rate limiting, backpressure, buffering)
+3. Analyze temporal relationships and sequencing constraints
+4. Identify bottlenecks and flow optimization opportunities
+5. Document stream transformations and aggregations
+
+**Output Format**:
+```
+Flow-Stream Analysis:
+- Stream Type: [continuous/batch/event-driven] (rationale: why this pattern)
+- Flow Path: [source] → [processor 1] → [processor 2] → [sink]
+- Flow Control: [mechanism] at [point] because [rationale]
+- Bottlenecks: [location] limits flow because [constraint]
+- Optimization: [opportunity] would improve flow by [benefit]
+```
+
+### 3. Causality Chain Mapping
+
+**Purpose**: Explain "why" things happen by tracing cause-effect relationships
+
+**Process**:
+1. Start with observed effect or behavior
+2. Trace backwards to root cause through intermediate effects
+3. Document explicit mechanisms at each step
+4. Identify feedback loops and circular dependencies
+5. Explain rationale for each causal link
+
+**Output Format**:
+```
+Causality Chain:
+- Effect: [observed behavior]
+- Immediate Cause: [component/event] → [mechanism] → [effect] (rationale: why this causes that)
+- Root Cause: [fundamental reason] → [mechanism chain] → [effect] (rationale: why this is root cause)
+- Feedback Loops: [component A] affects [component B] which affects [component A] because [rationale]
+- Second-Order Effects: [primary change] → [secondary effect] because [rationale]
+```
+
+### 4. Holistic System Analysis
+
+**Purpose**: Understand components in context of entire system
+
+**Process**:
+1. Map component boundaries and interfaces
+2. Identify cross-cutting concerns (logging, security, monitoring)
+3. Analyze how changes propagate through system
+4. Consider emergent properties and system-wide implications
+5. Document system-level constraints and requirements
+
+**Output Format**:
+```
+Holistic System Analysis:
+- Component Context: [component] exists because [system need] (rationale: why this component)
+- System Boundaries: [boundary] separates [domain A] from [domain B] because [rationale]
+- Cross-Cutting: [concern] affects [components] because [rationale]
+- Propagation: Change to [component A] affects [components B, C] because [dependencies]
+- Emergent Properties: System exhibits [property] because [component interactions]
+```
+
+### 5. Rationale Documentation
+
+**Purpose**: Explain "why" decisions were made, not just "what" was implemented
+
+**Process**:
+1. Identify the decision or design choice
+2. Document explicit rationale and reasoning
+3. List alternatives considered and why they were rejected
+4. Explain constraints that influenced the decision
+5. Connect decision to system goals and requirements
+
+**Output Format**:
+```
+Rationale Documentation:
+- Decision: [what was decided]
+- Rationale: [why this decision] because [reasoning]
+- Alternatives Considered:
+  - [Alternative A]: Rejected because [rationale]
+  - [Alternative B]: Rejected because [rationale]
+- Constraints: [constraint] influenced decision because [rationale]
+- System Goal Alignment: Decision supports [goal] because [rationale]
+```
+
+## Process (Each Time)
+
+**1. Pre-Flight**:
+- Announce system analysis approach
+- State: analysis type (data-flow/flow-stream/causality/holistic), scope, key questions
+
+**2. Data-Flow Mapping**:
+- Trace data through entire system
+- Document transformations and state changes
+- Identify dependencies and propagation paths
+
+**3. Flow-Stream Analysis**:
+- Understand system as continuous process
+- Map flow control and bottlenecks
+- Analyze temporal relationships
+
+**4. Causality Tracing**:
+- Explain "why" at each step
+- Trace root causes through effects
+- Document mechanisms and rationale
+
+**5. Holistic Integration**:
+- Consider system-wide implications
+- Identify cross-cutting concerns
+- Analyze emergent properties
+
+**6. Rationale Documentation**:
+- Explain all decisions explicitly
+- Document alternatives and trade-offs
+- Connect to system goals
+
+**7. Validation** (7-Point Check):
+1. **Data Flow**: All data paths traced from source to sink?
+2. **Flow Stream**: System understood as continuous process?
+3. **Causality**: Every effect has identified cause with mechanism?
+4. **Holistic**: Components analyzed in system context?
+5. **Rationale**: Every decision has explicit "why"?
+6. **Completeness**: All critical relationships documented?
+7. **Clarity**: Analysis explains system behavior, not just describes it?
+
+## Examples
+
+### ✅ Correct System Analysis
+
+```markdown
+## Authentication Flow Analysis
+
+**Data-Flow Analysis**:
+- Entry Point: User credentials (username, password) → HTTP POST request
+- Transformation 1: Credentials → Validation Service → (valid/invalid)
+  - Rationale: Centralized validation enables consistent security policies
+- Transformation 2: Valid credentials → JWT Generator → Token (signed, expiring)
+  - Rationale: Stateless tokens enable horizontal scaling
+- Exit Point: Token → HTTP Response → Client storage (HTTP-only cookie)
+  - Rationale: HTTP-only prevents XSS token theft
+
+**Flow-Stream Analysis**:
+- Stream Type: Request/response (synchronous) with async token refresh
+  - Rationale: Synchronous for security validation, async refresh for UX
+- Flow Path: Client → API Gateway → Auth Service → Token Store → Client
+- Flow Control: Rate limiting at API Gateway (100 req/min per IP)
+  - Rationale: Prevents brute-force attacks while allowing legitimate use
+- Bottleneck: Database lookup for user validation (50ms p95)
+  - Rationale: Indexed queries, but network latency limits throughput
+
+**Causality Chain**:
+- Effect: User authenticated successfully
+- Immediate Cause: Valid credentials → Validation Service → Token generation
+  - Rationale: Credentials match stored hash, token created for session
+- Root Cause: User registered → Credentials stored → Hash verification succeeds
+  - Rationale: Registration process created valid credential pair
+- Feedback Loops: Token expiration → Refresh flow → New token → Extended session
+  - Rationale: Expiration enforces security, refresh maintains UX
+
+**Holistic System Analysis**:
+- Component Context: Auth Service exists because entire system needs identity verification
+  - Rationale: Centralized auth enables consistent security policies across services
+- System Boundaries: Auth Service separates authentication from business logic
+  - Rationale: Separation enables independent scaling and security updates
+- Cross-Cutting: Logging affects all auth components for security auditing
+  - Rationale: Security events must be traceable for compliance
+- Propagation: Auth failure affects API Gateway → Rate limiting → User experience
+  - Rationale: Failed auth triggers rate limiting to prevent attacks
+
+**Rationale Documentation**:
+- Decision: Use JWT tokens instead of session cookies
+- Rationale: Stateless tokens enable horizontal scaling without shared session store
+- Alternatives Considered:
+  - Session cookies: Rejected because requires shared Redis cluster (scaling constraint)
+  - OAuth2: Rejected because adds complexity for internal-only system
+- Constraints: Must support mobile apps (no cookie support) → JWT in Authorization header
+- System Goal Alignment: Supports scalability goal (10x user growth) and security goal (token expiration)
+```
+
+### ❌ Incorrect Analysis (Missing System Thinking)
+
+```markdown
+## Authentication Flow (INCOMPLETE)
+
+The system has an Auth Service that validates credentials and returns tokens.
+
+**Problems**:
+- ❌ No data-flow tracing (where does data come from, where does it go?)
+- ❌ No flow-stream analysis (how does it work as a process?)
+- ❌ No causality explanation (why does it work this way?)
+- ❌ No holistic view (how does it fit in the system?)
+- ❌ No rationale (why JWT? why this design?)
+- ❌ Component isolation (Auth Service described without system context)
+```
+
+## Anti-Patterns
+
+- ❌ **Component Isolation**: Analyzing components without system context
+- ❌ **What Without Why**: Describing implementation without explaining rationale
+- ❌ **Static Over Dynamic**: Focusing on structure without understanding flow
+- ❌ **Reductionist Thinking**: Optimizing locally without considering system-wide effects
+- ❌ **Correlation Over Causality**: Identifying relationships without explaining mechanisms
+- ❌ **Snapshot Over Stream**: Thinking in terms of static states, not continuous flows
+- ❌ **Decision Without Rationale**: Making or documenting decisions without explicit "why"
+
+## Quick Reference
+
+### System Analysis Checklist
+
+- [ ] Data-flow traced from all entry points to sinks
+- [ ] Flow-stream patterns identified (continuous/batch/event-driven)
+- [ ] Causality chains mapped with explicit mechanisms
+- [ ] Holistic view considers system-wide implications
+- [ ] Rationale documented for all decisions
+- [ ] Cross-cutting concerns identified
+- [ ] Second-order effects considered
+- [ ] 7-point validation completed
+
+### Key Questions to Answer
+
+**Data-Flow**:
+- Where does data enter the system?
+- How does data transform at each step?
+- Where does data exit the system?
+- What are the data dependencies?
+
+**Flow-Stream**:
+- Is this a continuous stream or discrete events?
+- What controls the flow rate?
+- Where are the bottlenecks?
+- How does backpressure work?
+
+**Causality**:
+- Why does this component exist?
+- Why does this effect occur?
+- What is the root cause?
+- What are the feedback loops?
+
+**Holistic**:
+- How does this component fit in the system?
+- What are the system-wide implications?
+- What are the cross-cutting concerns?
+- What are the emergent properties?
+
+**Rationale**:
+- Why was this decision made?
+- What alternatives were considered?
+- What constraints influenced the decision?
+- How does this support system goals?
+
+## Related Rules
+
+- [markdown-mermaid-diagrams.mdc](./markdown-mermaid-diagrams.mdc) - Visual representation of system flows
+- [markdown-code-block-language.mdc](./markdown-code-block-language.mdc) - Code documentation standards
+
+## Pipeline Position
+
+**Prerequisites**:
+- Understanding of system components and their relationships
+- Access to system documentation or codebase
+
+**Input Assumptions**:
+- System or component to analyze exists
+- Analysis purpose is clear (debugging/design/documentation)
+
+**Output Guarantees**:
+- Complete data-flow mapping
+- Flow-stream understanding documented
+- Causality chains explained
+- Holistic system view provided
+- Rationale for all decisions documented
+
+**Next Steps**:
+- Create visual diagrams using Mermaid to illustrate flows
+- Document findings in system architecture documentation
+
+---
+
+**North Star**: Understand systems as interconnected flows of data and causality, not isolated components. Always explain "why", not just "what".

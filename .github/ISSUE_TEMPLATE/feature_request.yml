@@ -1,0 +1,147 @@
+---
+name: "🚀 Feature Request for Repository Template"
+description: "Suggest a new feature or enhancement for the repository template"
+title: "[FEATURE] Engineering Log: Brief description"
+labels: [enhancement, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a feature for our repository template! Please fill out the sections below to help us understand your proposal.
+
+        **Note**: This template is designed for AI-assisted development workflows. Consider how your feature might enhance AI integration or developer productivity.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: 📝 Feature Summary
+      description: Provide a clear and concise summary of the feature you'd like to see added.
+      placeholder: "A brief summary of the new feature..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 🎯 Problem Statement
+      description: What problem does this feature solve? What need does it address?
+      placeholder: "This feature would solve the problem of..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 💡 Proposed Solution
+      description: Describe the solution you'd like to see implemented.
+      placeholder: "I would like to see..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 🔄 Alternatives Considered
+      description: Describe any alternative solutions or features you've considered.
+      placeholder: "Alternative approaches I've considered include..."
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: 📦 Template Component
+      description: Which part of the repository template should this feature enhance?
+      options:
+        - "Documentation Content"
+        - "GitHub Workflows"
+        - "AI Integration (.claude, .cursor)"
+        - "Context Engineering"
+        - "Issue Templates"
+        - "Repository Configuration"
+        - "Automation Scripts"
+        - "Development Workflow"
+        - "New Component"
+        - "Other (please specify)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 🎯 Priority Level
+      description: How important is this feature to you?
+      options:
+        - "High - Critical for my workflow"
+        - "Medium - Would be very helpful"
+        - "Low - Nice to have"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: effort
+    attributes:
+      label: 🔧 Estimated Implementation Effort
+      description: What do you think the implementation complexity might be?
+      options:
+        - "Small - Minor configuration or documentation change"
+        - "Medium - New template files or moderate automation"
+        - "Large - Significant new functionality or complex integration"
+        - "Unknown - Not sure about complexity"
+
+  - type: textarea
+    id: use_cases
+    attributes:
+      label: 🎨 Use Cases
+      description: Describe specific use cases or scenarios where this feature would be valuable.
+      placeholder: |
+        Use Case 1: When setting up a new project, this feature would...
+        Use Case 2: During development, this would help with...
+        Use Case 3: For AI integration, this would enable...
+
+  - type: textarea
+    id: ai_integration
+    attributes:
+      label: 🤖 AI Integration Benefits
+      description: How would this feature enhance AI-assisted development workflows?
+      placeholder: "This feature would improve AI integration by..."
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: 📋 Examples or References
+      description: Provide examples, mockups, or references that illustrate your idea.
+      placeholder: "Examples of similar features or implementations..."
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📝 Additional Context
+      description: Add any other context, screenshots, or information about the feature request.
+      placeholder: "Any additional information that might be helpful..."
+
+  - type: checkboxes
+    id: implementation
+    attributes:
+      label: 🛠️ Implementation Willingness
+      description: How can you contribute to this feature?
+      options:
+        - label: I would be willing to help implement this feature
+          required: false
+        - label: I can provide testing and feedback during development
+          required: false
+        - label: I can contribute documentation for this feature
+          required: false
+        - label: I can help with design or planning discussions
+          required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: ✅ Pre-submission Checklist
+      description: Please confirm you have completed these steps
+      options:
+        - label: I have searched existing issues to ensure this is not a duplicate
+          required: true
+        - label: I have provided clear use cases and benefits
+          required: true
+        - label: I have considered how this fits with the template's AI-assisted development focus
+          required: true

@@ -1,0 +1,168 @@
+---
+title: "Documentation Naming Convention Standards"
+description: "Enforce consistent naming conventions in the docs/ folder for directories and markdown files following the established NN_description and NN-description.md patterns"
+globs: ["docs/**/*"]
+alwaysApply: true
+---
+
+# Documentation Naming Convention Standards
+
+## Description
+
+This rule enforces consistent naming conventions within the docs/ folder structure to maintain organizational clarity and discoverability. The rule ensures all directories and markdown files follow the established numerical prefixing patterns that facilitate logical ordering and hierarchical organization.
+
+**Primary Focus Areas:**
+- Directory naming with numerical prefixes and underscores
+- Markdown file naming with numerical prefixes and dashes
+- Hierarchical numbering consistency
+- Descriptive naming standards for maximum clarity
+
+## Rule
+
+**MANDATORY NAMING REQUIREMENTS:**
+
+1. **Directory Naming Convention**
+   - Use format: `NN_description` where NN is a two-digit number
+   - Examples: `00_context_engineering`, `01_overview`, `02_concepts`
+   - For nested numbering: `NN.N_description` format allowed (e.g., `04.1_anthropic_prompt_engineering`)
+   - Additional sub-numbering: `NN_N_description` format allowed (e.g., `01_1_product_requirement_promps`)
+   - Use lowercase with underscores as word separators
+   - Numbers must be zero-padded for proper sorting
+
+2. **Markdown File Naming Convention**
+   - Use format: `NN-description.md` where NN is a two-digit number
+   - Examples: `00-prp-codebase-analysis.md`, `02-2-1-context-engineering.md`
+   - For complex numbering: `NN-N-description.md` format allowed
+   - Version suffixes permitted: `NN-N-description-v2.md`
+   - Use lowercase with dashes as word separators
+   - Numbers must be zero-padded for proper sorting
+
+3. **Hierarchical Consistency**
+   - Maintain logical numerical progression within each directory level
+   - Avoid gaps in numbering sequences when possible
+   - Use consistent numbering depth within the same directory level
+   - Reserve 00 prefix for foundational or overview content
+
+4. **Descriptive Standards**
+   - Directory and file descriptions must be clear and specific
+   - Use abbreviated forms consistently (e.g., `prp` for "product requirement prompts")
+   - Avoid redundant terms in nested structures
+   - Maintain consistency with existing abbreviated terminology
+
+5. **ASCII Compatibility**
+   - Use only ASCII characters, numbers, underscores, and dashes
+   - Avoid spaces, special characters, or Unicode symbols
+   - Ensure case consistency (all lowercase)
+
+## Implementation
+
+**IDE Integration:**
+
+- Validates directory and file names against the established pattern
+- Suggests proper naming format when creating new docs/ content
+- Highlights violations of the naming convention in real-time
+- Provides auto-completion based on existing numbering patterns
+- Checks for numerical sequence gaps and suggests appropriate numbers
+
+**Validation Triggers:**
+- File creation within docs/ directory
+- Directory creation within docs/ structure
+- File renaming operations
+- Directory restructuring activities
+
+## Examples
+
+### ✅ Correct Directory Structure
+
+` ``
+docs/
+├── 00_context_engineering/
+│   ├── 00-prp-codebase-analysis.md
+│   ├── 01-1-prp-repository-github-configure.md
+│   └── 01-2-prp-repository-github-workflows.md
+├── 01_overview/
+│   ├── about-this-repo.md
+│   └── quick-start.md
+├── 02_concepts/
+│   └── 02-2-1-context-engineering.md
+└── 11_references/
+    ├── 08_1_internal/
+    └── 08_2_external/
+` ``
+
+### ❌ Incorrect Naming Patterns
+
+` ``
+docs/
+├── context-engineering/           ❌ Missing numerical prefix
+├── 1_overview/                    ❌ Not zero-padded
+│   ├── About This Repo.md         ❌ Spaces, capitalization
+│   └── quick_start.md             ❌ Underscore instead of dash
+├── 02-concepts/                   ❌ Dash instead of underscore
+└── References/                    ❌ No numerical prefix, capitalized
+    ├── internal/                  ❌ No numerical prefix
+    └── external docs/             ❌ Space in name
+` ``
+
+### Directory Naming Examples
+
+**✅ Correct:**
+- `00_context_engineering`
+- `01_overview`
+- `02_concepts`
+- `11_references`
+- `04.1_anthropic_prompt_engineering`
+- `01_1_product_requirement_promps`
+
+**❌ Incorrect:**
+- `context-engineering` (missing number prefix)
+- `1_overview` (not zero-padded)
+- `02-concepts` (dash instead of underscore)
+- `References` (capitalized, no number)
+- `4.1_anthropic` (not zero-padded)
+
+### File Naming Examples
+
+**✅ Correct:**
+- `00-prp-codebase-analysis.md`
+- `01-1-prp-repository-github-configure.md`
+- `02-2-1-context-engineering.md`
+- `01-1-prp-repository-github-configure-v2.md`
+
+**❌ Incorrect:**
+- `prp-codebase-analysis.md` (missing number prefix)
+- `1-1-prp-repository.md` (not zero-padded)
+- `02_1_context_engineering.md` (underscore instead of dash)
+- `PRP Codebase Analysis.md` (spaces, capitalization)
+
+### ASCII File Structure Validation
+
+` ``
+docs/
+├── 00_context_engineering/        ✅ Valid: NN_description
+├── 01_overview/                    ✅ Valid: NN_description
+│   ├── 00-overview.md             ✅ Valid: NN-description.md
+│   └── 01-quick-start.md          ✅ Valid: NN-description.md
+├── 02_concepts/                    ✅ Valid: NN_description
+│   └── 02-1-context-eng.md        ✅ Valid: NN-N-description.md
+└── 99_archive/                     ✅ Valid: NN_description
+    └── 01-deprecated-guide-v1.md   ✅ Valid: NN-description-vN.md
+` ``
+
+### Common Violations and Fixes
+
+**Directory Violations:**
+` ``
+❌ context engineering/     →  ✅ 00_context_engineering/
+❌ 1_Overview/              →  ✅ 01_overview/
+❌ 02-concepts/             →  ✅ 02_concepts/
+❌ References/              →  ✅ 11_references/
+` ``
+
+**File Violations:**
+` ``
+❌ Overview.md              →  ✅ 00-overview.md
+❌ 1-quick-start.md         →  ✅ 01-quick-start.md
+❌ context_engineering.md   →  ✅ 02-context-engineering.md
+❌ PRP Template Base.md     →  ✅ 01-prp-template-base.md
+` ``

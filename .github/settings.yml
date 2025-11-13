@@ -1,0 +1,76 @@
+# These settings are synced to GitHub by the Settings app (https://github.com/probot/settings)
+
+repository:
+  # A short description of the repository that will show up on GitHub
+  description: A collection of engineering logs, documentation, and styleguides.
+
+  # A URL with more information about the repository
+  homepage: https://github.com/Excoriate/engineering-log
+
+  # A list of topics to help people find the repository
+  topics: engineering-log, documentation, markdown, mermaid, styleguide, devlog
+
+  # Either `true` to make the repository private, or `false` to make it public.
+  private: false
+
+  # Either `true` to enable issues for this repository, `false` to disable them.
+  has_issues: true
+
+  # Either `true` to enable projects for this repository, or `false` to disable them.
+  has_projects: false
+
+  # Either `true` to enable the wiki for this repository, or `false` to disable it.
+  has_wiki: false
+
+  # Either `true` to enable downloads for this repository, or `false` to disable them.
+  has_downloads: true
+
+  # The default branch for pull requests and commits.
+  default_branch: main
+
+  # Either `true` to allow squash-merging pull requests, or `false` to prevent
+  # squash-merging.
+  allow_squash_merge: true
+
+  # Either `true` to allow merging pull requests with a merge commit, or `false`
+  # to prevent merging pull requests with merge commits.
+  allow_merge_commit: true
+
+  # Either `true` to allow rebase-merging pull requests, or `false` to prevent
+  # rebase-merging.
+  allow_rebase_merge: true
+
+  # Either `true` to automatically delete head branches when pull requests are
+  # merged, or `false` to prevent automatic deletion.
+  delete_branch_on_merge: true
+
+branches:
+  - name: main
+    protection:
+      # Required. Require at least one approving review on a pull request, before merging.
+      # Set to `null` to disable.
+      required_pull_request_reviews:
+        # The number of approvals required.
+        required_approving_review_count: 1
+        # Dismiss stale pull request approvals when new commits are pushed.
+        dismiss_stale_reviews: true
+        # Users and teams who are able to dismiss pull request reviews.
+        dismissal_restrictions:
+          users: []
+          teams: []
+
+      # Required. Require status checks to pass before merging.
+      required_status_checks:
+        # Required. Require branches to be up to date before merging.
+        strict: true
+        # Required. The list of status checks to require in order to merge into this branch.
+        contexts: []
+
+      # Required. Enforce all configured restrictions for administrators.
+      enforce_admins: true
+
+      # Required. Restrict who can push to this branch.
+      restrictions:
+        apps: []
+        users: []
+        teams: []

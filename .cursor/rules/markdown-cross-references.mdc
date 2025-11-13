@@ -1,0 +1,119 @@
+---
+title: "Markdown Cross-Reference Standards"
+description: "Enforce proper cross-document linking with relative paths and anchor links in markdown files"
+globs: ["**/*.md", "**/*.markdown"]
+alwaysApply: true
+---
+
+# Markdown Cross-Reference Standards
+
+## Description
+
+This rule enforces proper cross-document linking standards in markdown files. All references to other documents or sections MUST use explicit markdown link syntax with relative paths. Referencing documents by name alone is prohibited.
+
+**Primary Focus**: Proper link syntax and relative path usage
+
+## Rule
+
+**MANDATORY REQUIREMENTS:**
+
+1. **Explicit Link Syntax**
+   - MUST: Use markdown link syntax `[text](./path/to/file.md)`
+   - PROHIBITED: Referencing documents by name alone ("See CONTRIBUTING.md")
+   - PROHIBITED: Bare URLs without link text
+
+2. **Relative Paths**
+   - MUST: Use relative paths from current file location
+   - Format: `./file.md` (same directory), `../file.md` (parent), `../../file.md` (grandparent)
+   - MUST: Include file extension (`.md`)
+
+3. **Anchor Links**
+   - MUST: Use anchor syntax for section references `[text](./file.md#section-title)`
+   - Format: Section titles in lowercase with dashes: `#my-section-title`
+   - Spaces in section titles become dashes in anchor links
+
+4. **Link Validation**
+   - All referenced files MUST exist
+   - All anchor links MUST point to existing sections
+   - Broken links are validation failures
+
+## Implementation
+
+- Real-time link syntax validation
+- Broken link detection during editing
+- Auto-completion for file paths
+- Anchor link suggestions based on existing headers
+
+## Benefits
+
+1. **Navigate Reliability**: Links work correctly in all markdown viewers
+2. **Refactoring Safety**: IDEs can update links when files move
+3. **Validation**: Broken links can be detected automatically
+4. **Clarity**: Explicit links show relationship between documents
+
+## Examples
+
+### ✅ Correct Cross-References
+
+` ``markdown
+See the [Setup section](./CONTRIBUTING.md#setup) for installation instructions.
+
+For more details, refer to the [API documentation](./docs/api-reference.md).
+
+Check the [configuration guide](../config/settings.md#database-configuration).
+` ``
+
+### ❌ Incorrect Cross-References
+
+` ``markdown
+❌ See the "Setup" section in the contribution guide.
+   (No explicit link)
+
+❌ Refer to CONTRIBUTING.md for more details.
+   (Document name without link syntax)
+
+❌ See [this document](CONTRIBUTING.md).
+   (Missing ./ for relative path)
+
+❌ Check the setup documentation.
+   (Vague reference, no link)
+` ``
+
+### Anchor Link Examples
+
+` ``markdown
+✅ CORRECT:
+# My Section Title
+
+[Link to section](#my-section-title)
+[Link in other file](./other.md#my-section-title)
+
+❌ INCORRECT:
+[Link with spaces](#My Section Title)  ❌ Spaces not converted to dashes
+[Link with caps](#My-Section-Title)    ❌ Capitals not converted to lowercase
+` ``
+
+## Related Rules
+
+- [markdown-file-naming.md](./markdown-file-naming.md) - File naming affects link paths
+- [markdown-header-hierarchy.md](./markdown-header-hierarchy.md) - Headers create anchor targets
+- [markdown-formatting.md](./markdown-formatting.md) - Original combined rule (DEPRECATED)
+
+## Pipeline Position
+
+**Prerequisites**:
+- [markdown-file-naming.md](./markdown-file-naming.md) - Files must be named correctly before linking
+- [markdown-header-hierarchy.md](./markdown-header-hierarchy.md) - Headers must exist for anchor links
+
+**Input Assumptions**:
+- Markdown files exist
+- File names follow naming standards
+- Headers exist for anchor references
+
+**Output Guarantees**:
+- All cross-document references use explicit link syntax
+- All links use relative paths
+- All anchor links use correct format (lowercase, dashes)
+- No bare document name references
+
+**Next Steps**: None (final formatting rule in pipeline)
