@@ -32,7 +32,7 @@ The pipeline lies. It says "succeeded" because it successfully *requested* a dep
 
 ### 2.1 The Failure Chain (Mechanistic Explanation)
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────┐
 │ T-6 DAYS: Old Feature Branch Environment Torn Down (fbe-744839)           │
 ├────────────────────────────────────────────────────────────────────────────┤
@@ -133,7 +133,8 @@ kubectl get ns afi -o jsonpath='{.status.phase}'
 ```
 
 **Expected output if claim is true:**
-```
+
+```text
 Terminating
 ```
 
@@ -143,7 +144,8 @@ kubectl get ns | grep afi
 ```
 
 **Actual output (2025-12-22):**
-```
+
+```text
 afi                             Terminating   12d
 afi-monitoring                  Active        2d20h
 ```
@@ -333,7 +335,8 @@ argocd app get afi-app-of-apps --server argocd.dev.vpp.eneco.com --grpc-web | \
 ```
 
 **Expected output (should list child apps with Missing health):**
-```
+
+```text
 argoproj.io  Application  afi  frontend             OutOfSync  Missing   ...
 argoproj.io  Application  afi  integration-tests    OutOfSync  Missing   ...
 argoproj.io  Application  afi  telemetry            OutOfSync  Missing   ...
@@ -362,7 +365,8 @@ kubectl get pods -n afi 2>&1
 ```
 
 **Expected output:**
-```
+
+```text
 No resources found in afi namespace.
 ```
 
@@ -372,7 +376,8 @@ kubectl get deployments -n afi 2>&1
 ```
 
 **Expected output:**
-```
+
+```text
 No resources found in afi namespace.
 ```
 
@@ -382,7 +387,8 @@ kubectl get all -n afi 2>&1
 ```
 
 **Expected output:**
-```
+
+```text
 No resources found in afi namespace.
 ```
 
@@ -393,7 +399,8 @@ kubectl api-resources --verbs=list --namespaced -o name | \
 ```
 
 **Expected output (only Application CRDs):**
-```
+
+```text
 NAME            SYNC STATUS   HEALTH STATUS
 alarmengine     OutOfSync     Missing
 assetmonitor    OutOfSync     Missing
@@ -446,7 +453,8 @@ kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-application-controll
 ```
 
 **Expected output (Running, no restarts):**
-```
+
+```text
 NAME                                    READY   STATUS    RESTARTS   AGE
 argocd-application-controller-0         1/1     Running   0          5d20h
 ```
@@ -469,7 +477,8 @@ kubectl get applications.argoproj.io -n afi --no-headers | wc -l
 ```
 
 **Expected output:**
-```
+
+```text
 5
 ```
 
@@ -480,11 +489,13 @@ argocd app get afi-app-of-apps --server argocd.dev.vpp.eneco.com --grpc-web | \
 ```
 
 **Expected output (all child apps it's trying to manage):**
-```
+
+```text
 21
 ```
 
 **Technical rationale:** The app-of-apps defines 21 child Applications. If only 5 are stuck with finalizers and 16 were successfully deleted, something is different about these 5. Possible explanations:
+
 - They were managing more complex resources
 - They were deleted in a different order
 - Controller encountered an error specific to these 5
@@ -651,6 +662,7 @@ done
 ```
 
 **Verification after each patch:**
+
 ```bash
 kubectl get application $app -n afi -o jsonpath='{.metadata.finalizers}'
 # Should return empty: []
@@ -792,6 +804,7 @@ Each step must verify completion before proceeding. No fire-and-forget.
 1. **Why didn't ArgoCD controller process the finalizers 6 days ago?**
 
    **Investigation command:**
+
    ```bash
    # Get controller logs from Dec 16 (if retained)
    kubectl logs -n argocd argocd-application-controller-0 --since-time="2025-12-16T13:00:00Z" 2>/dev/null | \
@@ -803,6 +816,7 @@ Each step must verify completion before proceeding. No fire-and-forget.
 2. **Why are only 5 of 21 apps stuck?**
 
    **Investigation command:**
+
    ```bash
    # Compare stuck apps to successfully deleted apps
    # (Would need git history or ArgoCD logs from Dec 16)
@@ -813,6 +827,7 @@ Each step must verify completion before proceeding. No fire-and-forget.
 3. **Is this a recurring pattern?**
 
    **Investigation command:**
+
    ```bash
    kubectl get ns --field-selector status.phase=Terminating
    ```
@@ -822,6 +837,7 @@ Each step must verify completion before proceeding. No fire-and-forget.
 4. **Who or what initiated the deletion on Dec 16?**
 
    **Investigation commands:**
+
    ```bash
    # Git history
    cd VPP-Configuration && git log --since="2025-12-16" --until="2025-12-17" --oneline
@@ -932,6 +948,6 @@ az pipelines build show --id <build-id> \
 
 ---
 
-**End of Report**
+## End of Report
 
-*"The pipeline doesn't care if your deployment works. It only cares if it ran without crashing. These are not the same thing."*
+> "The pipeline doesn't care if your deployment works. It only cares if it ran without crashing. These are not the same thing."
