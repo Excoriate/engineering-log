@@ -1,8 +1,8 @@
 ---
 task_id: '2025-12-22-001'
 type: 'trajectory'
-description: 'File role: Navigation MAP of touched files. Task context: 1 modified, 2 read, 1 created, focus on investigation-report.md'
-last_updated: '2025-12-22 12:30'
+description: 'File role: Navigation MAP of touched files. Task context: 1 modified, 4 read, 2 created, focus on investigation + mastery guide'
+last_updated: '2025-12-22 12:45'
 ---
 
 # Trajectory
@@ -34,3 +34,4 @@ last_updated: '2025-12-22 12:30'
 | File | Purpose |
 |------|---------|
 | `log/employer/eneco/troubleshooting/cicd-green-but-failed-error/investigation-report.md` | Full investigation with 11 evidence-backed claims, remediation steps |
+| `log/employer/eneco/troubleshooting/cicd-green-but-failed-error/k8s-argocd-troubleshooting-mastery.md` | Comprehensive K8s/ArgoCD troubleshooting guide (~1000 lines): mindset, mental models, decision trees, command mastery, pattern recognition |

@@ -46,3 +46,4 @@ Investigation complete. Root cause: 5 ArgoCD Applications from old branch `fbe-7
 |----------|----------|
 | Investigation Report | `log/employer/eneco/troubleshooting/cicd-green-but-failed-error/investigation-report.md` |
 | Original Context | `log/employer/eneco/troubleshooting/cicd-green-but-failed-error/initial-antecedents.md` |
+| **Troubleshooting Mastery Guide** | `log/employer/eneco/troubleshooting/cicd-green-but-failed-error/k8s-argocd-troubleshooting-mastery.md` |

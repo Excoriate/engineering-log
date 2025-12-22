@@ -38,6 +38,14 @@ last_updated: '2025-12-22 12:30'
 
 ## Notes
 
+**[2025-12-22 12:45] Created K8s/ArgoCD Troubleshooting Mastery Guide**
+
+Based on this troubleshooting session, created comprehensive educational document:
+- Location: `log/employer/eneco/troubleshooting/cicd-green-but-failed-error/k8s-argocd-troubleshooting-mastery.md`
+- ~1000 lines covering: mindset, mental models, troubleshooting maps, command mastery, case study, pattern recognition, learning path
+- Written from 10x SRE/Distinguished Engineer mentorship perspective
+- Explains "why" behind every command, not just "what"
+
 Key commands for future similar investigations:
 
 ```bash
