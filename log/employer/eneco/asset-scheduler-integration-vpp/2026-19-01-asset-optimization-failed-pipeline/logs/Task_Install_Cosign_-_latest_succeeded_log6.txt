@@ -1,0 +1,31 @@
+2026-01-15T08:57:38.9484157Z ##[section]Starting: Install Cosign - [latest]
+2026-01-15T08:57:38.9495658Z ==============================================================================
+2026-01-15T08:57:38.9496097Z Task         : Command line
+2026-01-15T08:57:38.9496276Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:57:38.9496552Z Version      : 2.250.1
+2026-01-15T08:57:38.9496726Z Author       : Microsoft Corporation
+2026-01-15T08:57:38.9496922Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:57:38.9497189Z ==============================================================================
+2026-01-15T08:57:39.2033321Z Generating script.
+2026-01-15T08:57:39.2042130Z ========================== Starting Command Output ===========================
+2026-01-15T08:57:39.2072105Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/ccd6c7c7-b338-4e73-855c-0e628455b824.sh
+2026-01-15T08:57:39.2141264Z Fetching latest Cosign version from [https://api.github.com/repos/sigstore/cosign/releases/latest]
+2026-01-15T08:57:39.4783898Z Downloading Cosign v3.0.4 from [https://github.com/sigstore/cosign/releases/download/v3.0.4/cosign-linux-amd64]
+2026-01-15T08:57:41.4079253Z   ______   ______        _______. __    _______ .__   __.
+2026-01-15T08:57:41.4083570Z  /      | /  __  \      /       ||  |  /  _____||  \ |  |
+2026-01-15T08:57:41.4084373Z |  ,----'|  |  |  |    |   (----`|  | |  |  __  |   \|  |
+2026-01-15T08:57:41.4098239Z |  |     |  |  |  |     \   \    |  | |  | |_ | |  . `  |
+2026-01-15T08:57:41.4098550Z |  `----.|  `--'  | .----)   |   |  | |  |__| | |  |\   |
+2026-01-15T08:57:41.4098865Z  \______| \______/  |_______/    |__|  \______| |__| \__|
+2026-01-15T08:57:41.4099227Z cosign: A tool for Container Signing, Verification and Storage in an OCI registry.
+2026-01-15T08:57:41.4099419Z 
+2026-01-15T08:57:41.4099708Z GitVersion:    v3.0.4
+2026-01-15T08:57:41.4100031Z GitCommit:     6832fba4928c1ad69400235bbc41212de5006176
+2026-01-15T08:57:41.4100372Z GitTreeState:  clean
+2026-01-15T08:57:41.4100700Z BuildDate:     2026-01-09T21:17:16Z
+2026-01-15T08:57:41.4101034Z GoVersion:     go1.25.5
+2026-01-15T08:57:41.4101635Z Compiler:      gc
+2026-01-15T08:57:41.4101981Z Platform:      linux/amd64
+2026-01-15T08:57:41.4102150Z 
+2026-01-15T08:57:41.4137706Z 
+2026-01-15T08:57:41.4227311Z ##[section]Finishing: Install Cosign - [latest]

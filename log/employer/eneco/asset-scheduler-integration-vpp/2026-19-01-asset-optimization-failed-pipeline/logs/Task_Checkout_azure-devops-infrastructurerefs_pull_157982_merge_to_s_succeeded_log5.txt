@@ -1,0 +1,71 @@
+2026-01-15T08:57:37.7036553Z ##[section]Starting: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:57:37.7140339Z ==============================================================================
+2026-01-15T08:57:37.7141583Z Task         : Get sources
+2026-01-15T08:57:37.7142020Z Description  : Get sources from a repository. Supports Git, TfsVC, and SVN repositories.
+2026-01-15T08:57:37.7142343Z Version      : 1.0.0
+2026-01-15T08:57:37.7142650Z Author       : Microsoft
+2026-01-15T08:57:37.7143038Z Help         : [More Information](https://go.microsoft.com/fwlink/?LinkId=798199)
+2026-01-15T08:57:37.7143329Z ==============================================================================
+2026-01-15T08:57:38.0652312Z Syncing repository: azure-devops-infrastructure (Git)
+2026-01-15T08:57:38.1808608Z ##[command]git version
+2026-01-15T08:57:38.1921476Z git version 2.52.0
+2026-01-15T08:57:38.1967198Z ##[command]git lfs version
+2026-01-15T08:57:38.2708484Z git-lfs/3.7.1 (GitHub; linux amd64; go 1.24.4)
+2026-01-15T08:57:38.2877049Z ##[command]git init "/home/vsts/work/1/s"
+2026-01-15T08:57:38.3032173Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-01-15T08:57:38.3033749Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-01-15T08:57:38.3036155Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-01-15T08:57:38.3037105Z hint: call:
+2026-01-15T08:57:38.3042347Z hint:
+2026-01-15T08:57:38.3043851Z hint: 	git config --global init.defaultBranch <name>
+2026-01-15T08:57:38.3045200Z hint:
+2026-01-15T08:57:38.3049708Z Initialized empty Git repository in /home/vsts/work/1/s/.git/
+2026-01-15T08:57:38.3072515Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-01-15T08:57:38.3074490Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-01-15T08:57:38.3076145Z hint:
+2026-01-15T08:57:38.3077418Z hint: 	git branch -m <name>
+2026-01-15T08:57:38.3078537Z hint:
+2026-01-15T08:57:38.3080716Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-01-15T08:57:38.3084809Z ##[command]git remote add origin https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/VPP%AZP2520-%AZP2520Asset%AZP2520Optimisation/_git/azure-devops-infrastructure
+2026-01-15T08:57:38.3178568Z ##[command]git sparse-checkout disable
+2026-01-15T08:57:38.3283877Z ##[command]git config gc.auto 0
+2026-01-15T08:57:38.3393283Z ##[command]git config core.longpaths true
+2026-01-15T08:57:38.3594683Z ##[command]git config --get-all http.https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/VPP%AZP2520-%AZP2520Asset%AZP2520Optimisation/_git/azure-devops-infrastructure.extraheader
+2026-01-15T08:57:38.3665772Z ##[command]git config --get-all http.extraheader
+2026-01-15T08:57:38.3794056Z ##[command]git config --get-regexp .*extraheader
+2026-01-15T08:57:38.3887775Z ##[command]git config --get-all http.proxy
+2026-01-15T08:57:38.3955122Z ##[command]git config http.version HTTP/1.1
+2026-01-15T08:57:38.4036822Z ##[command]git config --get-all remote.origin.promisor
+2026-01-15T08:57:38.4109224Z ##[command]git config --get-all remote.origin.partialclonefilter
+2026-01-15T08:57:38.4151016Z ##[command]git --config-env=http.extraheader=env_var_http.extraheader fetch --force --tags --prune --prune-tags --progress --no-recurse-submodules origin --depth=1  +4babd2f29e5cf4e6789c36ac27903e7a77a47105:refs/remotes/origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:57:38.6096772Z remote: Azure Repos        
+2026-01-15T08:57:38.6107832Z remote: 
+2026-01-15T08:57:38.6108673Z remote: Found 32 objects to send. (45 ms)        
+2026-01-15T08:57:38.6255672Z From https://dev.azure.com/enecomanagedcloud/VPP%20-%20Asset%20Optimisation/_git/azure-devops-infrastructure
+2026-01-15T08:57:38.6260764Z  * [new ref]         4babd2f29e5cf4e6789c36ac27903e7a77a47105 -> origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:57:38.7012976Z ##[command]git --config-env=http.extraheader=env_var_http.extraheader fetch --force --tags --prune --prune-tags --progress --no-recurse-submodules origin --depth=1  +4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:57:38.8414555Z remote: Azure Repos        
+2026-01-15T08:57:38.8596475Z remote: 
+2026-01-15T08:57:38.8597670Z remote: Found 0 objects to send. (17 ms)        
+2026-01-15T08:57:38.8692958Z From https://dev.azure.com/enecomanagedcloud/VPP%20-%20Asset%20Optimisation/_git/azure-devops-infrastructure
+2026-01-15T08:57:38.8694360Z  * branch            4babd2f29e5cf4e6789c36ac27903e7a77a47105 -> FETCH_HEAD
+2026-01-15T08:57:38.9298510Z ##[command]git checkout --progress --force refs/remotes/origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:57:38.9316051Z Note: switching to 'refs/remotes/origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105'.
+2026-01-15T08:57:38.9316346Z 
+2026-01-15T08:57:38.9316829Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-01-15T08:57:38.9317397Z changes and commit them, and you can discard any commits you make in this
+2026-01-15T08:57:38.9318056Z state without impacting any branches by switching back to a branch.
+2026-01-15T08:57:38.9318340Z 
+2026-01-15T08:57:38.9318823Z If you want to create a new branch to retain commits you create, you may
+2026-01-15T08:57:38.9319372Z do so (now or later) by using -c with the switch command. Example:
+2026-01-15T08:57:38.9319603Z 
+2026-01-15T08:57:38.9320244Z   git switch -c <new-branch-name>
+2026-01-15T08:57:38.9320652Z 
+2026-01-15T08:57:38.9321582Z Or undo this operation with:
+2026-01-15T08:57:38.9321929Z 
+2026-01-15T08:57:38.9322598Z   git switch -
+2026-01-15T08:57:38.9322867Z 
+2026-01-15T08:57:38.9323681Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-01-15T08:57:38.9324140Z 
+2026-01-15T08:57:38.9325061Z HEAD is now at 4babd2f Merge pull request 157982 from feat/update-docs-ci-cd-plaform into main
+2026-01-15T08:57:38.9405671Z ##[section]Finishing: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s

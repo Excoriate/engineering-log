@@ -1,0 +1,296 @@
+2026-01-15T08:58:34.8324670Z ##[section]Starting: Run Terraform Plan
+2026-01-15T08:58:34.9929575Z ##[section]Starting: Initialize job
+2026-01-15T08:58:34.9934422Z Agent name: 'Azure Pipelines 16'
+2026-01-15T08:58:34.9935205Z Agent machine name: 'runnervm4s5zu'
+2026-01-15T08:58:34.9935574Z Current agent version: '4.266.2'
+2026-01-15T08:58:34.9966111Z ##[group]Runner Image Provisioner
+2026-01-15T08:58:34.9966567Z Hosted Compute Agent
+2026-01-15T08:58:34.9967146Z Version: 20251211.462
+2026-01-15T08:58:34.9967549Z Commit: 6cbad8c2bb55d58165063d031ccabf57e2d2db61
+2026-01-15T08:58:34.9967972Z Build Date: 2025-12-11T16:28:49Z
+2026-01-15T08:58:34.9968368Z Worker ID: {289a5506-2a13-47e3-871a-f13d28dc9fb2}
+2026-01-15T08:58:34.9968712Z ##[endgroup]
+2026-01-15T08:58:34.9969011Z ##[group]Operating System
+2026-01-15T08:58:34.9969297Z Ubuntu
+2026-01-15T08:58:34.9969542Z 24.04.3
+2026-01-15T08:58:34.9969775Z LTS
+2026-01-15T08:58:34.9970019Z ##[endgroup]
+2026-01-15T08:58:34.9970314Z ##[group]Runner Image
+2026-01-15T08:58:34.9970619Z Image: ubuntu-24.04
+2026-01-15T08:58:34.9971019Z Version: 20260105.202.1
+2026-01-15T08:58:34.9971465Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260105.202/images/ubuntu/Ubuntu2404-Readme.md
+2026-01-15T08:58:34.9972023Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260105.202
+2026-01-15T08:58:34.9972423Z ##[endgroup]
+2026-01-15T08:58:34.9976583Z Current image version: '20260105.202.1'
+2026-01-15T08:58:35.1405236Z Agent running as: 'vsts'
+2026-01-15T08:58:35.1446675Z Prepare build directory.
+2026-01-15T08:58:35.1646624Z Set build variables.
+2026-01-15T08:58:35.1661937Z Download all required tasks.
+2026-01-15T08:58:35.1727438Z Downloading task: TerraformInstaller (1.2.3)
+2026-01-15T08:58:43.2019374Z Downloading task: CmdLine (2.250.1)
+2026-01-15T08:58:43.5118741Z Downloading task: TerraformCLI (1.2.3)
+2026-01-15T08:58:44.0454853Z Downloading task: CopyFiles (2.246.0)
+2026-01-15T08:58:44.3004579Z Downloading task: PublishPipelineArtifact (1.242.0)
+2026-01-15T08:58:44.4581855Z Checking job knob settings.
+2026-01-15T08:58:44.4584352Z    Knob: DockerActionRetries = true Source: $(VSTSAGENT_DOCKER_ACTION_RETRIES) 
+2026-01-15T08:58:44.4584538Z    Knob: AgentToolsDirectory = /opt/hostedtoolcache Source: ${AGENT_TOOLSDIRECTORY} 
+2026-01-15T08:58:44.4585307Z    Knob: UseGitLongPaths = true Source: $(USE_GIT_LONG_PATHS) 
+2026-01-15T08:58:44.4586144Z    Knob: UseNode24withHandlerData = True Source: $(DistributedTask.Agent.UseNode24withHandlerData) 
+2026-01-15T08:58:44.4587270Z    Knob: EnableIssueSourceValidation = true Source: $(ENABLE_ISSUE_SOURCE_VALIDATION) 
+2026-01-15T08:58:44.4587731Z    Knob: AgentEnablePipelineArtifactLargeChunkSize = true Source: $(AGENT_ENABLE_PIPELINEARTIFACT_LARGE_CHUNK_SIZE) 
+2026-01-15T08:58:44.4588974Z    Knob: ContinueAfterCancelProcessTreeKillAttempt = true Source: $(VSTSAGENT_CONTINUE_AFTER_CANCEL_PROCESSTREEKILL_ATTEMPT) 
+2026-01-15T08:58:44.4589343Z    Knob: ProcessHandlerSecureArguments = false Source: $(AZP_75787_ENABLE_NEW_LOGIC) 
+2026-01-15T08:58:44.4589591Z    Knob: ProcessHandlerSecureArguments = false Source: $(AZP_75787_ENABLE_NEW_LOGIC_LOG) 
+2026-01-15T08:58:44.4589840Z    Knob: ProcessHandlerTelemetry = true Source: $(AZP_75787_ENABLE_COLLECT) 
+2026-01-15T08:58:44.4590101Z    Knob: UseNewNodeHandlerTelemetry = True Source: $(DistributedTask.Agent.USENEWNODEHANDLERTELEMETRY) 
+2026-01-15T08:58:44.4590352Z    Knob: ProcessHandlerEnableNewLogic = true Source: $(AZP_75787_ENABLE_NEW_PH_LOGIC) 
+2026-01-15T08:58:44.4590850Z    Knob: EnableResourceMonitorDebugOutput = true Source: $(AZP_ENABLE_RESOURCE_MONITOR_DEBUG_OUTPUT) 
+2026-01-15T08:58:44.4591112Z    Knob: EnableResourceUtilizationWarnings = true Source: $(AZP_ENABLE_RESOURCE_UTILIZATION_WARNINGS) 
+2026-01-15T08:58:44.4591485Z    Knob: IgnoreVSTSTaskLib = true Source: $(AZP_AGENT_IGNORE_VSTSTASKLIB) 
+2026-01-15T08:58:44.4591704Z    Knob: FailJobWhenAgentDies = true Source: $(FAIL_JOB_WHEN_AGENT_DIES) 
+2026-01-15T08:58:44.4592003Z    Knob: CheckForTaskDeprecation = true Source: $(AZP_AGENT_CHECK_FOR_TASK_DEPRECATION) 
+2026-01-15T08:58:44.4592712Z    Knob: CheckIfTaskNodeRunnerIsDeprecated246 = True Source: $(DistributedTask.Agent.CheckIfTaskNodeRunnerIsDeprecated246) 
+2026-01-15T08:58:44.4592987Z    Knob: UseNode20ToStartContainer = True Source: $(DistributedTask.Agent.UseNode20ToStartContainer) 
+2026-01-15T08:58:44.4593388Z    Knob: EnableTimeoutLogFlushing = True Source: $(DistributedTask.Agent.EnableTimeoutLogFlushing) 
+2026-01-15T08:58:44.4593745Z    Knob: LogTaskNameInUserAgent = true Source: $(AZP_AGENT_LOG_TASKNAME_IN_USERAGENT) 
+2026-01-15T08:58:44.4593991Z    Knob: UseFetchFilterInCheckoutTask = true Source: $(AGENT_USE_FETCH_FILTER_IN_CHECKOUT_TASK) 
+2026-01-15T08:58:44.4594293Z    Knob: Rosetta2Warning = true Source: $(ROSETTA2_WARNING) 
+2026-01-15T08:58:44.4594903Z    Knob: AddForceCredentialsToGitCheckout = True Source: $(DistributedTask.Agent.AddForceCredentialsToGitCheckout) 
+2026-01-15T08:58:44.4595281Z    Knob: AddForceCredentialsToGitCheckoutEnhanced = True Source: $(DistributedTask.Agent.AddForceCredentialsToGitCheckoutEnhanced) 
+2026-01-15T08:58:44.4595752Z    Knob: UseLatestTfExe = True Source: $(DistributedTask.Agent.UseLatestTfExe) 
+2026-01-15T08:58:44.4595996Z    Knob: UseSparseCheckoutInCheckoutTask = true Source: $(AGENT_USE_SPARSE_CHECKOUT_IN_CHECKOUT_TASK) 
+2026-01-15T08:58:44.4596331Z    Knob: AgentCDNConnectivityFailWarning = False Source: $(DistributedTask.Agent.AgentCDNConnectivityFailWarning) 
+2026-01-15T08:58:44.4596555Z    Knob: UseEnhancedLogging = true Source: ${AZP_USE_ENHANCED_LOGGING} 
+2026-01-15T08:58:44.4596914Z Finished checking job knob settings.
+2026-01-15T08:58:44.4923824Z Start tracking orphan processes.
+2026-01-15T08:58:44.5058432Z ##[section]Finishing: Initialize job
+2026-01-15T08:58:44.5126159Z ##[section]Async Command Start: DetectDockerContainer
+2026-01-15T08:58:44.5126703Z ##[section]Async Command End: DetectDockerContainer
+2026-01-15T08:58:44.5127682Z ##[section]Async Command Start: DetectDockerContainer
+2026-01-15T08:58:44.5127849Z ##[section]Async Command End: DetectDockerContainer
+2026-01-15T08:58:44.5252501Z ##[section]Starting: Install Terraform 1.13.1
+2026-01-15T08:58:44.5350407Z ==============================================================================
+2026-01-15T08:58:44.5351429Z Task         : Terraform Installer
+2026-01-15T08:58:44.5351752Z Description  : Installs a specific version of terraform
+2026-01-15T08:58:44.5351849Z Version      : 1.2.3
+2026-01-15T08:58:44.5352065Z Author       : Charles Zipp
+2026-01-15T08:58:44.5352323Z Help         : 
+2026-01-15T08:58:44.5352398Z ==============================================================================
+2026-01-15T08:58:44.7818017Z Terraform not installed, downloading from:  https://releases.hashicorp.com/terraform/1.13.1/terraform_1.13.1_linux_amd64.zip
+2026-01-15T08:58:44.7819796Z Terraform file name as:  terraform-1.13.1-9e8dd12d-ee99-45f3-b021-867a02c7a37d.zip
+2026-01-15T08:58:44.7828014Z Downloading: https://releases.hashicorp.com/terraform/1.13.1/terraform_1.13.1_linux_amd64.zip
+2026-01-15T08:58:45.3302137Z Terraform downloaded to path:  /home/vsts/work/_temp/terraform-1.13.1-9e8dd12d-ee99-45f3-b021-867a02c7a37d.zip
+2026-01-15T08:58:45.3302890Z Extracting archive
+2026-01-15T08:58:45.3320422Z [command]/usr/bin/unzip /home/vsts/work/_temp/terraform-1.13.1-9e8dd12d-ee99-45f3-b021-867a02c7a37d.zip
+2026-01-15T08:58:45.3321224Z Archive:  /home/vsts/work/_temp/terraform-1.13.1-9e8dd12d-ee99-45f3-b021-867a02c7a37d.zip
+2026-01-15T08:58:45.3321850Z   inflating: LICENSE.txt             
+2026-01-15T08:58:46.0938150Z   inflating: terraform               
+2026-01-15T08:58:46.0972817Z 
+2026-01-15T08:58:46.0975127Z Extracted terraform to dir:  /home/vsts/work/_temp/0d8ce51f-8cd9-4ba2-87e9-334d52488868
+2026-01-15T08:58:46.0975802Z Caching tool: terraform 1.13.1 x64
+2026-01-15T08:58:46.1939465Z Terraform installed in path:  /opt/hostedtoolcache/terraform/1.13.1/x64
+2026-01-15T08:58:46.1939928Z Resolving path to Terraform tool...
+2026-01-15T08:58:46.1940344Z Expected Terraform path:  /opt/hostedtoolcache/terraform/1.13.1/x64/terraform
+2026-01-15T08:58:46.1953541Z Searching the following paths:  [
+2026-01-15T08:58:46.1954830Z   '/opt/hostedtoolcache/terraform/1.13.1/x64',
+2026-01-15T08:58:46.1957240Z   '/opt/hostedtoolcache/terraform/1.13.1/x64/LICENSE.txt',
+2026-01-15T08:58:46.1958605Z   '/opt/hostedtoolcache/terraform/1.13.1/x64/terraform'
+2026-01-15T08:58:46.1959527Z ]
+2026-01-15T08:58:46.1969064Z Matched files:  [ '/opt/hostedtoolcache/terraform/1.13.1/x64/terraform' ]
+2026-01-15T08:58:46.1973546Z Prepending PATH environment variable with directory: /opt/hostedtoolcache/terraform/1.13.1/x64
+2026-01-15T08:58:46.1985978Z Verifying Terraform installation. Executing 'terraform version'
+2026-01-15T08:58:46.1988127Z [command]/opt/hostedtoolcache/terraform/1.13.1/x64/terraform version
+2026-01-15T08:58:46.4257048Z Terraform v1.13.1
+2026-01-15T08:58:46.4260745Z on linux_amd64
+2026-01-15T08:58:46.4260907Z 
+2026-01-15T08:58:46.4261327Z Your version of Terraform is out of date! The latest version
+2026-01-15T08:58:46.4261889Z is 1.14.3. You can update by downloading from https://developer.hashicorp.com/terraform/install
+2026-01-15T08:58:46.4283714Z 
+2026-01-15T08:58:46.4405444Z ##[section]Finishing: Install Terraform 1.13.1
+2026-01-15T08:58:46.4437274Z ##[section]Starting: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:58:46.4441318Z ==============================================================================
+2026-01-15T08:58:46.4441445Z Task         : Get sources
+2026-01-15T08:58:46.4441522Z Description  : Get sources from a repository. Supports Git, TfsVC, and SVN repositories.
+2026-01-15T08:58:46.4441616Z Version      : 1.0.0
+2026-01-15T08:58:46.4441682Z Author       : Microsoft
+2026-01-15T08:58:46.4441761Z Help         : [More Information](https://go.microsoft.com/fwlink/?LinkId=798199)
+2026-01-15T08:58:46.4441877Z ==============================================================================
+2026-01-15T08:58:46.7316368Z Syncing repository: azure-devops-infrastructure (Git)
+2026-01-15T08:58:46.8192066Z ##[command]git version
+2026-01-15T08:58:46.8490794Z git version 2.52.0
+2026-01-15T08:58:46.8518237Z ##[command]git lfs version
+2026-01-15T08:58:46.9019091Z git-lfs/3.7.1 (GitHub; linux amd64; go 1.24.4)
+2026-01-15T08:58:46.9236989Z ##[command]git init "/home/vsts/work/1/s"
+2026-01-15T08:58:46.9362552Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-01-15T08:58:46.9368024Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-01-15T08:58:46.9374534Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-01-15T08:58:46.9380873Z hint: call:
+2026-01-15T08:58:46.9389376Z hint:
+2026-01-15T08:58:46.9392437Z hint: 	git config --global init.defaultBranch <name>
+2026-01-15T08:58:46.9394857Z hint:
+2026-01-15T08:58:46.9403126Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-01-15T08:58:46.9404044Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-01-15T08:58:46.9406341Z hint:
+2026-01-15T08:58:46.9407822Z hint: 	git branch -m <name>
+2026-01-15T08:58:46.9409607Z hint:
+2026-01-15T08:58:46.9411310Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-01-15T08:58:46.9429920Z Initialized empty Git repository in /home/vsts/work/1/s/.git/
+2026-01-15T08:58:46.9445934Z ##[command]git remote add origin https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/VPP%AZP2520-%AZP2520Asset%AZP2520Optimisation/_git/azure-devops-infrastructure
+2026-01-15T08:58:46.9522380Z ##[command]git sparse-checkout disable
+2026-01-15T08:58:46.9644020Z ##[command]git config gc.auto 0
+2026-01-15T08:58:46.9677471Z ##[command]git config core.longpaths true
+2026-01-15T08:58:46.9829339Z ##[command]git config --get-all http.https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/VPP%AZP2520-%AZP2520Asset%AZP2520Optimisation/_git/azure-devops-infrastructure.extraheader
+2026-01-15T08:58:46.9866085Z ##[command]git config --get-all http.extraheader
+2026-01-15T08:58:46.9899182Z ##[command]git config --get-regexp .*extraheader
+2026-01-15T08:58:46.9926627Z ##[command]git config --get-all http.proxy
+2026-01-15T08:58:46.9952896Z ##[command]git config http.version HTTP/1.1
+2026-01-15T08:58:46.9987320Z ##[command]git config --get-all remote.origin.promisor
+2026-01-15T08:58:47.0015389Z ##[command]git config --get-all remote.origin.partialclonefilter
+2026-01-15T08:58:47.0061871Z ##[command]git --config-env=http.extraheader=env_var_http.extraheader fetch --force --tags --prune --prune-tags --progress --no-recurse-submodules origin --depth=1  +4babd2f29e5cf4e6789c36ac27903e7a77a47105:refs/remotes/origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:58:47.1976500Z remote: Azure Repos        
+2026-01-15T08:58:47.1977234Z remote: 
+2026-01-15T08:58:47.1978562Z remote: Found 32 objects to send. (1 ms)        
+2026-01-15T08:58:47.2147490Z From https://dev.azure.com/enecomanagedcloud/VPP%20-%20Asset%20Optimisation/_git/azure-devops-infrastructure
+2026-01-15T08:58:47.2149425Z  * [new ref]         4babd2f29e5cf4e6789c36ac27903e7a77a47105 -> origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:58:47.2526727Z ##[command]git --config-env=http.extraheader=env_var_http.extraheader fetch --force --tags --prune --prune-tags --progress --no-recurse-submodules origin --depth=1  +4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:58:47.4246592Z remote: Azure Repos        
+2026-01-15T08:58:47.4377908Z remote: 
+2026-01-15T08:58:47.4379903Z remote: Found 0 objects to send. (5 ms)        
+2026-01-15T08:58:47.4446716Z From https://dev.azure.com/enecomanagedcloud/VPP%20-%20Asset%20Optimisation/_git/azure-devops-infrastructure
+2026-01-15T08:58:47.4453170Z  * branch            4babd2f29e5cf4e6789c36ac27903e7a77a47105 -> FETCH_HEAD
+2026-01-15T08:58:47.4902514Z ##[command]git checkout --progress --force refs/remotes/origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:58:47.4940660Z Note: switching to 'refs/remotes/origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105'.
+2026-01-15T08:58:47.4941104Z 
+2026-01-15T08:58:47.4941923Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-01-15T08:58:47.4942429Z changes and commit them, and you can discard any commits you make in this
+2026-01-15T08:58:47.4942921Z state without impacting any branches by switching back to a branch.
+2026-01-15T08:58:47.4943223Z 
+2026-01-15T08:58:47.4943802Z If you want to create a new branch to retain commits you create, you may
+2026-01-15T08:58:47.4963227Z do so (now or later) by using -c with the switch command. Example:
+2026-01-15T08:58:47.4963702Z 
+2026-01-15T08:58:47.4965686Z   git switch -c <new-branch-name>
+2026-01-15T08:58:47.4965822Z 
+2026-01-15T08:58:47.4966564Z Or undo this operation with:
+2026-01-15T08:58:47.4966692Z 
+2026-01-15T08:58:47.4967582Z   git switch -
+2026-01-15T08:58:47.4967690Z 
+2026-01-15T08:58:47.4968006Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-01-15T08:58:47.4968175Z 
+2026-01-15T08:58:47.4968508Z HEAD is now at 4babd2f Merge pull request 157982 from feat/update-docs-ci-cd-plaform into main
+2026-01-15T08:58:47.4971244Z ##[command]git config http.https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/VPP%AZP2520-%AZP2520Asset%AZP2520Optimisation/_git/azure-devops-infrastructure.extraheader "AUTHORIZATION: placeholder_8361d2b7-961f-4e32-8224-39ab9a889073"
+2026-01-15T08:58:47.5016046Z ##[section]Finishing: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:58:47.5043302Z ##[section]Starting: Configure Git Auth
+2026-01-15T08:58:47.5048584Z ==============================================================================
+2026-01-15T08:58:47.5048687Z Task         : Command line
+2026-01-15T08:58:47.5048764Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:58:47.5048860Z Version      : 2.250.1
+2026-01-15T08:58:47.5048937Z Author       : Microsoft Corporation
+2026-01-15T08:58:47.5049013Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:58:47.5049233Z ==============================================================================
+2026-01-15T08:58:47.6683516Z Generating script.
+2026-01-15T08:58:47.6683957Z ========================== Starting Command Output ===========================
+2026-01-15T08:58:47.6684427Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/fda045af-dd5f-4b6a-99f8-b4f21d0d8b76.sh
+2026-01-15T08:58:47.6733867Z Configuring url override for git to enable remote terraform module checkout
+2026-01-15T08:58:47.6758378Z 
+2026-01-15T08:58:47.6830969Z ##[section]Finishing: Configure Git Auth
+2026-01-15T08:58:47.6863223Z ##[section]Starting: Terraform init
+2026-01-15T08:58:47.6870107Z ==============================================================================
+2026-01-15T08:58:47.6870219Z Task         : Terraform CLI
+2026-01-15T08:58:47.6870294Z Description  : Execute terraform cli commands
+2026-01-15T08:58:47.6870373Z Version      : 1.2.3
+2026-01-15T08:58:47.6870436Z Author       : Charles Zipp
+2026-01-15T08:58:47.6870528Z Help         : 
+2026-01-15T08:58:47.6870588Z ==============================================================================
+2026-01-15T08:58:48.4152017Z [command]/opt/hostedtoolcache/terraform/1.13.1/x64/terraform version
+2026-01-15T08:58:48.4413107Z Terraform v1.13.1
+2026-01-15T08:58:48.4426654Z on linux_amd64
+2026-01-15T08:58:48.4427208Z + provider registry.terraform.io/microsoft/azuredevops v1.9.0
+2026-01-15T08:58:48.4427411Z 
+2026-01-15T08:58:48.4427733Z Your version of Terraform is out of date! The latest version
+2026-01-15T08:58:48.4428433Z is 1.14.3. You can update by downloading from https://developer.hashicorp.com/terraform/install
+2026-01-15T08:58:48.4438638Z 
+2026-01-15T08:58:48.4479560Z [command]/opt/hostedtoolcache/terraform/1.13.1/x64/terraform init -backend-config=subscription_id=7b1ba02e-bac6-4c45-83a0-7f0d3104922e -backend-config=tenant_id=eca36054-49a9-4731-a42f-8400670fc022 -backend-config=client_id=*** -backend-config=oidc_token=*** -backend-config=use_oidc=true -backend-config=../../configuration/azure-devops/main.backend.config
+2026-01-15T08:58:48.4935997Z [0m[1mInitializing the backend...[0m
+2026-01-15T08:58:48.7452540Z [0m[1mInitializing modules...[0m
+2026-01-15T08:58:48.7470496Z - asset_scheduling_api_repo in repository
+2026-01-15T08:58:48.7479668Z - asset_scheduling_code_repo in repository
+2026-01-15T08:58:48.7509684Z - asset_scheduling_gitops_repo in repository
+2026-01-15T08:58:48.7510554Z - asset_scheduling_infrastructure_repo in repository
+2026-01-15T08:58:48.7511310Z - asset_scheduling_launchpad_worker_repo in repository
+2026-01-15T08:58:48.7511961Z - asset_scheduling_model_heineken_repo in repository
+2026-01-15T08:58:48.7522090Z - asset_scheduling_model_pepsico_repo in repository
+2026-01-15T08:58:48.7531908Z - asset_scheduling_outbox_repo in repository
+2026-01-15T08:58:48.7559159Z - asset_scheduling_pipeline_templates_repo in repository
+2026-01-15T08:58:48.7559983Z - asset_scheduling_platform_repo in repository
+2026-01-15T08:58:48.7607362Z [31m╷[0m[0m
+2026-01-15T08:58:48.7609016Z [31m│[0m [0m[1m[31mError: [0m[0m[1mFailed to get existing workspaces: listing blobs: executing request: Get "https://saastschbootstrapsb.blob.core.windows.net/tfstate?comp=list&prefix=azure-devops.tfstateenv%3A&restype=container": dial tcp: lookup saastschbootstrapsb.blob.core.windows.net on 127.0.0.53:53: no such host[0m
+2026-01-15T08:58:48.7610306Z [31m│[0m [0m
+2026-01-15T08:58:48.7611146Z [31m│[0m [0m[0m
+2026-01-15T08:58:48.7611966Z [31m╵[0m[0m
+2026-01-15T08:58:48.7664412Z 
+2026-01-15T08:58:48.7705669Z ##[error]Terraform command 'init' failed with exit code '1'.
+2026-01-15T08:58:48.7753491Z ##[error][31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mFailed to get existing workspaces: listing blobs: executing request: Get "https://saastschbootstrapsb.blob.core.windows.net/tfstate?comp=list&prefix=azure-devops.tfstateenv%3A&restype=container": dial tcp: lookup saastschbootstrapsb.blob.core.windows.net on 127.0.0.53:53: no such host[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m
+[31m╵[0m[0m
+
+2026-01-15T08:58:48.8713340Z ##[section]Finishing: Terraform init
+2026-01-15T08:58:48.8787217Z ##[section]Starting: Clean up Git Auth
+2026-01-15T08:58:48.8794357Z ==============================================================================
+2026-01-15T08:58:48.8794547Z Task         : Command line
+2026-01-15T08:58:48.8794660Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:58:48.8794834Z Version      : 2.250.1
+2026-01-15T08:58:48.8794943Z Author       : Microsoft Corporation
+2026-01-15T08:58:48.8795072Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:58:48.8795239Z ==============================================================================
+2026-01-15T08:58:49.0358000Z Generating script.
+2026-01-15T08:58:49.0358385Z ========================== Starting Command Output ===========================
+2026-01-15T08:58:49.0358809Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/3719d0d4-b6cb-402e-bf67-22da6ba11e91.sh
+2026-01-15T08:58:49.0415594Z Removing global git url override from git config
+2026-01-15T08:58:49.0439119Z 
+2026-01-15T08:58:49.0495589Z ##[section]Finishing: Clean up Git Auth
+2026-01-15T08:58:49.0522625Z Skipping step due to condition evaluation.
+Evaluating: SucceededNode()
+Result: False
+
+2026-01-15T08:58:49.0623331Z Skipping step due to condition evaluation.
+Evaluating: eq(variables['TERRAFORM_PLAN_HAS_CHANGES'], 'true')
+Expanded: eq(Null, 'true')
+Result: False
+
+2026-01-15T08:58:49.0650014Z Skipping step due to condition evaluation.
+Evaluating: eq(variables['TERRAFORM_PLAN_HAS_CHANGES'], 'true')
+Expanded: eq(Null, 'true')
+Result: False
+
+2026-01-15T08:58:49.0672799Z Skipping step due to condition evaluation.
+Evaluating: eq(variables['TERRAFORM_PLAN_HAS_CHANGES'], 'true')
+Expanded: eq(Null, 'true')
+Result: False
+
+2026-01-15T08:58:49.0695113Z Skipping step due to condition evaluation.
+Evaluating: eq(variables['TERRAFORM_PLAN_HAS_CHANGES'], 'true')
+Expanded: eq(Null, 'true')
+Result: False
+
+2026-01-15T08:58:49.0717313Z ##[section]Starting: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:58:49.0721129Z ==============================================================================
+2026-01-15T08:58:49.0721244Z Task         : Get sources
+2026-01-15T08:58:49.0721309Z Description  : Get sources from a repository. Supports Git, TfsVC, and SVN repositories.
+2026-01-15T08:58:49.0721410Z Version      : 1.0.0
+2026-01-15T08:58:49.0721470Z Author       : Microsoft
+2026-01-15T08:58:49.0721537Z Help         : [More Information](https://go.microsoft.com/fwlink/?LinkId=798199)
+2026-01-15T08:58:49.0721621Z ==============================================================================
+2026-01-15T08:58:49.3038194Z Cleaning any cached credential from repository: azure-devops-infrastructure (Git)
+2026-01-15T08:58:49.3257109Z ##[command]git version
+2026-01-15T08:58:49.3564806Z git version 2.52.0
+2026-01-15T08:58:49.3600643Z ##[command]git lfs version
+2026-01-15T08:58:49.3712195Z git-lfs/3.7.1 (GitHub; linux amd64; go 1.24.4)
+2026-01-15T08:58:49.3740946Z ##[command]git config --unset-all http.https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/VPP%AZP2520-%AZP2520Asset%AZP2520Optimisation/_git/azure-devops-infrastructure.extraheader
+2026-01-15T08:58:49.3982160Z ##[section]Finishing: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:58:49.4003292Z ##[section]Starting: Finalize Job
+2026-01-15T08:58:49.4014036Z Cleaning up task key
+2026-01-15T08:58:49.4014643Z Start cleaning up orphan processes.
+2026-01-15T08:58:49.4224937Z ##[section]Finishing: Finalize Job
+2026-01-15T08:58:49.4248608Z ##[section]Finishing: Run Terraform Plan

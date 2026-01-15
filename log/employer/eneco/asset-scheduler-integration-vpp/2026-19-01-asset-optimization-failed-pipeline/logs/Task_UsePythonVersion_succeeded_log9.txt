@@ -1,0 +1,12 @@
+2026-01-15T08:57:46.0891230Z ##[section]Starting: UsePythonVersion
+2026-01-15T08:57:46.0897416Z ==============================================================================
+2026-01-15T08:57:46.0897524Z Task         : Use Python version
+2026-01-15T08:57:46.0897588Z Description  : Use the specified version of Python from the tool cache, optionally adding it to the PATH
+2026-01-15T08:57:46.0897688Z Version      : 0.266.0
+2026-01-15T08:57:46.0897744Z Author       : Microsoft Corporation
+2026-01-15T08:57:46.0897812Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/tool/use-python-version
+2026-01-15T08:57:46.0897897Z ==============================================================================
+2026-01-15T08:57:46.3333738Z Found tool in cache: Python 3.14.2 x64
+2026-01-15T08:57:46.3447505Z Prepending PATH environment variable with directory: /opt/hostedtoolcache/Python/3.14.2/x64
+2026-01-15T08:57:46.3449543Z Prepending PATH environment variable with directory: /opt/hostedtoolcache/Python/3.14.2/x64/bin
+2026-01-15T08:57:46.3683134Z ##[section]Finishing: UsePythonVersion

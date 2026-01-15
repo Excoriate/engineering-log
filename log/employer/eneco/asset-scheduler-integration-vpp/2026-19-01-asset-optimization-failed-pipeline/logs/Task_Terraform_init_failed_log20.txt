@@ -1,0 +1,43 @@
+2026-01-15T08:58:47.6863208Z ##[section]Starting: Terraform init
+2026-01-15T08:58:47.6870094Z ==============================================================================
+2026-01-15T08:58:47.6870215Z Task         : Terraform CLI
+2026-01-15T08:58:47.6870284Z Description  : Execute terraform cli commands
+2026-01-15T08:58:47.6870368Z Version      : 1.2.3
+2026-01-15T08:58:47.6870432Z Author       : Charles Zipp
+2026-01-15T08:58:47.6870524Z Help         : 
+2026-01-15T08:58:47.6870584Z ==============================================================================
+2026-01-15T08:58:48.4151998Z [command]/opt/hostedtoolcache/terraform/1.13.1/x64/terraform version
+2026-01-15T08:58:48.4413072Z Terraform v1.13.1
+2026-01-15T08:58:48.4426643Z on linux_amd64
+2026-01-15T08:58:48.4427202Z + provider registry.terraform.io/microsoft/azuredevops v1.9.0
+2026-01-15T08:58:48.4427407Z 
+2026-01-15T08:58:48.4427730Z Your version of Terraform is out of date! The latest version
+2026-01-15T08:58:48.4428308Z is 1.14.3. You can update by downloading from https://developer.hashicorp.com/terraform/install
+2026-01-15T08:58:48.4438624Z 
+2026-01-15T08:58:48.4479544Z [command]/opt/hostedtoolcache/terraform/1.13.1/x64/terraform init -backend-config=subscription_id=7b1ba02e-bac6-4c45-83a0-7f0d3104922e -backend-config=tenant_id=eca36054-49a9-4731-a42f-8400670fc022 -backend-config=client_id=*** -backend-config=oidc_token=*** -backend-config=use_oidc=true -backend-config=../../configuration/azure-devops/main.backend.config
+2026-01-15T08:58:48.4935948Z [0m[1mInitializing the backend...[0m
+2026-01-15T08:58:48.7452504Z [0m[1mInitializing modules...[0m
+2026-01-15T08:58:48.7470482Z - asset_scheduling_api_repo in repository
+2026-01-15T08:58:48.7479655Z - asset_scheduling_code_repo in repository
+2026-01-15T08:58:48.7509670Z - asset_scheduling_gitops_repo in repository
+2026-01-15T08:58:48.7510548Z - asset_scheduling_infrastructure_repo in repository
+2026-01-15T08:58:48.7511304Z - asset_scheduling_launchpad_worker_repo in repository
+2026-01-15T08:58:48.7511935Z - asset_scheduling_model_heineken_repo in repository
+2026-01-15T08:58:48.7522077Z - asset_scheduling_model_pepsico_repo in repository
+2026-01-15T08:58:48.7531895Z - asset_scheduling_outbox_repo in repository
+2026-01-15T08:58:48.7559145Z - asset_scheduling_pipeline_templates_repo in repository
+2026-01-15T08:58:48.7559975Z - asset_scheduling_platform_repo in repository
+2026-01-15T08:58:48.7607348Z [31m╷[0m[0m
+2026-01-15T08:58:48.7609001Z [31m│[0m [0m[1m[31mError: [0m[0m[1mFailed to get existing workspaces: listing blobs: executing request: Get "https://saastschbootstrapsb.blob.core.windows.net/tfstate?comp=list&prefix=azure-devops.tfstateenv%3A&restype=container": dial tcp: lookup saastschbootstrapsb.blob.core.windows.net on 127.0.0.53:53: no such host[0m
+2026-01-15T08:58:48.7610295Z [31m│[0m [0m
+2026-01-15T08:58:48.7611136Z [31m│[0m [0m[0m
+2026-01-15T08:58:48.7611956Z [31m╵[0m[0m
+2026-01-15T08:58:48.7664396Z 
+2026-01-15T08:58:48.7705632Z ##[error]Terraform command 'init' failed with exit code '1'.
+2026-01-15T08:58:48.7753460Z ##[error][31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mFailed to get existing workspaces: listing blobs: executing request: Get "https://saastschbootstrapsb.blob.core.windows.net/tfstate?comp=list&prefix=azure-devops.tfstateenv%3A&restype=container": dial tcp: lookup saastschbootstrapsb.blob.core.windows.net on 127.0.0.53:53: no such host[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m
+[31m╵[0m[0m
+
+2026-01-15T08:58:48.8713328Z ##[section]Finishing: Terraform init

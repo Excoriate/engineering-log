@@ -1,0 +1,31 @@
+2026-01-15T08:57:53.8729791Z ##[section]Starting: Run pre-commit
+2026-01-15T08:57:53.8735404Z ==============================================================================
+2026-01-15T08:57:53.8735505Z Task         : Command line
+2026-01-15T08:57:53.8735574Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:57:53.8735664Z Version      : 2.250.1
+2026-01-15T08:57:53.8735731Z Author       : Microsoft Corporation
+2026-01-15T08:57:53.8735818Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:57:53.8735903Z ==============================================================================
+2026-01-15T08:57:54.0757487Z Generating script.
+2026-01-15T08:57:54.0771835Z Script contents:
+2026-01-15T08:57:54.0774094Z pre-commit run --all-files
+2026-01-15T08:57:54.0776201Z ========================== Starting Command Output ===========================
+2026-01-15T08:57:54.0806050Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/a8082a0f-eba9-4c47-982a-51193cad725d.sh
+2026-01-15T08:57:54.8193735Z [INFO] Initializing environment for https://github.com/pre-commit/pre-commit-hooks.
+2026-01-15T08:57:55.3534374Z [INFO] Initializing environment for https://github.com/igorshubovych/markdownlint-cli.
+2026-01-15T08:57:55.8628753Z [INFO] Initializing environment for https://github.com/antonbabenko/pre-commit-terraform.
+2026-01-15T08:57:56.4800726Z [INFO] Installing environment for https://github.com/pre-commit/pre-commit-hooks.
+2026-01-15T08:57:56.4801958Z [INFO] Once installed this environment will be reused.
+2026-01-15T08:57:56.4807257Z [INFO] This may take a few minutes...
+2026-01-15T08:58:02.7260659Z [INFO] Installing environment for https://github.com/igorshubovych/markdownlint-cli.
+2026-01-15T08:58:02.7263032Z [INFO] Once installed this environment will be reused.
+2026-01-15T08:58:02.7263352Z [INFO] This may take a few minutes...
+2026-01-15T08:58:20.7884362Z trim trailing whitespace.................................................Passed
+2026-01-15T08:58:20.8690038Z fix end of files.........................................................Passed
+2026-01-15T08:58:20.9559937Z check yaml...............................................................Passed
+2026-01-15T08:58:21.0518166Z check for added large files..............................................Passed
+2026-01-15T08:58:21.2462574Z markdownlint.............................................................Passed
+2026-01-15T08:58:21.4140618Z Terraform fmt............................................................Passed
+2026-01-15T08:58:22.8700463Z Terraform validate with tflint...........................................Passed
+2026-01-15T08:58:22.8956542Z 
+2026-01-15T08:58:22.9012498Z ##[section]Finishing: Run pre-commit

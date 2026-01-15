@@ -1,0 +1,24 @@
+2026-01-15T08:57:41.4254768Z ##[section]Starting: Install TFLint - [latest]
+2026-01-15T08:57:41.4260709Z ==============================================================================
+2026-01-15T08:57:41.4260823Z Task         : Command line
+2026-01-15T08:57:41.4260893Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:57:41.4260986Z Version      : 2.250.1
+2026-01-15T08:57:41.4261056Z Author       : Microsoft Corporation
+2026-01-15T08:57:41.4261125Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:57:41.4261219Z ==============================================================================
+2026-01-15T08:57:41.7464934Z Generating script.
+2026-01-15T08:57:41.7477596Z ========================== Starting Command Output ===========================
+2026-01-15T08:57:41.7512215Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/d6128353-aea8-4fcf-9f0c-d5bcacc105a7.sh
+2026-01-15T08:57:41.7625808Z Fetching latest TFLint version from [https://api.github.com/repos/terraform-linters/tflint/releases/latest]
+2026-01-15T08:57:42.0152232Z Downloading TFLint v0.60.0 from [BASE_URL]
+2026-01-15T08:57:42.0182035Z Download package & checksums
+2026-01-15T08:57:43.1166626Z Verify checksums with cosign
+2026-01-15T08:57:44.0793090Z Verified OK
+2026-01-15T08:57:44.0815276Z Verifying package integrity...
+2026-01-15T08:57:44.1029310Z tflint_linux_amd64.zip: OK
+2026-01-15T08:57:44.1032876Z Unpacking and Installing...
+2026-01-15T08:57:44.1062955Z Archive:  /tmp/tmp.2XxigQz58q/tflint_linux_amd64.zip
+2026-01-15T08:57:44.4493561Z   inflating: /tmp/tmp.2XxigQz58q/tflint  
+2026-01-15T08:57:44.4879848Z getwd: no such file or directoryInstalled 
+2026-01-15T08:57:44.4903609Z 
+2026-01-15T08:57:44.5000376Z ##[section]Finishing: Install TFLint - [latest]

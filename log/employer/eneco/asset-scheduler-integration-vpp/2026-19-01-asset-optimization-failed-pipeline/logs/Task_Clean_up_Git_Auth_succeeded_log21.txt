@@ -1,0 +1,14 @@
+2026-01-15T08:58:48.8787198Z ##[section]Starting: Clean up Git Auth
+2026-01-15T08:58:48.8794344Z ==============================================================================
+2026-01-15T08:58:48.8794542Z Task         : Command line
+2026-01-15T08:58:48.8794657Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:58:48.8794831Z Version      : 2.250.1
+2026-01-15T08:58:48.8794940Z Author       : Microsoft Corporation
+2026-01-15T08:58:48.8795068Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:58:48.8795235Z ==============================================================================
+2026-01-15T08:58:49.0357971Z Generating script.
+2026-01-15T08:58:49.0358380Z ========================== Starting Command Output ===========================
+2026-01-15T08:58:49.0358805Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/3719d0d4-b6cb-402e-bf67-22da6ba11e91.sh
+2026-01-15T08:58:49.0415525Z Removing global git url override from git config
+2026-01-15T08:58:49.0439093Z 
+2026-01-15T08:58:49.0495579Z ##[section]Finishing: Clean up Git Auth

@@ -1,0 +1,63 @@
+2026-01-15T08:57:36.1955294Z ##[section]Starting: Initialize job
+2026-01-15T08:57:36.1959158Z Agent name: 'Azure Pipelines 26'
+2026-01-15T08:57:36.1959847Z Agent machine name: 'runnervm4s5zu'
+2026-01-15T08:57:36.1960169Z Current agent version: '4.266.2'
+2026-01-15T08:57:36.1987684Z ##[group]Runner Image Provisioner
+2026-01-15T08:57:36.1988020Z Hosted Compute Agent
+2026-01-15T08:57:36.1988293Z Version: 20251211.462
+2026-01-15T08:57:36.1988587Z Commit: 6cbad8c2bb55d58165063d031ccabf57e2d2db61
+2026-01-15T08:57:36.1988917Z Build Date: 2025-12-11T16:28:49Z
+2026-01-15T08:57:36.1989233Z Worker ID: {ddb66eb7-75d2-4297-8033-047a006c7d42}
+2026-01-15T08:57:36.1989492Z ##[endgroup]
+2026-01-15T08:57:36.1989744Z ##[group]Operating System
+2026-01-15T08:57:36.1989965Z Ubuntu
+2026-01-15T08:57:36.1990166Z 24.04.3
+2026-01-15T08:57:36.1990347Z LTS
+2026-01-15T08:57:36.1990555Z ##[endgroup]
+2026-01-15T08:57:36.1990788Z ##[group]Runner Image
+2026-01-15T08:57:36.1991021Z Image: ubuntu-24.04
+2026-01-15T08:57:36.1991604Z Version: 20260105.202.1
+2026-01-15T08:57:36.1992028Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260105.202/images/ubuntu/Ubuntu2404-Readme.md
+2026-01-15T08:57:36.1992520Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260105.202
+2026-01-15T08:57:36.1992864Z ##[endgroup]
+2026-01-15T08:57:36.1996704Z Current image version: '20260105.202.1'
+2026-01-15T08:57:36.3313132Z Agent running as: 'vsts'
+2026-01-15T08:57:36.3360851Z Prepare build directory.
+2026-01-15T08:57:36.3629661Z Set build variables.
+2026-01-15T08:57:36.3651252Z Download all required tasks.
+2026-01-15T08:57:36.3746052Z Downloading task: CmdLine (2.250.1)
+2026-01-15T08:57:36.5704874Z Downloading task: TerraformInstaller (1.2.3)
+2026-01-15T08:57:36.9730691Z Downloading task: UsePythonVersion (0.266.0)
+2026-01-15T08:57:37.6245331Z Checking job knob settings.
+2026-01-15T08:57:37.6249617Z    Knob: DockerActionRetries = true Source: $(VSTSAGENT_DOCKER_ACTION_RETRIES) 
+2026-01-15T08:57:37.6250165Z    Knob: AgentToolsDirectory = /opt/hostedtoolcache Source: ${AGENT_TOOLSDIRECTORY} 
+2026-01-15T08:57:37.6252428Z    Knob: UseGitLongPaths = true Source: $(USE_GIT_LONG_PATHS) 
+2026-01-15T08:57:37.6254829Z    Knob: UseNode24withHandlerData = True Source: $(DistributedTask.Agent.UseNode24withHandlerData) 
+2026-01-15T08:57:37.6257356Z    Knob: EnableIssueSourceValidation = true Source: $(ENABLE_ISSUE_SOURCE_VALIDATION) 
+2026-01-15T08:57:37.6258628Z    Knob: AgentEnablePipelineArtifactLargeChunkSize = true Source: $(AGENT_ENABLE_PIPELINEARTIFACT_LARGE_CHUNK_SIZE) 
+2026-01-15T08:57:37.6262256Z    Knob: ContinueAfterCancelProcessTreeKillAttempt = true Source: $(VSTSAGENT_CONTINUE_AFTER_CANCEL_PROCESSTREEKILL_ATTEMPT) 
+2026-01-15T08:57:37.6263317Z    Knob: ProcessHandlerSecureArguments = false Source: $(AZP_75787_ENABLE_NEW_LOGIC) 
+2026-01-15T08:57:37.6264030Z    Knob: ProcessHandlerSecureArguments = false Source: $(AZP_75787_ENABLE_NEW_LOGIC_LOG) 
+2026-01-15T08:57:37.6264746Z    Knob: ProcessHandlerTelemetry = true Source: $(AZP_75787_ENABLE_COLLECT) 
+2026-01-15T08:57:37.6265536Z    Knob: UseNewNodeHandlerTelemetry = True Source: $(DistributedTask.Agent.USENEWNODEHANDLERTELEMETRY) 
+2026-01-15T08:57:37.6266263Z    Knob: ProcessHandlerEnableNewLogic = true Source: $(AZP_75787_ENABLE_NEW_PH_LOGIC) 
+2026-01-15T08:57:37.6267760Z    Knob: EnableResourceMonitorDebugOutput = true Source: $(AZP_ENABLE_RESOURCE_MONITOR_DEBUG_OUTPUT) 
+2026-01-15T08:57:37.6268592Z    Knob: EnableResourceUtilizationWarnings = true Source: $(AZP_ENABLE_RESOURCE_UTILIZATION_WARNINGS) 
+2026-01-15T08:57:37.6269669Z    Knob: IgnoreVSTSTaskLib = true Source: $(AZP_AGENT_IGNORE_VSTSTASKLIB) 
+2026-01-15T08:57:37.6270344Z    Knob: FailJobWhenAgentDies = true Source: $(FAIL_JOB_WHEN_AGENT_DIES) 
+2026-01-15T08:57:37.6271229Z    Knob: CheckForTaskDeprecation = true Source: $(AZP_AGENT_CHECK_FOR_TASK_DEPRECATION) 
+2026-01-15T08:57:37.6272337Z    Knob: CheckIfTaskNodeRunnerIsDeprecated246 = True Source: $(DistributedTask.Agent.CheckIfTaskNodeRunnerIsDeprecated246) 
+2026-01-15T08:57:37.6273643Z    Knob: UseNode20ToStartContainer = True Source: $(DistributedTask.Agent.UseNode20ToStartContainer) 
+2026-01-15T08:57:37.6274928Z    Knob: EnableTimeoutLogFlushing = True Source: $(DistributedTask.Agent.EnableTimeoutLogFlushing) 
+2026-01-15T08:57:37.6275975Z    Knob: LogTaskNameInUserAgent = true Source: $(AZP_AGENT_LOG_TASKNAME_IN_USERAGENT) 
+2026-01-15T08:57:37.6276719Z    Knob: UseFetchFilterInCheckoutTask = true Source: $(AGENT_USE_FETCH_FILTER_IN_CHECKOUT_TASK) 
+2026-01-15T08:57:37.6277578Z    Knob: Rosetta2Warning = true Source: $(ROSETTA2_WARNING) 
+2026-01-15T08:57:37.6279440Z    Knob: AddForceCredentialsToGitCheckout = True Source: $(DistributedTask.Agent.AddForceCredentialsToGitCheckout) 
+2026-01-15T08:57:37.6280506Z    Knob: AddForceCredentialsToGitCheckoutEnhanced = True Source: $(DistributedTask.Agent.AddForceCredentialsToGitCheckoutEnhanced) 
+2026-01-15T08:57:37.6281894Z    Knob: UseLatestTfExe = True Source: $(DistributedTask.Agent.UseLatestTfExe) 
+2026-01-15T08:57:37.6282651Z    Knob: UseSparseCheckoutInCheckoutTask = true Source: $(AGENT_USE_SPARSE_CHECKOUT_IN_CHECKOUT_TASK) 
+2026-01-15T08:57:37.6283698Z    Knob: AgentCDNConnectivityFailWarning = False Source: $(DistributedTask.Agent.AgentCDNConnectivityFailWarning) 
+2026-01-15T08:57:37.6284387Z    Knob: UseEnhancedLogging = true Source: ${AZP_USE_ENHANCED_LOGGING} 
+2026-01-15T08:57:37.6285111Z Finished checking job knob settings.
+2026-01-15T08:57:37.6620325Z Start tracking orphan processes.
+2026-01-15T08:57:37.6782493Z ##[section]Finishing: Initialize job

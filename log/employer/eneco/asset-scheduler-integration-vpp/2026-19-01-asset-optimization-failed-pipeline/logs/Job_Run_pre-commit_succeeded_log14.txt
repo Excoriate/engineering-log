@@ -1,0 +1,337 @@
+2026-01-15T08:57:36.0805426Z ##[section]Starting: Run pre-commit
+2026-01-15T08:57:36.1955390Z ##[section]Starting: Initialize job
+2026-01-15T08:57:36.1959186Z Agent name: 'Azure Pipelines 26'
+2026-01-15T08:57:36.1959859Z Agent machine name: 'runnervm4s5zu'
+2026-01-15T08:57:36.1960177Z Current agent version: '4.266.2'
+2026-01-15T08:57:36.1987713Z ##[group]Runner Image Provisioner
+2026-01-15T08:57:36.1988028Z Hosted Compute Agent
+2026-01-15T08:57:36.1988302Z Version: 20251211.462
+2026-01-15T08:57:36.1988596Z Commit: 6cbad8c2bb55d58165063d031ccabf57e2d2db61
+2026-01-15T08:57:36.1988925Z Build Date: 2025-12-11T16:28:49Z
+2026-01-15T08:57:36.1989241Z Worker ID: {ddb66eb7-75d2-4297-8033-047a006c7d42}
+2026-01-15T08:57:36.1989501Z ##[endgroup]
+2026-01-15T08:57:36.1989751Z ##[group]Operating System
+2026-01-15T08:57:36.1989972Z Ubuntu
+2026-01-15T08:57:36.1990172Z 24.04.3
+2026-01-15T08:57:36.1990363Z LTS
+2026-01-15T08:57:36.1990562Z ##[endgroup]
+2026-01-15T08:57:36.1990795Z ##[group]Runner Image
+2026-01-15T08:57:36.1991028Z Image: ubuntu-24.04
+2026-01-15T08:57:36.1991646Z Version: 20260105.202.1
+2026-01-15T08:57:36.1992041Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260105.202/images/ubuntu/Ubuntu2404-Readme.md
+2026-01-15T08:57:36.1992532Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260105.202
+2026-01-15T08:57:36.1992874Z ##[endgroup]
+2026-01-15T08:57:36.1996729Z Current image version: '20260105.202.1'
+2026-01-15T08:57:36.3313184Z Agent running as: 'vsts'
+2026-01-15T08:57:36.3360879Z Prepare build directory.
+2026-01-15T08:57:36.3629703Z Set build variables.
+2026-01-15T08:57:36.3651541Z Download all required tasks.
+2026-01-15T08:57:36.3746085Z Downloading task: CmdLine (2.250.1)
+2026-01-15T08:57:36.5704912Z Downloading task: TerraformInstaller (1.2.3)
+2026-01-15T08:57:36.9730715Z Downloading task: UsePythonVersion (0.266.0)
+2026-01-15T08:57:37.6245416Z Checking job knob settings.
+2026-01-15T08:57:37.6249647Z    Knob: DockerActionRetries = true Source: $(VSTSAGENT_DOCKER_ACTION_RETRIES) 
+2026-01-15T08:57:37.6250179Z    Knob: AgentToolsDirectory = /opt/hostedtoolcache Source: ${AGENT_TOOLSDIRECTORY} 
+2026-01-15T08:57:37.6252446Z    Knob: UseGitLongPaths = true Source: $(USE_GIT_LONG_PATHS) 
+2026-01-15T08:57:37.6254834Z    Knob: UseNode24withHandlerData = True Source: $(DistributedTask.Agent.UseNode24withHandlerData) 
+2026-01-15T08:57:37.6257361Z    Knob: EnableIssueSourceValidation = true Source: $(ENABLE_ISSUE_SOURCE_VALIDATION) 
+2026-01-15T08:57:37.6258633Z    Knob: AgentEnablePipelineArtifactLargeChunkSize = true Source: $(AGENT_ENABLE_PIPELINEARTIFACT_LARGE_CHUNK_SIZE) 
+2026-01-15T08:57:37.6262263Z    Knob: ContinueAfterCancelProcessTreeKillAttempt = true Source: $(VSTSAGENT_CONTINUE_AFTER_CANCEL_PROCESSTREEKILL_ATTEMPT) 
+2026-01-15T08:57:37.6263322Z    Knob: ProcessHandlerSecureArguments = false Source: $(AZP_75787_ENABLE_NEW_LOGIC) 
+2026-01-15T08:57:37.6264034Z    Knob: ProcessHandlerSecureArguments = false Source: $(AZP_75787_ENABLE_NEW_LOGIC_LOG) 
+2026-01-15T08:57:37.6264760Z    Knob: ProcessHandlerTelemetry = true Source: $(AZP_75787_ENABLE_COLLECT) 
+2026-01-15T08:57:37.6265541Z    Knob: UseNewNodeHandlerTelemetry = True Source: $(DistributedTask.Agent.USENEWNODEHANDLERTELEMETRY) 
+2026-01-15T08:57:37.6266268Z    Knob: ProcessHandlerEnableNewLogic = true Source: $(AZP_75787_ENABLE_NEW_PH_LOGIC) 
+2026-01-15T08:57:37.6267791Z    Knob: EnableResourceMonitorDebugOutput = true Source: $(AZP_ENABLE_RESOURCE_MONITOR_DEBUG_OUTPUT) 
+2026-01-15T08:57:37.6268597Z    Knob: EnableResourceUtilizationWarnings = true Source: $(AZP_ENABLE_RESOURCE_UTILIZATION_WARNINGS) 
+2026-01-15T08:57:37.6269673Z    Knob: IgnoreVSTSTaskLib = true Source: $(AZP_AGENT_IGNORE_VSTSTASKLIB) 
+2026-01-15T08:57:37.6270347Z    Knob: FailJobWhenAgentDies = true Source: $(FAIL_JOB_WHEN_AGENT_DIES) 
+2026-01-15T08:57:37.6271234Z    Knob: CheckForTaskDeprecation = true Source: $(AZP_AGENT_CHECK_FOR_TASK_DEPRECATION) 
+2026-01-15T08:57:37.6272344Z    Knob: CheckIfTaskNodeRunnerIsDeprecated246 = True Source: $(DistributedTask.Agent.CheckIfTaskNodeRunnerIsDeprecated246) 
+2026-01-15T08:57:37.6273776Z    Knob: UseNode20ToStartContainer = True Source: $(DistributedTask.Agent.UseNode20ToStartContainer) 
+2026-01-15T08:57:37.6274933Z    Knob: EnableTimeoutLogFlushing = True Source: $(DistributedTask.Agent.EnableTimeoutLogFlushing) 
+2026-01-15T08:57:37.6275980Z    Knob: LogTaskNameInUserAgent = true Source: $(AZP_AGENT_LOG_TASKNAME_IN_USERAGENT) 
+2026-01-15T08:57:37.6276723Z    Knob: UseFetchFilterInCheckoutTask = true Source: $(AGENT_USE_FETCH_FILTER_IN_CHECKOUT_TASK) 
+2026-01-15T08:57:37.6277582Z    Knob: Rosetta2Warning = true Source: $(ROSETTA2_WARNING) 
+2026-01-15T08:57:37.6279445Z    Knob: AddForceCredentialsToGitCheckout = True Source: $(DistributedTask.Agent.AddForceCredentialsToGitCheckout) 
+2026-01-15T08:57:37.6280511Z    Knob: AddForceCredentialsToGitCheckoutEnhanced = True Source: $(DistributedTask.Agent.AddForceCredentialsToGitCheckoutEnhanced) 
+2026-01-15T08:57:37.6281900Z    Knob: UseLatestTfExe = True Source: $(DistributedTask.Agent.UseLatestTfExe) 
+2026-01-15T08:57:37.6282665Z    Knob: UseSparseCheckoutInCheckoutTask = true Source: $(AGENT_USE_SPARSE_CHECKOUT_IN_CHECKOUT_TASK) 
+2026-01-15T08:57:37.6283703Z    Knob: AgentCDNConnectivityFailWarning = False Source: $(DistributedTask.Agent.AgentCDNConnectivityFailWarning) 
+2026-01-15T08:57:37.6284391Z    Knob: UseEnhancedLogging = true Source: ${AZP_USE_ENHANCED_LOGGING} 
+2026-01-15T08:57:37.6285115Z Finished checking job knob settings.
+2026-01-15T08:57:37.6620360Z Start tracking orphan processes.
+2026-01-15T08:57:37.6782514Z ##[section]Finishing: Initialize job
+2026-01-15T08:57:37.6855671Z ##[section]Async Command Start: DetectDockerContainer
+2026-01-15T08:57:37.6856558Z ##[section]Async Command End: DetectDockerContainer
+2026-01-15T08:57:37.6858572Z ##[section]Async Command Start: DetectDockerContainer
+2026-01-15T08:57:37.6859077Z ##[section]Async Command End: DetectDockerContainer
+2026-01-15T08:57:37.7036575Z ##[section]Starting: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:57:37.7140372Z ==============================================================================
+2026-01-15T08:57:37.7141605Z Task         : Get sources
+2026-01-15T08:57:37.7142028Z Description  : Get sources from a repository. Supports Git, TfsVC, and SVN repositories.
+2026-01-15T08:57:37.7142347Z Version      : 1.0.0
+2026-01-15T08:57:37.7142656Z Author       : Microsoft
+2026-01-15T08:57:37.7143046Z Help         : [More Information](https://go.microsoft.com/fwlink/?LinkId=798199)
+2026-01-15T08:57:37.7143333Z ==============================================================================
+2026-01-15T08:57:38.0652350Z Syncing repository: azure-devops-infrastructure (Git)
+2026-01-15T08:57:38.1808661Z ##[command]git version
+2026-01-15T08:57:38.1921625Z git version 2.52.0
+2026-01-15T08:57:38.1967228Z ##[command]git lfs version
+2026-01-15T08:57:38.2708654Z git-lfs/3.7.1 (GitHub; linux amd64; go 1.24.4)
+2026-01-15T08:57:38.2877090Z ##[command]git init "/home/vsts/work/1/s"
+2026-01-15T08:57:38.3032235Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-01-15T08:57:38.3033771Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-01-15T08:57:38.3036178Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-01-15T08:57:38.3037119Z hint: call:
+2026-01-15T08:57:38.3042372Z hint:
+2026-01-15T08:57:38.3043873Z hint: 	git config --global init.defaultBranch <name>
+2026-01-15T08:57:38.3045216Z hint:
+2026-01-15T08:57:38.3049731Z Initialized empty Git repository in /home/vsts/work/1/s/.git/
+2026-01-15T08:57:38.3072543Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-01-15T08:57:38.3074513Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-01-15T08:57:38.3076168Z hint:
+2026-01-15T08:57:38.3077437Z hint: 	git branch -m <name>
+2026-01-15T08:57:38.3078597Z hint:
+2026-01-15T08:57:38.3080725Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-01-15T08:57:38.3084831Z ##[command]git remote add origin https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/VPP%AZP2520-%AZP2520Asset%AZP2520Optimisation/_git/azure-devops-infrastructure
+2026-01-15T08:57:38.3178605Z ##[command]git sparse-checkout disable
+2026-01-15T08:57:38.3283902Z ##[command]git config gc.auto 0
+2026-01-15T08:57:38.3393318Z ##[command]git config core.longpaths true
+2026-01-15T08:57:38.3594742Z ##[command]git config --get-all http.https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/VPP%AZP2520-%AZP2520Asset%AZP2520Optimisation/_git/azure-devops-infrastructure.extraheader
+2026-01-15T08:57:38.3665809Z ##[command]git config --get-all http.extraheader
+2026-01-15T08:57:38.3794107Z ##[command]git config --get-regexp .*extraheader
+2026-01-15T08:57:38.3887814Z ##[command]git config --get-all http.proxy
+2026-01-15T08:57:38.3955189Z ##[command]git config http.version HTTP/1.1
+2026-01-15T08:57:38.4036861Z ##[command]git config --get-all remote.origin.promisor
+2026-01-15T08:57:38.4109268Z ##[command]git config --get-all remote.origin.partialclonefilter
+2026-01-15T08:57:38.4151054Z ##[command]git --config-env=http.extraheader=env_var_http.extraheader fetch --force --tags --prune --prune-tags --progress --no-recurse-submodules origin --depth=1  +4babd2f29e5cf4e6789c36ac27903e7a77a47105:refs/remotes/origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:57:38.6096836Z remote: Azure Repos        
+2026-01-15T08:57:38.6107859Z remote: 
+2026-01-15T08:57:38.6108689Z remote: Found 32 objects to send. (45 ms)        
+2026-01-15T08:57:38.6255761Z From https://dev.azure.com/enecomanagedcloud/VPP%20-%20Asset%20Optimisation/_git/azure-devops-infrastructure
+2026-01-15T08:57:38.6260789Z  * [new ref]         4babd2f29e5cf4e6789c36ac27903e7a77a47105 -> origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:57:38.7013407Z ##[command]git --config-env=http.extraheader=env_var_http.extraheader fetch --force --tags --prune --prune-tags --progress --no-recurse-submodules origin --depth=1  +4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:57:38.8414623Z remote: Azure Repos        
+2026-01-15T08:57:38.8596518Z remote: 
+2026-01-15T08:57:38.8597683Z remote: Found 0 objects to send. (17 ms)        
+2026-01-15T08:57:38.8693000Z From https://dev.azure.com/enecomanagedcloud/VPP%20-%20Asset%20Optimisation/_git/azure-devops-infrastructure
+2026-01-15T08:57:38.8694388Z  * branch            4babd2f29e5cf4e6789c36ac27903e7a77a47105 -> FETCH_HEAD
+2026-01-15T08:57:38.9298548Z ##[command]git checkout --progress --force refs/remotes/origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105
+2026-01-15T08:57:38.9316072Z Note: switching to 'refs/remotes/origin/4babd2f29e5cf4e6789c36ac27903e7a77a47105'.
+2026-01-15T08:57:38.9316357Z 
+2026-01-15T08:57:38.9316835Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-01-15T08:57:38.9317420Z changes and commit them, and you can discard any commits you make in this
+2026-01-15T08:57:38.9318068Z state without impacting any branches by switching back to a branch.
+2026-01-15T08:57:38.9318346Z 
+2026-01-15T08:57:38.9318828Z If you want to create a new branch to retain commits you create, you may
+2026-01-15T08:57:38.9319377Z do so (now or later) by using -c with the switch command. Example:
+2026-01-15T08:57:38.9319607Z 
+2026-01-15T08:57:38.9320256Z   git switch -c <new-branch-name>
+2026-01-15T08:57:38.9320671Z 
+2026-01-15T08:57:38.9321594Z Or undo this operation with:
+2026-01-15T08:57:38.9321935Z 
+2026-01-15T08:57:38.9322608Z   git switch -
+2026-01-15T08:57:38.9322876Z 
+2026-01-15T08:57:38.9323693Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-01-15T08:57:38.9324146Z 
+2026-01-15T08:57:38.9325068Z HEAD is now at 4babd2f Merge pull request 157982 from feat/update-docs-ci-cd-plaform into main
+2026-01-15T08:57:38.9405691Z ##[section]Finishing: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:57:38.9484175Z ##[section]Starting: Install Cosign - [latest]
+2026-01-15T08:57:38.9495675Z ==============================================================================
+2026-01-15T08:57:38.9496102Z Task         : Command line
+2026-01-15T08:57:38.9496281Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:57:38.9496556Z Version      : 2.250.1
+2026-01-15T08:57:38.9496730Z Author       : Microsoft Corporation
+2026-01-15T08:57:38.9496926Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:57:38.9497193Z ==============================================================================
+2026-01-15T08:57:39.2033383Z Generating script.
+2026-01-15T08:57:39.2042159Z ========================== Starting Command Output ===========================
+2026-01-15T08:57:39.2072131Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/ccd6c7c7-b338-4e73-855c-0e628455b824.sh
+2026-01-15T08:57:39.2142719Z Fetching latest Cosign version from [https://api.github.com/repos/sigstore/cosign/releases/latest]
+2026-01-15T08:57:39.4783970Z Downloading Cosign v3.0.4 from [https://github.com/sigstore/cosign/releases/download/v3.0.4/cosign-linux-amd64]
+2026-01-15T08:57:41.4079312Z   ______   ______        _______. __    _______ .__   __.
+2026-01-15T08:57:41.4083589Z  /      | /  __  \      /       ||  |  /  _____||  \ |  |
+2026-01-15T08:57:41.4084394Z |  ,----'|  |  |  |    |   (----`|  | |  |  __  |   \|  |
+2026-01-15T08:57:41.4098259Z |  |     |  |  |  |     \   \    |  | |  | |_ | |  . `  |
+2026-01-15T08:57:41.4098557Z |  `----.|  `--'  | .----)   |   |  | |  |__| | |  |\   |
+2026-01-15T08:57:41.4098870Z  \______| \______/  |_______/    |__|  \______| |__| \__|
+2026-01-15T08:57:41.4099243Z cosign: A tool for Container Signing, Verification and Storage in an OCI registry.
+2026-01-15T08:57:41.4099444Z 
+2026-01-15T08:57:41.4099715Z GitVersion:    v3.0.4
+2026-01-15T08:57:41.4100057Z GitCommit:     6832fba4928c1ad69400235bbc41212de5006176
+2026-01-15T08:57:41.4100378Z GitTreeState:  clean
+2026-01-15T08:57:41.4100707Z BuildDate:     2026-01-09T21:17:16Z
+2026-01-15T08:57:41.4101039Z GoVersion:     go1.25.5
+2026-01-15T08:57:41.4101647Z Compiler:      gc
+2026-01-15T08:57:41.4102014Z Platform:      linux/amd64
+2026-01-15T08:57:41.4102156Z 
+2026-01-15T08:57:41.4137729Z 
+2026-01-15T08:57:41.4227329Z ##[section]Finishing: Install Cosign - [latest]
+2026-01-15T08:57:41.4254785Z ##[section]Starting: Install TFLint - [latest]
+2026-01-15T08:57:41.4260723Z ==============================================================================
+2026-01-15T08:57:41.4260828Z Task         : Command line
+2026-01-15T08:57:41.4260898Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:57:41.4260990Z Version      : 2.250.1
+2026-01-15T08:57:41.4261060Z Author       : Microsoft Corporation
+2026-01-15T08:57:41.4261130Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:57:41.4261223Z ==============================================================================
+2026-01-15T08:57:41.7464972Z Generating script.
+2026-01-15T08:57:41.7477620Z ========================== Starting Command Output ===========================
+2026-01-15T08:57:41.7512240Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/d6128353-aea8-4fcf-9f0c-d5bcacc105a7.sh
+2026-01-15T08:57:41.7625899Z Fetching latest TFLint version from [https://api.github.com/repos/terraform-linters/tflint/releases/latest]
+2026-01-15T08:57:42.0152272Z Downloading TFLint v0.60.0 from [BASE_URL]
+2026-01-15T08:57:42.0182054Z Download package & checksums
+2026-01-15T08:57:43.1166660Z Verify checksums with cosign
+2026-01-15T08:57:44.0793122Z Verified OK
+2026-01-15T08:57:44.0815288Z Verifying package integrity...
+2026-01-15T08:57:44.1029334Z tflint_linux_amd64.zip: OK
+2026-01-15T08:57:44.1032886Z Unpacking and Installing...
+2026-01-15T08:57:44.1062969Z Archive:  /tmp/tmp.2XxigQz58q/tflint_linux_amd64.zip
+2026-01-15T08:57:44.4493595Z   inflating: /tmp/tmp.2XxigQz58q/tflint  
+2026-01-15T08:57:44.4879880Z getwd: no such file or directoryInstalled 
+2026-01-15T08:57:44.4903629Z 
+2026-01-15T08:57:44.5000389Z ##[section]Finishing: Install TFLint - [latest]
+2026-01-15T08:57:44.5043098Z ##[section]Starting: Install Terraform 1.13.1
+2026-01-15T08:57:44.5050216Z ==============================================================================
+2026-01-15T08:57:44.5050377Z Task         : Terraform Installer
+2026-01-15T08:57:44.5050493Z Description  : Installs a specific version of terraform
+2026-01-15T08:57:44.5050617Z Version      : 1.2.3
+2026-01-15T08:57:44.5050706Z Author       : Charles Zipp
+2026-01-15T08:57:44.5050828Z Help         : 
+2026-01-15T08:57:44.5050922Z ==============================================================================
+2026-01-15T08:57:44.6589433Z Terraform not installed, downloading from:  https://releases.hashicorp.com/terraform/1.13.1/terraform_1.13.1_linux_amd64.zip
+2026-01-15T08:57:44.6589848Z Terraform file name as:  terraform-1.13.1-a7a768a2-0dd5-4279-8922-b8f14ecf95be.zip
+2026-01-15T08:57:44.6592060Z Downloading: https://releases.hashicorp.com/terraform/1.13.1/terraform_1.13.1_linux_amd64.zip
+2026-01-15T08:57:45.0839923Z Terraform downloaded to path:  /home/vsts/work/_temp/terraform-1.13.1-a7a768a2-0dd5-4279-8922-b8f14ecf95be.zip
+2026-01-15T08:57:45.0840543Z Extracting archive
+2026-01-15T08:57:45.0866125Z [command]/usr/bin/unzip /home/vsts/work/_temp/terraform-1.13.1-a7a768a2-0dd5-4279-8922-b8f14ecf95be.zip
+2026-01-15T08:57:45.0949480Z Archive:  /home/vsts/work/_temp/terraform-1.13.1-a7a768a2-0dd5-4279-8922-b8f14ecf95be.zip
+2026-01-15T08:57:45.0962384Z   inflating: LICENSE.txt             
+2026-01-15T08:57:45.7757793Z   inflating: terraform               
+2026-01-15T08:57:45.7766344Z 
+2026-01-15T08:57:45.7780607Z Extracted terraform to dir:  /home/vsts/work/_temp/02c126ef-ad2a-47bf-bab6-ef24eb98289a
+2026-01-15T08:57:45.7784083Z Caching tool: terraform 1.13.1 x64
+2026-01-15T08:57:45.8550741Z Terraform installed in path:  /opt/hostedtoolcache/terraform/1.13.1/x64
+2026-01-15T08:57:45.8551092Z Resolving path to Terraform tool...
+2026-01-15T08:57:45.8551675Z Expected Terraform path:  /opt/hostedtoolcache/terraform/1.13.1/x64/terraform
+2026-01-15T08:57:45.8570511Z Searching the following paths:  [
+2026-01-15T08:57:45.8571751Z   '/opt/hostedtoolcache/terraform/1.13.1/x64',
+2026-01-15T08:57:45.8572423Z   '/opt/hostedtoolcache/terraform/1.13.1/x64/LICENSE.txt',
+2026-01-15T08:57:45.8573041Z   '/opt/hostedtoolcache/terraform/1.13.1/x64/terraform'
+2026-01-15T08:57:45.8573551Z ]
+2026-01-15T08:57:45.8586919Z Matched files:  [ '/opt/hostedtoolcache/terraform/1.13.1/x64/terraform' ]
+2026-01-15T08:57:45.8590399Z Prepending PATH environment variable with directory: /opt/hostedtoolcache/terraform/1.13.1/x64
+2026-01-15T08:57:45.8598610Z Verifying Terraform installation. Executing 'terraform version'
+2026-01-15T08:57:45.8608474Z [command]/opt/hostedtoolcache/terraform/1.13.1/x64/terraform version
+2026-01-15T08:57:46.0730108Z Terraform v1.13.1
+2026-01-15T08:57:46.0733263Z on linux_amd64
+2026-01-15T08:57:46.0733760Z 
+2026-01-15T08:57:46.0734473Z Your version of Terraform is out of date! The latest version
+2026-01-15T08:57:46.0734845Z is 1.14.3. You can update by downloading from https://developer.hashicorp.com/terraform/install
+2026-01-15T08:57:46.0763564Z 
+2026-01-15T08:57:46.0866977Z ##[section]Finishing: Install Terraform 1.13.1
+2026-01-15T08:57:46.0891239Z ##[section]Starting: UsePythonVersion
+2026-01-15T08:57:46.0897431Z ==============================================================================
+2026-01-15T08:57:46.0897527Z Task         : Use Python version
+2026-01-15T08:57:46.0897591Z Description  : Use the specified version of Python from the tool cache, optionally adding it to the PATH
+2026-01-15T08:57:46.0897690Z Version      : 0.266.0
+2026-01-15T08:57:46.0897746Z Author       : Microsoft Corporation
+2026-01-15T08:57:46.0897814Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/tool/use-python-version
+2026-01-15T08:57:46.0897899Z ==============================================================================
+2026-01-15T08:57:46.3333761Z Found tool in cache: Python 3.14.2 x64
+2026-01-15T08:57:46.3447520Z Prepending PATH environment variable with directory: /opt/hostedtoolcache/Python/3.14.2/x64
+2026-01-15T08:57:46.3449582Z Prepending PATH environment variable with directory: /opt/hostedtoolcache/Python/3.14.2/x64/bin
+2026-01-15T08:57:46.3683144Z ##[section]Finishing: UsePythonVersion
+2026-01-15T08:57:46.3716984Z ##[section]Starting: Install pre-commit
+2026-01-15T08:57:46.3722223Z ==============================================================================
+2026-01-15T08:57:46.3722314Z Task         : Command line
+2026-01-15T08:57:46.3722380Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:57:46.3722467Z Version      : 2.250.1
+2026-01-15T08:57:46.3722530Z Author       : Microsoft Corporation
+2026-01-15T08:57:46.3722592Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:57:46.3722680Z ==============================================================================
+2026-01-15T08:57:46.5320153Z Generating script.
+2026-01-15T08:57:46.5328592Z ========================== Starting Command Output ===========================
+2026-01-15T08:57:46.5346797Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/95a66a07-f9ce-4c54-b896-eb8ab3853338.sh
+2026-01-15T08:57:51.4444549Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.14.2/x64/lib/python3.14/site-packages (25.3)
+2026-01-15T08:57:52.6444226Z Collecting pre-commit
+2026-01-15T08:57:52.7006815Z   Downloading pre_commit-4.5.1-py2.py3-none-any.whl.metadata (1.2 kB)
+2026-01-15T08:57:52.7153992Z Collecting cfgv>=2.0.0 (from pre-commit)
+2026-01-15T08:57:52.7183234Z   Downloading cfgv-3.5.0-py2.py3-none-any.whl.metadata (8.9 kB)
+2026-01-15T08:57:52.7683805Z Collecting identify>=1.0.0 (from pre-commit)
+2026-01-15T08:57:52.7719642Z   Downloading identify-2.6.16-py2.py3-none-any.whl.metadata (4.4 kB)
+2026-01-15T08:57:52.7904701Z Collecting nodeenv>=0.11.1 (from pre-commit)
+2026-01-15T08:57:52.7935074Z   Downloading nodeenv-1.10.0-py2.py3-none-any.whl.metadata (24 kB)
+2026-01-15T08:57:52.8394715Z Collecting pyyaml>=5.1 (from pre-commit)
+2026-01-15T08:57:52.8442702Z   Downloading pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+2026-01-15T08:57:52.8930422Z Collecting virtualenv>=20.10.0 (from pre-commit)
+2026-01-15T08:57:52.8962283Z   Downloading virtualenv-20.36.1-py3-none-any.whl.metadata (4.7 kB)
+2026-01-15T08:57:52.9168826Z Collecting distlib<1,>=0.3.7 (from virtualenv>=20.10.0->pre-commit)
+2026-01-15T08:57:52.9201997Z   Downloading distlib-0.4.0-py2.py3-none-any.whl.metadata (5.2 kB)
+2026-01-15T08:57:52.9431838Z Collecting filelock<4,>=3.20.1 (from virtualenv>=20.10.0->pre-commit)
+2026-01-15T08:57:52.9464473Z   Downloading filelock-3.20.3-py3-none-any.whl.metadata (2.1 kB)
+2026-01-15T08:57:52.9728716Z Collecting platformdirs<5,>=3.9.1 (from virtualenv>=20.10.0->pre-commit)
+2026-01-15T08:57:52.9766196Z   Downloading platformdirs-4.5.1-py3-none-any.whl.metadata (12 kB)
+2026-01-15T08:57:52.9871991Z Downloading pre_commit-4.5.1-py2.py3-none-any.whl (226 kB)
+2026-01-15T08:57:53.0028223Z Downloading cfgv-3.5.0-py2.py3-none-any.whl (7.4 kB)
+2026-01-15T08:57:53.0080859Z Downloading identify-2.6.16-py2.py3-none-any.whl (99 kB)
+2026-01-15T08:57:53.0139913Z Downloading nodeenv-1.10.0-py2.py3-none-any.whl (23 kB)
+2026-01-15T08:57:53.0198298Z Downloading pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (794 kB)
+2026-01-15T08:57:53.0447819Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 794.2/794.2 kB 65.1 MB/s  0:00:00
+2026-01-15T08:57:53.0448402Z Downloading virtualenv-20.36.1-py3-none-any.whl (6.0 MB)
+2026-01-15T08:57:53.0813202Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.0/6.0 MB 138.8 MB/s  0:00:00
+2026-01-15T08:57:53.0843489Z Downloading distlib-0.4.0-py2.py3-none-any.whl (469 kB)
+2026-01-15T08:57:53.0917848Z Downloading filelock-3.20.3-py3-none-any.whl (16 kB)
+2026-01-15T08:57:53.0978253Z Downloading platformdirs-4.5.1-py3-none-any.whl (18 kB)
+2026-01-15T08:57:53.1393088Z Installing collected packages: distlib, pyyaml, platformdirs, nodeenv, identify, filelock, cfgv, virtualenv, pre-commit
+2026-01-15T08:57:53.7851113Z 
+2026-01-15T08:57:53.7868228Z Successfully installed cfgv-3.5.0 distlib-0.4.0 filelock-3.20.3 identify-2.6.16 nodeenv-1.10.0 platformdirs-4.5.1 pre-commit-4.5.1 pyyaml-6.0.3 virtualenv-20.36.1
+2026-01-15T08:57:53.8643525Z 
+2026-01-15T08:57:53.8703926Z ##[section]Finishing: Install pre-commit
+2026-01-15T08:57:53.8729800Z ##[section]Starting: Run pre-commit
+2026-01-15T08:57:53.8735413Z ==============================================================================
+2026-01-15T08:57:53.8735508Z Task         : Command line
+2026-01-15T08:57:53.8735576Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:57:53.8735667Z Version      : 2.250.1
+2026-01-15T08:57:53.8735733Z Author       : Microsoft Corporation
+2026-01-15T08:57:53.8735820Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:57:53.8735912Z ==============================================================================
+2026-01-15T08:57:54.0757520Z Generating script.
+2026-01-15T08:57:54.0771856Z Script contents:
+2026-01-15T08:57:54.0774107Z pre-commit run --all-files
+2026-01-15T08:57:54.0776211Z ========================== Starting Command Output ===========================
+2026-01-15T08:57:54.0806121Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/a8082a0f-eba9-4c47-982a-51193cad725d.sh
+2026-01-15T08:57:54.8193775Z [INFO] Initializing environment for https://github.com/pre-commit/pre-commit-hooks.
+2026-01-15T08:57:55.3534407Z [INFO] Initializing environment for https://github.com/igorshubovych/markdownlint-cli.
+2026-01-15T08:57:55.8628795Z [INFO] Initializing environment for https://github.com/antonbabenko/pre-commit-terraform.
+2026-01-15T08:57:56.4800765Z [INFO] Installing environment for https://github.com/pre-commit/pre-commit-hooks.
+2026-01-15T08:57:56.4801970Z [INFO] Once installed this environment will be reused.
+2026-01-15T08:57:56.4807272Z [INFO] This may take a few minutes...
+2026-01-15T08:58:02.7260757Z [INFO] Installing environment for https://github.com/igorshubovych/markdownlint-cli.
+2026-01-15T08:58:02.7263043Z [INFO] Once installed this environment will be reused.
+2026-01-15T08:58:02.7263357Z [INFO] This may take a few minutes...
+2026-01-15T08:58:20.7884418Z trim trailing whitespace.................................................Passed
+2026-01-15T08:58:20.8690070Z fix end of files.........................................................Passed
+2026-01-15T08:58:20.9559976Z check yaml...............................................................Passed
+2026-01-15T08:58:21.0518200Z check for added large files..............................................Passed
+2026-01-15T08:58:21.2462608Z markdownlint.............................................................Passed
+2026-01-15T08:58:21.4140656Z Terraform fmt............................................................Passed
+2026-01-15T08:58:22.8700504Z Terraform validate with tflint...........................................Passed
+2026-01-15T08:58:22.8956597Z 
+2026-01-15T08:58:22.9012510Z ##[section]Finishing: Run pre-commit
+2026-01-15T08:58:22.9040505Z ##[section]Starting: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:58:22.9044718Z ==============================================================================
+2026-01-15T08:58:22.9044830Z Task         : Get sources
+2026-01-15T08:58:22.9044887Z Description  : Get sources from a repository. Supports Git, TfsVC, and SVN repositories.
+2026-01-15T08:58:22.9044982Z Version      : 1.0.0
+2026-01-15T08:58:22.9045036Z Author       : Microsoft
+2026-01-15T08:58:22.9045092Z Help         : [More Information](https://go.microsoft.com/fwlink/?LinkId=798199)
+2026-01-15T08:58:22.9045176Z ==============================================================================
+2026-01-15T08:58:23.1082904Z Cleaning any cached credential from repository: azure-devops-infrastructure (Git)
+2026-01-15T08:58:23.1200807Z ##[section]Finishing: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:58:23.1224794Z ##[section]Starting: Finalize Job
+2026-01-15T08:58:23.1236347Z Cleaning up task key
+2026-01-15T08:58:23.1236955Z Start cleaning up orphan processes.
+2026-01-15T08:58:23.1444201Z ##[section]Finishing: Finalize Job
+2026-01-15T08:58:23.1467228Z ##[section]Finishing: Run pre-commit

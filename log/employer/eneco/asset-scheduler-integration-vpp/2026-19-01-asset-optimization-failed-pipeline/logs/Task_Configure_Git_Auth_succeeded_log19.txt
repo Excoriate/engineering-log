@@ -1,0 +1,14 @@
+2026-01-15T08:58:47.5043288Z ##[section]Starting: Configure Git Auth
+2026-01-15T08:58:47.5048572Z ==============================================================================
+2026-01-15T08:58:47.5048683Z Task         : Command line
+2026-01-15T08:58:47.5048760Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:58:47.5048857Z Version      : 2.250.1
+2026-01-15T08:58:47.5048934Z Author       : Microsoft Corporation
+2026-01-15T08:58:47.5049009Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:58:47.5049230Z ==============================================================================
+2026-01-15T08:58:47.6683476Z Generating script.
+2026-01-15T08:58:47.6683946Z ========================== Starting Command Output ===========================
+2026-01-15T08:58:47.6684420Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/fda045af-dd5f-4b6a-99f8-b4f21d0d8b76.sh
+2026-01-15T08:58:47.6733788Z Configuring url override for git to enable remote terraform module checkout
+2026-01-15T08:58:47.6758348Z 
+2026-01-15T08:58:47.6830950Z ##[section]Finishing: Configure Git Auth

@@ -1,0 +1,15 @@
+2026-01-15T08:58:49.0717303Z ##[section]Starting: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:58:49.0721121Z ==============================================================================
+2026-01-15T08:58:49.0721241Z Task         : Get sources
+2026-01-15T08:58:49.0721307Z Description  : Get sources from a repository. Supports Git, TfsVC, and SVN repositories.
+2026-01-15T08:58:49.0721407Z Version      : 1.0.0
+2026-01-15T08:58:49.0721468Z Author       : Microsoft
+2026-01-15T08:58:49.0721535Z Help         : [More Information](https://go.microsoft.com/fwlink/?LinkId=798199)
+2026-01-15T08:58:49.0721619Z ==============================================================================
+2026-01-15T08:58:49.3038168Z Cleaning any cached credential from repository: azure-devops-infrastructure (Git)
+2026-01-15T08:58:49.3257077Z ##[command]git version
+2026-01-15T08:58:49.3564777Z git version 2.52.0
+2026-01-15T08:58:49.3600626Z ##[command]git lfs version
+2026-01-15T08:58:49.3712120Z git-lfs/3.7.1 (GitHub; linux amd64; go 1.24.4)
+2026-01-15T08:58:49.3740930Z ##[command]git config --unset-all http.https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/VPP%AZP2520-%AZP2520Asset%AZP2520Optimisation/_git/azure-devops-infrastructure.extraheader
+2026-01-15T08:58:49.3982144Z ##[section]Finishing: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s

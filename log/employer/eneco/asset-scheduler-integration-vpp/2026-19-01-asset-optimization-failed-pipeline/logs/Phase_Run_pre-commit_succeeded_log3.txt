@@ -1,0 +1,49 @@
+2026-01-15T08:57:28.7412856Z ##[section]Starting: Prepare job runPreCommit
+2026-01-15T08:57:28.7663566Z Variables:
+2026-01-15T08:57:28.7663566Z ContinueOnError: False
+2026-01-15T08:57:28.7663566Z TimeoutInMinutes: 60
+2026-01-15T08:57:28.7663566Z CancelTimeoutInMinutes: 5
+2026-01-15T08:57:28.7663566Z Expand:
+2026-01-15T08:57:28.7663566Z   MaxConcurrency: 0
+2026-01-15T08:57:28.7667665Z   ########## System Pipeline Decorator(s) ##########
+
+2026-01-15T08:57:28.7667665Z   Begin evaluating template 'system-pre-steps.yml'
+Evaluating: eq('true', variables['system.debugContext'])
+Expanded: eq('true', Null)
+Result: False
+Evaluating: resources['repositories']['self']
+Expanded: Object
+Result: True
+Evaluating: not(containsValue(job['steps']['*']['task']['id'], '6d15af64-176c-496d-b583-fd2ae21d4df4'))
+Expanded: not(containsValue(Object, '6d15af64-176c-496d-b583-fd2ae21d4df4'))
+Result: True
+Evaluating: resources['repositories']['self']['checkoutOptions']
+Result: Object
+Evaluating: pair['key']
+Result: 'fetchDepth'
+Evaluating: pair['value']
+Result: '1'
+Finished evaluating template 'system-pre-steps.yml'
+********************************************************************************
+Template and static variable resolution complete. Final runtime YAML document:
+steps:
+- task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
+  inputs:
+    repository: self
+    fetchDepth: 1
+
+
+2026-01-15T08:57:28.7755636Z   ########## ms.advancedsecurity-tasks.dependency-scanning-decorator ##########
+
+2026-01-15T08:57:28.7755636Z   Begin evaluating template 'assets/dependency-scanning-injection-decorator.yml@'
+Evaluating: and(or(eq(resources['repositories']['self']['ref'], resources['repositories']['self']['defaultBranch']), and(eq(variables['build.reason'], 'PullRequest'), eq(variables['system.pullrequest.targetbranch'], resources['repositories']['self']['defaultBranch']))), or(eq(resources['repositories']['__designer_repo']['ref'], resources['repositories']['__designer_repo']['defaultBranch']), and(eq(variables['build.reason'], 'PullRequest'), eq(variables['system.pullrequest.targetbranch'], resources['repositories']['__designer_repo']['defaultBranch']))), or(eq(resources['repositories']['self']['type'], 'Git'), eq(resources['repositories']['__designer_repo']['type'], 'Git')), eq(variables['build.advancedSecurityEnabled'], 'true'), eq(variables['build.dependencyScanningInjectionEnabled'], 'true'))
+Expanded: and(or(eq('refs/pull/157982/merge', 'refs/heads/main'), and(eq('PullRequest', 'PullRequest'), eq('refs/heads/main', 'refs/heads/main'))), or(eq(Null, Null), and(eq(variables['build.reason'], 'PullRequest'), eq(variables['system.pullrequest.targetbranch'], resources['repositories']['__designer_repo']['defaultBranch']))), or(eq('Git', 'Git'), eq(resources['repositories']['__designer_repo']['type'], 'Git')), eq('false', 'true'), eq(variables['build.dependencyScanningInjectionEnabled'], 'true'))
+Result: False
+Finished evaluating template 'assets/dependency-scanning-injection-decorator.yml@'
+********************************************************************************
+Template and static variable resolution complete. Final runtime YAML document:
+steps: []
+
+
+2026-01-15T08:57:28.7755636Z   MaxConcurrency: 0
+2026-01-15T08:57:28.7795769Z ##[section]Finishing: Prepare job runPreCommit

@@ -1,0 +1,46 @@
+2026-01-15T08:57:46.3716976Z ##[section]Starting: Install pre-commit
+2026-01-15T08:57:46.3722215Z ==============================================================================
+2026-01-15T08:57:46.3722312Z Task         : Command line
+2026-01-15T08:57:46.3722378Z Description  : Run a command line script using Bash on Linux and macOS and cmd.exe on Windows
+2026-01-15T08:57:46.3722465Z Version      : 2.250.1
+2026-01-15T08:57:46.3722528Z Author       : Microsoft Corporation
+2026-01-15T08:57:46.3722590Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/command-line
+2026-01-15T08:57:46.3722672Z ==============================================================================
+2026-01-15T08:57:46.5320116Z Generating script.
+2026-01-15T08:57:46.5328572Z ========================== Starting Command Output ===========================
+2026-01-15T08:57:46.5346782Z [command]/usr/bin/bash --noprofile --norc /home/vsts/work/_temp/95a66a07-f9ce-4c54-b896-eb8ab3853338.sh
+2026-01-15T08:57:51.4444416Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.14.2/x64/lib/python3.14/site-packages (25.3)
+2026-01-15T08:57:52.6444192Z Collecting pre-commit
+2026-01-15T08:57:52.7006776Z   Downloading pre_commit-4.5.1-py2.py3-none-any.whl.metadata (1.2 kB)
+2026-01-15T08:57:52.7153966Z Collecting cfgv>=2.0.0 (from pre-commit)
+2026-01-15T08:57:52.7183220Z   Downloading cfgv-3.5.0-py2.py3-none-any.whl.metadata (8.9 kB)
+2026-01-15T08:57:52.7683766Z Collecting identify>=1.0.0 (from pre-commit)
+2026-01-15T08:57:52.7719619Z   Downloading identify-2.6.16-py2.py3-none-any.whl.metadata (4.4 kB)
+2026-01-15T08:57:52.7904665Z Collecting nodeenv>=0.11.1 (from pre-commit)
+2026-01-15T08:57:52.7935055Z   Downloading nodeenv-1.10.0-py2.py3-none-any.whl.metadata (24 kB)
+2026-01-15T08:57:52.8394675Z Collecting pyyaml>=5.1 (from pre-commit)
+2026-01-15T08:57:52.8442676Z   Downloading pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+2026-01-15T08:57:52.8930365Z Collecting virtualenv>=20.10.0 (from pre-commit)
+2026-01-15T08:57:52.8962260Z   Downloading virtualenv-20.36.1-py3-none-any.whl.metadata (4.7 kB)
+2026-01-15T08:57:52.9168792Z Collecting distlib<1,>=0.3.7 (from virtualenv>=20.10.0->pre-commit)
+2026-01-15T08:57:52.9201978Z   Downloading distlib-0.4.0-py2.py3-none-any.whl.metadata (5.2 kB)
+2026-01-15T08:57:52.9431798Z Collecting filelock<4,>=3.20.1 (from virtualenv>=20.10.0->pre-commit)
+2026-01-15T08:57:52.9464453Z   Downloading filelock-3.20.3-py3-none-any.whl.metadata (2.1 kB)
+2026-01-15T08:57:52.9728679Z Collecting platformdirs<5,>=3.9.1 (from virtualenv>=20.10.0->pre-commit)
+2026-01-15T08:57:52.9766178Z   Downloading platformdirs-4.5.1-py3-none-any.whl.metadata (12 kB)
+2026-01-15T08:57:52.9871973Z Downloading pre_commit-4.5.1-py2.py3-none-any.whl (226 kB)
+2026-01-15T08:57:53.0028198Z Downloading cfgv-3.5.0-py2.py3-none-any.whl (7.4 kB)
+2026-01-15T08:57:53.0080838Z Downloading identify-2.6.16-py2.py3-none-any.whl (99 kB)
+2026-01-15T08:57:53.0139871Z Downloading nodeenv-1.10.0-py2.py3-none-any.whl (23 kB)
+2026-01-15T08:57:53.0198278Z Downloading pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (794 kB)
+2026-01-15T08:57:53.0447776Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 794.2/794.2 kB 65.1 MB/s  0:00:00
+2026-01-15T08:57:53.0448395Z Downloading virtualenv-20.36.1-py3-none-any.whl (6.0 MB)
+2026-01-15T08:57:53.0813161Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.0/6.0 MB 138.8 MB/s  0:00:00
+2026-01-15T08:57:53.0843459Z Downloading distlib-0.4.0-py2.py3-none-any.whl (469 kB)
+2026-01-15T08:57:53.0917821Z Downloading filelock-3.20.3-py3-none-any.whl (16 kB)
+2026-01-15T08:57:53.0978229Z Downloading platformdirs-4.5.1-py3-none-any.whl (18 kB)
+2026-01-15T08:57:53.1393054Z Installing collected packages: distlib, pyyaml, platformdirs, nodeenv, identify, filelock, cfgv, virtualenv, pre-commit
+2026-01-15T08:57:53.7851063Z 
+2026-01-15T08:57:53.7867937Z Successfully installed cfgv-3.5.0 distlib-0.4.0 filelock-3.20.3 identify-2.6.16 nodeenv-1.10.0 platformdirs-4.5.1 pre-commit-4.5.1 pyyaml-6.0.3 virtualenv-20.36.1
+2026-01-15T08:57:53.8643467Z 
+2026-01-15T08:57:53.8703913Z ##[section]Finishing: Install pre-commit

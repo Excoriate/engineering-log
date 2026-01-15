@@ -1,0 +1,39 @@
+2026-01-15T08:57:44.5043083Z ##[section]Starting: Install Terraform 1.13.1
+2026-01-15T08:57:44.5050207Z ==============================================================================
+2026-01-15T08:57:44.5050373Z Task         : Terraform Installer
+2026-01-15T08:57:44.5050489Z Description  : Installs a specific version of terraform
+2026-01-15T08:57:44.5050613Z Version      : 1.2.3
+2026-01-15T08:57:44.5050703Z Author       : Charles Zipp
+2026-01-15T08:57:44.5050825Z Help         : 
+2026-01-15T08:57:44.5050918Z ==============================================================================
+2026-01-15T08:57:44.6589403Z Terraform not installed, downloading from:  https://releases.hashicorp.com/terraform/1.13.1/terraform_1.13.1_linux_amd64.zip
+2026-01-15T08:57:44.6589844Z Terraform file name as:  terraform-1.13.1-a7a768a2-0dd5-4279-8922-b8f14ecf95be.zip
+2026-01-15T08:57:44.6592051Z Downloading: https://releases.hashicorp.com/terraform/1.13.1/terraform_1.13.1_linux_amd64.zip
+2026-01-15T08:57:45.0839848Z Terraform downloaded to path:  /home/vsts/work/_temp/terraform-1.13.1-a7a768a2-0dd5-4279-8922-b8f14ecf95be.zip
+2026-01-15T08:57:45.0840534Z Extracting archive
+2026-01-15T08:57:45.0866113Z [command]/usr/bin/unzip /home/vsts/work/_temp/terraform-1.13.1-a7a768a2-0dd5-4279-8922-b8f14ecf95be.zip
+2026-01-15T08:57:45.0949467Z Archive:  /home/vsts/work/_temp/terraform-1.13.1-a7a768a2-0dd5-4279-8922-b8f14ecf95be.zip
+2026-01-15T08:57:45.0962373Z   inflating: LICENSE.txt             
+2026-01-15T08:57:45.7757763Z   inflating: terraform               
+2026-01-15T08:57:45.7766329Z 
+2026-01-15T08:57:45.7780595Z Extracted terraform to dir:  /home/vsts/work/_temp/02c126ef-ad2a-47bf-bab6-ef24eb98289a
+2026-01-15T08:57:45.7784072Z Caching tool: terraform 1.13.1 x64
+2026-01-15T08:57:45.8550713Z Terraform installed in path:  /opt/hostedtoolcache/terraform/1.13.1/x64
+2026-01-15T08:57:45.8551087Z Resolving path to Terraform tool...
+2026-01-15T08:57:45.8551665Z Expected Terraform path:  /opt/hostedtoolcache/terraform/1.13.1/x64/terraform
+2026-01-15T08:57:45.8570488Z Searching the following paths:  [
+2026-01-15T08:57:45.8571742Z   '/opt/hostedtoolcache/terraform/1.13.1/x64',
+2026-01-15T08:57:45.8572416Z   '/opt/hostedtoolcache/terraform/1.13.1/x64/LICENSE.txt',
+2026-01-15T08:57:45.8573035Z   '/opt/hostedtoolcache/terraform/1.13.1/x64/terraform'
+2026-01-15T08:57:45.8573544Z ]
+2026-01-15T08:57:45.8586907Z Matched files:  [ '/opt/hostedtoolcache/terraform/1.13.1/x64/terraform' ]
+2026-01-15T08:57:45.8590387Z Prepending PATH environment variable with directory: /opt/hostedtoolcache/terraform/1.13.1/x64
+2026-01-15T08:57:45.8598598Z Verifying Terraform installation. Executing 'terraform version'
+2026-01-15T08:57:45.8608461Z [command]/opt/hostedtoolcache/terraform/1.13.1/x64/terraform version
+2026-01-15T08:57:46.0730079Z Terraform v1.13.1
+2026-01-15T08:57:46.0733250Z on linux_amd64
+2026-01-15T08:57:46.0733754Z 
+2026-01-15T08:57:46.0734463Z Your version of Terraform is out of date! The latest version
+2026-01-15T08:57:46.0734832Z is 1.14.3. You can update by downloading from https://developer.hashicorp.com/terraform/install
+2026-01-15T08:57:46.0763544Z 
+2026-01-15T08:57:46.0866965Z ##[section]Finishing: Install Terraform 1.13.1

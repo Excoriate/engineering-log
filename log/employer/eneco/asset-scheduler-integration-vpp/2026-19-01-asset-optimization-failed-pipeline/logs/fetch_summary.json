@@ -1,0 +1,9 @@
+{
+  "build_id": "1490557",
+  "definition": "azure-devops-infrastructure - ci",
+  "result": "failed",
+  "logs_directory": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/asset-scheduler-integration-vpp/2026-19-01-asset-optimization-failed-pipeline/logs",
+  "files_downloaded": 28,
+  "files_failed": 0,
+  "status": "success"
+}

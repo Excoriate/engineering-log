@@ -1,0 +1,10 @@
+2026-01-15T08:58:22.9040496Z ##[section]Starting: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
+2026-01-15T08:58:22.9044710Z ==============================================================================
+2026-01-15T08:58:22.9044828Z Task         : Get sources
+2026-01-15T08:58:22.9044885Z Description  : Get sources from a repository. Supports Git, TfsVC, and SVN repositories.
+2026-01-15T08:58:22.9044980Z Version      : 1.0.0
+2026-01-15T08:58:22.9045034Z Author       : Microsoft
+2026-01-15T08:58:22.9045089Z Help         : [More Information](https://go.microsoft.com/fwlink/?LinkId=798199)
+2026-01-15T08:58:22.9045174Z ==============================================================================
+2026-01-15T08:58:23.1082866Z Cleaning any cached credential from repository: azure-devops-infrastructure (Git)
+2026-01-15T08:58:23.1200789Z ##[section]Finishing: Checkout azure-devops-infrastructure@refs/pull/157982/merge to s
