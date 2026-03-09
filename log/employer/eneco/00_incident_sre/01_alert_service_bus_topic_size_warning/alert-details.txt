@@ -1,0 +1,5 @@
+mcdta-vpp-sb-vpp-sbus-d-topic-size-d-warning
+
+https://portal.azure.com/#@Eneco.onmicrosoft.com/resource/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-mon/providers/Microsoft.Insights/metricalerts/mcdta-vpp-sb-vpp-sbus-d-topic-size-d-warning/users
+
+/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-mon/providers/Microsoft.Insights/metricalerts/mcdta-vpp-sb-vpp-sbus-d-topic-size-d-warning

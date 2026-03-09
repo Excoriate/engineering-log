@@ -1,0 +1,65 @@
+{
+  "apiVersion": "2024-03-01-preview",
+  "id": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-mon/providers/Microsoft.Insights/metricalerts/mcdta-vpp-sb-vpp-sbus-d-topic-size-d-warning",
+  "name": "mcdta-vpp-sb-vpp-sbus-d-topic-size-d-warning",
+  "type": "microsoft.insights/metricalerts",
+  "location": "global",
+  "tags": {
+      "AppName": "Virtual Power Plant(VPP)",
+      "Environment": "MC Development",
+      "Purpose": "vpp_core_shared",
+      "cost_discriminator": "vpp_core_shared",
+      "resolutionGroup": "Eneco - Virtual Power Plant - VPP Support"
+  },
+  "properties": {
+      "description": "Action will be triggered when any topic exceeds size of 400000000Mb",
+      "severity": 2,
+      "enabled": true,
+      "scopes": [
+          "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-d"
+      ],
+      "evaluationFrequency": "PT1M",
+      "autoMitigate": true,
+      "targetResourceType": "",
+      "targetResourceRegion": "",
+      "actions": [
+          {
+              "actionGroupId": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-mon/providers/Microsoft.Insights/actionGroups/eneco-vpp-devops-actiongroup",
+              "webHookProperties": {}
+          },
+          {
+              "actionGroupId": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/rg-pltfrm-infra-d/providers/Microsoft.Insights/actionGroups/ag-trade-platform-d",
+              "webHookProperties": {}
+          },
+          {
+              "actionGroupId": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-mon/providers/Microsoft.Insights/actionGroups/eneco-vpp-service-bus-topic-size-actiongroup",
+              "webHookProperties": {}
+          }
+      ],
+      "windowSize": "PT5M",
+      "criteria": {
+          "allOf": [
+              {
+                  "operator": "GreaterThan",
+                  "threshold": 400000000,
+                  "name": "Metric1",
+                  "metricNamespace": "Microsoft.ServiceBus/Namespaces",
+                  "metricName": "Size",
+                  "dimensions": [
+                      {
+                          "name": "EntityName",
+                          "operator": "Include",
+                          "values": [
+                              "*"
+                          ]
+                      }
+                  ],
+                  "timeAggregation": "Maximum",
+                  "skipMetricValidation": false,
+                  "criterionType": "StaticThresholdCriterion"
+              }
+          ],
+          "odata.type": "Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria"
+      }
+  }
+}
