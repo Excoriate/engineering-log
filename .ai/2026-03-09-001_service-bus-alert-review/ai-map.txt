@@ -1,0 +1,39 @@
+=== Prior .ai tasks ===
+/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai
+├── 2026-02-04-001_ado-permission-sync
+│   ├── 01-design.md
+│   └── 02-implementation.md
+├── 2026-03-09-001_service-bus-alert-review
+│   ├── 01-task-requirements-initial.md
+│   ├── ai-map.txt
+│   ├── context
+│   ├── lessons-learned
+│   ├── plan
+│   ├── specs
+│   └── verification
+└── memory
+    ├── 2025-11-26-001
+    │   ├── actions.md
+    │   └── memory.md
+    └── 2025_12_22_task001_cicd-green-but-failed
+        ├── plan.md
+        ├── scratchpad.md
+        ├── task-handoff.md
+        ├── task-requirements.md
+        └── trajectory.md
+
+=== Alert incident directory ===
+/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/00_incident_sre
+└── 01_alert_service_bus_topic_size_warning
+    ├── alert-capture-screenshot.png
+    ├── alert-details.txt
+    └── alert-json-view.json
+
+=== Alert JSON file size ===
+    2780 /Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/00_incident_sre/01_alert_service_bus_topic_size_warning/alert-json-view.json
+
+=== alert incident files ===
+/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/00_incident_sre/01_alert_service_bus_topic_size_warning
+├── alert-capture-screenshot.png
+├── alert-details.txt
+└── alert-json-view.json

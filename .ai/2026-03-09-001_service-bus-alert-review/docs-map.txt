@@ -1,0 +1,6 @@
+=== Docs Discovery ===
+No docs/ or std/documentation/ directory in engineering-log repo.
+Relevant docs are in the incident directory itself:
+  alert-details.txt (5 lines)
+  alert-capture-screenshot.png
+IaC repo has: README.md at root of MC-VPP-Infrastructure/main

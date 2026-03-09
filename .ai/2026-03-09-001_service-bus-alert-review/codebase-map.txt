@@ -1,0 +1,33 @@
+=== IaC Repo: MC-VPP-Infrastructure/main ===
+Root: /Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/MC-VPP-Infrastructure/main
+
+TOP-LEVEL STRUCTURE:
+  configuration/
+    acc-alerts.tfvars       <- ACC environment alert thresholds
+    dev-alerts.tfvars       <- DEV environment alert thresholds (444 lines)
+    prd-alerts.tfvars       <- PRD environment alert thresholds (589 lines)
+    dev.tfvars / acc.tfvars / prd.tfvars
+  justfile
+  README.md
+  terraform/
+    metric-alert-service-bus.tf     *** KEY FILE (135 lines) ***
+    servicebus-mc-lz.tf             *** KEY FILE (52 lines) ***
+    logicapp-azure-monitor-metric-alerts-slack.tf
+    logicappslackint.tf
+    actiongroup.tf
+    variables.tf / locals.tf / data.tf / provider.tf
+
+=== KEY FILES FOR THIS TASK ===
+metric-alert-service-bus.tf     135 lines
+servicebus-mc-lz.tf             52 lines
+dev-alerts.tfvars               444 lines
+prd-alerts.tfvars               589 lines
+alert-json-view.json            65 lines
+alert-details.txt               5 lines
+alert-capture-screenshot.png    (image)
+
+=== Alert Incident Artifacts ===
+log/employer/eneco/00_incident_sre/01_alert_service_bus_topic_size_warning/
+  alert-json-view.json
+  alert-details.txt
+  alert-capture-screenshot.png

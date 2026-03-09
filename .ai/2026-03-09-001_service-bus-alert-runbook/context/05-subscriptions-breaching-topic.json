@@ -1,0 +1,26 @@
+[
+  {
+    "activeMessageCount": 0,
+    "deadLetterMessageCount": null,
+    "dlqCount": 0,
+    "messageCount": 0,
+    "name": "tenant-gateway-subscription",
+    "status": "Active"
+  },
+  {
+    "activeMessageCount": 0,
+    "deadLetterMessageCount": null,
+    "dlqCount": 0,
+    "messageCount": 0,
+    "name": "dataprep",
+    "status": "Active"
+  },
+  {
+    "activeMessageCount": 5,
+    "deadLetterMessageCount": null,
+    "dlqCount": 3796,
+    "messageCount": 3801,
+    "name": "asset-scheduling-gateway",
+    "status": "Active"
+  }
+]

@@ -1,0 +1,95 @@
+--- prior tasks ---
+/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai
+├── 2026-02-04-001_ado-permission-sync
+│   ├── 01-design.md
+│   └── 02-implementation.md
+├── 2026-03-09-001_append-adversarial-review
+│   ├── context
+│   ├── lessons-learned
+│   ├── plan
+│   ├── specs
+│   └── verification
+├── 2026-03-09-001_append-alert-sections
+│   ├── context
+│   ├── lessons-learned
+│   ├── plan
+│   ├── specs
+│   └── verification
+├── 2026-03-09-001_service-bus-alert-review
+│   ├── 01-task-requirements-final.md
+│   ├── 01-task-requirements-initial.md
+│   ├── agents-claude-discovery.txt
+│   ├── ai-map.txt
+│   ├── codebase-map.txt
+│   ├── config-map.txt
+│   ├── context
+│   │   ├── 01-alert-facts.md
+│   │   ├── 02-iac-code-facts.md
+│   │   └── 03-live-env-state.md
+│   ├── docs-map.txt
+│   ├── lessons-learned
+│   ├── plan
+│   │   └── plan.md
+│   ├── specs
+│   │   ├── spec-01-analysis.md
+│   │   ├── spec-02-explanation.md
+│   │   ├── spec-03-proposal.md
+│   │   └── spec-04-slack.md
+│   └── verification
+│       ├── activation-checklist.md
+│       └── phase-8-results.md
+├── 2026-03-09-001_service-bus-alert-runbook
+│   ├── 01-task-requirements-final.md
+│   ├── 01-task-requirements-initial.md
+│   ├── agents-claude-discovery.txt
+│   ├── ai-map.txt
+│   ├── codebase-map.txt
+│   ├── config-map.txt
+│   ├── context
+│   │   ├── 00-auth-context.txt
+│   │   ├── 00-live-findings-summary.md
+│   │   ├── 01-namespace-show.txt
+│   │   ├── 02-alert-list.txt
+│   │   ├── 03-alert-rule-show.txt
+│   │   ├── 03-alert-rule.json
+│   │   ├── 04-topics-ranked.txt
+│   │   ├── 04-topics-raw.json
+│   │   ├── 05-subscriptions-breaching-topic.json
+│   │   ├── 06-topic-show-breaching.json
+│   │   ├── 07-subscription-detail-asset-scheduling-gateway.json
+│   │   ├── 08-metrics-incoming-messages.json
+│   │   ├── 09-metrics-complete-message.json
+│   │   ├── 10-activity-log-alert.json
+│   │   ├── 11-metrics-dlq-breaching-topic.json
+│   │   ├── 12-action-group-ag-trade-platform-d.json
+│   │   ├── 13-action-group-slack.json
+│   │   ├── 14-metrics-size-namespace.json
+│   │   ├── 15-namespace-show.json
+│   │   ├── 16-dlq-peek-messages.json
+│   │   └── 17-current-alert-state.json
+│   ├── docs-map.txt
+│   ├── lessons-learned
+│   ├── plan
+│   │   └── plan.md
+│   ├── specs
+│   │   ├── spec-diagnose-py.md
+│   │   └── spec-runbook-readme.md
+│   └── verification
+├── 2026-03-09-002_diagnose-rust-cli
+│   ├── 01-task-requirements-initial.md
+│   ├── ai-map.txt
+│   ├── codebase-map.txt
+│   ├── context
+│   ├── plan
+│   ├── specs
+│   └── verification
+└── memory
+    ├── 2025-11-26-001
+    │   ├── actions.md
+    │   └── memory.md
+    └── 2025_12_22_task001_cicd-green-but-failed
+        ├── plan.md
+        ├── scratchpad.md
+        ├── task-handoff.md
+        ├── task-requirements.md
+        └── trajectory.md

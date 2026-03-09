@@ -1,0 +1,3 @@
+EnvironmentName    HomeTenantId                          IsDefault    Name                                    State    TenantId
+-----------------  ------------------------------------  -----------  --------------------------------------  -------  ------------------------------------
+AzureCloud         eca36054-49a9-4731-a42f-8400670fc022  True         Eneco MCC - Development - Workload VPP  Enabled  eca36054-49a9-4731-a42f-8400670fc022

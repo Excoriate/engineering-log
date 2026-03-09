@@ -1,0 +1,63 @@
+{
+  "actions": [
+    {
+      "actionGroupId": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-mon/providers/Microsoft.Insights/actionGroups/eneco-vpp-devops-actiongroup",
+      "webHookProperties": {}
+    },
+    {
+      "actionGroupId": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/rg-pltfrm-infra-d/providers/Microsoft.Insights/actionGroups/ag-trade-platform-d",
+      "webHookProperties": {}
+    },
+    {
+      "actionGroupId": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-mon/providers/Microsoft.Insights/actionGroups/eneco-vpp-service-bus-topic-size-actiongroup",
+      "webHookProperties": {}
+    }
+  ],
+  "autoMitigate": true,
+  "criteria": {
+    "allOf": [
+      {
+        "criterionType": "StaticThresholdCriterion",
+        "dimensions": [
+          {
+            "name": "EntityName",
+            "operator": "Include",
+            "values": [
+              "*"
+            ]
+          }
+        ],
+        "metricName": "Size",
+        "metricNamespace": "Microsoft.ServiceBus/Namespaces",
+        "name": "Metric1",
+        "operator": "GreaterThan",
+        "skipMetricValidation": false,
+        "threshold": 400000000.0,
+        "timeAggregation": "Maximum"
+      }
+    ],
+    "odata.type": "Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria"
+  },
+  "description": "Action will be triggered when any topic exceeds size of 400000000Mb",
+  "enabled": true,
+  "evaluationFrequency": "PT1M",
+  "id": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-mon/providers/Microsoft.Insights/metricAlerts/mcdta-vpp-sb-vpp-sbus-d-topic-size-d-warning",
+  "location": "global",
+  "name": "mcdta-vpp-sb-vpp-sbus-d-topic-size-d-warning",
+  "resourceGroup": "mcdta-rg-vpp-d-mon",
+  "scopes": [
+    "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-d"
+  ],
+  "severity": 2,
+  "tags": {
+    "AppName": "Virtual Power Plant(VPP)",
+    "Environment": "MC Development",
+    "Purpose": "vpp_core_shared",
+    "cost_discriminator": "vpp_core_shared",
+    "resolutionGroup": "Eneco - Virtual Power Plant - VPP Support"
+  },
+  "targetResourceRegion": "",
+  "targetResourceType": "",
+  "type": "Microsoft.Insights/metricAlerts",
+  "windowSize": "PT5M"
+}

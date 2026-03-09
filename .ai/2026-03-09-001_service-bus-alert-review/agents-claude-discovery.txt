@@ -1,0 +1,8 @@
+=== Agent/Claude File Discovery ===
+CLAUDE.md: ~/.claude/CLAUDE.md (global, v43.2.1 — loaded)
+AGENTS.md: not present in this repo
+Project-specific rules: none found
+Available subagents: azure_devops_pipeline_debugger, adr-engineering,
+  engineering-docs-create-linuskernel, deep-dive-documentation,
+  azure_devops_workitem_creator, pull_request_review_azure_devops
+Relevant for this task: engineering-docs-create-linuskernel (for alert-explanation.md)

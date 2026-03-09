@@ -1,0 +1,12 @@
+=== TARGET ALERT RULE SHOW ===
+Name: mcdta-vpp-sb-vpp-sbus-d-topic-size-d-warning
+Severity: None
+Enabled: None
+AutoMitigate: None
+EvalFreq: None
+WindowSize: None
+Metric: None
+Threshold: None
+Operator: None
+Aggregation: None
+Exit: 0

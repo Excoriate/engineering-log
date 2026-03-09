@@ -1,0 +1,48 @@
+TOPIC                                                                                      BYTES       MB   %WARN     STATUS
+-----------------------------------------------------------------------------------------------------------------------------
+assetplanning-asset-strike-price-schedule-created-v1                                 552,270,911    552.3   138.1% >>> BREACHING
+assetplanning-prioritized-capacity-calculation-start-created-v1                       20,082,319     20.1     5.0% 
+asset-asset-registered-v1                                                             10,433,776     10.4     2.6% 
+assetplanning-asset-power-schedule-overwrite-created-v1                                2,210,268      2.2     0.6% 
+assetplanning-asset-capacity-forecast-schedule-created-v1                              1,619,087      1.6     0.4% 
+asset-asset-updated-v1                                                                 1,188,019      1.2     0.3% 
+asset-asset-market-enablement-changed-v1                                               1,123,367      1.1     0.3% 
+topic-asset-effective-steering-mode                                                      792,395      0.8     0.2% 
+asset-asset-configured-steering-mode-changed-v1                                          747,721      0.7     0.2% 
+topic-assetplanning-strikepriceschedule-created                                          666,584      0.7     0.2% 
+asset-asset-fleet-optimizer-status-updated-v1                                            562,543      0.6     0.1% 
+asset-asset-market-status-updated-v1                                                     501,151      0.5     0.1% 
+assetplanning-asset-flex-reservation-overwrite-created-v1                                485,087      0.5     0.1% 
+asset-asset-vpp-status-updated-v1                                                        338,847      0.3     0.1% 
+topic-fleetoptimizer-output-created                                                      329,760      0.3     0.1% 
+topic-assetplanning-marketallocation-created                                             211,523      0.2     0.1% 
+assetplanning-asset-market-allocation-overwrite-schedule-created-v1                      207,883      0.2     0.1% 
+asset-asset-deleted-v1                                                                   141,851      0.1     0.0% 
+topic-marketinteraction-portfolio-contract-2                                             141,643      0.1     0.0% 
+topic-alarm-signals-batch-event                                                          134,595      0.1     0.0% 
+topic-curtailment-schdule-stream-copy                                                    124,392      0.1     0.0% 
+topic-asset-production-forecast-stream-copy                                              120,929      0.1     0.0% 
+assetplanning-asset-flex-capacity-schedule-created-v1                                    110,520      0.1     0.0% 
+topic-assetplanning-productionforecastschedule-created                                   103,294      0.1     0.0% 
+topic-assetplanning-feasiblepowerschedule-created                                        102,711      0.1     0.0% 
+assetplanning-asset-flex-reservation-schedule-created-v1                                  97,786      0.1     0.0% 
+topic-asset-market-allocation-status-updated                                              96,911      0.1     0.0% 
+assetplanning-spot-price-forecast-schedule-created-v1                                     79,487      0.1     0.0% 
+dataprep-asset-effective-steering-mode-changed-v1                                         73,619      0.1     0.0% 
+topic-assetplanning-availabilityschedule-created                                          59,783      0.1     0.0% 
+assetplanning-asset-congestion-restriction-aggregated-schedule-created-v1                 53,870      0.1     0.0% 
+topic-distributed-energy-resource-event-v2-stream-copy                                    53,035      0.1     0.0% 
+topic-assetplanning-congestionrestrictions-stream-copy                                    18,221      0.0     0.0% 
+topic-asset-default-market-updated                                                        13,679      0.0     0.0% 
+topic-asset-flex-reservation-shadow-mode-stream-copy                                      10,994      0.0     0.0% 
+topic-asset-power-schedule-shadow-mode-stream-copy                                        10,660      0.0     0.0% 
+topic-assetplanning-assetenergycapacityforecast-created                                   10,096      0.0     0.0% 
+topic-assetplanning-flexreservationschedule-created                                        6,557      0.0     0.0% 
+topic-fleetoptimizer-fallback-output-created                                               5,608      0.0     0.0% 
+topic-assetplanning-flexreservation-overwrite-created                                      5,120      0.0     0.0% 
+topic-assetplanning-powerschedule-overwrite-created                                        5,097      0.0     0.0% 
+topic-dataprep-endtoendtesting-portfolio-cleanup                                           1,669      0.0     0.0% 
+
+Breaching (>400MB): 1 topics
+Near threshold (>70%): 0 topics
+Total topics: 252

@@ -1,0 +1,21 @@
+---config-check---
+/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.claude
+└── settings.local.json
+/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.cursor
+└── rules
+    ├── cursor-create-new-rules.mdc
+    ├── markdown-code-block-language.mdc
+    ├── markdown-cross-references.mdc
+    ├── markdown-directory-naming.mdc
+    ├── markdown-docs-naming-convention.mdc
+    ├── markdown-file-naming.mdc
+    ├── markdown-formatting.mdc
+    ├── markdown-general-naming-convention.mdc
+    ├── markdown-header-hierarchy.mdc
+    ├── markdown-mandatory-metadata.mdc
+    ├── markdown-mermaid-diagrams.mdc
+    ├── markdown-spacing.mdc
+    ├── snyk_rules.mdc
+    └── system-thinker-holistic-engineering-analysis.mdc
+no CLAUDE.md
+no AGENTS.md

@@ -1,0 +1,34 @@
+{
+  "armRoleReceivers": [],
+  "automationRunbookReceivers": [],
+  "azureAppPushReceivers": [],
+  "azureFunctionReceivers": [],
+  "emailReceivers": [],
+  "enabled": true,
+  "eventHubReceivers": [],
+  "groupShortName": "vppslackd",
+  "id": "/subscriptions/839AF51E-C8DD-4BD2-944B-A7799EB2E1E4/resourceGroups/mcdta-rg-vpp-d-mon/providers/microsoft.insights/actionGroups/eneco-vpp-service-bus-topic-size-actiongroup",
+  "itsmReceivers": [],
+  "location": "Global",
+  "logicAppReceivers": [],
+  "name": "eneco-vpp-service-bus-topic-size-actiongroup",
+  "resourceGroup": "mcdta-rg-vpp-d-mon",
+  "smsReceivers": [],
+  "tags": {
+    "AppName": "Virtual Power Plant(VPP)",
+    "Environment": "MC Development",
+    "Purpose": "vpp_core_shared",
+    "cost_discriminator": "vpp_core_shared",
+    "resolutionGroup": "Eneco - Virtual Power Plant - VPP Support"
+  },
+  "type": "Microsoft.Insights/ActionGroups",
+  "voiceReceivers": [],
+  "webhookReceivers": [
+    {
+      "name": "Slack",
+      "serviceUri": "https://prod-241.westeurope.logic.azure.com:443/workflows/9385803f89f140a6ad030fe420f3f00d/triggers/http-trigger/paths/invoke?api-version=2019-05-01&sp=%2Ftriggers%2Fhttp-trigger%2Frun&sv=1.0&sig=SnYPRM-WWO7uMxWX-kJeJumWXMbwHfARr-tYsVddi0E",
+      "useAadAuth": false,
+      "useCommonAlertSchema": true
+    }
+  ]
+}

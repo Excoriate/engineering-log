@@ -1,0 +1,30 @@
+{
+  "accessedAt": "2026-03-09T04:27:37.5652703Z",
+  "autoDeleteOnIdle": "P427D",
+  "countDetails": {
+    "activeMessageCount": 0,
+    "deadLetterMessageCount": 0,
+    "scheduledMessageCount": 0,
+    "transferDeadLetterMessageCount": 0,
+    "transferMessageCount": 0
+  },
+  "createdAt": "2025-08-07T07:24:07.3384436Z",
+  "defaultMessageTimeToLive": "P366D",
+  "duplicateDetectionHistoryTimeWindow": "PT10M",
+  "enableBatchedOperations": true,
+  "enableExpress": false,
+  "enablePartitioning": false,
+  "id": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-d/topics/assetplanning-asset-strike-price-schedule-created-v1",
+  "location": "westeurope",
+  "maxMessageSizeInKilobytes": 1024,
+  "maxSizeInMegabytes": 1024,
+  "name": "assetplanning-asset-strike-price-schedule-created-v1",
+  "requiresDuplicateDetection": false,
+  "resourceGroup": "mcdta-rg-vpp-d-messaging",
+  "sizeInBytes": 552270911,
+  "status": "Active",
+  "subscriptionCount": 3,
+  "supportOrdering": false,
+  "type": "Microsoft.ServiceBus/namespaces/topics",
+  "updatedAt": "2025-08-07T07:24:07.3384436Z"
+}

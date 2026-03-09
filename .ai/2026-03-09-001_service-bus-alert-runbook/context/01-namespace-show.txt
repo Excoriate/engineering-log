@@ -1,0 +1,50 @@
+=== NAMESPACE SHOW ===
+{
+  "createdAt": "2025-03-05T01:51:37.9245622Z",
+  "disableLocalAuth": false,
+  "id": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-d",
+  "location": "westeurope",
+  "metricId": "839af51e-c8dd-4bd2-944b-a7799eb2e1e4:vpp-sbus-d",
+  "minimumTlsVersion": "1.2",
+  "name": "vpp-sbus-d",
+  "premiumMessagingPartitions": 1,
+  "privateEndpointConnections": [
+    {
+      "id": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-d/privateEndpointConnections/dd392e87-5a72-45c7-8d44-9c1a6d8250a0",
+      "location": "westeurope",
+      "name": "dd392e87-5a72-45c7-8d44-9c1a6d8250a0",
+      "privateEndpoint": {
+        "id": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-messaging/providers/Microsoft.Network/privateEndpoints/vpp-privateendpoint-mc-lz-servbus-d",
+        "resourceGroup": "mcdta-rg-vpp-d-messaging"
+      },
+      "privateLinkServiceConnectionState": {
+        "description": "Auto-Approved",
+        "status": "Approved"
+      },
+      "provisioningState": "Succeeded",
+      "resourceGroup": "mcdta-rg-vpp-d-messaging",
+      "type": "Microsoft.ServiceBus/Namespaces/PrivateEndpointConnections"
+    }
+  ],
+  "provisioningState": "Succeeded",
+  "publicNetworkAccess": "Disabled",
+  "resourceGroup": "mcdta-rg-vpp-d-messaging",
+  "serviceBusEndpoint": "https://vpp-sbus-d.servicebus.windows.net:443/",
+  "sku": {
+    "capacity": 1,
+    "name": "Premium",
+    "tier": "Premium"
+  },
+  "status": "Active",
+  "tags": {
+    "AppName": "Virtual Power Plant(VPP)",
+    "Environment": "MC Development",
+    "Purpose": "vpp_core_shared",
+    "cost_discriminator": "vpp_core_shared",
+    "resolutionGroup": "Eneco - Virtual Power Plant - VPP Support"
+  },
+  "type": "Microsoft.ServiceBus/Namespaces",
+  "updatedAt": "2026-01-13T12:16:22Z",
+  "zoneRedundant": true
+}
+Exit: 0

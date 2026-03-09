@@ -1,0 +1,31 @@
+/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/
+├── docs
+│   └── guides
+├── engineering
+│   └── azure_keyvault_rotation
+├── log
+│   └── employer
+│       ├── eneco
+│       │   ├── 00_incident_sre
+│       │   │   └── 01_alert_service_bus_topic_size_warning
+│       │   ├── adr-archived
+│       │   │   ├── architecture-decision-records
+│       │   │   ├── architecture-decisions
+│       │   │   ├── build-permits
+│       │   │   ├── domain-decision-records
+│       │   │   └── implementation-decision-records
+│       │   ├── asset-scheduler-integration-vpp
+│       │   │   ├── 2026-19-01-asset-optimization-failed-pipeline
+│       │   │   └── outputs
+│       │   ├── github_implementation
+│       │   │   ├── 01_sre_team_approach
+│       │   │   ├── 02_repos_involved
+│       │   │   └── 03_proposed_design
+│       │   ├── scripts
+│       │   └── troubleshooting
+│       │       ├── 2026_02_05_failed_feature_branche
+│       │       └── cicd-green-but-failed-error
+│       └── other
+└── scratchpad
+
+29 directories

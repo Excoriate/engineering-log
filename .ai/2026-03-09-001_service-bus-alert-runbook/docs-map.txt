@@ -1,0 +1,15 @@
+/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/00_incident_sre/01_alert_service_bus_topic_size_warning
+├── 01_analysis-alert.md
+├── 02_alert-explanation.md
+├── 03_proposal.md
+├── 04_slack-explanation.md
+├── 05_pr-spec.md
+├── alert-capture-screenshot.png
+├── alert-details.txt
+└── alert-json-view.json
+     310 /Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/00_incident_sre/01_alert_service_bus_topic_size_warning/01_analysis-alert.md
+     276 /Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/00_incident_sre/01_alert_service_bus_topic_size_warning/02_alert-explanation.md
+     419 /Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/00_incident_sre/01_alert_service_bus_topic_size_warning/03_proposal.md
+      16 /Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/00_incident_sre/01_alert_service_bus_topic_size_warning/04_slack-explanation.md
+     573 /Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/00_incident_sre/01_alert_service_bus_topic_size_warning/05_pr-spec.md
+    1594 total

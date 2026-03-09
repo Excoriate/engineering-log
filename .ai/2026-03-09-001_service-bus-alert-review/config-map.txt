@@ -1,0 +1,6 @@
+=== Config Discovery ===
+.claude/: present at ~/.claude (global config, agents, skills)
+.cursor/: not found in project root
+.codex/: not found in project root
+CLAUDE.md: not found in engineering-log project (uses global ~/.claude/CLAUDE.md)
+AGENTS.md: not found in engineering-log project

@@ -1,0 +1,52 @@
+{
+  "cost": 29,
+  "interval": "PT5M",
+  "namespace": "Microsoft.ServiceBus/namespaces",
+  "resourceregion": "westeurope",
+  "timespan": "2026-03-09T03:59:46Z/2026-03-09T04:29:46Z",
+  "value": [
+    {
+      "displayDescription": "Size of an Queue/Topic in Bytes.",
+      "errorCode": "Success",
+      "id": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-d/providers/Microsoft.Insights/metrics/Size",
+      "name": {
+        "localizedValue": "Size",
+        "value": "Size"
+      },
+      "resourceGroup": "mcdta-rg-vpp-d-messaging",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "maximum": 591685606.0,
+              "timeStamp": "2026-03-09T03:59:00Z"
+            },
+            {
+              "maximum": 592569941.0,
+              "timeStamp": "2026-03-09T04:04:00Z"
+            },
+            {
+              "maximum": 594167474.0,
+              "timeStamp": "2026-03-09T04:09:00Z"
+            },
+            {
+              "maximum": 594096343.0,
+              "timeStamp": "2026-03-09T04:14:00Z"
+            },
+            {
+              "maximum": 594632114.0,
+              "timeStamp": "2026-03-09T04:19:00Z"
+            },
+            {
+              "maximum": 597463885.0,
+              "timeStamp": "2026-03-09T04:24:00Z"
+            }
+          ],
+          "metadatavalues": []
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Bytes"
+    }
+  ]
+}

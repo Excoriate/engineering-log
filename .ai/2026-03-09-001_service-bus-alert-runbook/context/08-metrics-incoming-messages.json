@@ -1,0 +1,84 @@
+{
+  "cost": 59,
+  "interval": "PT5M",
+  "namespace": "Microsoft.ServiceBus/namespaces",
+  "resourceregion": "westeurope",
+  "timespan": "2026-03-09T03:28:29Z/2026-03-09T04:28:29Z",
+  "value": [
+    {
+      "displayDescription": "Incoming Messages for Microsoft.ServiceBus.",
+      "errorCode": "Success",
+      "id": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-d/providers/Microsoft.Insights/metrics/IncomingMessages",
+      "name": {
+        "localizedValue": "Incoming Messages",
+        "value": "IncomingMessages"
+      },
+      "resourceGroup": "mcdta-rg-vpp-d-messaging",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "timeStamp": "2026-03-09T03:28:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T03:33:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T03:38:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T03:43:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T03:48:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T03:53:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T03:58:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T04:03:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T04:08:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T04:13:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T04:18:00Z",
+              "total": 5.0
+            },
+            {
+              "timeStamp": "2026-03-09T04:23:00Z",
+              "total": 5.0
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "EntityName",
+                "value": "EntityName"
+              },
+              "value": "assetplanning-asset-strike-price-schedule-created-v1"
+            }
+          ]
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    }
+  ]
+}

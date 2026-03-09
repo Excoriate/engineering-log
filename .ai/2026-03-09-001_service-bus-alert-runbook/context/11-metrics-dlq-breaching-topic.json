@@ -1,0 +1,84 @@
+{
+  "cost": 59,
+  "interval": "PT5M",
+  "namespace": "Microsoft.ServiceBus/namespaces",
+  "resourceregion": "westeurope",
+  "timespan": "2026-03-09T03:29:04Z/2026-03-09T04:29:04Z",
+  "value": [
+    {
+      "displayDescription": "Count of dead-lettered messages in a Queue/Topic.",
+      "errorCode": "Success",
+      "id": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-d/providers/Microsoft.Insights/metrics/DeadletteredMessages",
+      "name": {
+        "localizedValue": "Count of dead-lettered messages in a Queue/Topic.",
+        "value": "DeadletteredMessages"
+      },
+      "resourceGroup": "mcdta-rg-vpp-d-messaging",
+      "timeseries": [
+        {
+          "data": [
+            {
+              "maximum": 3736.0,
+              "timeStamp": "2026-03-09T03:29:00Z"
+            },
+            {
+              "maximum": 3746.0,
+              "timeStamp": "2026-03-09T03:34:00Z"
+            },
+            {
+              "maximum": 3751.0,
+              "timeStamp": "2026-03-09T03:39:00Z"
+            },
+            {
+              "maximum": 3756.0,
+              "timeStamp": "2026-03-09T03:44:00Z"
+            },
+            {
+              "maximum": 3761.0,
+              "timeStamp": "2026-03-09T03:49:00Z"
+            },
+            {
+              "maximum": 3766.0,
+              "timeStamp": "2026-03-09T03:54:00Z"
+            },
+            {
+              "maximum": 3771.0,
+              "timeStamp": "2026-03-09T03:59:00Z"
+            },
+            {
+              "maximum": 3776.0,
+              "timeStamp": "2026-03-09T04:04:00Z"
+            },
+            {
+              "maximum": 3781.0,
+              "timeStamp": "2026-03-09T04:09:00Z"
+            },
+            {
+              "maximum": 3786.0,
+              "timeStamp": "2026-03-09T04:14:00Z"
+            },
+            {
+              "maximum": 3791.0,
+              "timeStamp": "2026-03-09T04:19:00Z"
+            },
+            {
+              "maximum": 3796.0,
+              "timeStamp": "2026-03-09T04:24:00Z"
+            }
+          ],
+          "metadatavalues": [
+            {
+              "name": {
+                "localizedValue": "EntityName",
+                "value": "EntityName"
+              },
+              "value": "assetplanning-asset-strike-price-schedule-created-v1"
+            }
+          ]
+        }
+      ],
+      "type": "Microsoft.Insights/metrics",
+      "unit": "Count"
+    }
+  ]
+}

@@ -1,0 +1,840 @@
+2026-02-04T13:21:16.4554023Z ##[section]Starting: Terraform Plan Destroy
+2026-02-04T13:21:16.4559856Z ==============================================================================
+2026-02-04T13:21:16.4559983Z Task         : Azure CLI
+2026-02-04T13:21:16.4560057Z Description  : Run Azure CLI commands against an Azure subscription in a PowerShell Core/Shell script when running on Linux agent or PowerShell/PowerShell Core/Batch script when running on Windows agent.
+2026-02-04T13:21:16.4560231Z Version      : 2.268.0
+2026-02-04T13:21:16.4560310Z Author       : Microsoft Corporation
+2026-02-04T13:21:16.4560389Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/deploy/azure-cli
+2026-02-04T13:21:16.4560500Z ==============================================================================
+2026-02-04T13:21:16.7401482Z [command]/usr/bin/az version
+2026-02-04T13:21:17.0105222Z {
+2026-02-04T13:21:17.0106030Z   "azure-cli": "2.82.0",
+2026-02-04T13:21:17.0106698Z   "azure-cli-core": "2.82.0",
+2026-02-04T13:21:17.0107062Z   "azure-cli-telemetry": "1.1.0",
+2026-02-04T13:21:17.0107470Z   "extensions": {
+2026-02-04T13:21:17.0107818Z     "azure-devops": "1.0.2"
+2026-02-04T13:21:17.0108166Z   }
+2026-02-04T13:21:17.0108471Z }
+2026-02-04T13:21:17.0127805Z Setting AZURE_CONFIG_DIR env variable to: /home/vsts/work/_temp/.azclitask
+2026-02-04T13:21:17.0138704Z Setting active cloud to: AzureCloud
+2026-02-04T13:21:17.0147216Z [command]/usr/bin/az cloud set -n AzureCloud
+2026-02-04T13:21:17.5665091Z [command]/usr/bin/az login --service-principal -u *** --tenant eca36054-49a9-4731-a42f-8400670fc022 --allow-no-subscriptions --federated-token ***
+2026-02-04T13:21:18.2566565Z [
+2026-02-04T13:21:18.2569532Z   {
+2026-02-04T13:21:18.2569898Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:18.2570289Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2570704Z     "id": "c7425e5b-a7d4-49f1-a45e-23f230783fa5",
+2026-02-04T13:21:18.2571101Z     "isDefault": true,
+2026-02-04T13:21:18.2571441Z     "managedByTenants": [],
+2026-02-04T13:21:18.2571834Z     "name": "Eneco MCC - Development - Workload BTM",
+2026-02-04T13:21:18.2572196Z     "state": "Enabled",
+2026-02-04T13:21:18.2572844Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2573194Z     "user": {
+2026-02-04T13:21:18.2573920Z       "name": "***",
+2026-02-04T13:21:18.2574280Z       "type": "servicePrincipal"
+2026-02-04T13:21:18.2574602Z     }
+2026-02-04T13:21:18.2574886Z   },
+2026-02-04T13:21:18.2575177Z   {
+2026-02-04T13:21:18.2575501Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:18.2575888Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2576283Z     "id": "7b1ba02e-bac6-4c45-83a0-7f0d3104922e",
+2026-02-04T13:21:18.2576638Z     "isDefault": false,
+2026-02-04T13:21:18.2576970Z     "managedByTenants": [],
+2026-02-04T13:21:18.2577348Z     "name": "Eneco Cloud Foundation - Sandbox-Development-Test",
+2026-02-04T13:21:18.2577709Z     "state": "Enabled",
+2026-02-04T13:21:18.2578072Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2578423Z     "user": {
+2026-02-04T13:21:18.2578784Z       "name": "***",
+2026-02-04T13:21:18.2579111Z       "type": "servicePrincipal"
+2026-02-04T13:21:18.2579425Z     }
+2026-02-04T13:21:18.2579722Z   },
+2026-02-04T13:21:18.2580012Z   {
+2026-02-04T13:21:18.2580326Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:18.2580707Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2581113Z     "id": "403b7169-4500-4fbe-98f5-0752f1b89f41",
+2026-02-04T13:21:18.2581497Z     "isDefault": false,
+2026-02-04T13:21:18.2581847Z     "managedByTenants": [],
+2026-02-04T13:21:18.2582232Z     "name": "Eneco MCC - Acceptance - Workload BTM",
+2026-02-04T13:21:18.2582601Z     "state": "Enabled",
+2026-02-04T13:21:18.2814773Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2815249Z     "user": {
+2026-02-04T13:21:18.2815819Z       "name": "***",
+2026-02-04T13:21:18.2816178Z       "type": "servicePrincipal"
+2026-02-04T13:21:18.2816514Z     }
+2026-02-04T13:21:18.2817197Z   },
+2026-02-04T13:21:18.2817497Z   {
+2026-02-04T13:21:18.2817818Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:18.2818235Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2818674Z     "id": "839af51e-c8dd-4bd2-944b-a7799eb2e1e4",
+2026-02-04T13:21:18.2819068Z     "isDefault": false,
+2026-02-04T13:21:18.2819449Z     "managedByTenants": [],
+2026-02-04T13:21:18.2819867Z     "name": "Eneco MCC - Development - Workload VPP",
+2026-02-04T13:21:18.2820271Z     "state": "Enabled",
+2026-02-04T13:21:18.2820659Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2821016Z     "user": {
+2026-02-04T13:21:18.2821406Z       "name": "***",
+2026-02-04T13:21:18.2821743Z       "type": "servicePrincipal"
+2026-02-04T13:21:18.2822077Z     }
+2026-02-04T13:21:18.2822389Z   },
+2026-02-04T13:21:18.2822701Z   {
+2026-02-04T13:21:18.2823058Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:18.2823502Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2824226Z     "id": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+2026-02-04T13:21:18.2824648Z     "isDefault": false,
+2026-02-04T13:21:18.2825022Z     "managedByTenants": [],
+2026-02-04T13:21:18.2825417Z     "name": "Eneco MCC - Production - Workload VPP",
+2026-02-04T13:21:18.2825786Z     "state": "Enabled",
+2026-02-04T13:21:18.2826166Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2826527Z     "user": {
+2026-02-04T13:21:18.2826914Z       "name": "***",
+2026-02-04T13:21:18.2827249Z       "type": "servicePrincipal"
+2026-02-04T13:21:18.2827577Z     }
+2026-02-04T13:21:18.2827883Z   },
+2026-02-04T13:21:18.2828168Z   {
+2026-02-04T13:21:18.2828509Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:18.2828929Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2829363Z     "id": "d8363cc2-77fb-4947-8463-7e52d6852a7c",
+2026-02-04T13:21:18.2829745Z     "isDefault": false,
+2026-02-04T13:21:18.2830106Z     "managedByTenants": [],
+2026-02-04T13:21:18.2830503Z     "name": "Eneco MCC - Production - Hub",
+2026-02-04T13:21:18.2830913Z     "state": "Enabled",
+2026-02-04T13:21:18.2831497Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2831880Z     "user": {
+2026-02-04T13:21:18.2832283Z       "name": "***",
+2026-02-04T13:21:18.2832666Z       "type": "servicePrincipal"
+2026-02-04T13:21:18.2832994Z     }
+2026-02-04T13:21:18.2833292Z   },
+2026-02-04T13:21:18.2913903Z   {
+2026-02-04T13:21:18.2914368Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:18.2914786Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2915255Z     "id": "20349567-96c5-44d9-ac61-36302c3d40f0",
+2026-02-04T13:21:18.2915668Z     "isDefault": false,
+2026-02-04T13:21:18.2916059Z     "managedByTenants": [],
+2026-02-04T13:21:18.2916456Z     "name": "Eneco MCC - Test - Workload BTM",
+2026-02-04T13:21:18.2916839Z     "state": "Enabled",
+2026-02-04T13:21:18.2917225Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2917642Z     "user": {
+2026-02-04T13:21:18.2918075Z       "name": "***",
+2026-02-04T13:21:18.2918471Z       "type": "servicePrincipal"
+2026-02-04T13:21:18.2918818Z     }
+2026-02-04T13:21:18.2919137Z   },
+2026-02-04T13:21:18.2919448Z   {
+2026-02-04T13:21:18.2919792Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:18.2920196Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2920622Z     "id": "b524d084-edf5-449d-8e92-999ebbaf485e",
+2026-02-04T13:21:18.2920989Z     "isDefault": false,
+2026-02-04T13:21:18.2921342Z     "managedByTenants": [],
+2026-02-04T13:21:18.2921717Z     "name": "Eneco MCC - Acceptance - Workload VPP",
+2026-02-04T13:21:18.2922091Z     "state": "Enabled",
+2026-02-04T13:21:18.2922467Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2922836Z     "user": {
+2026-02-04T13:21:18.2923225Z       "name": "***",
+2026-02-04T13:21:18.2923831Z       "type": "servicePrincipal"
+2026-02-04T13:21:18.2924187Z     }
+2026-02-04T13:21:18.2924514Z   },
+2026-02-04T13:21:18.2925052Z   {
+2026-02-04T13:21:18.2925429Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:18.2967849Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2968367Z     "id": "bbb7cb49-13ee-4ef6-ad09-d35e9538a06e",
+2026-02-04T13:21:18.2968771Z     "isDefault": false,
+2026-02-04T13:21:18.2969140Z     "managedByTenants": [],
+2026-02-04T13:21:18.2969558Z     "name": "Eneco Cloud Foundation - Smart Workspace",
+2026-02-04T13:21:18.2969955Z     "state": "Enabled",
+2026-02-04T13:21:18.2970372Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2970777Z     "user": {
+2026-02-04T13:21:18.2971214Z       "name": "***",
+2026-02-04T13:21:18.2971600Z       "type": "servicePrincipal"
+2026-02-04T13:21:18.2971949Z     }
+2026-02-04T13:21:18.2972269Z   },
+2026-02-04T13:21:18.2972593Z   {
+2026-02-04T13:21:18.2972952Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:18.2973378Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2974067Z     "id": "1154588b-1374-4b0a-b1e7-9f8b07cffc13",
+2026-02-04T13:21:18.2974502Z     "isDefault": false,
+2026-02-04T13:21:18.2974876Z     "managedByTenants": [],
+2026-02-04T13:21:18.2975275Z     "name": "Eneco MCC - Production - Workload BTM",
+2026-02-04T13:21:18.2975662Z     "state": "Enabled",
+2026-02-04T13:21:18.2976025Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:18.2976394Z     "user": {
+2026-02-04T13:21:18.2976799Z       "name": "***",
+2026-02-04T13:21:18.2977155Z       "type": "servicePrincipal"
+2026-02-04T13:21:18.2977505Z     }
+2026-02-04T13:21:18.2977818Z   }
+2026-02-04T13:21:18.2978123Z ]
+2026-02-04T13:21:18.2978616Z [command]/usr/bin/az account set --subscription 7b1ba02e-bac6-4c45-83a0-7f0d3104922e
+2026-02-04T13:21:18.7061293Z [command]/usr/bin/bash /home/vsts/work/_temp/azureclitaskscript1770211276736.sh
+2026-02-04T13:21:18.7168487Z rm: cannot remove '/home/vsts/.gitconfig': No such file or directory
+2026-02-04T13:21:18.7201626Z /home/vsts/work/1/s/terraform_temp
+2026-02-04T13:21:18.7221875Z total 180
+2026-02-04T13:21:18.7222308Z drwxr-xr-x 3 vsts vsts   4096 Feb  4 13:21 .
+2026-02-04T13:21:18.7222923Z drwxr-xr-x 3 vsts vsts   4096 Feb  4 13:20 ..
+2026-02-04T13:21:18.7223360Z drwxr-xr-x 2 vsts vsts   4096 Feb  4 13:20 appconfiguration
+2026-02-04T13:21:18.7224169Z -rw-r--r-- 1 vsts vsts 126806 Feb  4 13:20 configuration.yaml
+2026-02-04T13:21:18.7224694Z -rw-r--r-- 1 vsts vsts  39835 Feb  4 13:21 feature_flags_from_azure.yaml
+2026-02-04T13:21:18.7225185Z -rw-r--r-- 1 vsts vsts   1826 Feb  4 13:21 main.aks.tf
+2026-02-04T13:21:18.7856549Z [0m[1mInitializing the backend...[0m
+2026-02-04T13:21:20.5786687Z [0m[32m
+2026-02-04T13:21:20.5787648Z Successfully configured the backend "azurerm"! Terraform will automatically
+2026-02-04T13:21:20.5789202Z use this backend unless the backend configuration changes.[0m
+2026-02-04T13:21:21.2594213Z [0m[1mInitializing modules...[0m
+2026-02-04T13:21:21.2627779Z - app_configuration_entries in appconfiguration
+2026-02-04T13:21:21.2628886Z [0m[1mInitializing provider plugins...[0m
+2026-02-04T13:21:21.2632900Z - Finding hashicorp/azurerm versions matching "4.40.0"...
+2026-02-04T13:21:21.4307717Z - Installing hashicorp/azurerm v4.40.0...
+2026-02-04T13:21:23.0172006Z - Installed hashicorp/azurerm v4.40.0 (signed by HashiCorp)
+2026-02-04T13:21:23.0173199Z Terraform has created a lock file [1m.terraform.lock.hcl[0m to record the provider
+2026-02-04T13:21:23.0180780Z selections it made above. Include this file in your version control repository
+2026-02-04T13:21:23.0185143Z so that Terraform can guarantee to make the same selections by default when
+2026-02-04T13:21:23.0188903Z you run "terraform init" in the future.[0m
+2026-02-04T13:21:23.0192361Z
+2026-02-04T13:21:23.0196307Z [0m[1m[32mTerraform has been successfully initialized![0m[32m[0m
+2026-02-04T13:21:23.0199821Z [0m[32m
+2026-02-04T13:21:23.0203236Z You may now begin working with Terraform. Try running "terraform plan" to see
+2026-02-04T13:21:23.0205318Z any changes that are required for your infrastructure. All Terraform commands
+2026-02-04T13:21:23.0207455Z should now work.
+2026-02-04T13:21:23.0208935Z
+2026-02-04T13:21:23.0210505Z If you ever set or change modules or backend configuration for Terraform,
+2026-02-04T13:21:23.0211301Z rerun this command to reinitialize your working directory. If you forget, other
+2026-02-04T13:21:23.0212422Z commands will detect it and remind you to do so if necessary.[0m
+2026-02-04T13:21:25.1969867Z [31m╷[0m[0m
+2026-02-04T13:21:25.1971412Z [31m│[0m [0m[1m[31mError: [0m[0m[1mError acquiring the state lock[0m
+2026-02-04T13:21:25.1979216Z [31m│[0m [0m
+2026-02-04T13:21:25.1979998Z [31m│[0m [0m[0mError message: state blob is already locked
+2026-02-04T13:21:25.1980700Z [31m│[0m [0mLock Info:
+2026-02-04T13:21:25.1981514Z [31m│[0m [0m  ID:        5f06d4fe-4d07-efae-f69a-1bdc5ae51988
+2026-02-04T13:21:25.1982348Z [31m│[0m [0m  Path:      tfstate/ishtar.appconfig.tfstate
+2026-02-04T13:21:25.1983119Z [31m│[0m [0m  Operation: OperationTypePlan
+2026-02-04T13:21:25.1984067Z [31m│[0m [0m  Who:       vsts@runnervmbm2r7
+2026-02-04T13:21:25.1984880Z [31m│[0m [0m  Version:   1.13.1
+2026-02-04T13:21:25.1985804Z [31m│[0m [0m  Created:   2026-02-04 11:13:16.713231211 +0000 UTC
+2026-02-04T13:21:25.1986312Z [31m│[0m [0m  Info:
+2026-02-04T13:21:25.1986702Z [31m│[0m [0m
+2026-02-04T13:21:25.1987079Z [31m│[0m [0m
+2026-02-04T13:21:25.1987622Z [31m│[0m [0mTerraform acquires a state lock to protect the state from being written
+2026-02-04T13:21:25.1988248Z [31m│[0m [0mby multiple users at the same time. Please resolve the issue above and try
+2026-02-04T13:21:25.1988870Z [31m│[0m [0magain. For most commands, you can disable locking with the "-lock=false"
+2026-02-04T13:21:25.1989395Z [31m│[0m [0mflag, but this is not recommended.
+2026-02-04T13:21:25.1989813Z [31m╵[0m[0m
+2026-02-04T13:21:25.2020671Z Exit code: 1
+2026-02-04T13:21:25.2028884Z
+2026-02-04T13:21:25.2069837Z ##[error]Script failed with exit code: 1
+2026-02-04T13:21:25.2078295Z [command]/usr/bin/az account clear
+2026-02-04T13:21:25.6865350Z ##[warning]RetryHelper encountered task failure, will retry (attempt #: 1 out of 3) after 1000 ms
+2026-02-04T13:21:26.8864972Z [command]/usr/bin/az version
+2026-02-04T13:21:27.1515111Z {
+2026-02-04T13:21:27.1517928Z   "azure-cli": "2.82.0",
+2026-02-04T13:21:27.1534319Z   "azure-cli-core": "2.82.0",
+2026-02-04T13:21:27.1535240Z   "azure-cli-telemetry": "1.1.0",
+2026-02-04T13:21:27.1535875Z   "extensions": {
+2026-02-04T13:21:27.1536526Z     "azure-devops": "1.0.2"
+2026-02-04T13:21:27.1537199Z   }
+2026-02-04T13:21:27.1537772Z }
+2026-02-04T13:21:27.1541492Z Setting AZURE_CONFIG_DIR env variable to: /home/vsts/work/_temp/.azclitask
+2026-02-04T13:21:27.1548438Z Setting active cloud to: AzureCloud
+2026-02-04T13:21:27.1553785Z [command]/usr/bin/az cloud set -n AzureCloud
+2026-02-04T13:21:27.6989774Z [command]/usr/bin/az login --service-principal -u *** --tenant eca36054-49a9-4731-a42f-8400670fc022 --allow-no-subscriptions --federated-token ***
+2026-02-04T13:21:28.4363108Z [
+2026-02-04T13:21:28.4365173Z   {
+2026-02-04T13:21:28.4366762Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:28.4368397Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4369973Z     "id": "c7425e5b-a7d4-49f1-a45e-23f230783fa5",
+2026-02-04T13:21:28.4371612Z     "isDefault": true,
+2026-02-04T13:21:28.4372178Z     "managedByTenants": [],
+2026-02-04T13:21:28.4372718Z     "name": "Eneco MCC - Development - Workload BTM",
+2026-02-04T13:21:28.4373225Z     "state": "Enabled",
+2026-02-04T13:21:28.4374044Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4374624Z     "user": {
+2026-02-04T13:21:28.4375234Z       "name": "***",
+2026-02-04T13:21:28.4375738Z       "type": "servicePrincipal"
+2026-02-04T13:21:28.4376203Z     }
+2026-02-04T13:21:28.4376786Z   },
+2026-02-04T13:21:28.4378347Z   {
+2026-02-04T13:21:28.4378700Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:28.4379097Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4379865Z     "id": "7b1ba02e-bac6-4c45-83a0-7f0d3104922e",
+2026-02-04T13:21:28.4380267Z     "isDefault": false,
+2026-02-04T13:21:28.4380608Z     "managedByTenants": [],
+2026-02-04T13:21:28.4381020Z     "name": "Eneco Cloud Foundation - Sandbox-Development-Test",
+2026-02-04T13:21:28.4381415Z     "state": "Enabled",
+2026-02-04T13:21:28.4381800Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4382155Z     "user": {
+2026-02-04T13:21:28.4382588Z       "name": "***",
+2026-02-04T13:21:28.4382974Z       "type": "servicePrincipal"
+2026-02-04T13:21:28.4383332Z     }
+2026-02-04T13:21:28.4384103Z   },
+2026-02-04T13:21:28.4384433Z   {
+2026-02-04T13:21:28.4384772Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:28.4385168Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4385584Z     "id": "403b7169-4500-4fbe-98f5-0752f1b89f41",
+2026-02-04T13:21:28.4385955Z     "isDefault": false,
+2026-02-04T13:21:28.4386306Z     "managedByTenants": [],
+2026-02-04T13:21:28.4386700Z     "name": "Eneco MCC - Acceptance - Workload BTM",
+2026-02-04T13:21:28.4387073Z     "state": "Enabled",
+2026-02-04T13:21:28.4387471Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4387839Z     "user": {
+2026-02-04T13:21:28.4388243Z       "name": "***",
+2026-02-04T13:21:28.4388599Z       "type": "servicePrincipal"
+2026-02-04T13:21:28.4388983Z     }
+2026-02-04T13:21:28.4389288Z   },
+2026-02-04T13:21:28.4389589Z   {
+2026-02-04T13:21:28.4389941Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:28.4390346Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4390783Z     "id": "839af51e-c8dd-4bd2-944b-a7799eb2e1e4",
+2026-02-04T13:21:28.4391174Z     "isDefault": false,
+2026-02-04T13:21:28.4391537Z     "managedByTenants": [],
+2026-02-04T13:21:28.4391919Z     "name": "Eneco MCC - Development - Workload VPP",
+2026-02-04T13:21:28.4392300Z     "state": "Enabled",
+2026-02-04T13:21:28.4392671Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4393043Z     "user": {
+2026-02-04T13:21:28.4393416Z       "name": "***",
+2026-02-04T13:21:28.4414677Z       "type": "servicePrincipal"
+2026-02-04T13:21:28.4415056Z     }
+2026-02-04T13:21:28.4415389Z   },
+2026-02-04T13:21:28.4415693Z   {
+2026-02-04T13:21:28.4416050Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:28.4416483Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4416933Z     "id": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+2026-02-04T13:21:28.4417334Z     "isDefault": false,
+2026-02-04T13:21:28.4417720Z     "managedByTenants": [],
+2026-02-04T13:21:28.4418118Z     "name": "Eneco MCC - Production - Workload VPP",
+2026-02-04T13:21:28.4418504Z     "state": "Enabled",
+2026-02-04T13:21:28.4418904Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4419294Z     "user": {
+2026-02-04T13:21:28.4419733Z       "name": "***",
+2026-02-04T13:21:28.4420107Z       "type": "servicePrincipal"
+2026-02-04T13:21:28.4420459Z     }
+2026-02-04T13:21:28.4420780Z   },
+2026-02-04T13:21:28.4421115Z   {
+2026-02-04T13:21:28.4421475Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:28.4421905Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4422345Z     "id": "d8363cc2-77fb-4947-8463-7e52d6852a7c",
+2026-02-04T13:21:28.4422735Z     "isDefault": false,
+2026-02-04T13:21:28.4423113Z     "managedByTenants": [],
+2026-02-04T13:21:28.4423509Z     "name": "Eneco MCC - Production - Hub",
+2026-02-04T13:21:28.4430113Z     "state": "Enabled",
+2026-02-04T13:21:28.4430551Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4430968Z     "user": {
+2026-02-04T13:21:28.4431401Z       "name": "***",
+2026-02-04T13:21:28.4431751Z       "type": "servicePrincipal"
+2026-02-04T13:21:28.4432117Z     }
+2026-02-04T13:21:28.4432445Z   },
+2026-02-04T13:21:28.4432773Z   {
+2026-02-04T13:21:28.4433120Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:28.4433769Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4434465Z     "id": "20349567-96c5-44d9-ac61-36302c3d40f0",
+2026-02-04T13:21:28.4434873Z     "isDefault": false,
+2026-02-04T13:21:28.4435240Z     "managedByTenants": [],
+2026-02-04T13:21:28.4435599Z     "name": "Eneco MCC - Test - Workload BTM",
+2026-02-04T13:21:28.4435960Z     "state": "Enabled",
+2026-02-04T13:21:28.4436329Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4436676Z     "user": {
+2026-02-04T13:21:28.4437060Z       "name": "***",
+2026-02-04T13:21:28.4437403Z       "type": "servicePrincipal"
+2026-02-04T13:21:28.4437730Z     }
+2026-02-04T13:21:28.4438012Z   },
+2026-02-04T13:21:28.4438310Z   {
+2026-02-04T13:21:28.4438635Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:28.4439057Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4439489Z     "id": "b524d084-edf5-449d-8e92-999ebbaf485e",
+2026-02-04T13:21:28.4439893Z     "isDefault": false,
+2026-02-04T13:21:28.4440264Z     "managedByTenants": [],
+2026-02-04T13:21:28.4440667Z     "name": "Eneco MCC - Acceptance - Workload VPP",
+2026-02-04T13:21:28.4441070Z     "state": "Enabled",
+2026-02-04T13:21:28.4441431Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4441770Z     "user": {
+2026-02-04T13:21:28.4442133Z       "name": "***",
+2026-02-04T13:21:28.4442451Z       "type": "servicePrincipal"
+2026-02-04T13:21:28.4442763Z     }
+2026-02-04T13:21:28.4443054Z   },
+2026-02-04T13:21:28.4443344Z   {
+2026-02-04T13:21:28.4477105Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:28.4477626Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4478097Z     "id": "bbb7cb49-13ee-4ef6-ad09-d35e9538a06e",
+2026-02-04T13:21:28.4478512Z     "isDefault": false,
+2026-02-04T13:21:28.4478890Z     "managedByTenants": [],
+2026-02-04T13:21:28.4479295Z     "name": "Eneco Cloud Foundation - Smart Workspace",
+2026-02-04T13:21:28.4479709Z     "state": "Enabled",
+2026-02-04T13:21:28.4480107Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4480494Z     "user": {
+2026-02-04T13:21:28.4480920Z       "name": "***",
+2026-02-04T13:21:28.4481315Z       "type": "servicePrincipal"
+2026-02-04T13:21:28.4481872Z     }
+2026-02-04T13:21:28.4482207Z   },
+2026-02-04T13:21:28.4482508Z   {
+2026-02-04T13:21:28.4482865Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:28.4483290Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4484073Z     "id": "1154588b-1374-4b0a-b1e7-9f8b07cffc13",
+2026-02-04T13:21:28.4484498Z     "isDefault": false,
+2026-02-04T13:21:28.4484865Z     "managedByTenants": [],
+2026-02-04T13:21:28.4485261Z     "name": "Eneco MCC - Production - Workload BTM",
+2026-02-04T13:21:28.4485667Z     "state": "Enabled",
+2026-02-04T13:21:28.4486072Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:28.4486480Z     "user": {
+2026-02-04T13:21:28.4486898Z       "name": "***",
+2026-02-04T13:21:28.4487274Z       "type": "servicePrincipal"
+2026-02-04T13:21:28.4487625Z     }
+2026-02-04T13:21:28.4487954Z   }
+2026-02-04T13:21:28.4488293Z ]
+2026-02-04T13:21:28.4504305Z [command]/usr/bin/az account set --subscription 7b1ba02e-bac6-4c45-83a0-7f0d3104922e
+2026-02-04T13:21:28.8947297Z [command]/usr/bin/bash /home/vsts/work/_temp/azureclitaskscript1770211286882.sh
+2026-02-04T13:21:28.9082453Z /home/vsts/work/1/s/terraform_temp
+2026-02-04T13:21:28.9105681Z total 188
+2026-02-04T13:21:28.9106117Z drwxr-xr-x 4 vsts vsts   4096 Feb  4 13:21 .
+2026-02-04T13:21:28.9106541Z drwxr-xr-x 3 vsts vsts   4096 Feb  4 13:20 ..
+2026-02-04T13:21:28.9106965Z drwxr-xr-x 4 vsts vsts   4096 Feb  4 13:21 .terraform
+2026-02-04T13:21:28.9107419Z -rw-r--r-- 1 vsts vsts   1185 Feb  4 13:21 .terraform.lock.hcl
+2026-02-04T13:21:28.9107890Z drwxr-xr-x 2 vsts vsts   4096 Feb  4 13:20 appconfiguration
+2026-02-04T13:21:28.9108366Z -rw-r--r-- 1 vsts vsts 126806 Feb  4 13:20 configuration.yaml
+2026-02-04T13:21:28.9108840Z -rw-r--r-- 1 vsts vsts  39835 Feb  4 13:21 feature_flags_from_azure.yaml
+2026-02-04T13:21:28.9109308Z -rw-r--r-- 1 vsts vsts   1826 Feb  4 13:21 main.aks.tf
+2026-02-04T13:21:28.9531016Z [0m[1mInitializing the backend...[0m
+2026-02-04T13:21:31.5727808Z [0m[1mInitializing modules...[0m
+2026-02-04T13:21:31.5745571Z [0m[1mInitializing provider plugins...[0m
+2026-02-04T13:21:31.5747924Z - Reusing previous version of hashicorp/azurerm from the dependency lock file
+2026-02-04T13:21:31.7680905Z - Using previously-installed hashicorp/azurerm v4.40.0
+2026-02-04T13:21:31.7681601Z
+2026-02-04T13:21:31.7688020Z [0m[1m[32mTerraform has been successfully initialized![0m[32m[0m
+2026-02-04T13:21:31.7688771Z [0m[32m
+2026-02-04T13:21:31.7689747Z You may now begin working with Terraform. Try running "terraform plan" to see
+2026-02-04T13:21:31.7691540Z any changes that are required for your infrastructure. All Terraform commands
+2026-02-04T13:21:31.7692017Z should now work.
+2026-02-04T13:21:31.7692178Z
+2026-02-04T13:21:31.7692621Z If you ever set or change modules or backend configuration for Terraform,
+2026-02-04T13:21:31.7693165Z rerun this command to reinitialize your working directory. If you forget, other
+2026-02-04T13:21:31.7693900Z commands will detect it and remind you to do so if necessary.[0m
+2026-02-04T13:21:33.9597312Z [31m╷[0m[0m
+2026-02-04T13:21:33.9598630Z [31m│[0m [0m[1m[31mError: [0m[0m[1mError acquiring the state lock[0m
+2026-02-04T13:21:33.9599906Z [31m│[0m [0m
+2026-02-04T13:21:33.9600736Z [31m│[0m [0m[0mError message: state blob is already locked
+2026-02-04T13:21:33.9601441Z [31m│[0m [0mLock Info:
+2026-02-04T13:21:33.9602216Z [31m│[0m [0m  ID:        5f06d4fe-4d07-efae-f69a-1bdc5ae51988
+2026-02-04T13:21:33.9602734Z [31m│[0m [0m  Path:      tfstate/ishtar.appconfig.tfstate
+2026-02-04T13:21:33.9603203Z [31m│[0m [0m  Operation: OperationTypePlan
+2026-02-04T13:21:33.9603832Z [31m│[0m [0m  Who:       vsts@runnervmbm2r7
+2026-02-04T13:21:33.9604275Z [31m│[0m [0m  Version:   1.13.1
+2026-02-04T13:21:33.9604799Z [31m│[0m [0m  Created:   2026-02-04 11:13:16.713231211 +0000 UTC
+2026-02-04T13:21:33.9605276Z [31m│[0m [0m  Info:
+2026-02-04T13:21:33.9605638Z [31m│[0m [0m
+2026-02-04T13:21:33.9606006Z [31m│[0m [0m
+2026-02-04T13:21:33.9606916Z [31m│[0m [0mTerraform acquires a state lock to protect the state from being written
+2026-02-04T13:21:33.9607508Z [31m│[0m [0mby multiple users at the same time. Please resolve the issue above and try
+2026-02-04T13:21:33.9608091Z [31m│[0m [0magain. For most commands, you can disable locking with the "-lock=false"
+2026-02-04T13:21:33.9608588Z [31m│[0m [0mflag, but this is not recommended.
+2026-02-04T13:21:33.9609010Z [31m╵[0m[0m
+2026-02-04T13:21:33.9637074Z Exit code: 1
+2026-02-04T13:21:33.9647759Z
+2026-02-04T13:21:33.9664437Z ##[error]Script failed with exit code: 1
+2026-02-04T13:21:33.9668144Z [command]/usr/bin/az account clear
+2026-02-04T13:21:34.4109531Z ##[warning]RetryHelper encountered task failure, will retry (attempt #: 2 out of 3) after 4000 ms
+2026-02-04T13:21:38.6159239Z [command]/usr/bin/az version
+2026-02-04T13:21:38.8834964Z {
+2026-02-04T13:21:38.8837918Z   "azure-cli": "2.82.0",
+2026-02-04T13:21:38.8838334Z   "azure-cli-core": "2.82.0",
+2026-02-04T13:21:38.8839454Z   "azure-cli-telemetry": "1.1.0",
+2026-02-04T13:21:38.8839859Z   "extensions": {
+2026-02-04T13:21:38.8843924Z     "azure-devops": "1.0.2"
+2026-02-04T13:21:38.8844301Z   }
+2026-02-04T13:21:38.8844627Z }
+2026-02-04T13:21:38.8845095Z Setting AZURE_CONFIG_DIR env variable to: /home/vsts/work/_temp/.azclitask
+2026-02-04T13:21:38.8847732Z Setting active cloud to: AzureCloud
+2026-02-04T13:21:38.8852708Z [command]/usr/bin/az cloud set -n AzureCloud
+2026-02-04T13:21:39.5575770Z [command]/usr/bin/az login --service-principal -u *** --tenant eca36054-49a9-4731-a42f-8400670fc022 --allow-no-subscriptions --federated-token ***
+2026-02-04T13:21:40.2801395Z [
+2026-02-04T13:21:40.2804319Z   {
+2026-02-04T13:21:40.2804626Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:40.2804966Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2805336Z     "id": "bbb7cb49-13ee-4ef6-ad09-d35e9538a06e",
+2026-02-04T13:21:40.2805986Z     "isDefault": true,
+2026-02-04T13:21:40.2806290Z     "managedByTenants": [],
+2026-02-04T13:21:40.2806642Z     "name": "Eneco Cloud Foundation - Smart Workspace",
+2026-02-04T13:21:40.2806981Z     "state": "Enabled",
+2026-02-04T13:21:40.2807322Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2807649Z     "user": {
+2026-02-04T13:21:40.2808062Z       "name": "***",
+2026-02-04T13:21:40.2808365Z       "type": "servicePrincipal"
+2026-02-04T13:21:40.2808651Z     }
+2026-02-04T13:21:40.2808911Z   },
+2026-02-04T13:21:40.2809173Z   {
+2026-02-04T13:21:40.2809442Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:40.2809805Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2810154Z     "id": "7b1ba02e-bac6-4c45-83a0-7f0d3104922e",
+2026-02-04T13:21:40.2810473Z     "isDefault": false,
+2026-02-04T13:21:40.2810760Z     "managedByTenants": [],
+2026-02-04T13:21:40.2811098Z     "name": "Eneco Cloud Foundation - Sandbox-Development-Test",
+2026-02-04T13:21:40.2811429Z     "state": "Enabled",
+2026-02-04T13:21:40.2811754Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2812057Z     "user": {
+2026-02-04T13:21:40.2812376Z       "name": "***",
+2026-02-04T13:21:40.2812680Z       "type": "servicePrincipal"
+2026-02-04T13:21:40.2812961Z     }
+2026-02-04T13:21:40.2813210Z   },
+2026-02-04T13:21:40.2813467Z   {
+2026-02-04T13:21:40.2814088Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:40.2814420Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2814766Z     "id": "839af51e-c8dd-4bd2-944b-a7799eb2e1e4",
+2026-02-04T13:21:40.2815087Z     "isDefault": false,
+2026-02-04T13:21:40.2815392Z     "managedByTenants": [],
+2026-02-04T13:21:40.2815708Z     "name": "Eneco MCC - Development - Workload VPP",
+2026-02-04T13:21:40.2816016Z     "state": "Enabled",
+2026-02-04T13:21:40.2816332Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2816636Z     "user": {
+2026-02-04T13:21:40.2816960Z       "name": "***",
+2026-02-04T13:21:40.2817246Z       "type": "servicePrincipal"
+2026-02-04T13:21:40.2817671Z     }
+2026-02-04T13:21:40.2817928Z   },
+2026-02-04T13:21:40.2818180Z   {
+2026-02-04T13:21:40.2818443Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:40.2818778Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2819137Z     "id": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+2026-02-04T13:21:40.2819451Z     "isDefault": false,
+2026-02-04T13:21:40.2819738Z     "managedByTenants": [],
+2026-02-04T13:21:40.2820037Z     "name": "Eneco MCC - Production - Workload VPP",
+2026-02-04T13:21:40.2820352Z     "state": "Enabled",
+2026-02-04T13:21:40.2820705Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2821037Z     "user": {
+2026-02-04T13:21:40.2821385Z       "name": "***",
+2026-02-04T13:21:40.2821717Z       "type": "servicePrincipal"
+2026-02-04T13:21:40.2822050Z     }
+2026-02-04T13:21:40.2822346Z   },
+2026-02-04T13:21:40.2822630Z   {
+2026-02-04T13:21:40.2822960Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:40.2823346Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2854170Z     "id": "d8363cc2-77fb-4947-8463-7e52d6852a7c",
+2026-02-04T13:21:40.2854617Z     "isDefault": false,
+2026-02-04T13:21:40.2854990Z     "managedByTenants": [],
+2026-02-04T13:21:40.2855378Z     "name": "Eneco MCC - Production - Hub",
+2026-02-04T13:21:40.2855757Z     "state": "Enabled",
+2026-02-04T13:21:40.2856144Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2856526Z     "user": {
+2026-02-04T13:21:40.2856933Z       "name": "***",
+2026-02-04T13:21:40.2857301Z       "type": "servicePrincipal"
+2026-02-04T13:21:40.2857640Z     }
+2026-02-04T13:21:40.2857959Z   },
+2026-02-04T13:21:40.2858275Z   {
+2026-02-04T13:21:40.2858632Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:40.2859033Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2859487Z     "id": "b524d084-edf5-449d-8e92-999ebbaf485e",
+2026-02-04T13:21:40.2860057Z     "isDefault": false,
+2026-02-04T13:21:40.2860427Z     "managedByTenants": [],
+2026-02-04T13:21:40.2860824Z     "name": "Eneco MCC - Acceptance - Workload VPP",
+2026-02-04T13:21:40.2861200Z     "state": "Enabled",
+2026-02-04T13:21:40.2861586Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2861983Z     "user": {
+2026-02-04T13:21:40.2862484Z       "name": "***",
+2026-02-04T13:21:40.2862831Z       "type": "servicePrincipal"
+2026-02-04T13:21:40.2863172Z     }
+2026-02-04T13:21:40.2863481Z   },
+2026-02-04T13:21:40.2864009Z   {
+2026-02-04T13:21:40.2864339Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:40.2864730Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2865142Z     "id": "c7425e5b-a7d4-49f1-a45e-23f230783fa5",
+2026-02-04T13:21:40.2865516Z     "isDefault": false,
+2026-02-04T13:21:40.2865850Z     "managedByTenants": [],
+2026-02-04T13:21:40.2866216Z     "name": "Eneco MCC - Development - Workload BTM",
+2026-02-04T13:21:40.2866586Z     "state": "Enabled",
+2026-02-04T13:21:40.2866956Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2867321Z     "user": {
+2026-02-04T13:21:40.2867734Z       "name": "***",
+2026-02-04T13:21:40.2868110Z       "type": "servicePrincipal"
+2026-02-04T13:21:40.2868458Z     }
+2026-02-04T13:21:40.2868774Z   },
+2026-02-04T13:21:40.2869080Z   {
+2026-02-04T13:21:40.2869436Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:40.2869864Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2870311Z     "id": "20349567-96c5-44d9-ac61-36302c3d40f0",
+2026-02-04T13:21:40.2870696Z     "isDefault": false,
+2026-02-04T13:21:40.2871063Z     "managedByTenants": [],
+2026-02-04T13:21:40.2871435Z     "name": "Eneco MCC - Test - Workload BTM",
+2026-02-04T13:21:40.2871785Z     "state": "Enabled",
+2026-02-04T13:21:40.2872178Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2872542Z     "user": {
+2026-02-04T13:21:40.2872935Z       "name": "***",
+2026-02-04T13:21:40.2873294Z       "type": "servicePrincipal"
+2026-02-04T13:21:40.2873859Z     }
+2026-02-04T13:21:40.2874347Z   },
+2026-02-04T13:21:40.2874658Z   {
+2026-02-04T13:21:40.2874988Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:40.2875383Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2875792Z     "id": "403b7169-4500-4fbe-98f5-0752f1b89f41",
+2026-02-04T13:21:40.2876165Z     "isDefault": false,
+2026-02-04T13:21:40.2876519Z     "managedByTenants": [],
+2026-02-04T13:21:40.2876919Z     "name": "Eneco MCC - Acceptance - Workload BTM",
+2026-02-04T13:21:40.2877309Z     "state": "Enabled",
+2026-02-04T13:21:40.2877701Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2878077Z     "user": {
+2026-02-04T13:21:40.2878491Z       "name": "***",
+2026-02-04T13:21:40.2878849Z       "type": "servicePrincipal"
+2026-02-04T13:21:40.2879183Z     }
+2026-02-04T13:21:40.2879476Z   },
+2026-02-04T13:21:40.2879765Z   {
+2026-02-04T13:21:40.2880092Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:40.2880489Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2880902Z     "id": "1154588b-1374-4b0a-b1e7-9f8b07cffc13",
+2026-02-04T13:21:40.2881263Z     "isDefault": false,
+2026-02-04T13:21:40.2881605Z     "managedByTenants": [],
+2026-02-04T13:21:40.2881975Z     "name": "Eneco MCC - Production - Workload BTM",
+2026-02-04T13:21:40.2882341Z     "state": "Enabled",
+2026-02-04T13:21:40.2882703Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:40.2883093Z     "user": {
+2026-02-04T13:21:40.2883508Z       "name": "***",
+2026-02-04T13:21:40.2884092Z       "type": "servicePrincipal"
+2026-02-04T13:21:40.2884453Z     }
+2026-02-04T13:21:40.2884777Z   }
+2026-02-04T13:21:40.2885104Z ]
+2026-02-04T13:21:40.2885621Z [command]/usr/bin/az account set --subscription 7b1ba02e-bac6-4c45-83a0-7f0d3104922e
+2026-02-04T13:21:40.7465733Z [command]/usr/bin/bash /home/vsts/work/_temp/azureclitaskscript1770211298612.sh
+2026-02-04T13:21:40.7618068Z /home/vsts/work/1/s/terraform_temp
+2026-02-04T13:21:40.7651849Z total 188
+2026-02-04T13:21:40.7652726Z drwxr-xr-x 4 vsts vsts   4096 Feb  4 13:21 .
+2026-02-04T13:21:40.7655170Z drwxr-xr-x 3 vsts vsts   4096 Feb  4 13:20 ..
+2026-02-04T13:21:40.7655912Z drwxr-xr-x 4 vsts vsts   4096 Feb  4 13:21 .terraform
+2026-02-04T13:21:40.7657001Z -rw-r--r-- 1 vsts vsts   1185 Feb  4 13:21 .terraform.lock.hcl
+2026-02-04T13:21:40.7657707Z drwxr-xr-x 2 vsts vsts   4096 Feb  4 13:20 appconfiguration
+2026-02-04T13:21:40.7658732Z -rw-r--r-- 1 vsts vsts 126806 Feb  4 13:20 configuration.yaml
+2026-02-04T13:21:40.7659491Z -rw-r--r-- 1 vsts vsts  39835 Feb  4 13:21 feature_flags_from_azure.yaml
+2026-02-04T13:21:40.7660597Z -rw-r--r-- 1 vsts vsts   1826 Feb  4 13:21 main.aks.tf
+2026-02-04T13:21:40.8059541Z [0m[1mInitializing the backend...[0m
+2026-02-04T13:21:43.4434458Z [0m[1mInitializing modules...[0m
+2026-02-04T13:21:43.4455327Z [0m[1mInitializing provider plugins...[0m
+2026-02-04T13:21:43.4455939Z - Reusing previous version of hashicorp/azurerm from the dependency lock file
+2026-02-04T13:21:43.6398724Z - Using previously-installed hashicorp/azurerm v4.40.0
+2026-02-04T13:21:43.6399394Z
+2026-02-04T13:21:43.6400346Z [0m[1m[32mTerraform has been successfully initialized![0m[32m[0m
+2026-02-04T13:21:43.6401218Z [0m[32m
+2026-02-04T13:21:43.6403023Z You may now begin working with Terraform. Try running "terraform plan" to see
+2026-02-04T13:21:43.6404328Z any changes that are required for your infrastructure. All Terraform commands
+2026-02-04T13:21:43.6405164Z should now work.
+2026-02-04T13:21:43.6406652Z
+2026-02-04T13:21:43.6409477Z If you ever set or change modules or backend configuration for Terraform,
+2026-02-04T13:21:43.6410164Z rerun this command to reinitialize your working directory. If you forget, other
+2026-02-04T13:21:43.6410830Z commands will detect it and remind you to do so if necessary.[0m
+2026-02-04T13:21:45.9275949Z [31m╷[0m[0m
+2026-02-04T13:21:45.9279246Z [31m│[0m [0m[1m[31mError: [0m[0m[1mError acquiring the state lock[0m
+2026-02-04T13:21:45.9279974Z [31m│[0m [0m
+2026-02-04T13:21:45.9280738Z [31m│[0m [0m[0mError message: state blob is already locked
+2026-02-04T13:21:45.9281795Z [31m│[0m [0mLock Info:
+2026-02-04T13:21:45.9282600Z [31m│[0m [0m  ID:        5f06d4fe-4d07-efae-f69a-1bdc5ae51988
+2026-02-04T13:21:45.9283445Z [31m│[0m [0m  Path:      tfstate/ishtar.appconfig.tfstate
+2026-02-04T13:21:45.9285035Z [31m│[0m [0m  Operation: OperationTypePlan
+2026-02-04T13:21:45.9285533Z [31m│[0m [0m  Who:       vsts@runnervmbm2r7
+2026-02-04T13:21:45.9285970Z [31m│[0m [0m  Version:   1.13.1
+2026-02-04T13:21:45.9286512Z [31m│[0m [0m  Created:   2026-02-04 11:13:16.713231211 +0000 UTC
+2026-02-04T13:21:45.9286968Z [31m│[0m [0m  Info:
+2026-02-04T13:21:45.9287335Z [31m│[0m [0m
+2026-02-04T13:21:45.9287687Z [31m│[0m [0m
+2026-02-04T13:21:45.9288181Z [31m│[0m [0mTerraform acquires a state lock to protect the state from being written
+2026-02-04T13:21:45.9288831Z [31m│[0m [0mby multiple users at the same time. Please resolve the issue above and try
+2026-02-04T13:21:45.9289467Z [31m│[0m [0magain. For most commands, you can disable locking with the "-lock=false"
+2026-02-04T13:21:45.9289996Z [31m│[0m [0mflag, but this is not recommended.
+2026-02-04T13:21:45.9290399Z [31m╵[0m[0m
+2026-02-04T13:21:45.9315942Z Exit code: 1
+2026-02-04T13:21:45.9330227Z
+2026-02-04T13:21:45.9348395Z ##[error]Script failed with exit code: 1
+2026-02-04T13:21:45.9352502Z [command]/usr/bin/az account clear
+2026-02-04T13:21:46.3935923Z ##[warning]RetryHelper encountered task failure, will retry (attempt #: 3 out of 3) after 9000 ms
+2026-02-04T13:21:55.6045579Z [command]/usr/bin/az version
+2026-02-04T13:21:55.8845027Z {
+2026-02-04T13:21:55.8846028Z   "azure-cli": "2.82.0",
+2026-02-04T13:21:55.8846720Z   "azure-cli-core": "2.82.0",
+2026-02-04T13:21:55.8847481Z   "azure-cli-telemetry": "1.1.0",
+2026-02-04T13:21:55.8848131Z   "extensions": {
+2026-02-04T13:21:55.8848760Z     "azure-devops": "1.0.2"
+2026-02-04T13:21:55.8850140Z   }
+2026-02-04T13:21:55.8859762Z }
+2026-02-04T13:21:55.8860537Z Setting AZURE_CONFIG_DIR env variable to: /home/vsts/work/_temp/.azclitask
+2026-02-04T13:21:55.8861379Z Setting active cloud to: AzureCloud
+2026-02-04T13:21:55.8862138Z [command]/usr/bin/az cloud set -n AzureCloud
+2026-02-04T13:21:56.4494713Z [command]/usr/bin/az login --service-principal -u *** --tenant eca36054-49a9-4731-a42f-8400670fc022 --allow-no-subscriptions --federated-token ***
+2026-02-04T13:21:57.2040405Z [
+2026-02-04T13:21:57.2040749Z   {
+2026-02-04T13:21:57.2041858Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:57.2042293Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2042714Z     "id": "bbb7cb49-13ee-4ef6-ad09-d35e9538a06e",
+2026-02-04T13:21:57.2043085Z     "isDefault": true,
+2026-02-04T13:21:57.2043425Z     "managedByTenants": [],
+2026-02-04T13:21:57.2044060Z     "name": "Eneco Cloud Foundation - Smart Workspace",
+2026-02-04T13:21:57.2044434Z     "state": "Enabled",
+2026-02-04T13:21:57.2044822Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2045191Z     "user": {
+2026-02-04T13:21:57.2045642Z       "name": "***",
+2026-02-04T13:21:57.2045994Z       "type": "servicePrincipal"
+2026-02-04T13:21:57.2046330Z     }
+2026-02-04T13:21:57.2046641Z   },
+2026-02-04T13:21:57.2046926Z   {
+2026-02-04T13:21:57.2047226Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:57.2047607Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2048003Z     "id": "7b1ba02e-bac6-4c45-83a0-7f0d3104922e",
+2026-02-04T13:21:57.2048365Z     "isDefault": false,
+2026-02-04T13:21:57.2048693Z     "managedByTenants": [],
+2026-02-04T13:21:57.2049079Z     "name": "Eneco Cloud Foundation - Sandbox-Development-Test",
+2026-02-04T13:21:57.2049462Z     "state": "Enabled",
+2026-02-04T13:21:57.2049832Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2050187Z     "user": {
+2026-02-04T13:21:57.2050567Z       "name": "***",
+2026-02-04T13:21:57.2050928Z       "type": "servicePrincipal"
+2026-02-04T13:21:57.2051251Z     }
+2026-02-04T13:21:57.2051554Z   },
+2026-02-04T13:21:57.2052114Z   {
+2026-02-04T13:21:57.2052456Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:57.2052861Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2053285Z     "id": "839af51e-c8dd-4bd2-944b-a7799eb2e1e4",
+2026-02-04T13:21:57.2082878Z     "isDefault": false,
+2026-02-04T13:21:57.2083329Z     "managedByTenants": [],
+2026-02-04T13:21:57.2083905Z     "name": "Eneco MCC - Development - Workload VPP",
+2026-02-04T13:21:57.2084253Z     "state": "Enabled",
+2026-02-04T13:21:57.2084633Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2084994Z     "user": {
+2026-02-04T13:21:57.2085439Z       "name": "***",
+2026-02-04T13:21:57.2085792Z       "type": "servicePrincipal"
+2026-02-04T13:21:57.2086133Z     }
+2026-02-04T13:21:57.2086453Z   },
+2026-02-04T13:21:57.2086759Z   {
+2026-02-04T13:21:57.2087089Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:57.2087509Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2087929Z     "id": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+2026-02-04T13:21:57.2088298Z     "isDefault": false,
+2026-02-04T13:21:57.2088625Z     "managedByTenants": [],
+2026-02-04T13:21:57.2088992Z     "name": "Eneco MCC - Production - Workload VPP",
+2026-02-04T13:21:57.2089348Z     "state": "Enabled",
+2026-02-04T13:21:57.2089711Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2090032Z     "user": {
+2026-02-04T13:21:57.2090345Z       "name": "***",
+2026-02-04T13:21:57.2090623Z       "type": "servicePrincipal"
+2026-02-04T13:21:57.2090935Z     }
+2026-02-04T13:21:57.2091238Z   },
+2026-02-04T13:21:57.2091524Z   {
+2026-02-04T13:21:57.2091849Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:57.2092240Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2092661Z     "id": "d8363cc2-77fb-4947-8463-7e52d6852a7c",
+2026-02-04T13:21:57.2093009Z     "isDefault": false,
+2026-02-04T13:21:57.2093889Z     "managedByTenants": [],
+2026-02-04T13:21:57.2094248Z     "name": "Eneco MCC - Production - Hub",
+2026-02-04T13:21:57.2094631Z     "state": "Enabled",
+2026-02-04T13:21:57.2095064Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2095448Z     "user": {
+2026-02-04T13:21:57.2095852Z       "name": "***",
+2026-02-04T13:21:57.2096208Z       "type": "servicePrincipal"
+2026-02-04T13:21:57.2096541Z     }
+2026-02-04T13:21:57.2096844Z   },
+2026-02-04T13:21:57.2097143Z   {
+2026-02-04T13:21:57.2097452Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:57.2097829Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2098211Z     "id": "b524d084-edf5-449d-8e92-999ebbaf485e",
+2026-02-04T13:21:57.2098578Z     "isDefault": false,
+2026-02-04T13:21:57.2098892Z     "managedByTenants": [],
+2026-02-04T13:21:57.2099211Z     "name": "Eneco MCC - Acceptance - Workload VPP",
+2026-02-04T13:21:57.2099554Z     "state": "Enabled",
+2026-02-04T13:21:57.2099932Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2100275Z     "user": {
+2026-02-04T13:21:57.2100682Z       "name": "***",
+2026-02-04T13:21:57.2101037Z       "type": "servicePrincipal"
+2026-02-04T13:21:57.2101375Z     }
+2026-02-04T13:21:57.2101687Z   },
+2026-02-04T13:21:57.2101980Z   {
+2026-02-04T13:21:57.2102312Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:57.2102710Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2103127Z     "id": "c7425e5b-a7d4-49f1-a45e-23f230783fa5",
+2026-02-04T13:21:57.2103485Z     "isDefault": false,
+2026-02-04T13:21:57.2124375Z     "managedByTenants": [],
+2026-02-04T13:21:57.2124799Z     "name": "Eneco MCC - Development - Workload BTM",
+2026-02-04T13:21:57.2125202Z     "state": "Enabled",
+2026-02-04T13:21:57.2125579Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2125939Z     "user": {
+2026-02-04T13:21:57.2126365Z       "name": "***",
+2026-02-04T13:21:57.2126713Z       "type": "servicePrincipal"
+2026-02-04T13:21:57.2127054Z     }
+2026-02-04T13:21:57.2127335Z   },
+2026-02-04T13:21:57.2127626Z   {
+2026-02-04T13:21:57.2128129Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:57.2128438Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2128844Z     "id": "403b7169-4500-4fbe-98f5-0752f1b89f41",
+2026-02-04T13:21:57.2129209Z     "isDefault": false,
+2026-02-04T13:21:57.2129546Z     "managedByTenants": [],
+2026-02-04T13:21:57.2129911Z     "name": "Eneco MCC - Acceptance - Workload BTM",
+2026-02-04T13:21:57.2130259Z     "state": "Enabled",
+2026-02-04T13:21:57.2130645Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2131006Z     "user": {
+2026-02-04T13:21:57.2131375Z       "name": "***",
+2026-02-04T13:21:57.2131763Z       "type": "servicePrincipal"
+2026-02-04T13:21:57.2132159Z     }
+2026-02-04T13:21:57.2132482Z   },
+2026-02-04T13:21:57.2132791Z   {
+2026-02-04T13:21:57.2133112Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:57.2133507Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2134128Z     "id": "20349567-96c5-44d9-ac61-36302c3d40f0",
+2026-02-04T13:21:57.2134489Z     "isDefault": false,
+2026-02-04T13:21:57.2134812Z     "managedByTenants": [],
+2026-02-04T13:21:57.2135176Z     "name": "Eneco MCC - Test - Workload BTM",
+2026-02-04T13:21:57.2135534Z     "state": "Enabled",
+2026-02-04T13:21:57.2135923Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2136286Z     "user": {
+2026-02-04T13:21:57.2136686Z       "name": "***",
+2026-02-04T13:21:57.2137041Z       "type": "servicePrincipal"
+2026-02-04T13:21:57.2137375Z     }
+2026-02-04T13:21:57.2137667Z   },
+2026-02-04T13:21:57.2137972Z   {
+2026-02-04T13:21:57.2138307Z     "cloudName": "AzureCloud",
+2026-02-04T13:21:57.2138696Z     "homeTenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2139105Z     "id": "1154588b-1374-4b0a-b1e7-9f8b07cffc13",
+2026-02-04T13:21:57.2139479Z     "isDefault": false,
+2026-02-04T13:21:57.2139992Z     "managedByTenants": [],
+2026-02-04T13:21:57.2140359Z     "name": "Eneco MCC - Production - Workload BTM",
+2026-02-04T13:21:57.2140722Z     "state": "Enabled",
+2026-02-04T13:21:57.2141117Z     "tenantId": "eca36054-49a9-4731-a42f-8400670fc022",
+2026-02-04T13:21:57.2141505Z     "user": {
+2026-02-04T13:21:57.2141892Z       "name": "***",
+2026-02-04T13:21:57.2142240Z       "type": "servicePrincipal"
+2026-02-04T13:21:57.2142565Z     }
+2026-02-04T13:21:57.2142846Z   }
+2026-02-04T13:21:57.2143131Z ]
+2026-02-04T13:21:57.2169926Z [command]/usr/bin/az account set --subscription 7b1ba02e-bac6-4c45-83a0-7f0d3104922e
+2026-02-04T13:21:57.6670186Z [command]/usr/bin/bash /home/vsts/work/_temp/azureclitaskscript1770211315600.sh
+2026-02-04T13:21:57.6855564Z /home/vsts/work/1/s/terraform_temp
+2026-02-04T13:21:57.6856398Z total 188
+2026-02-04T13:21:57.6856988Z drwxr-xr-x 4 vsts vsts   4096 Feb  4 13:21 .
+2026-02-04T13:21:57.6857626Z drwxr-xr-x 3 vsts vsts   4096 Feb  4 13:20 ..
+2026-02-04T13:21:57.6858239Z drwxr-xr-x 4 vsts vsts   4096 Feb  4 13:21 .terraform
+2026-02-04T13:21:57.6858903Z -rw-r--r-- 1 vsts vsts   1185 Feb  4 13:21 .terraform.lock.hcl
+2026-02-04T13:21:57.6859576Z drwxr-xr-x 2 vsts vsts   4096 Feb  4 13:20 appconfiguration
+2026-02-04T13:21:57.6860225Z -rw-r--r-- 1 vsts vsts 126806 Feb  4 13:20 configuration.yaml
+2026-02-04T13:21:57.6860866Z -rw-r--r-- 1 vsts vsts  39835 Feb  4 13:21 feature_flags_from_azure.yaml
+2026-02-04T13:21:57.6861534Z -rw-r--r-- 1 vsts vsts   1826 Feb  4 13:21 main.aks.tf
+2026-02-04T13:21:57.7262455Z [0m[1mInitializing the backend...[0m
+2026-02-04T13:22:00.4200029Z [0m[1mInitializing modules...[0m
+2026-02-04T13:22:00.4242995Z [0m[1mInitializing provider plugins...[0m
+2026-02-04T13:22:00.4244006Z - Reusing previous version of hashicorp/azurerm from the dependency lock file
+2026-02-04T13:22:00.6182501Z - Using previously-installed hashicorp/azurerm v4.40.0
+2026-02-04T13:22:00.6183088Z
+2026-02-04T13:22:00.6184548Z [0m[1m[32mTerraform has been successfully initialized![0m[32m[0m
+2026-02-04T13:22:00.6185721Z [0m[32m
+2026-02-04T13:22:00.6186549Z You may now begin working with Terraform. Try running "terraform plan" to see
+2026-02-04T13:22:00.6189834Z any changes that are required for your infrastructure. All Terraform commands
+2026-02-04T13:22:00.6190502Z should now work.
+2026-02-04T13:22:00.6190729Z
+2026-02-04T13:22:00.6191306Z If you ever set or change modules or backend configuration for Terraform,
+2026-02-04T13:22:00.6191910Z rerun this command to reinitialize your working directory. If you forget, other
+2026-02-04T13:22:00.6192493Z commands will detect it and remind you to do so if necessary.[0m
+2026-02-04T13:22:02.8185709Z [31m╷[0m[0m
+2026-02-04T13:22:02.8186485Z [31m│[0m [0m[1m[31mError: [0m[0m[1mError acquiring the state lock[0m
+2026-02-04T13:22:02.8187131Z [31m│[0m [0m
+2026-02-04T13:22:02.8187885Z [31m│[0m [0m[0mError message: state blob is already locked
+2026-02-04T13:22:02.8188591Z [31m│[0m [0mLock Info:
+2026-02-04T13:22:02.8189374Z [31m│[0m [0m  ID:        5f06d4fe-4d07-efae-f69a-1bdc5ae51988
+2026-02-04T13:22:02.8190230Z [31m│[0m [0m  Path:      tfstate/ishtar.appconfig.tfstate
+2026-02-04T13:22:02.8191021Z [31m│[0m [0m  Operation: OperationTypePlan
+2026-02-04T13:22:02.8191786Z [31m│[0m [0m  Who:       vsts@runnervmbm2r7
+2026-02-04T13:22:02.8192434Z [31m│[0m [0m  Version:   1.13.1
+2026-02-04T13:22:02.8193112Z [31m│[0m [0m  Created:   2026-02-04 11:13:16.713231211 +0000 UTC
+2026-02-04T13:22:02.8193880Z [31m│[0m [0m  Info:
+2026-02-04T13:22:02.8194367Z [31m│[0m [0m
+2026-02-04T13:22:02.8194840Z [31m│[0m [0m
+2026-02-04T13:22:02.8195502Z [31m│[0m [0mTerraform acquires a state lock to protect the state from being written
+2026-02-04T13:22:02.8196287Z [31m│[0m [0mby multiple users at the same time. Please resolve the issue above and try
+2026-02-04T13:22:02.8197053Z [31m│[0m [0magain. For most commands, you can disable locking with the "-lock=false"
+2026-02-04T13:22:02.8197714Z [31m│[0m [0mflag, but this is not recommended.
+2026-02-04T13:22:02.8198582Z [31m╵[0m[0m
+2026-02-04T13:22:02.8230325Z Exit code: 1
+2026-02-04T13:22:02.8238930Z
+2026-02-04T13:22:02.8256222Z ##[error]Script failed with exit code: 1
+2026-02-04T13:22:02.8274430Z [command]/usr/bin/az account clear
+2026-02-04T13:22:03.3147331Z ##[section]Finishing: Terraform Plan Destroy

@@ -1,0 +1,1766 @@
+[
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "activation-mfrr-activationresponse-outbox-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "activation.mfrr.infrastructure.common.outbox.events~ioutboxevent",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "asset-asset-configured-steering-mode-changed-v1",
+    "sizeInBytes": 747721,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "asset-asset-deleted-v1",
+    "sizeInBytes": 141851,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "asset-asset-fleet-optimizer-status-updated-v1",
+    "sizeInBytes": 562543,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "asset-asset-flex-capacity-corrected-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "asset-asset-market-allocation-status-updated-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "asset-asset-market-enablement-changed-v1",
+    "sizeInBytes": 1123367,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "asset-asset-market-status-updated-v1",
+    "sizeInBytes": 501151,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "asset-asset-registered-v1",
+    "sizeInBytes": 10433776,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "asset-asset-updated-v1",
+    "sizeInBytes": 1188019,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "asset-asset-vpp-status-updated-v1",
+    "sizeInBytes": 338847,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-aligne-asset-sales-plan-aggregated-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-adjusted-power-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-availability-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-capacity-forecast-schedule-created-v1",
+    "sizeInBytes": 1619087,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-co-location-forecast-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-colocation-restrictions-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-complete-market-allocation-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-complete-power-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-congestion-restriction-aggregated-schedule-created-v1",
+    "sizeInBytes": 53870,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-congestion-restrictions-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-energy-capacity-forecast-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-feasible-power-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-flex-capacity-schedule-created-v1",
+    "sizeInBytes": 110520,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-flex-reservation-overwrite-created-v1",
+    "sizeInBytes": 485087,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-flex-reservation-schedule-created-v1",
+    "sizeInBytes": 97786,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-intraday-order-confirmed-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-market-allocation-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-market-allocation-overwrite-schedule-created-v1",
+    "sizeInBytes": 207883,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-power-capacity-overwrite-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-power-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-power-schedule-overwrite-created-v1",
+    "sizeInBytes": 2210268,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-power-schedule-shadow-mode-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-prioritized-capacity-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-production-forecast-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-ramp-rate-forecast-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-return-to-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-strike-price-schedule-created-v1",
+    "sizeInBytes": 552270911,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-asset-uncertainty-corrected-forecast-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-balancing-reserve-contract-schedule-created-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-prioritized-capacity-calculation-start-created-v1",
+    "sizeInBytes": 20082319,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "assetplanning-spot-price-forecast-schedule-created-v1",
+    "sizeInBytes": 79487,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "cgw-alarm-heartbeat-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "cgw-alarm-signals-batch-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "dataprep-asset-effective-steering-mode-changed-v1",
+    "sizeInBytes": 73619,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "dataprep-e2e-asset-schedule-cleanup-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "datapreprocessing.contracts.endtoendtests.assetschedulecleanupevent.v1~assetschedulecleanupevent",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "dispatcher-afrr-dispatcherloop-outbox-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "dispatcher-mfrr-dispatcherloop-outbox-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "dispatcher-portfolio-setpoint-summary-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "dispatcher.mfrr.infrastructure.referencesignal.common.outbox.events~ioutboxevent",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "dispatcher.shared.infrastructure.common.outbox.events~ioutboxevent",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eneco.vpp.messaging.abstractions.interfaces~iassetevent",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eneco.vpp.messaging.azureservicebus.masstransit.events~ivppassetevent",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eneco.vpp.messaging.azureservicebus.masstransit.events~ivppevent",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eneco.vpp.messaging.masstransit~imessage",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.assetdefaultmarketallocationupdated.v1~assetdefaultmarketallocationupdatedevent",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.assetmarketallocationchanged.v1~assetmarketallocationchangedclaimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.portfoliocontractevent.v2~portfoliocontractevent",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~iregimeschedule",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.aligneassetsalesplanaggregated.v1~values--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetavailabilityschedulecreated.v1~assetavailability--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetcapacityforecastschedulecreated.v1~capacityforecast--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetcongestionrestrictionsschedulecreated.v1~assetcongestionrestrictions--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetenergycapacityforecastcreated.v1~energycapacityforecast--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetfeasiblepowerschedulecreated.v1~feasiblepowerschedule--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetflexcapacitycorrectedschedule.v1~flexcapacitycorrected--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetflexcapacitycorrectedschedule.v1~uncertaintycorrected--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetflexcapacityschedule.v1~flexcapacity--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetflexreservationoverwritecreated.v1~flexreservationoverwrite--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetflexreservationschedulecreated.v1~flexreservation--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetmarketallocationcreatedevent.v1~marketallocation--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetmarketallocationoverwritecreated.v1~marketallocationoverwrite--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetpowercapacityoverwritecreated.v1~powercapacityoverwrite--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetpowerschedulecreated.v1~setpoint--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetpowerscheduleoverwritecreated.v1~powerscheduleoverwrite--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetproductionforecastschedulecreated.v1~productionforecast--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetramprateschedulecreated.v1~ramprateforecast--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetstrikepriceschedulecreated.v1~strikeprice--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreatedclaimcheck.v1~feasiblepowerscheduleclaimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events.schedulecreatedclaimcheck.v1~schedulecreatedclaimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "eventbus.messages.events~itenantevent",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "fo-trigger-optimization-run-v1",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--activation.mfrr.infrastructure.common.outbox.events~ioutboxevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--dispatcher.scheduled.infrastructure.dispatching.outbox.events~outboxevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.azureservicebus.masstransit.events~ivppassetevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.azureservicebus.masstransit.events~ivppevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetplanning.contracts.assetcolocationrestrictionsschedulecreated.v1~assetcolocationrestrictionsschedulecreatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetplanning.contracts.assetcongestionrestrictionsaggregatedschedulecreated.v1~assetcongestionrestrictionaggregatedschedulecreatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetplanning.contracts.assetflexreservationschedulecreated.v1~assetflexreservationschedulecreatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetplanning.contracts.assetprioritizedcapacityschedulecreated.v1~assetprioritizedcapacityschedulecreatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetplanning.contracts.prioritizedcapacitycalculationstartcreated.v1~prioritizedcapacitycalculationstartcreatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetservice.contracts.assetconfiguredsteeringmodeupdatedevent.v1~assetconfiguredsteeringmodeupdatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetservice.contracts.assetdeletedevent.v1~assetdeletedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetservice.contracts.assetfleetoptimizerstatusupdatedevent.v1~assetfleetoptimizerstatusupdatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetservice.contracts.assetmarketenablementstatusupdatedevent.v1~assetmarketenablementstatusupdatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetservice.contracts.assetmarketstatusupdatedevent.v1~assetmarketstatusupdatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetservice.contracts.assetregisteredevent.v1~assetregisteredevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetservice.contracts.assetupdatedevent.v1~assetupdatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--assetservice.contracts.assetvppstatusupdatedevent.v1~assetvppstatusupdatedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--datapreprocessing.contracts.effectivesteeringmodechanged.v1~effectivesteeringmodechangedevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--dispatcher.shared.infrastructure.dispatching.outbox.events~dispatcheroutboxevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eneco.vpp.messaging.masstransit~message--marketinteraction.contracts.portfoliocontractevent.v2~portfoliocontractevent----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.alarmheartbeat.v2~alarmheartbeatevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.alarmsignalsbatch.v1~alarmsignalsbatchevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.aligneassetsalesplanaggregated.v1~aligneassetsalesplanaggregatedcreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetavailabilityschedulecreated.v1~assetavailabilityschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetcapacityforecastschedulecreated.v1~assetcapacityforecastschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetconfiguredsteeringmodechanged.v1~assetconfiguredsteeringmodechangedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetdeleted.v1~assetdeletedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.asseteffectivesteeringmodechanged.v3~asseteffectivesteeringmodechangedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetfeasiblepowerschedulecreated.v1~assetfeasiblepowerschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetfleetoptimizerstatuschanged.v1~assetfleetoptimizerstatuschangedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetflexcapacitycorrectedschedule.v1~assetflexcapacitycorrectedschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetflexcapacitycorrectedschedule.v1~assetuncertaintycorrectedforecastschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetflexcapacityschedule.v1~assetflexcapacityschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetflexreservationschedulecreated.v1~assetflexreservationschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetmarketallocationcreatedevent.v1~assetmarketallocationcreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetmarketenablementstatusupdated.v1~assetmarketenablementstatusupdatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetmarketstatusupdatedevent.v1~assetmarketstatusupdatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetpowerschedulecreated.v1~assetpowerschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetproductionforecastschedulecreated.v1~assetproductionforecastschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetramprateschedulecreated.v1~assetramprateforecastschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetregistered.v1~assetregisteredevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetstrikepriceschedulecreated.v1~assetstrikepriceschedulecreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetupdated.v1~assetupdatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.assetvppstatusupdated.v1~assetvppstatusupdatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.dataprep.v1.endtoend~dataprepassetschedulecleanupevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.fleetoptimizerfallbackoutputcreated.v1~fleetoptimizerfallbackoutputcreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.fleetoptimizeroutputcreated.v1~fleetoptimizeroutputcreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.portfoliocontractevent.v2~portfoliocontractevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.portfoliosetpointrequestcreated.v2~portfoliosetpointrequestcreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.portfoliosetpointsummarycreated.v2~portfoliosetpointsummarycreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~iregimeschedule--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.aligneassetsalesplanaggregated.v1~values----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetavailabilityschedulecreated.v1~assetavailability----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetcapacityforecastschedulecreated.v1~capacityforecast----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetfeasiblepowerschedulecreated.v1~feasiblepowerschedule----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetflexcapacitycorrectedschedule.v1~flexcapacitycorrected----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetflexcapacitycorrectedschedule.v1~uncertaintycorrected----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetflexcapacityschedule.v1~flexcapacity----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetflexreservationschedulecreated.v1~flexreservation----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetmarketallocationcreatedevent.v1~marketallocation----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetpowerschedulecreated.v1~setpoint----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetproductionforecastschedulecreated.v1~productionforecast----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetramprateschedulecreated.v1~ramprateforecast----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreated.v1~schedulecreatedevent--eventbus.messages.events.assetstrikepriceschedulecreated.v1~strikeprice----",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreatedclaimcheck.v1~capacityforecastclaimcheck--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreatedclaimcheck.v1~congestionrestrictionsclaimcheck--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreatedclaimcheck.v1~flexreservationclaimcheck--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreatedclaimcheck.v1~marketallocationclaimcheck--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreatedclaimcheck.v1~powerscheduleclaimcheck--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreatedclaimcheck.v1~productionforecastclaimcheck--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreatedclaimcheck.v1~ramprateforecastclaimcheck--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreatedclaimcheck.v1~schedulecreatedclaimcheck--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.schedulecreatedclaimcheck.v1~strikepriceclaimcheck--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.aligneassetsalesplanaggregatedevent.v1~aligneassetsalesplanaggregatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetavailabilityevent.v2~assetavailabilityeventv2--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetcongestionrestrictionsevent.v1~assetcongestionrestrictionsevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetcurtailmentscheduleevent.v1~assetcurtailmentscheduleevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetenergycapacityforecastevent.v1~assetenergycapacityforecastevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetfeasiblepowerscheduleevent.v1~assetfeasiblepowerscheduleevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetflexcapacitycorrectedscheduleevent.v1~assetflexcapacitycorrectedscheduleevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetflexreservationevent.v1~assetflexreservationevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetflexreservationshadowmodeevent.v1~assetflexreservationshadowmodeevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetpowerscheduleevent.v1~assetpowerscheduleevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetpowerscheduleshadowmodeevent.v1~assetpowerscheduleshadowmodeevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetproductionforecastevent.v1~assetproductionforecastevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetramprateforecastevent.v1~assetramprateforecastevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.assetstrikepricesevent.v1~assetstrikepricesevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.balancingreservecontractreportevent.v1~balancingreservecontractreportevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.distributedenergyresourceeventv2event.v1~distributedenergyresourceeventv2event--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.streamcopy.forwardpricesevent.v1~forwardpricesevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events.telemetrycreated.v1~telemetrycreatedevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~fault--eventbus.messages.events~itenantevent--",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "masstransit~receivefault",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-alarm-created-event",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-alarm-heartbeat-event-2",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-alarm-signals-batch-event",
+    "sizeInBytes": 134595,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-alarm-solved-event",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-availability-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-configured-steering-mode-updated",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-default-market-allocation-updated",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-default-market-updated",
+    "sizeInBytes": 13679,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-effective-steering-mode",
+    "sizeInBytes": 792395,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-feasible-power-schedule-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-flex-reservation-shadow-mode-stream-copy",
+    "sizeInBytes": 10994,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-flex-reservation-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-market-allocation-status-updated",
+    "sizeInBytes": 96911,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-power-schedule-shadow-mode-stream-copy",
+    "sizeInBytes": 10660,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-power-schedule-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-production-forecast-stream-copy",
+    "sizeInBytes": 120929,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-ramprate-forecast-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-asset-strike-prices-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-aligneassetsalesplanaggregated-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-aligneassetsalesplanaggregated-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-assetenergycapacityforecast-created",
+    "sizeInBytes": 10096,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-assetenergycapacityforecast-created-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-availabilityschedule-created",
+    "sizeInBytes": 59783,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-capacityforecast-claimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-capacityforecast-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-capacityoperating-claimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-congestionrestrictions-claimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-congestionrestrictions-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-congestionrestrictions-stream-copy",
+    "sizeInBytes": 18221,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-feasiblepowerschedule-created",
+    "sizeInBytes": 102711,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-flexcapacitycorrected-claimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-flexcapacitycorrectedschedule-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-flexcapacitycorrectedschedule-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-flexcapacityschedule-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-flexreservation-claimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-flexreservation-overwrite-created",
+    "sizeInBytes": 5120,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-flexreservationschedule-created",
+    "sizeInBytes": 6557,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-marketallocation-created",
+    "sizeInBytes": 211523,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-marketallocation-overwrite-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-powercapacity-overwrite-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-powerschedule-claimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-powerschedule-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-powerschedule-overwrite-created",
+    "sizeInBytes": 5097,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-productionforecast-claimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-productionforecastschedule-created",
+    "sizeInBytes": 103294,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-ramprateforecast-claimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-ramprateforecast-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-ramprateforecastschedule-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-strikeprice-claimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-strikeprice-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-strikepriceschedule-created",
+    "sizeInBytes": 666584,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-uncertaintycorrectedforecast-claimcheck",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-assetplanning-uncertaintycorrectedforecastschedule-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-curtailment-schdule-stream-copy",
+    "sizeInBytes": 124392,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-dataprep-endtoendtesting-actualpowerhistory-update",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-dataprep-endtoendtesting-asset-cleanup",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-dataprep-endtoendtesting-assetschedule-cleanup",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-dataprep-endtoendtesting-marketallocation-update",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-dataprep-endtoendtesting-portfolio-cleanup",
+    "sizeInBytes": 1669,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-distributed-energy-resource-event-v2-stream-copy",
+    "sizeInBytes": 53035,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-fleetoptimizer-fallback-output-created",
+    "sizeInBytes": 5608,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-fleetoptimizer-infeasible-fallback-solution",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-fleetoptimizer-infeasible-solution",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-fleetoptimizer-input-created",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-fleetoptimizer-output-created",
+    "sizeInBytes": 329760,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-forward-prices-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-market-allocation-claim-check",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-marketinteraction-balancing-reserve-contract-report-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-marketinteraction-flex-market-bids-stream-copy",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-marketinteraction-portfolio-contract-2",
+    "sizeInBytes": 141643,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-portfolioservice-setpoints-2",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-reference-signal-cycle-output",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-resulting-variables-calculated",
+    "sizeInBytes": 0,
+    "status": "Active"
+  },
+  {
+    "maxSizeInMegabytes": 1024,
+    "messageCount": null,
+    "name": "topic-telemetry-event",
+    "sizeInBytes": 0,
+    "status": "Active"
+  }
+]

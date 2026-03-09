@@ -1,0 +1,38 @@
+{
+  "armRoleReceivers": [],
+  "automationRunbookReceivers": [],
+  "azureAppPushReceivers": [],
+  "azureFunctionReceivers": [],
+  "emailReceivers": [],
+  "enabled": true,
+  "eventHubReceivers": [],
+  "groupShortName": "pltfrm-d",
+  "id": "/subscriptions/839AF51E-C8DD-4BD2-944B-A7799EB2E1E4/resourceGroups/rg-pltfrm-infra-d/providers/microsoft.insights/actionGroups/ag-trade-platform-d",
+  "itsmReceivers": [],
+  "location": "Global",
+  "logicAppReceivers": [],
+  "name": "ag-trade-platform-d",
+  "resourceGroup": "rg-pltfrm-infra-d",
+  "smsReceivers": [],
+  "tags": {
+    "AppName": "Virtual Power Plant (VPP)",
+    "AppOwner": "fm_myriad_platform@eneco.com",
+    "CMDB_ID": "E22-000022",
+    "CostCenter": "ITC-000049-201",
+    "Environment": "Development",
+    "FinancialCluster": "Energy Trade Infrastructuur / Overige Applicaties",
+    "FinancialOwner": "DTS_BTNL_IntegrationTrade",
+    "OpsOwner": "Unassigned",
+    "cost_discriminator": "vpp-platform"
+  },
+  "type": "Microsoft.Insights/ActionGroups",
+  "voiceReceivers": [],
+  "webhookReceivers": [
+    {
+      "name": "rootly-trade-platform",
+      "serviceUri": "https://webhooks.rootly.com/webhooks/incoming/azure_webhooks?secret=f3dce788fb5f38d02c1325866a3f623c88e9b526f321d6c3296389d4a34691e2",
+      "useAadAuth": false,
+      "useCommonAlertSchema": true
+    }
+  ]
+}

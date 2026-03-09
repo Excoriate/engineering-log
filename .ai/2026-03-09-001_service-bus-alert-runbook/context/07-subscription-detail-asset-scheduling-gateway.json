@@ -1,0 +1,28 @@
+{
+  "accessedAt": "2026-03-06T10:42:36.8896095Z",
+  "autoDeleteOnIdle": "P427D",
+  "countDetails": {
+    "activeMessageCount": 5,
+    "deadLetterMessageCount": 3796,
+    "scheduledMessageCount": 0,
+    "transferDeadLetterMessageCount": 0,
+    "transferMessageCount": 0
+  },
+  "createdAt": "2026-03-06T10:42:36.8896095Z",
+  "deadLetteringOnFilterEvaluationExceptions": true,
+  "deadLetteringOnMessageExpiration": true,
+  "defaultMessageTimeToLive": "PT5M",
+  "enableBatchedOperations": false,
+  "id": "/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-d/topics/assetplanning-asset-strike-price-schedule-created-v1/subscriptions/asset-scheduling-gateway",
+  "isClientAffine": false,
+  "location": "westeurope",
+  "lockDuration": "PT1M",
+  "maxDeliveryCount": 10,
+  "messageCount": 3801,
+  "name": "asset-scheduling-gateway",
+  "requiresSession": false,
+  "resourceGroup": "mcdta-rg-vpp-d-messaging",
+  "status": "Active",
+  "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+  "updatedAt": "2026-03-06T10:42:36.8896095Z"
+}
