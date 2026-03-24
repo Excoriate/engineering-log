@@ -1,0 +1,3 @@
+From past few days sandbox environment is down. E2E pipeline for sandbox are failing as 503 Gateway timeout error.
+
+https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_build/results?buildId=1579769&view=logs&j=dded719d-e4af-5638-65ef-ece3839615a6&t=d7ed71f3-5fe2-5757-e984-e7abb828b0b7&l=21

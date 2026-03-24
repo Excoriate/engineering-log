@@ -1,0 +1,8 @@
+https://dev.azure.com/enecomanagedcloud/VPP%20-%20Asset%20Optimisation/_git/flex-trade-optimizer-gitops/pullrequest/169088
+
+Specific thing to review on this PR:
+Flex Trade Optimizer GitOps configuration for dev-mc, acc and prod.
+
+PS: also repo policy allows merging with only backend approval. Should we have a Platform policy for such changes as well?
+ --
+Was reviewed by their peers? Yes :raised_hands::skin-tone-2: — Pull Request URL: https://dev.azure.com/enecomanagedcloud/VPP%20-%20Asset%20Optimisation/_git/flex-trade-optimizer-gitops/pullrequest/169088 -- Is the Pull Request rich, and with context?: [":white_check_mark:Of course"] -- The priority is: :smiling_face_with_tear:I can wait a couple of days and the details are:
