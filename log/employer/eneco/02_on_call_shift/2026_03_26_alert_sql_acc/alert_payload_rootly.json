@@ -1,0 +1,84 @@
+{
+  "ID": "2dcceeeb-86af-46d3-beac-1a1dc359b936",
+  "data": {
+    "essentials": {
+      "region": "westeurope",
+      "alertId": "/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e/providers/Microsoft.AlertsManagement/alerts/7beb762f-6013-c52b-1a66-c0700daf000e",
+      "severity": "Sev2",
+      "alertRule": "mcdta-vpp-SqlDB-healthevent-a",
+      "signalType": "Log",
+      "alertRuleID": "/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e/resourceGroups/mcdta-rg-vpp-a-res/providers/microsoft.insights/scheduledqueryrules/mcdta-vpp-SqlDB-healthevent-a",
+      "description": "Health event activated for SqlDB",
+      "firedDateTime": "2026-03-25T23:31:12.6575387Z",
+      "originAlertId": "7914a86f-ce2c-d41e-b040-286d7293895e",
+      "alertTargetIDs": [
+        "/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e"
+      ],
+      "monitorCondition": "Fired",
+      "essentialsVersion": "1.0",
+      "investigationLink": "https://portal.azure.com/#view/Microsoft_Azure_Monitoring_Alerts/Investigate.ReactView/alertId/%2fsubscriptions%2fb524d084-edf5-449d-8e92-999ebbaf485e%2fproviders%2fMicrosoft.AlertsManagement%2falerts%2f7beb762f-6013-c52b-1a66-c0700daf000e",
+      "monitoringService": "Log Alerts V2",
+      "configurationItems": [
+        "/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e"
+      ],
+      "targetResourceType": "microsoft.resources/subscriptions",
+      "alertContextVersion": "1.0"
+    },
+    "alertContext": {
+      "condition": {
+        "allOf": [
+          {
+            "event": null,
+            "operator": "GreaterThan",
+            "threshold": "5",
+            "dimensions": [],
+            "metricValue": 6,
+            "searchQuery": "AzureActivity\n | where CategoryValue == \"ResourceHealth\"\n | where ActivityStatusValue == \"Active\"\n | where OperationNameValue contains \"healthevent/Activated/action\"\n | where ResourceProviderValue == \"MICROSOFT.SQL\"\n | project Level, ResourceProviderValue, Properties\n | extend PropertiesParsed = parse_json(Properties)\n | project\n PropertiesParsed.[\"cause\"],\n PropertiesParsed.[\"type\"],\n PropertiesParsed.[\"resource\"],\n PropertiesParsed.[\"resourceProviderValue\"],\n PropertiesParsed.[\"eventSubmissionTimestamp\"]\n",
+            "failingPeriods": {
+              "minFailingPeriodsToAlert": 1,
+              "numberOfEvaluationPeriods": 1
+            },
+            "timeAggregation": "Count",
+            "metricMeasureColumn": null,
+            "targetResourceTypes": null,
+            "linkToSearchResultsUI": "https://portal.azure.com#@eca36054-49a9-4731-a42f-8400670fc022/blade/Microsoft_Azure_Monitoring_Logs/LogsBlade/source/Alerts.EmailLinks/scope/%7B%22resources%22%3A%5B%7B%22resourceId%22%3A%22%2Fsubscriptions%2Fb524d084-edf5-449d-8e92-999ebbaf485e%22%7D%5D%7D/q/eJyNkEFLw0AQhe%2F%2BimFPCqX9BTmUgihUU5viRYqMycNsSXbD7mw04o93m1oSxRb3NDv7vjdvZ%2F4RHOa56FZLd0H0SW8lHGjBglfrukeuAihJSK3hbXA5bsCVlGqkPeKZsAQ%2FEH0fY2XawLFoa%2B65xkGYWyOsjSdV9sZoYWTWozFCMeNYWTM2OQZZOdvqAm4YeHe7WKdZer2ZZg%2FLA9I4u0MutIy%2B1eRvdkLxGpOJhu8hvAtMMequ2HkUlFCzL5533prL4fVqPCnW%2B%2FObnT6pnIOH2k5OK6Rrzgvcd%2Fx%2FiX788SzR7zwLL7X2Pi57o2t44bpR2y8%3D/prettify/1/timespan/2026-03-25T23%3a15%3a37.0000000Z%2f2026-03-25T23%3a30%3a37.0000000Z",
+            "linkToSearchResultsAPI": "https://api.loganalytics.io/v1/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e/query?query=AzureActivity%0A%20%20%7C%20where%20CategoryValue%20%3D%3D%20%22ResourceHealth%22%0A%20%20%7C%20where%20ActivityStatusValue%20%3D%3D%20%22Active%22%0A%20%20%7C%20where%20OperationNameValue%20contains%20%22healthevent%2FActivated%2Faction%22%0A%20%20%7C%20where%20ResourceProviderValue%20%3D%3D%20%22MICROSOFT.SQL%22%0A%20%20%7C%20project%20Level%2C%20ResourceProviderValue%2C%20Properties%0A%20%20%7C%20extend%20PropertiesParsed%20%3D%20parse_json%28Properties%29%0A%20%20%7C%20project%0A%20%20%20%20%20%20PropertiesParsed.%5B%22cause%22%5D%2C%0A%20%20%20%20%20%20PropertiesParsed.%5B%22type%22%5D%2C%0A%20%20%20%20%20%20PropertiesParsed.%5B%22resource%22%5D%2C%0A%20%20%20%20%20%20PropertiesParsed.%5B%22resourceProviderValue%22%5D%2C%0A%20%20%20%20%20%20PropertiesParsed.%5B%22eventSubmissionTimestamp%22%5D&timespan=2026-03-25T23%3a15%3a37.0000000Z%2f2026-03-25T23%3a30%3a37.0000000Z",
+            "linkToFilteredSearchResultsUI": "https://portal.azure.com#@eca36054-49a9-4731-a42f-8400670fc022/blade/Microsoft_Azure_Monitoring_Logs/LogsBlade/source/Alerts.EmailLinks/scope/%7B%22resources%22%3A%5B%7B%22resourceId%22%3A%22%2Fsubscriptions%2Fb524d084-edf5-449d-8e92-999ebbaf485e%22%7D%5D%7D/q/eJyNkEFLw0AQhe%2F%2BimFPCqX9BTmUgihUU5viRYqMycNsSXbD7mw04o93m1oSxRb3NDv7vjdvZ%2F4RHOa56FZLd0H0SW8lHGjBglfrukeuAihJSK3hbXA5bsCVlGqkPeKZsAQ%2FEH0fY2XawLFoa%2B65xkGYWyOsjSdV9sZoYWTWozFCMeNYWTM2OQZZOdvqAm4YeHe7WKdZer2ZZg%2FLA9I4u0MutIy%2B1eRvdkLxGpOJhu8hvAtMMequ2HkUlFCzL5533prL4fVqPCnW%2B%2FObnT6pnIOH2k5OK6Rrzgvcd%2Fx%2FiX788SzR7zwLL7X2Pi57o2t44bpR2y8%3D/prettify/1/timespan/2026-03-25T23%3a15%3a37.0000000Z%2f2026-03-25T23%3a30%3a37.0000000Z",
+            "linkToFilteredSearchResultsAPI": "https://api.loganalytics.io/v1/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e/query?query=AzureActivity%0A%20%20%7C%20where%20CategoryValue%20%3D%3D%20%22ResourceHealth%22%0A%20%20%7C%20where%20ActivityStatusValue%20%3D%3D%20%22Active%22%0A%20%20%7C%20where%20OperationNameValue%20contains%20%22healthevent%2FActivated%2Faction%22%0A%20%20%7C%20where%20ResourceProviderValue%20%3D%3D%20%22MICROSOFT.SQL%22%0A%20%20%7C%20project%20Level%2C%20ResourceProviderValue%2C%20Properties%0A%20%20%7C%20extend%20PropertiesParsed%20%3D%20parse_json%28Properties%29%0A%20%20%7C%20project%0A%20%20%20%20%20%20PropertiesParsed.%5B%22cause%22%5D%2C%0A%20%20%20%20%20%20PropertiesParsed.%5B%22type%22%5D%2C%0A%20%20%20%20%20%20PropertiesParsed.%5B%22resource%22%5D%2C%0A%20%20%20%20%20%20PropertiesParsed.%5B%22resourceProviderValue%22%5D%2C%0A%20%20%20%20%20%20PropertiesParsed.%5B%22eventSubmissionTimestamp%22%5D&timespan=2026-03-25T23%3a15%3a37.0000000Z%2f2026-03-25T23%3a30%3a37.0000000Z"
+          }
+        ],
+        "windowSize": "PT15M",
+        "windowEndTime": "2026-03-25T23:30:37Z",
+        "windowStartTime": "2026-03-25T23:15:37Z"
+      },
+      "properties": {},
+      "conditionType": "LogQueryCriteria"
+    },
+    "customProperties": {}
+  },
+  "rootly": {
+    "title": "mcdta-vpp-SqlDB-healthevent-a",
+    "description": "Health event activated for SqlDB",
+    "alert_source_url": "https://portal.azure.com/#view/Microsoft_Azure_Monitoring_Alerts/Investigate.ReactView/alertId/%2fsubscriptions%2fb524d084-edf5-449d-8e92-999ebbaf485e%2fproviders%2fMicrosoft.AlertsManagement%2falerts%2f7beb762f-6013-c52b-1a66-c0700daf000e",
+    "alerting_targets": [
+      {
+        "id": "1b6ee744-4aca-45ed-9d00-2d1d2b5edbfa",
+        "type": "EscalationPolicy"
+      }
+    ]
+  },
+  "schemaId": "azureMonitorCommonAlertSchema",
+  "routing_rules": [
+    {
+      "id": "ec1b8ab3-cc70-4d41-9016-bfa6384b0d1f",
+      "targets": [
+        {
+          "id": "1b6ee744-4aca-45ed-9d00-2d1d2b5edbfa",
+          "type": "EscalationPolicy"
+        }
+      ]
+    }
+  ],
+  "alert_urgency_id": "0ef2c622-8ccb-468d-8bfe-1d2401b6374d",
+  "rootly_alert_status": "triggered"
+}
