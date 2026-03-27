@@ -1,0 +1,5 @@
+use this alias, already available in your zsh profile
+➜enecotfvppmcloginacc
+
+It'll log you into the az subscription, and ONLY DOING READ-INLY QUERIES, check and get the full understanding of the alert on the azure side. On the Openshift side,
+provide only the os commands to check the status of the pods, deployments, etc.

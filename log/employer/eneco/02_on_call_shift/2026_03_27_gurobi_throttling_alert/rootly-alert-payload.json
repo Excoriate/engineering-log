@@ -1,0 +1,87 @@
+{
+  "ID": "3e9bac03-f0dc-4e31-82ee-0d849b003037",
+  "data": {
+    "essentials": {
+      "alertId": "/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e/providers/Microsoft.AlertsManagement/alerts/644aa7a9-25dc-4e16-bc0e-a781bae4f000",
+      "severity": "Sev2",
+      "alertRule": "gurobi-cosmos-throttling-429-a",
+      "signalType": "Metric",
+      "alertRuleID": "/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e/resourceGroups/rg-gurobi-platform-a/providers/Microsoft.Insights/metricAlerts/gurobi-cosmos-throttling-429-a",
+      "description": "Trigger on Request status code of 429",
+      "firedDateTime": "2026-03-27T13:46:47.5480095Z",
+      "originAlertId": "b524d084-edf5-449d-8e92-999ebbaf485e_rg-gurobi-platform-a_Microsoft.Insights_metricAlerts_gurobi-cosmos-throttling-429-a_1933910171",
+      "alertTargetIDs": [
+        "/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e/resourcegroups/rg-gurobi-platform-a/providers/microsoft.documentdb/databaseaccounts/cosmosdb-gurobi-platform-a"
+      ],
+      "monitorCondition": "Fired",
+      "essentialsVersion": "1.0",
+      "investigationLink": "https://portal.azure.com/#view/Microsoft_Azure_Monitoring_Alerts/Investigate.ReactView/alertId/%2fsubscriptions%2fb524d084-edf5-449d-8e92-999ebbaf485e%2fresourceGroups%2frg-gurobi-platform-a%2fproviders%2fMicrosoft.AlertsManagement%2falerts%2f644aa7a9-25dc-4e16-bc0e-a781bae4f000",
+      "monitoringService": "Platform",
+      "configurationItems": [
+        "cosmosdb-gurobi-platform-a"
+      ],
+      "targetResourceType": "microsoft.documentdb/databaseaccounts",
+      "alertContextVersion": "1.0",
+      "targetResourceGroup": "rg-gurobi-platform-a"
+    },
+    "alertContext": {
+      "condition": {
+        "allOf": [
+          {
+            "operator": "GreaterThanOrEqual",
+            "threshold": "20",
+            "dimensions": [
+              {
+                "name": "StatusCode",
+                "type": null,
+                "value": "429",
+                "values": null,
+                "operator": null
+              }
+            ],
+            "metricName": "TotalRequests",
+            "metricValue": 24,
+            "webTestName": null,
+            "metricNamespace": "microsoft.documentdb/databaseaccounts",
+            "timeAggregation": "Count"
+          }
+        ],
+        "windowSize": "PT5M",
+        "windowEndTime": "2026-03-27T13:44:32.994Z",
+        "windowStartTime": "2026-03-27T13:39:32.994Z",
+        "staticThresholdFailingPeriods": {
+          "minFailingPeriodsToAlert": 0,
+          "numberOfEvaluationPeriods": 0
+        }
+      },
+      "properties": null,
+      "conditionType": "SingleResourceMultipleMetricCriteria"
+    },
+    "customProperties": null
+  },
+  "rootly": {
+    "title": "gurobi-cosmos-throttling-429-a",
+    "description": "Trigger on Request status code of 429",
+    "alert_source_url": "https://portal.azure.com/#view/Microsoft_Azure_Monitoring_Alerts/Investigate.ReactView/alertId/%2fsubscriptions%2fb524d084-edf5-449d-8e92-999ebbaf485e%2fresourceGroups%2frg-gurobi-platform-a%2fproviders%2fMicrosoft.AlertsManagement%2falerts%2f644aa7a9-25dc-4e16-bc0e-a781bae4f000",
+    "alerting_targets": [
+      {
+        "id": "1b6ee744-4aca-45ed-9d00-2d1d2b5edbfa",
+        "type": "EscalationPolicy"
+      }
+    ]
+  },
+  "schemaId": "azureMonitorCommonAlertSchema",
+  "routing_rules": [
+    {
+      "id": "ec1b8ab3-cc70-4d41-9016-bfa6384b0d1f",
+      "targets": [
+        {
+          "id": "1b6ee744-4aca-45ed-9d00-2d1d2b5edbfa",
+          "type": "EscalationPolicy"
+        }
+      ]
+    }
+  ],
+  "alert_urgency_id": "0ef2c622-8ccb-468d-8bfe-1d2401b6374d",
+  "rootly_alert_status": "triggered"
+}
