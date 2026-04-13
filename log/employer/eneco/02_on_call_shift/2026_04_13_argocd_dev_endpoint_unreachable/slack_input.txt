@@ -1,0 +1,17 @@
+I'm trying to make some endpoints available for QA to test. I see that my service already has an Ingress object on the kubernetes definition, however I'm not able to reach the endpoints.
+
+ArgoCD: https://argocd.dev.vpp.eneco.com/applications/ionix/activationmfrr?resource=
+
+URL: https://ionix.dev.vpp.eneco.com/api/activationmfrr/swagger/index.html
+
+In ArgoCD, I see that the entry point has an orange color instead of blue. Other services that have endpoints exposed have everything blue (for example, https://argocd.dev.vpp.eneco.com/applications/ionix/dispatchersimulator?resource=).
+
+I tried to look for documentation about what the colors mean, but Argo doesn't have it. There is an open issue in GitHub .
+
+Branches and code for reference:
+https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/MC-VPP-Infrastructure?path=%2F&version=GBfeature%2Fopswork%2Frewrite-rule&_a=contents
+
+--
+Hello Alex :hand: can you help me with the ticket from Tiago please? I have spent a lot of time looking into it but I don't know what further to do.
+
+From what I can see on dev there is no rewrite rule so nothing will go through for the endpoint he wants but there is one in prod/acc.

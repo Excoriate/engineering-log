@@ -1,0 +1,20 @@
+RELEVANT REPOS (all local):
+
+1. Eneco.Vpp.Core.Dispatching (helm charts for activationmfrr + all dispatchers)
+   Path: /Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/Eneco.Vpp.Core.Dispatching/
+   Charts: helm/{activationmfrr,dataprep,dispatcherafrr,dispatchermfrr,dispatcherscheduled,dispatchersimulator,dispatchermanual}
+   Key: helm/activationmfrr/templates/ingress.yaml (THE ingress template)
+   Comparison: helm/dispatchersimulator/templates/ingress.yaml (WORKING service)
+
+2. VPP-Configuration (values per env, referenced as $values in ArgoCD)
+   Path: /Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/VPP-Configuration/
+   Key: Helm/activationmfrr/{sandbox,dev,acc,prod}/{values.yaml,values-override.yaml}
+   ArgoCD uses: Helm/activationmfrr/sandbox/values.yaml + values-override.yaml
+
+3. VPP.GitOps (ArgoCD application definitions)
+   Path: /Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/VPP.GitOps/
+   Key: argocd-configuration/applicationsets/vpp-feature-branch-environments.yaml (57 lines)
+   Key: argocd-configuration/applicationsets/vpp-products.yaml
+
+4. MC-VPP-Infrastructure (Terraform IaC — NOT directly relevant but branch feature/opswork/rewrite-rule exists)
+   Path: /Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/MC-VPP-Infrastructure/main/

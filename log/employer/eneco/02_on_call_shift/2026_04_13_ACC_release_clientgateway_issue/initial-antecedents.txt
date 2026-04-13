@@ -1,0 +1,11 @@
+1) Project/Repo ACC release 2) Pipeline URL: https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration/commit/25d008a143a240d7b254582c803a9a096237bd11?refName=refs%2Fheads%2Fmain 3) Priority: :bufo-crying: This is blocking me, 4)If bug:
+ACC release failing
+ 5) Details:
+For some reason https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_build?definitionId=1811&_a=summary (One-For-All) triggered https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration/commit/25d008a143a240d7b254582c803a9a096237bd11?refName=refs%2Fheads%2Fmain (VPP-Configuration) pipeline which did not set version for ClientGateway on acc environment and erased version from dev environment, leading to failing sync in argocd
+
+
+there is a missing clientgateway command in logs, which looks like lead to empty versions for this service
+
+Repo:
+https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration/commit/25d008a143a240d7b254582c803a9a096237bd11?refName=refs%2Fheads%2Fmain
+https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_build/results?buildId=1605902&view=results

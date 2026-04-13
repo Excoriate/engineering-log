@@ -1,0 +1,7 @@
+Config files relevant to this incident:
+- VPP-Configuration/Helm/activationmfrr/sandbox/values.yaml
+- VPP-Configuration/Helm/activationmfrr/sandbox/values-override.yaml
+- VPP-Configuration/Helm/activationmfrr/dev/values.yaml (comparison)
+- VPP-Configuration/Helm/activationmfrr/acc/values.yaml (comparison — has rewrite rule per colleague)
+- VPP-Configuration/Helm/activationmfrr/prod/values.yaml (comparison — has rewrite rule per colleague)
+- Eneco.Vpp.Core.Dispatching/helm/activationmfrr/values.yaml (chart defaults)

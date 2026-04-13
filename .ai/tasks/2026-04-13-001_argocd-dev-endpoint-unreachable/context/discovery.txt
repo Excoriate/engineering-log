@@ -1,0 +1,4 @@
+No CLAUDE.md or AGENTS.md in engineering-log repo.
+Global CLAUDE.md at ~/.claude/CLAUDE.md — Brain v62.0.0.
+Eneco skills available: eneco-context-repos, eneco-context-docs, eneco-platform-mc-vpp-infra, eneco-platform-aad, eneco-tool-tradeit-mc-environments, eneco-flex-trade-optimizer, eneco-tools-rootly.
+Relevant: eneco-context-repos (for ADO repo browsing), eneco-context-docs (for wiki/docs lookup).
