@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "id": "verify-own-prior-claim-via-parallel-adversarial-evaluator",
+      "summary": "When the task is to verify coordinator's own prior claim (Slack reply, ADR, assertion), dispatch an adversarial reviewer AND an evaluator in parallel. One lens alone misses either the conceptual or the methodology error class.",
+      "severity": "high",
+      "confidence": "validated",
+      "last_validated": "2026-04-21",
+      "category": "memory",
+      "source_episode": "[[2026-04-21-oncall-erik-lumbela-argocd-sandbox]]",
+      "tags": ["adversarial", "self-verification", "reviewer-dispatch", "oncall", "diagnosis"]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+https://eneco-online.slack.com/lists/T039G7V20/F0ACUPDV7HU?record_id=Rec0AU7GAKAJH
+https://eneco-online.slack.com/archives/C063SNM8PK5/p1776781493090009
+---
+1) Project/Repo Vpp-Infrastructure 2) Pipeline URL: https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_build/results?buildId=1616964&view=logs&j=c4a10d1f-fbee-5cf8-583b-7e6bc88f2b58 3) Priority: :this-is-fine: Today is fine!, 4)If bug:
+mFRR-Activation on Sandbox is missing EventHub consumer.
+ 5) Details:
+Found the activation mFRR service on sandbox is crash looping due to missing consumer group. Triggered the pipeline for the vpp-infrastructure.
+---
+
