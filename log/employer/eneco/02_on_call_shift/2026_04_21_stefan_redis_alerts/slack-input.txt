@@ -1,0 +1,24 @@
+Slack request item: https://eneco-online.slack.com/lists/T039G7V20/F0ACUPDV7HU?record_id=Rec0ATVMGS4J1
+
+---
+I would need help and support with the azure alerts for Redis. I saw that recently there were some default alerts introduced in the Redis module in the Eneco.Infrastructure repository. It seems that in the MC-Infrastructure we are using the same default alerts for all envs equally.
+For some unexplainable reason since last week we get spammed by one of this alerts on dev-mc which uses standard instead of Premium.
+Would be great if we could make the alerts configurable by env that we can adjust and maybe disable alerts.
+---
+
+Context gfiven int the thread:
+---
+Stefan Klopf  [8:37 AM]
+Good morning @alex.torres. I saw you got assigned to this ticket. Do you want to have a chat about it to get more information? I am going on vacation from tomorrow onwards and it would be great for the rest of the 24/7 core team to get this spamming alert solved.
+Alex Torres  [8:40 AM]
+Hello @Stefan Klopf,
+I’ll take a look first. I’ll ping you if it’s required a sync about it.Alex Torres  [10:53 AM]
+@Stefan Klopf,to complement my view; you have recent alert examples that you can provide? — alerts triggered, either in Azure or Rootly?
+Stefan Klopf  [11:09 AM]
+Hi Alex, this was the one which was very annoying on dev-mc. It was fired in azure and routed to rootly.
+image.png [11:11 AM]I added another request earlier the last week about this redis metrics that spiked above the threshold and caused the alert to fire and solve.
+[11:11 AM]It looks now that the metrics is getting back to the initial state
+Stefan Klopf  [11:17 AM]
+We had a look at the current Redis alerts last Friday and some of them seems to be not really helpful/useful. e.g. the UsedMemory-vpp-rediscache01-xx the threshold sems to be way to low and we still have the AllUsedMemoryPercentage-vpp-rediscache01-xx which seems to be more useful.2 files Stefan Klopf  [11:31 AM]
+image.png
+---
