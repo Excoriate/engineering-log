@@ -1,0 +1,18 @@
+{
+  "task_id": "2026-04-26-003",
+  "slug": "2ndbrain-knowledge-build-pbbtbv-lessons",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-04-26-003_2ndbrain-knowledge-build-pbbtbv-lessons",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Documents/obsidian/llm-wiki",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-rootly",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/build-ledgers"
+  ],
+  "created_files": [],
+  "modified_files": [],
+  "external_writes": [
+    "/Users/alextorresruiz/Documents/obsidian/.ai/build-ledgers/2026-04-26-185000-pbbtbv-lessons-build.md",
+    "/Users/alextorresruiz/Documents/obsidian/llm-wiki/learnings/lessons/oncall-rca-must-close-on-every-state-plane.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-rootly/eneco-vpp-alert-noise-patterns.md"
+  ],
+  "git_mutations": []
+}

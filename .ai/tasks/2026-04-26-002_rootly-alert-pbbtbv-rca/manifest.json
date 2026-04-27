@@ -1,0 +1,29 @@
+{
+  "task_id": "2026-04-26-002",
+  "slug": "rootly-alert-pbbtbv-rca",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-04-26-002_rootly-alert-pbbtbv-rca",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/shift_alerts_summary/2026-April (20-26)",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory"
+  ],
+  "created_files": [
+    "01-task-requirements-initial.md",
+    "01-task-requirements-final.md",
+    "context/map-ai.md",
+    "context/map-codebase.md",
+    "context/map-config.md",
+    "context/map-docs.md",
+    "context/map-discovery.md",
+    "context/01-rootly-alert-pbbtBV.json",
+    "context/02-evidence-summary.md",
+    "plan/plan.md",
+    "specs/rca-spec.md"
+  ],
+  "modified_files": [],
+  "external_writes": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/shift_alerts_summary/2026-April (20-26)/2026-04-26_pbbtBV_kv-vppagg-bootstrap-d-latency.md",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/feedback_oncall_rca_multi_system_convergence.md",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/project_ccoe_keyvault_bootstrap_alert_noise.md"
+  ],
+  "git_mutations": []
+}

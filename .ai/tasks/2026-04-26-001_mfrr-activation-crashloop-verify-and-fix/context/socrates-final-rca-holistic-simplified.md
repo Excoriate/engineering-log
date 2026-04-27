@@ -1,0 +1,45 @@
+---
+task_id: 2026-04-26-001
+agent: socrates-contrarian
+status: complete
+summary: Final pass on the simplified rca-holistic skill. The simplification was partial — SKILL.md adopted the three-term discipline and X1-X4, but holistic-ladder.md still uses "mental model" everywhere and the validator script enforces none of the new contracts. The disclosure footnote on the dogfood is theatrical without behavioral teeth. Verdict: PROCEED-WITH-CHANGES; three patches block "complete" but none block "review".
+---
+
+# Verdict
+PROCEED-WITH-CHANGES
+
+# Patches required
+
+1. **Three-term renaming did not propagate to `holistic-ladder.md`.** SKILL.md:43 declares "model = level-schema unless qualified", but `holistic-ladder.md:3,12,18,25,41,57,70,83,96,109,122,135,148,161,174` still uses "mental model" and "Mental model installed" as the canonical dimension name in EVERY level row. SKILL.md itself reverts at lines 62, 123, 146, 171 ("Mental Model 0/1/2", "Core discipline (Mental Model 2)"). Q3 fails. **Change**: rename the `holistic-ladder.md` dimension to `Level-schema installed` and rename SKILL.md headings to `Cross-cutting discipline 0/1/2` (or `Foundation 0/1/2`). Without this, an agent loading `holistic-ladder.md` (the canonical contract per SKILL.md:528) reads "Mental model" 12 times and the disambiguation collapses on first contact.
+
+2. **X1, domain_prior, X1.4 are policy without enforcement.** `scripts/validate-rca-completeness.sh` (260 lines) contains no grep for a bold level-schema phrase per level, no `domain_prior` front-matter check, and no cross-session-vs-self-reference distinction (verified via `grep` — only G11 vocabulary continuity exists). Q5 and Q7 are unenforceable. **Change**: add validator gate G12 ("each non-skipped level contains ≥1 bold-emphasized phrase under or near the anchor question") and G13 ("front-matter declares `domain_prior: high|low`; if `low`, ≥1 axiom or prediction in the doc carries `[UNVERIFIED[assumption: domain-prior` token"). X1.4 self-reference is genuinely not machine-checkable from the doc alone — accept this and downgrade X1.4 to "author attestation in a `connections:` front-matter list pointing at file paths or URLs that exist on disk / resolve to 200; validator checks resolution, not semantics."
+
+3. **Dogfood disclosure (SKILL.md:537) is theatrical as written.** The sentence sits inside a "load on demand" bullet under `Operational surfaces`. An agent doing Phase 4 drafting and pattern-matching from the dogfood loads the dogfood directly via filesystem; SKILL.md:537 is loaded once at skill-init and then 3000 tokens away (Kant Q1's recency-dominance argument applies here too). **Change**: copy the disclosure into a `DISCLOSURE.md` file at the dogfood directory root AND add a top-of-file banner inside the dogfood RCA itself ("This RCA was authored before Cross-level Rule X1; it does NOT yet annotate each level with a named level-schema phrase. Do not pattern-match level structure from this exemplar.") A future agent opening the dogfood file sees the banner; one reading SKILL.md alone does not.
+
+# Q1-Q9 attack notes
+
+**Q1.** Partial simplification. The DNA-axes-as-discipline genuinely disappeared (SKILL.md no longer has "Axiom 1-4" or "DNA" sections). The four lenses (SKILL.md:110-121) are an honest aid — table is 12 lines, framed "when stuck" (SKILL.md:112), and the canonical level contract is asserted once (SKILL.md:51). Renamed but reduced: lenses are framed as views, not parallel disciplines. NOT a relocation. Caveat: "A schema that survives one lens is a fact-list with a name on it" (SKILL.md:121) re-imports DNA-coverage-pressure through the back door — agent will read that as "must apply all four lenses" not "use when stuck."
+
+**Q2.** X3 and X4 are NOT one rule with two flavors. X3 (SKILL.md:103-104) is a *content* rule — what to do when evidence inverts a prior claim (preserve original verbatim, name inversion). X4 (SKILL.md:106-108) is a *register* rule — first-person forensic voice. The discriminating test: a doc can pass X3 (every inversion named) and fail X4 (written as "it was determined that"); a doc can pass X4 (first-person passion) with no inversions to name. They are independently load-bearing. Keep both.
+
+**Q3.** Honored in SKILL.md prose (the word "model" appears qualified: "level-schema", "schema-graph", "inherited-schema") but **violated in `holistic-ladder.md` and SKILL.md headings**. See Patch 1. AP16 (anti-patterns.md:145-153) correctly says "level-schema unnamed" — at least the anti-patterns layer absorbed the rename. The propagation is half-done.
+
+**Q4.** Defensible refusal. Simplicity-maniac's 4-primitive collapse (named reader / evidence ledger / 12 levels with named schema / one adversarial pass) would lose: the freshness-probe-before-mirrored-read discipline (H-CMD-3, MFRR-incident-specific lesson), the cross-deliverable coherence diff (Phase 7), the explicit graceful-degradation status `review` rule (SKILL.md:486-488). These three are not redundant restatements of the four primitives — they encode lessons from prior tasks (ADO silent state drift, parallel adversarial+evaluator). Keeping 12 levels + 4 DFs at the price of 16 heuristics is a defensible trade. The author refused the over-simplification correctly — but the residual complexity is justified only because the heuristics encode *named prior failures*. The Lenses table (SKILL.md:114-121), in contrast, encodes no prior failure and could go without loss.
+
+**Q5.** Not enforceable. SKILL.md:382 says `domain_prior: low` MUST be declared "when applicable" — but "when applicable" is the agent's self-judgment, the validator does not check (`grep "domain_prior" scripts/*.sh` returns nothing), and there is no prompt that says "before Phase 0 gate-out, output the domain_prior declaration as a labeled line." It is a polite suggestion. See Patch 2.
+
+**Q6.** Theatrical as positioned (SKILL.md:537, end of "load on demand" list, ~500 tokens of catalog text after the cross-level rules). A future agent reading the dogfood reads `examples/01-mfrr-activation-crashloop/RCA.md` directly — they do not re-read SKILL.md:537 first. Behavior change requires the disclosure at the *dogfood file's* head, not in SKILL.md's load-on-demand index. See Patch 3.
+
+**Q7.** Not enforceable from the doc alone. "Self-reference within the same session does not count" (SKILL.md:94) is a semantic distinction with no machine signal — a path to `../sibling-rca.md` looks identical whether authored 5 minutes ago or 5 months ago. The validator can check that the link resolves; it cannot check that the target pre-existed this session. Author good faith is the actual gate. See Patch 2 — downgrade X1.4 to "links resolve" + author attestation, do not pretend it is machine-checked.
+
+**Q8.** Two losses worth flagging. (a) Simplicity-maniac patch 3 (externalized `rca-manifest.json` for resumability) was NOT absorbed — Phase-7 cross-deliverable coherence and the evidence ledger still live as prose inside the RCA, so a fresh-session resume re-parses prose to find them (Q4 of the simplicity report stands). (b) Kant patch 1 (DNA recency-dominance fix) is partially absorbed because the DNA section was deleted — but the *replacement* is the Lenses table at SKILL.md:110-121, still in the front third of the spine. The recency problem isn't fixed; it's smaller. Compressing did not relocate.
+
+**Q9.** Worst case from prior pass: "agent confidently authors a hallucinated level-schema in an unfamiliar domain." Mitigation now lives at SKILL.md:382 (Phase 0 step 5, domain_prior). Mitigation is **declared, not enforced**. The worst case has moved from "no awareness of domain ignorance" to "awareness exists in the prompt but no probe forces the declaration." Net reduction in risk: marginal. See Patch 2.
+
+# Residual risks I cannot falsify
+
+1. **The Lenses table will be read as a discipline, not an aid.** "A schema that survives one lens is a fact-list with a name on it" (SKILL.md:121) is a coverage imperative dressed as advice. Resolving probe: dispatch `kant-cognitive-scientist` on a fresh session with only SKILL.md and ask "are the four lenses optional or required?" — if Kant says "required," the framing leaked.
+
+2. **The 873-line dogfood remains the on-disk template.** SKILL.md:231 warns against cargo-culting it, SKILL.md:537 discloses it predates X1, but agents pattern-match from concrete artifacts more than from prose warnings. Resolving probe: in a future invocation, ask the agent post-hoc "did you read the dogfood before drafting?" — if yes and the new RCA mirrors its level-count regardless of incident class, the warning failed.
+
+3. **Validator G11 (vocabulary continuity) does not enforce X2's "no retroactive reveal" half.** G11 catches name reuse but not "name first appears at L8 was already in L1-L6." Resolving probe: read `validate-rca-completeness.sh` G11 implementation; if it walks levels in order and tracks first-appearance, X2 is enforced; if it only checks "this name appears in adjacent levels," the retroactive-reveal check is missing.
