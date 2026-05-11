@@ -1,0 +1,11 @@
+{
+  "task_id": "2026-05-11-005",
+  "slug": "cmc-alert-vpp-cluster-prod",
+  "task_root": ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod",
+  "phase": 1,
+  "preflight_complete": true,
+  "domain_class": "investigation",
+  "compression_mode": "Full",
+  "created": "2026-05-11",
+  "predecessor_task": "2026-05-11-003_rootly-alert-ln2i9h-intake-rca"
+}

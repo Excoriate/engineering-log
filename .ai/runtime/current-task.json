@@ -1,11 +1,10 @@
 {
-  "task_id": "2026-05-11-005",
-  "slug": "cmc-alert-vpp-cluster-prod",
-  "task_root": ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod",
-  "phase": 1,
+  "task_id": "2026-05-11-006",
+  "slug": "ghostty-cyberdream-cmux-tune",
+  "task_root": ".ai/tasks/2026-05-11-006_ghostty-cyberdream-cmux-tune",
+  "phase": 7,
   "preflight_complete": true,
-  "domain_class": "investigation",
-  "compression_mode": "Full",
-  "created": "2026-05-11",
-  "predecessor_task": "2026-05-11-003_rootly-alert-ln2i9h-intake-rca"
+  "domain_class": "implementation",
+  "compression_mode": "Compact",
+  "created": "2026-05-11"
 }

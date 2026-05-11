@@ -1,0 +1,25 @@
+{
+  "task_id": "2026-05-11-006",
+  "slug": "ghostty-cyberdream-cmux-tune",
+  "task_root": ".ai/tasks/2026-05-11-006_ghostty-cyberdream-cmux-tune",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/dotfiles/Ghostty/config",
+    "/Users/alextorresruiz/.config/ghostty/config"
+  ],
+  "created": "2026-05-11",
+  "modified": "2026-05-11",
+  "created_files": [],
+  "modified_files": [],
+  "external_writes": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/dotfiles/Ghostty/config",
+    "/Users/alextorresruiz/.config/ghostty/config"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    "wc -l on both files: 153 lines, identical bytes confirmed via cp",
+    "Ghostty 1.3.2 binary located at /Applications/cmux.app/Contents/Resources/bin/ghostty"
+  ],
+  "status": "in_progress"
+}
