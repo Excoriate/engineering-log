@@ -1,0 +1,31 @@
+{
+  "value": [
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/Microsoft.AlertsManagement/alerts/43dc76d06924d00b50c7b0aa1fd4ddbe31138659e86266b590ce1c67d8f0f000",
+      "name": "Service Health Issue - VPP Resources - Production",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-network-ejkm/providers/microsoft.insights/activityLogAlerts/Service Health Issue - VPP Resources - Production",
+          "alertState": "New",
+          "description": "Service Health Issue - VPP Resources - Production",
+          "lastModifiedDateTime": "2026-05-11T13:27:55.6926503Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ServiceHealth",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "662512f2-724e-4459-b207-48e2cd5d28ce_20a16a6fca79ab4f7db447c68149632e",
+          "startDateTime": "2026-05-11T13:27:55.6926503Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceGroup": "",
+          "targetResourceName": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceType": ""
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    }
+  ]
+}

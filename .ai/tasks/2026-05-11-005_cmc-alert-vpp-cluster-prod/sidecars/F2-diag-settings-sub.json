@@ -1,0 +1,127 @@
+{
+  "value": [
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/microsoft.insights/diagnosticSettings/diagnostic_settings",
+      "location": "global",
+      "logs": [
+        {
+          "category": "Security",
+          "enabled": true
+        },
+        {
+          "category": "Alert",
+          "enabled": true
+        },
+        {
+          "category": "Autoscale",
+          "enabled": true
+        },
+        {
+          "category": "ServiceHealth",
+          "enabled": true
+        },
+        {
+          "category": "Administrative",
+          "enabled": true
+        },
+        {
+          "category": "Policy",
+          "enabled": true
+        },
+        {
+          "category": "Recommendation",
+          "enabled": true
+        },
+        {
+          "category": "ResourceHealth",
+          "enabled": true
+        }
+      ],
+      "name": "diagnostic_settings",
+      "type": "Microsoft.Insights/diagnosticSettings",
+      "workspaceId": "/subscriptions/6c1ab7bd-97b5-4179-8077-ac85acf7bd03/resourceGroups/mcc-rg-law-dkwf/providers/Microsoft.OperationalInsights/workspaces/mcc-log-workspace-oqqp"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/microsoft.insights/diagnosticSettings/diagnostic_settings_activitylog",
+      "location": "global",
+      "logs": [
+        {
+          "category": "Security",
+          "enabled": true
+        },
+        {
+          "category": "Autoscale",
+          "enabled": true
+        },
+        {
+          "category": "Alert",
+          "enabled": true
+        },
+        {
+          "category": "Policy",
+          "enabled": true
+        },
+        {
+          "category": "Recommendation",
+          "enabled": true
+        },
+        {
+          "category": "Administrative",
+          "enabled": true
+        },
+        {
+          "category": "ResourceHealth",
+          "enabled": true
+        },
+        {
+          "category": "ServiceHealth",
+          "enabled": true
+        }
+      ],
+      "name": "diagnostic_settings_activitylog",
+      "storageAccountId": "/subscriptions/6c1ab7bd-97b5-4179-8077-ac85acf7bd03/resourceGroups/mcc-rg-activitylog-fqdn/providers/Microsoft.Storage/storageAccounts/mccstactivitylogtker",
+      "type": "Microsoft.Insights/diagnosticSettings"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/microsoft.insights/diagnosticSettings/diagnostic_settings_vppprod",
+      "location": "global",
+      "logs": [
+        {
+          "category": "Administrative",
+          "enabled": false
+        },
+        {
+          "category": "Security",
+          "enabled": true
+        },
+        {
+          "category": "ServiceHealth",
+          "enabled": true
+        },
+        {
+          "category": "Alert",
+          "enabled": true
+        },
+        {
+          "category": "Recommendation",
+          "enabled": false
+        },
+        {
+          "category": "Policy",
+          "enabled": false
+        },
+        {
+          "category": "Autoscale",
+          "enabled": false
+        },
+        {
+          "category": "ResourceHealth",
+          "enabled": true
+        }
+      ],
+      "name": "diagnostic_settings_vppprod",
+      "type": "Microsoft.Insights/diagnosticSettings",
+      "workspaceId": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.operationalinsights/workspaces/vpp-log-analyt-p"
+    }
+  ]
+}

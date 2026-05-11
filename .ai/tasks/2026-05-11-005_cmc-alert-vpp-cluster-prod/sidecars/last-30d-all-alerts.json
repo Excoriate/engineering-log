@@ -1,0 +1,1376 @@
+{
+  "nextLink": "https://management.azure.com:443/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/Microsoft.AlertsManagement/alerts?api-version=2019-05-05-preview&timeRange=30d&ctoken=ew0KICAiJGlkIjogIjEiLA0KICAiTWF4Um93cyI6IDUwLA0KICAiUm93c1RvU2tpcCI6IDUwLA0KICAiS3VzdG9DbHVzdGVyVXJsIjogImh0dHBzOi8vYWxlcnRzLW5ldS1vbmUtc2YuYXJnLmNvcmUud2luZG93cy5uZXQiDQp9",
+  "value": [
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/Microsoft.AlertsManagement/alerts/43dc76d06924d00b50c7b0aa1fd4ddbe31138659e86266b590ce1c67d8f0f000",
+      "name": "Service Health Issue - VPP Resources - Production",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-network-ejkm/providers/microsoft.insights/activityLogAlerts/Service Health Issue - VPP Resources - Production",
+          "alertState": "New",
+          "description": "Service Health Issue - VPP Resources - Production",
+          "lastModifiedDateTime": "2026-05-11T13:27:55.6926503Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ServiceHealth",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "662512f2-724e-4459-b207-48e2cd5d28ce_20a16a6fca79ab4f7db447c68149632e",
+          "startDateTime": "2026-05-11T13:27:55.6926503Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceGroup": "",
+          "targetResourceName": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceType": ""
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/Microsoft.AlertsManagement/alerts/449ed1c78da5c29add2c3f910a6ccaa7c8a005b4fe672e1a29205e7d3aaff000",
+      "name": "Service Health Issue - VPP Resources - Production",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-network-ejkm/providers/microsoft.insights/activityLogAlerts/Service Health Issue - VPP Resources - Production",
+          "alertState": "New",
+          "description": "Service Health Issue - VPP Resources - Production",
+          "lastModifiedDateTime": "2026-05-11T13:22:57.8010831Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ServiceHealth",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "4de50591-a142-e52b-fce4-bc023c78207f_20a16a6fca79ab4f7db447c68149632e",
+          "startDateTime": "2026-05-11T13:22:57.8010831Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceGroup": "",
+          "targetResourceName": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceType": ""
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/Microsoft.AlertsManagement/alerts/fdbfa6a0415cb0efb2d4e0dca4a38cf447270a26c450ece4d07b3f725de5f000",
+      "name": "Service Health Issue - VPP Resources - Production",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-network-ejkm/providers/microsoft.insights/activityLogAlerts/Service Health Issue - VPP Resources - Production",
+          "alertState": "New",
+          "description": "Service Health Issue - VPP Resources - Production",
+          "lastModifiedDateTime": "2026-05-11T13:17:56.7693248Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ServiceHealth",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "8c9e2fbf-2c28-8ccf-9ea0-86368d7a1920_20a16a6fca79ab4f7db447c68149632e",
+          "startDateTime": "2026-05-11T13:17:56.7693248Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceGroup": "",
+          "targetResourceName": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceType": ""
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/Microsoft.AlertsManagement/alerts/7ca25b09-e05e-cced-606d-cc4d91d5000e",
+      "name": "vpp-resource-unhealthy",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/scheduledqueryrules/vpp-resource-unhealthy",
+          "alertState": "New",
+          "description": "",
+          "lastModifiedDateTime": "2026-05-11T13:12:43.2790702Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "Log Alerts V2",
+          "severity": "Sev0",
+          "signalType": "Log",
+          "sourceCreatedId": "22ed515b-24d3-26ce-3fb3-09cfc5158afb",
+          "startDateTime": "2026-05-11T13:12:43.2790702Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceGroup": "",
+          "targetResourceName": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceType": ""
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/microsoft.authorization/roleassignments/abce852f-d6fc-4c5e-b76a-d2e6f767b5b7/providers/Microsoft.AlertsManagement/alerts/4b2e783e-97a1-71e9-9f90-321f9244f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-11T07:27:56.3503782Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "53b51ab9-c66d-4672-bd23-07671f78f08e_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-11T07:27:56.3503782Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/microsoft.authorization/roleassignments/abce852f-d6fc-4c5e-b76a-d2e6f767b5b7",
+          "targetResourceGroup": "",
+          "targetResourceName": "abce852f-d6fc-4c5e-b76a-d2e6f767b5b7",
+          "targetResourceType": "roleassignments"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/c23698fd-3b97-3e12-7667-c8aaeac3000e",
+      "name": "mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+          "alertState": "New",
+          "description": "Alert when scaling factor is extreme\nsee details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/29848/APE-Prediction-scale-factor",
+          "lastModifiedDateTime": "2026-05-11T07:04:05.9699479Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "Application Insights",
+          "severity": "Sev3",
+          "signalType": "Log",
+          "sourceCreatedId": "37c70f6c-f3a6-3d0d-c39c-78e848080b68",
+          "startDateTime": "2026-05-11T07:04:05.9699479Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/bc457b68-4267-d1ff-310f-4e6be7b1000e",
+      "name": "mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+          "alertState": "New",
+          "description": "Alert when scaling factor is extreme\nsee details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/29848/APE-Prediction-scale-factor",
+          "lastModifiedDateTime": "2026-05-10T20:05:09.2840598Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-10T20:05:09.3232804Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev3",
+          "signalType": "Log",
+          "sourceCreatedId": "6693b6ad-fb58-d147-4596-ad073f3e2e9d",
+          "startDateTime": "2026-05-10T06:04:07.8862942Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/146738dc-5084-ba34-2f02-c8028b08000e",
+      "name": "mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+          "alertState": "New",
+          "description": "Alert when scaling factor is extreme\nsee details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/29848/APE-Prediction-scale-factor",
+          "lastModifiedDateTime": "2026-05-09T20:05:05.9468929Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-09T20:05:06.01833Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev3",
+          "signalType": "Log",
+          "sourceCreatedId": "ab395479-1c73-d608-ccd9-4b1ecf046cc3",
+          "startDateTime": "2026-05-09T06:04:04.8733478Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/333fd5e5-e8a3-2116-f44d-447e7ffa000e",
+      "name": "mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+          "alertState": "New",
+          "description": "Alert when scaling factor is extreme\nsee details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/29848/APE-Prediction-scale-factor",
+          "lastModifiedDateTime": "2026-05-08T21:05:46.1414865Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-08T21:05:46.183507Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev3",
+          "signalType": "Log",
+          "sourceCreatedId": "b3af0c15-67e5-fb9f-6b9c-a4767eeb91b6",
+          "startDateTime": "2026-05-08T07:04:08.2945616Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-messaging/providers/microsoft.storage/storageaccounts/vppevhpremiump/providers/Microsoft.AlertsManagement/alerts/ee3bd69f-77c7-ace5-080b-10692802f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-08T12:53:08.4162647Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "6e3a11f6-2e2c-493a-a7b6-1bc1dbb4b2a6_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-08T12:53:08.4162647Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-messaging/providers/microsoft.storage/storageaccounts/vppevhpremiump/providers/microsoft.authorization/roleassignments/733f7322-b4db-ad6e-9ee8-5e03d2c5acb9",
+          "targetResourceGroup": "mcprd-rg-vpp-p-messaging",
+          "targetResourceName": "733f7322-b4db-ad6e-9ee8-5e03d2c5acb9",
+          "targetResourceType": "storageaccounts"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.documentdb/databaseaccounts/vpp-cosmosdbmongo-account-assetdispatcher-p/providers/Microsoft.AlertsManagement/alerts/6ad95f21-1a87-d7df-556b-0813559af000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-08T12:53:07.9440552Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "aff52ac2-28ce-472c-ab88-684c7a4cd904_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-08T12:53:07.9440552Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.documentdb/databaseaccounts/vpp-cosmosdbmongo-account-assetdispatcher-p/providers/microsoft.authorization/roleassignments/11c92989-84b6-85f9-12d5-d7e81e25d0a4",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "11c92989-84b6-85f9-12d5-d7e81e25d0a4",
+          "targetResourceType": "databaseaccounts"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.kusto/clusters/vppkustocluster01p/providers/Microsoft.AlertsManagement/alerts/bd9ebfee-4067-e0c4-27b2-01b675c1f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-08T12:52:58.4297515Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "1e30c0cd-7663-4980-b7e8-263bf7c0da14_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-08T12:52:58.4297515Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.kusto/clusters/vppkustocluster01p/providers/microsoft.authorization/roleassignments/d401b3d9-538a-d907-d0a1-fb8c4f4c68b8",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "d401b3d9-538a-d907-d0a1-fb8c4f4c68b8",
+          "targetResourceType": "clusters"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-mon/providers/microsoft.authorization/roleassignments/f7b6bbb7-0c6c-5bcf-e576-460fe8338e4b/providers/Microsoft.AlertsManagement/alerts/1d87b8b6-701b-307d-66d4-5a83159bf000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-08T12:52:58.3250516Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "ce8944ec-f2cc-48b3-8e5e-05861f1917f2_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-08T12:52:58.3250516Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-mon/providers/microsoft.authorization/roleassignments/f7b6bbb7-0c6c-5bcf-e576-460fe8338e4b",
+          "targetResourceGroup": "mcprd-rg-vpp-p-mon",
+          "targetResourceName": "f7b6bbb7-0c6c-5bcf-e576-460fe8338e4b",
+          "targetResourceType": "roleassignments"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-messaging/providers/microsoft.servicebus/namespaces/vpp-sbus-p/providers/Microsoft.AlertsManagement/alerts/068582a0-32b8-6d2a-e776-aceb6691f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-08T12:52:58.2469989Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "c37e262a-a37d-4a77-83a4-9a92f16b3fff_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-08T12:52:58.2469989Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-messaging/providers/microsoft.servicebus/namespaces/vpp-sbus-p/providers/microsoft.authorization/roleassignments/bf33b81f-3ee3-6d0d-e9aa-63531212fba9",
+          "targetResourceGroup": "mcprd-rg-vpp-p-messaging",
+          "targetResourceName": "bf33b81f-3ee3-6d0d-e9aa-63531212fba9",
+          "targetResourceType": "namespaces"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-messaging/providers/microsoft.eventhub/namespaces/vpp-evh-premium-p/providers/Microsoft.AlertsManagement/alerts/a41116c0-9c88-d795-9131-19a8da51f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-08T12:52:57.9851929Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "1529de09-26d6-4c25-b48b-53b3f7bbf14c_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-08T12:52:57.9851929Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-messaging/providers/microsoft.eventhub/namespaces/vpp-evh-premium-p/providers/microsoft.authorization/roleassignments/ae3d05b9-3e28-a8f8-1b13-7fd59b590cad",
+          "targetResourceGroup": "mcprd-rg-vpp-p-messaging",
+          "targetResourceName": "ae3d05b9-3e28-a8f8-1b13-7fd59b590cad",
+          "targetResourceType": "namespaces"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-vpp-dispatching-p/providers/microsoft.appconfiguration/configurationstores/vpp-applicationconfig-dispatcher-p/providers/Microsoft.AlertsManagement/alerts/983737df-cb81-2898-fff3-c1bbdfc9f000",
+      "name": "mcc-ala-cis-delete-roleassignments-dirq",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-delete-roleassignments-dirq",
+          "alertState": "New",
+          "description": "Activity alert for Delete RoleAssignments - Azure cis-delete-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-08T08:37:59.5070553Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "b06458dc-3fba-4562-8b85-62a949ce27c2_73b3b99de8ef38753f7f1b15cd56c391",
+          "startDateTime": "2026-05-08T08:37:59.5070553Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-vpp-dispatching-p/providers/microsoft.appconfiguration/configurationstores/vpp-applicationconfig-dispatcher-p/providers/microsoft.authorization/roleassignments/fb485a4b-b171-0acd-f593-61bda58f2dc0",
+          "targetResourceGroup": "rg-vpp-dispatching-p",
+          "targetResourceName": "fb485a4b-b171-0acd-f593-61bda58f2dc0",
+          "targetResourceType": "configurationstores"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-vpp-dispatching-p/providers/microsoft.keyvault/vaults/vpp-dispatcher-appsec-p/providers/Microsoft.AlertsManagement/alerts/e932cedb-9ac5-2b5a-21cd-ba58235df000",
+      "name": "mcc-ala-cis-delete-roleassignments-dirq",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-delete-roleassignments-dirq",
+          "alertState": "New",
+          "description": "Activity alert for Delete RoleAssignments - Azure cis-delete-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-08T08:37:56.5742264Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "af64067d-9332-4d8e-bada-782840fdb290_73b3b99de8ef38753f7f1b15cd56c391",
+          "startDateTime": "2026-05-08T08:37:56.5742264Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-vpp-dispatching-p/providers/microsoft.keyvault/vaults/vpp-dispatcher-appsec-p/providers/microsoft.authorization/roleassignments/9de1f88c-bf7d-665c-02c7-b16504e0d59e",
+          "targetResourceGroup": "rg-vpp-dispatching-p",
+          "targetResourceName": "9de1f88c-bf7d-665c-02c7-b16504e0d59e",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-vpp-dispatching-p/providers/microsoft.keyvault/vaults/vpp-dispatcher-appsec-p/providers/Microsoft.AlertsManagement/alerts/2712ca59-889f-a58c-1dbc-180014a1f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-08T08:37:56.4219884Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "0f728b5d-6032-49c1-b0b3-8d2dbba97e8c_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-08T08:37:56.4219884Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-vpp-dispatching-p/providers/microsoft.keyvault/vaults/vpp-dispatcher-appsec-p/providers/microsoft.authorization/roleassignments/f5d8a726-8353-fb8d-1d56-882f595c2bca",
+          "targetResourceGroup": "rg-vpp-dispatching-p",
+          "targetResourceName": "f5d8a726-8353-fb8d-1d56-882f595c2bca",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-vpp-dispatching-p/providers/microsoft.appconfiguration/configurationstores/vpp-applicationconfig-dispatcher-p/providers/Microsoft.AlertsManagement/alerts/286a8235-c21e-8752-acde-75cf3377f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-08T08:32:56.1522549Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "8dba10b4-8099-46b9-b690-52b877010303_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-08T08:32:56.1522549Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-vpp-dispatching-p/providers/microsoft.appconfiguration/configurationstores/vpp-applicationconfig-dispatcher-p/providers/microsoft.authorization/roleassignments/ec61f704-8aa9-99ee-020d-84876ad62b06",
+          "targetResourceGroup": "rg-vpp-dispatching-p",
+          "targetResourceName": "ec61f704-8aa9-99ee-020d-84876ad62b06",
+          "targetResourceType": "configurationstores"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/c5835baa-4004-ccd6-52ef-134d0acc000e",
+      "name": "mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+          "alertState": "New",
+          "description": "Alert when scaling factor is extreme\nsee details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/29848/APE-Prediction-scale-factor",
+          "lastModifiedDateTime": "2026-05-07T19:05:08.8752472Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-07T19:05:08.9197382Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev3",
+          "signalType": "Log",
+          "sourceCreatedId": "d87c3381-293b-9aa8-c37c-f0002f18aa5d",
+          "startDateTime": "2026-05-07T06:04:09.1553664Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-vpp-dispatching-p/providers/microsoft.appconfiguration/configurationstores/vpp-applicationconfig-dispatcher-p/providers/Microsoft.AlertsManagement/alerts/99540d0c-1fc2-e347-d3a8-008729d2f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-07T14:17:56.7499405Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "0505ebf1-2c5d-4ce4-b3cd-8cd4acce1ddd_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-07T14:17:56.7499405Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-vpp-dispatching-p/providers/microsoft.appconfiguration/configurationstores/vpp-applicationconfig-dispatcher-p/providers/microsoft.authorization/roleassignments/fb485a4b-b171-0acd-f593-61bda58f2dc0",
+          "targetResourceGroup": "rg-vpp-dispatching-p",
+          "targetResourceName": "fb485a4b-b171-0acd-f593-61bda58f2dc0",
+          "targetResourceType": "configurationstores"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-flex-trade-optimizer-p/providers/microsoft.keyvault/vaults/kv-fto-prod/providers/Microsoft.AlertsManagement/alerts/20e42317-65d2-4f27-a889-1bdb2748f000",
+      "name": "kv-fto-prod-kv-availability-below-100",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/rg-flex-trade-optimizer-p/providers/Microsoft.Insights/metricAlerts/kv-fto-prod-kv-availability-below-100",
+          "alertState": "New",
+          "description": "Alert when Key Vault availability is below 100%",
+          "lastModifiedDateTime": "2026-05-07T01:20:33.9344127Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-07T01:20:34.4289202Z",
+          "monitorService": "Platform",
+          "severity": "Sev2",
+          "signalType": "Metric",
+          "sourceCreatedId": "f007df01-9295-491c-b0e9-e3981f2df0b0_rg-flex-trade-optimizer-p_Microsoft.Insights_metricAlerts_kv-fto-prod-kv-availability-below-100_-593864716",
+          "startDateTime": "2026-05-07T01:05:35.5409559Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-flex-trade-optimizer-p/providers/microsoft.keyvault/vaults/kv-fto-prod",
+          "targetResourceGroup": "rg-flex-trade-optimizer-p",
+          "targetResourceName": "kv-fto-prod",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/1d630bce-42cd-ab4a-9861-2cfe18e0000e",
+      "name": "mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+          "alertState": "New",
+          "description": "Alert when scaling factor is extreme\nsee details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/29848/APE-Prediction-scale-factor",
+          "lastModifiedDateTime": "2026-05-06T20:05:05.8300297Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-06T20:05:05.9001406Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev3",
+          "signalType": "Log",
+          "sourceCreatedId": "26a86b2d-0947-08a6-dbfa-ba6ade527bc3",
+          "startDateTime": "2026-05-06T07:04:05.4423251Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/caf38f50-5435-77b1-f358-716a23b9000e",
+      "name": "mcprd-vpp-ai-teamOptimumErrorMonitoring-assetplanning-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-teamOptimumErrorMonitoring-assetplanning-p",
+          "alertState": "New",
+          "description": "Alert when error count above threshold\n see details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/13010/Team-Optimum-Error-Alerts",
+          "lastModifiedDateTime": "2026-05-06T10:22:19.1867033Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "Application Insights",
+          "severity": "Sev2",
+          "signalType": "Log",
+          "sourceCreatedId": "dce4c474-f7b9-835a-ab30-f98d1ce2c300",
+          "startDateTime": "2026-05-06T10:22:19.1867033Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/8474c3b1-a033-fe91-8f30-a6a843b8000e",
+      "name": "mcprd-vpp-ai-teamOptimumErrorMonitoring-marketinteraction-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-teamOptimumErrorMonitoring-marketinteraction-p",
+          "alertState": "New",
+          "description": "Alert when error count above threshold\n see details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/13010/Team-Optimum-Error-Alerts",
+          "lastModifiedDateTime": "2026-05-06T10:21:14.9792033Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "Application Insights",
+          "severity": "Sev2",
+          "signalType": "Log",
+          "sourceCreatedId": "fb90854c-bb99-015e-8168-b7642ab5211d",
+          "startDateTime": "2026-05-06T10:21:14.9792033Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/579f78cf-14c0-6ce6-1800-99ee6e46000e",
+      "name": "mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+          "alertState": "New",
+          "description": "Alert when scaling factor is extreme\nsee details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/29848/APE-Prediction-scale-factor",
+          "lastModifiedDateTime": "2026-05-05T21:05:06.7571055Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-05T21:05:06.8251232Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev3",
+          "signalType": "Log",
+          "sourceCreatedId": "de41b487-7a97-3f5a-0dff-084c9a1284ee",
+          "startDateTime": "2026-05-05T08:04:04.9479557Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/a2e2ef68-dd7d-f211-9277-9328bfdf000e",
+      "name": "mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+          "alertState": "New",
+          "description": "Alert when scaling factor is extreme\nsee details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/29848/APE-Prediction-scale-factor",
+          "lastModifiedDateTime": "2026-05-04T21:05:05.7377346Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-04T21:05:05.7746516Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev3",
+          "signalType": "Log",
+          "sourceCreatedId": "a6803e65-3d0f-344e-eb9d-a452f535790e",
+          "startDateTime": "2026-05-04T07:04:17.2179171Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-agg-p-storage/providers/microsoft.storage/storageaccounts/mcvppaggstoragep/providers/Microsoft.AlertsManagement/alerts/e3e9ab9b-44d4-47e3-988a-a6f764bef000",
+      "name": "eneco-vpp-agg-storageAvailability-static-metric-alert-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-agg-p-mon/providers/Microsoft.Insights/metricAlerts/eneco-vpp-agg-storageAvailability-static-metric-alert-p",
+          "alertState": "New",
+          "description": "Storage Account Availability.",
+          "lastModifiedDateTime": "2026-05-04T20:44:18.1918732Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-04T20:44:18.5814206Z",
+          "monitorService": "Platform",
+          "severity": "Sev2",
+          "signalType": "Metric",
+          "sourceCreatedId": "f007df01-9295-491c-b0e9-e3981f2df0b0_mcprd-rg-vpp-agg-p-mon_Microsoft.Insights_metricAlerts_eneco-vpp-agg-storageAvailability-static-metric-alert-p_-1168451179",
+          "startDateTime": "2026-05-04T20:37:22.5660625Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-agg-p-storage/providers/microsoft.storage/storageaccounts/mcvppaggstoragep",
+          "targetResourceGroup": "mcprd-rg-vpp-agg-p-storage",
+          "targetResourceName": "mcvppaggstoragep",
+          "targetResourceType": "storageaccounts"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/Microsoft.AlertsManagement/alerts/0b3225d0-526f-7323-00ed-4485051bf000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-04T14:28:37.4351081Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "50222747-6574-4c6a-9717-9554a8209625_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-04T14:28:37.4351081Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/microsoft.authorization/roleassignments/20f0e2be-7b13-7533-8c9f-89905c9f77e2",
+          "targetResourceGroup": "rg-asset-scheduling-p",
+          "targetResourceName": "20f0e2be-7b13-7533-8c9f-89905c9f77e2",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/Microsoft.AlertsManagement/alerts/590a935e-ecd4-c2a1-cc58-3f9a1c35f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-04T14:28:36.5877222Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "84104e44-2098-4985-8943-61f3a820f911_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-04T14:28:36.5877222Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/microsoft.authorization/roleassignments/a6b03a31-8e13-d8ef-5c9d-0e23ca8145c7",
+          "targetResourceGroup": "rg-asset-scheduling-p",
+          "targetResourceName": "a6b03a31-8e13-d8ef-5c9d-0e23ca8145c7",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/Microsoft.AlertsManagement/alerts/906ce008-2c62-b5c2-98ba-925be13bf000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-04T14:28:36.5201257Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "b709a698-cd5a-476e-99ca-ee62c12f6fb7_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-04T14:28:36.5201257Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/microsoft.authorization/roleassignments/df72121a-9f20-f41d-bf2f-64e8caf47faf",
+          "targetResourceGroup": "rg-asset-scheduling-p",
+          "targetResourceName": "df72121a-9f20-f41d-bf2f-64e8caf47faf",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/Microsoft.AlertsManagement/alerts/ad738a13-e2b0-e154-683b-460653daf000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-04T14:28:36.5187816Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "f7f50b1a-497a-4d64-821f-6b7c941779d5_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-04T14:28:36.5187816Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/microsoft.authorization/roleassignments/e19492cc-ca64-f8d7-20b8-5a08e762ee4e",
+          "targetResourceGroup": "rg-asset-scheduling-p",
+          "targetResourceName": "e19492cc-ca64-f8d7-20b8-5a08e762ee4e",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/Microsoft.AlertsManagement/alerts/afb72f17-ab8a-891e-d734-892ea76cf000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-04T14:28:36.4338758Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "17ed7c54-7ff8-45c3-9210-0322300601d1_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-04T14:28:36.4338758Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/microsoft.authorization/roleassignments/74a201ad-98c1-a861-8193-dba968666de4",
+          "targetResourceGroup": "rg-asset-scheduling-p",
+          "targetResourceName": "74a201ad-98c1-a861-8193-dba968666de4",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/Microsoft.AlertsManagement/alerts/daec5338-f659-6a73-b147-6d167ad6f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-04T14:28:36.4333629Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "8715fd6d-4561-4f57-9d1e-0ca0f5fb5fe7_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-04T14:28:36.4333629Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/microsoft.authorization/roleassignments/417ad605-c14a-caa5-5a8a-b00620d04dab",
+          "targetResourceGroup": "rg-asset-scheduling-p",
+          "targetResourceName": "417ad605-c14a-caa5-5a8a-b00620d04dab",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/Microsoft.AlertsManagement/alerts/55784bb0-e046-7a89-eb75-ff91bdfef000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-04T14:28:36.3896468Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "412fffc7-9785-4cee-9424-6860e982eb34_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-04T14:28:36.3896468Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/microsoft.authorization/roleassignments/720877a1-8eae-5271-89f2-352654cb578b",
+          "targetResourceGroup": "rg-asset-scheduling-p",
+          "targetResourceName": "720877a1-8eae-5271-89f2-352654cb578b",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/Microsoft.AlertsManagement/alerts/df0db918-c56b-2f1b-89a2-edd54427f000",
+      "name": "mcc-ala-cis-create-roleassignments-mljs",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/microsoft.insights/activityLogAlerts/mcc-ala-cis-create-roleassignments-mljs",
+          "alertState": "New",
+          "description": "Activity alert for Create or Update RoleAssignments - Azure cis-create-roleassignments environment",
+          "lastModifiedDateTime": "2026-05-04T14:28:36.3879971Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "ActivityLog Administrative",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "3fc8f474-aa9b-446f-b0cf-4e7703899a15_4d5c9e22790219e05de40e2ae4552c95",
+          "startDateTime": "2026-05-04T14:28:36.3879971Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/rg-asset-scheduling-p/providers/microsoft.keyvault/vaults/kv-apollo-inbox-p/providers/microsoft.authorization/roleassignments/81215570-434c-b90b-8e2a-76cf06936baa",
+          "targetResourceGroup": "rg-asset-scheduling-p",
+          "targetResourceName": "81215570-434c-b90b-8e2a-76cf06936baa",
+          "targetResourceType": "vaults"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/26b6576c-f541-12b1-c86e-5bac30e8000e",
+      "name": "mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+          "alertState": "New",
+          "description": "Alert when scaling factor is extreme\nsee details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/29848/APE-Prediction-scale-factor",
+          "lastModifiedDateTime": "2026-05-03T20:05:05.5011297Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-03T20:05:05.620567Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev3",
+          "signalType": "Log",
+          "sourceCreatedId": "af758227-e983-d27c-54bb-8834c0f3ed4b",
+          "startDateTime": "2026-05-03T07:04:07.9125887Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.kusto/clusters/vppkustocluster01p/providers/Microsoft.AlertsManagement/alerts/3c686fe9-74fa-4db2-a234-47256feff000",
+      "name": "mcprd-vpp-IngestionLatency-KustoDynamic-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/Microsoft.Insights/metricAlerts/mcprd-vpp-IngestionLatency-KustoDynamic-p",
+          "alertState": "New",
+          "description": "IngestionLatency",
+          "lastModifiedDateTime": "2026-05-03T11:34:11.6418862Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-03T11:34:11.8194494Z",
+          "monitorService": "Platform",
+          "severity": "Sev2",
+          "signalType": "Metric",
+          "sourceCreatedId": "f007df01-9295-491c-b0e9-e3981f2df0b0_mcprd-rg-vpp-p-mon_Microsoft.Insights_metricAlerts_mcprd-vpp-IngestionLatency-KustoDynamic-p_-278496314",
+          "startDateTime": "2026-05-03T11:08:51.2999766Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.kusto/clusters/vppkustocluster01p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "vppkustocluster01p",
+          "targetResourceType": "clusters"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.kusto/clusters/vppkustocluster01p/providers/Microsoft.AlertsManagement/alerts/e3923ffc-f1fc-4c8e-8fec-19d3c8d2f000",
+      "name": "mcprd-vpp-IngestionLatency-KustoDynamic-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/Microsoft.Insights/metricAlerts/mcprd-vpp-IngestionLatency-KustoDynamic-p",
+          "alertState": "New",
+          "description": "IngestionLatency",
+          "lastModifiedDateTime": "2026-05-03T10:49:01.1923698Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-03T10:49:01.5310019Z",
+          "monitorService": "Platform",
+          "severity": "Sev2",
+          "signalType": "Metric",
+          "sourceCreatedId": "f007df01-9295-491c-b0e9-e3981f2df0b0_mcprd-rg-vpp-p-mon_Microsoft.Insights_metricAlerts_mcprd-vpp-IngestionLatency-KustoDynamic-p_-278496314",
+          "startDateTime": "2026-05-03T10:34:01.5268416Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.kusto/clusters/vppkustocluster01p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "vppkustocluster01p",
+          "targetResourceType": "clusters"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning/providers/Microsoft.AlertsManagement/alerts/3ac8ea19-1dff-4de3-a115-5769c7b5f000",
+      "name": "mcprd-vpp-mssql-assetplanning-connection-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/Microsoft.Insights/metricAlerts/mcprd-vpp-mssql-assetplanning-connection-p",
+          "alertState": "New",
+          "description": "Action will be triggered when count of connections failed is greater than 0.",
+          "lastModifiedDateTime": "2026-05-03T01:25:53.2148021Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-03T01:25:53.5178355Z",
+          "monitorService": "Platform",
+          "severity": "Sev1",
+          "signalType": "Metric",
+          "sourceCreatedId": "f007df01-9295-491c-b0e9-e3981f2df0b0_mcprd-rg-vpp-p-mon_Microsoft.Insights_metricAlerts_mcprd-vpp-mssql-assetplanning-connection-p_-1929114837",
+          "startDateTime": "2026-05-03T01:18:53.2241391Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "assetplanning",
+          "targetResourceType": "servers"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/1a0c5b0c-9134-fc69-0ee1-ef30345e000e",
+      "name": "mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-APEPredictionMonitoring-scalingFactor-p",
+          "alertState": "New",
+          "description": "Alert when scaling factor is extreme\nsee details at https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki/wikis/Myriad---VPP.wiki/29848/APE-Prediction-scale-factor",
+          "lastModifiedDateTime": "2026-05-02T21:05:39.9245288Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-02T21:05:39.9669196Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev3",
+          "signalType": "Log",
+          "sourceCreatedId": "bbf33ff8-3754-7bc5-67dd-65dbc2ca1c40",
+          "startDateTime": "2026-05-02T07:04:14.1434962Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/f898a1a4-7994-cfb4-7c0c-9c128669000e",
+      "name": "mcprd-vpp-ai-traces-assetDBSQLConnectionError-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-traces-assetDBSQLConnectionError-p",
+          "alertState": "New",
+          "description": "Alert when total results cross threshold",
+          "lastModifiedDateTime": "2026-05-01T21:05:40.2556166Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-01T21:05:40.3127436Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev2",
+          "signalType": "Log",
+          "sourceCreatedId": "2d51c5d0-2ca4-92da-2eb0-2db0288b78cf",
+          "startDateTime": "2026-05-01T20:04:56.9435034Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p/providers/Microsoft.AlertsManagement/alerts/4fd31775-a144-abac-0e6f-8a3b86e3000e",
+      "name": "mcprd-vpp-ai-traces-assetmonitorDBSQLConnectionError-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/scheduledqueryrules/mcprd-vpp-ai-traces-assetmonitorDBSQLConnectionError-p",
+          "alertState": "New",
+          "description": "Alert when total results cross threshold",
+          "lastModifiedDateTime": "2026-05-01T21:01:01.0622719Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-01T21:01:01.1028882Z",
+          "monitorService": "Application Insights",
+          "severity": "Sev2",
+          "signalType": "Log",
+          "sourceCreatedId": "06097605-51e1-061e-ad7f-a2809feb4e61",
+          "startDateTime": "2026-05-01T20:10:12.7409205Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/components/vpp-appinsights-p",
+          "targetResourceGroup": "mcprd-rg-vpp-p-res",
+          "targetResourceName": "vpp-appinsights-p",
+          "targetResourceType": "components"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning/providers/Microsoft.AlertsManagement/alerts/ad511e74-3b68-4918-8a5b-f2f2f907f000",
+      "name": "mcprd-vpp-mssql-assetplanning-connection-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/Microsoft.Insights/metricAlerts/mcprd-vpp-mssql-assetplanning-connection-p",
+          "alertState": "New",
+          "description": "Action will be triggered when count of connections failed is greater than 0.",
+          "lastModifiedDateTime": "2026-05-01T20:35:37.8041518Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-01T20:35:38.1745018Z",
+          "monitorService": "Platform",
+          "severity": "Sev1",
+          "signalType": "Metric",
+          "sourceCreatedId": "f007df01-9295-491c-b0e9-e3981f2df0b0_mcprd-rg-vpp-p-mon_Microsoft.Insights_metricAlerts_mcprd-vpp-mssql-assetplanning-connection-p_-1929114837",
+          "startDateTime": "2026-05-01T20:28:36.6771818Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "assetplanning",
+          "targetResourceType": "servers"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning-elia/providers/Microsoft.AlertsManagement/alerts/14861f6a-a69b-4947-8d65-a6492e0ef000",
+      "name": "mcprd-vpp-mssql-assetplanning-elia-connection-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/Microsoft.Insights/metricAlerts/mcprd-vpp-mssql-assetplanning-elia-connection-p",
+          "alertState": "New",
+          "description": "Action will be triggered when count of connections failed is greater than 0.",
+          "lastModifiedDateTime": "2026-05-01T20:35:29.6142135Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-01T20:35:32.7253453Z",
+          "monitorService": "Platform",
+          "severity": "Sev1",
+          "signalType": "Metric",
+          "sourceCreatedId": "f007df01-9295-491c-b0e9-e3981f2df0b0_mcprd-rg-vpp-p-mon_Microsoft.Insights_metricAlerts_mcprd-vpp-mssql-assetplanning-elia-connection-p_-2084599385",
+          "startDateTime": "2026-05-01T20:28:21.8757206Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning-elia",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "assetplanning-elia",
+          "targetResourceType": "servers"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/asset/providers/Microsoft.AlertsManagement/alerts/4ead562e-dada-43a4-9fc5-b3bf164df000",
+      "name": "mcprd-vpp-mssql-asset-connection-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/Microsoft.Insights/metricAlerts/mcprd-vpp-mssql-asset-connection-p",
+          "alertState": "New",
+          "description": "Action will be triggered when count of connections failed is greater than 0.",
+          "lastModifiedDateTime": "2026-05-01T20:35:25.3565702Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-01T20:35:25.8568769Z",
+          "monitorService": "Platform",
+          "severity": "Sev1",
+          "signalType": "Metric",
+          "sourceCreatedId": "f007df01-9295-491c-b0e9-e3981f2df0b0_mcprd-rg-vpp-p-mon_Microsoft.Insights_metricAlerts_mcprd-vpp-mssql-asset-connection-p_-1502292906",
+          "startDateTime": "2026-05-01T20:28:30.9286099Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/asset",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "asset",
+          "targetResourceType": "servers"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning-assets/providers/Microsoft.AlertsManagement/alerts/236eae8f-d8ef-4c59-a8cc-d85ce2c7f000",
+      "name": "mcprd-vpp-mssql-assetplanning-assets-connection-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/Microsoft.Insights/metricAlerts/mcprd-vpp-mssql-assetplanning-assets-connection-p",
+          "alertState": "New",
+          "description": "Action will be triggered when count of connections failed is greater than 0.",
+          "lastModifiedDateTime": "2026-05-01T20:35:09.3680437Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-01T20:35:09.838793Z",
+          "monitorService": "Platform",
+          "severity": "Sev1",
+          "signalType": "Metric",
+          "sourceCreatedId": "f007df01-9295-491c-b0e9-e3981f2df0b0_mcprd-rg-vpp-p-mon_Microsoft.Insights_metricAlerts_mcprd-vpp-mssql-assetplanning-assets-connection-p_-681949851",
+          "startDateTime": "2026-05-01T20:28:26.6749284Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning-assets",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "assetplanning-assets",
+          "targetResourceType": "servers"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning-elia/providers/Microsoft.AlertsManagement/alerts/7e4573c4-cc64-9fde-b1be-5ec91e4cf000",
+      "name": "Resource Health VPP resources",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-network-ejkm/providers/microsoft.insights/activityLogAlerts/Resource Health VPP resources",
+          "alertState": "New",
+          "description": "",
+          "lastModifiedDateTime": "2026-05-01T20:19:02.4342329Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "Resource Health",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "2461ace9-c21f-4937-8e8b-18d1c0f205b9_c5e9f1d7db1c4a527387af37bb4e1f37",
+          "startDateTime": "2026-05-01T20:19:02.4342329Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning-elia",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "assetplanning-elia",
+          "targetResourceType": "servers"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning-elia/providers/Microsoft.AlertsManagement/alerts/7c88b859-b5ec-911a-0a68-9829586af000",
+      "name": "mcprd-vpp-mssql-assetplanning-elia-health-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/microsoft.insights/activityLogAlerts/mcprd-vpp-mssql-assetplanning-elia-health-p",
+          "alertState": "New",
+          "description": "Azure Resource Health Check",
+          "lastModifiedDateTime": "2026-05-01T20:18:58.7631654Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "Resource Health",
+          "severity": "Sev4",
+          "signalType": "Log",
+          "sourceCreatedId": "2461ace9-c21f-4937-8e8b-18d1c0f205b9_28ea1afa853970b2841ce8e56d24fb6e",
+          "startDateTime": "2026-05-01T20:18:58.7631654Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning-elia",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "assetplanning-elia",
+          "targetResourceType": "servers"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    },
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning-elia/providers/Microsoft.AlertsManagement/alerts/5986ad29-2ccb-48b7-8d8d-569b7fcef000",
+      "name": "mcprd-vpp-mssql-assetplanning-elia-connection-p",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-mon/providers/Microsoft.Insights/metricAlerts/mcprd-vpp-mssql-assetplanning-elia-connection-p",
+          "alertState": "New",
+          "description": "Action will be triggered when count of connections failed is greater than 0.",
+          "lastModifiedDateTime": "2026-05-01T20:13:22.3049087Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Resolved",
+          "monitorConditionResolvedDateTime": "2026-05-01T20:13:22.6337918Z",
+          "monitorService": "Platform",
+          "severity": "Sev1",
+          "signalType": "Metric",
+          "sourceCreatedId": "f007df01-9295-491c-b0e9-e3981f2df0b0_mcprd-rg-vpp-p-mon_Microsoft.Insights_metricAlerts_mcprd-vpp-mssql-assetplanning-elia-connection-p_-2084599385",
+          "startDateTime": "2026-05-01T20:06:45.2166698Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourcegroups/mcprd-rg-vpp-p-storage/providers/microsoft.sql/servers/vpp-sqlserver-p/databases/assetplanning-elia",
+          "targetResourceGroup": "mcprd-rg-vpp-p-storage",
+          "targetResourceName": "assetplanning-elia",
+          "targetResourceType": "servers"
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    }
+  ]
+}

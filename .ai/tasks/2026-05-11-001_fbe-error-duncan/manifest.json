@@ -1,0 +1,60 @@
+{
+  "task_id": "2026-05-11-001",
+  "slug": "fbe-error-duncan",
+  "task_root": ".ai/tasks/2026-05-11-001_fbe-error-duncan",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/_index.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/_index.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/pattern-azure-resource-orphan-on-slot-reuse.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/recipe-resolve-apply-time-resource-already-exists.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/2026-05-11-kidu-orphan-premium-eventhub-namespace-rca.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/2026-05-11-kidu-orphan-premium-eventhub-namespace-fix.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/2026-05-11-kidu-orphan-premium-eventhub-namespace-explanation.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/2026-05-11-kidu-orphan-premium-eventhub-namespace-lessons.md",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/build-ledgers/2026-05-11-120000-fbe-errors-build.md",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/build-ledgers/2026-05-11-130000-fbe-errors-cve-pattern-build.md",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/knowledge-checks/2026-05-11-122000-fbe-errors-zone-check.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/pattern-fbe-service-build-blocked-by-transitive-cve.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/recipe-resolve-nu1902-nu1903-build-failure.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/pattern-argocd-pat-expiry-blocks-new-fbe-apps.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/recipe-rotate-argocd-sandbox-pat.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/2026-05-11-pat-expiry-argocd-auth-break.md"
+  ],
+  "created_files": [
+    ".ai/tasks/2026-05-11-001_fbe-error-duncan/manifest.json",
+    ".ai/tasks/2026-05-11-001_fbe-error-duncan/01-task-requirements-initial.md"
+  ],
+  "modified_files": [
+    ".ai/runtime/current-task.json"
+  ],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "completed_adversarial_dispatches": [
+    {"agent": "socrates-contrarian", "verdict": "PROCEED-WITH-CHANGES", "artifact": "auxiliary/adversarial-review-socrates.md", "critical_findings": 0, "high_findings": 5, "medium_findings": 7, "low_findings": 6, "absorbed": true},
+    {"agent": "el-demoledor", "verdict": "PROCEED-WITH-CHANGES", "artifact": "auxiliary/adversarial-review-eldemoledor.md", "critical_findings": 3, "high_findings": 3, "medium_findings": 4, "low_findings": 5, "absorbed": true}
+  ],
+  "gate_witnesses": [
+    {"claim": "orphan namespace vpp-evh-premium-kidu exists since 2025-06-10", "witness_type": "external-runtime-output", "evidence": "proofs/outputs/probe-01-namespace-show.json"},
+    {"claim": "orphan namespace is empty (no event hubs, no consumer groups)", "witness_type": "external-runtime-output", "evidence": "az eventhubs eventhub list returned []; in adversarial-review-eldemoledor.md confirmed via independent probe"},
+    {"claim": "Duncan's lease is held on slot kidu with branch fbe-821600-date-selector-flex-reservation-dashboard", "witness_type": "external-agent-artifact", "evidence": "auxiliary/adversarial-review-eldemoledor.md (el-demoledor independently verified via storage account key auth)"},
+    {"claim": "Pipeline 2412 YAML is consistent across all 9 worktrees", "witness_type": "external-agent-artifact", "evidence": "auxiliary/adversarial-review-eldemoledor.md"},
+    {"claim": "diagnosis (F2-adjacent apply-time orphan) is materially correct", "witness_type": "external-agent-artifact", "evidence": "both adversarial reviews concluded diagnosis survives falsification"},
+    {"claim": "polling loop in original fix.md Step 4 has a silent-failure mode (EXPLOIT-VERIFIED)", "witness_type": "external-agent-artifact", "evidence": "auxiliary/adversarial-review-eldemoledor.md C1 (reproduced via az account clear)"}
+  ],
+  "runtime_attacks": [],
+  "gate_witnesses": [],
+  "created_at": "2026-05-11",
+  "modified_at": "2026-05-11",
+  "domain_class": "knowledge",
+  "control_plane_artifact": false,
+  "crubvg": {"C": 2, "R": 1, "U": 2, "B": 1, "V": 1, "G": 1, "total": 9, "g_adjusted": true},
+  "compression_mode": "Full",
+  "skill_invoked": "rca-holistic",
+  "input_mode": "ENRICH",
+  "domain_prior": "low",
+  "intake_antecedents": [
+    "log/employer/eneco/02_on_call_shift/2026_05_11_fbe_error_duncan/context.md",
+    "log/employer/eneco/02_on_call_shift/2026_05_11_fbe_error_duncan/slack-intake.txt"
+  ]
+}

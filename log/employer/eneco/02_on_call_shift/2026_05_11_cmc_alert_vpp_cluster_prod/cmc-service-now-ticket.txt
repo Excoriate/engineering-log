@@ -1,0 +1,36 @@
+Caller:
+Location: Utrecht
+Reported CI: Azure Cluster | namespace eneco-vpp-prd (in description)
+Cause CI: Azure Cluster | namespace eneco-vpp-prd (in description)
+Business Service: MCLZ - OpenShift Platform
+
+Description:
+Event details
+
+Trigger details
+Host	Eneco MCC - Production - Workload VPP
+Trigger	Azure - AlertName: vpp-resource-unhealthy
+Severity	Disaster
+Problem expression
+last(/Eneco MCC - Production - Workload VPP/azure.alerts.sev0[/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/scheduledqueryrules/vpp-resource-unhealthy])=1
+Recovery expression
+Event generation	Normal
+Allow manual close	No
+Enabled	Yes
+Event details
+Event	Azure - AlertName: vpp-resource-unhealthy
+Operational data
+1
+Severity	Disaster
+Time	2026-05-11 15:13:50
+Acknowledged	No
+Tags	action OC: nullclass: softwarecomponent: azure_alert
+Description
+AssignmentGroup: null
+
+Description:
+
+
+AlertType: Microsoft.Insights/scheduledQueryRules
+
+https://portal.azure.com/#view/Microsoft_OperationsManagementSuite_Workspace/Logs.Rea[…]icrosoft.OperationalInsights%2Fworkspaces%2Fvpp-log-analyt-p

@@ -1,0 +1,91 @@
+{
+  "task_id": "2026-05-11-005",
+  "slug": "cmc-alert-vpp-cluster-prod",
+  "task_root": ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod",
+  "predecessor_task": "2026-05-11-003_rootly-alert-ln2i9h-intake-rca",
+  "phase_current": 1,
+  "alert_identity_from_intake": {
+    "name": "vpp-resource-unhealthy",
+    "type": "Microsoft.Insights/scheduledQueryRules",
+    "resource_id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/scheduledqueryrules/vpp-resource-unhealthy",
+    "subscription_id": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+    "resource_group": "mcprd-rg-vpp-p-res",
+    "workspace": "vpp-log-analyt-p",
+    "namespace": "eneco-vpp-prd",
+    "business_service": "MCLZ - OpenShift Platform",
+    "host": "Eneco MCC - Production - Workload VPP",
+    "severity_text": "Disaster",
+    "severity_numeric": 0,
+    "fired_at": "2026-05-11 15:13:50",
+    "acknowledged": false,
+    "intake_channel": "ServiceNow (NOT Rootly)",
+    "intake_file": "log/employer/eneco/02_on_call_shift/2026_05_11_cmc_alert_vpp_cluster_prod/cmc-service-now-ticket.txt"
+  },
+  "phase_compression_mode": "Full",
+  "crubvg": {
+    "C": 1, "R": 0, "U": 2, "B": 2, "V": 2, "G": 2,
+    "sum": 9,
+    "g_adjustment": 1,
+    "total": 10
+  },
+  "domain_class": "investigation",
+  "control_plane_artifact": false,
+  "created": "2026-05-11",
+  "modified": "2026-05-11",
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_05_11_cmc_alert_vpp_cluster_prod/",
+    "log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/",
+    ".ai/memory/lessons-learned.json"
+  ],
+  "created_files": [
+    "log/employer/eneco/02_on_call_shift/2026_05_11_cmc_alert_vpp_cluster_prod/rca-supplement.md",
+    "log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/auxiliary/cross-rca-correlation-with-005.md",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/F1-falsifier-firing-window.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/F1-30min-before-fire.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/azure-alerts-last-hour.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/this-rule-alerts-1d.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/F4-resource-graph-history.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/F2-alert-processing-rules.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/F2-logic-apps.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/F2-snow-related.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/F2-diag-settings-sub.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/rootly-last-hour.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/microsoft-5Z1B-6KG-servicehealth.json",
+    ".ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/sidecars/last-30d-all-alerts.json"
+  ],
+  "modified_files": [],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_05_11_cmc_alert_vpp_cluster_prod/rca-supplement.md",
+    "log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/auxiliary/cross-rca-correlation-with-005.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    {"claim": "F1 BLOCKING — rule fired with count=1 in firing window (mechanism anomaly)", "witness_type": "external-runtime-output", "witness": "az monitor log-analytics query result saved at sidecars/F1-falsifier-firing-window.json (1 row) + sidecars/F1-30min-before-fire.json (3 rows total, only 1 in firing window)"},
+    {"claim": "F4 RESOLVED — rule never modified post-creation (A1 from two independent surfaces)", "witness_type": "external-runtime-output", "witness": "az graph resourcechanges returns total_records=0; combined with sidecars/azure-alert-rule-raw.json systemData createdAt == lastModifiedAt to the microsecond"},
+    {"claim": "Last-hour Azure alerts in PROD VPP subscription = 1 vpp-resource-unhealthy + 1 NEW sibling Service Health Issue (sev4) at 13:27:55 UTC", "witness_type": "external-runtime-output", "witness": "sidecars/azure-alerts-last-hour.json"},
+    {"claim": "Task 003 alert ln2I9h current state still acknowledged (not resolved)", "witness_type": "external-runtime-output", "witness": "rootly-api.sh GET /v1/alerts/ln2I9h output"},
+    {"claim": "Microsoft 5Z1B-6KG-class incident source-verified this session via live Service Health events API", "witness_type": "external-runtime-output", "witness": "sidecars/microsoft-5Z1B-6KG-servicehealth.json + az rest ResourceHealth/events filter West Europe returned the Mitigated event at 2026-05-11T13:10:37 UTC"},
+    {"claim": "Both prior-session adversarial reports (Socrates + El-Demoledor against rca.md) absorbed in supplement; 2 BLOCKING findings (F1 mechanism, F3 cluster falsifier) explicitly named and re-probed", "witness_type": "external-agent-artifact", "witness": "auxiliary/socrates-attack-on-rca.md + auxiliary/eldemoledor-attack-on-rca.md (prior session) absorbed in rca-supplement.md §2-§5"},
+    {"claim": "Cross-RCA correlation between task 003 (ln2I9h CPU throttling, dev) and task 005 (vpp-resource-unhealthy, prd) is grounded in shared Microsoft incident", "witness_type": "external-runtime-output", "witness": "Timestamps align: Microsoft impact 06:40-12:45 UTC contains ln2I9h fire at 11:45 UTC; Mitigated communication ingested at 13:10:36 UTC triggers vpp-resource-unhealthy at 13:12:43 UTC. Both surfaces probed in this session."}
+  ],
+  "context_universe": {
+    "L_code": {"status": "pending", "owner": "eneco-context-repos", "first_proof": "MC-VPP-Infrastructure /terraform/", "omitted_risk": "miss IaC drift"},
+    "L_config": {"status": "pending", "owner": "eneco-context-repos", "first_proof": "configuration/prd-alerts.tfvars", "omitted_risk": "miss threshold + ownership"},
+    "L_docs": {"status": "pending", "owner": "eneco-context-docs", "first_proof": "wiki search for alert + runbook", "omitted_risk": "miss documented runbook"},
+    "L_history": {"status": "pending", "owner": "coordinator-light", "first_proof": "git log on alert tf files", "omitted_risk": "miss recent change as suspect"},
+    "L_runtime_azure": {"status": "pending", "owner": "coordinator via /eneco-tools-connect-mc-environments", "first_proof": "az monitor activity-log + alert resource", "omitted_risk": "no payload = no diagnosis"},
+    "L_runtime_oc": {"status": "blocked_user_delegation", "owner": "user runs commands", "first_proof": "playbook executed by user", "omitted_risk": "no cluster state, only Azure surface"},
+    "L_intake": {"status": "active_first_read", "owner": "coordinator", "first_proof": "cmc-service-now-ticket.txt", "omitted_risk": "miss original framing - INTAKE IS SERVICE-NOW NOT ROOTLY"},
+    "L_precedent": {"status": "active", "owner": "coordinator", "first_proof": "lessons-learned.json + recall bundle + sibling on-call dirs", "omitted_risk": "symptom-patch repeat"}
+  },
+  "hypotheses": [
+    {"id": "H1", "claim": "Genuine cluster workload incident; Azure-side proxy alert surfaces OpenShift pathology", "elimination_condition": "Azure alert payload + oc cluster state both contradict workload-failure mechanism"},
+    {"id": "H2", "claim": "Noisy/structurally-flawed alert rule (CCoE-style false-positive on prod baseline)", "elimination_condition": "alert rule + threshold matched against >=30d historical metric distribution shows real anomaly"},
+    {"id": "H3", "claim": "Alert pipeline drift (multi-system convergence gap: ServiceNow != Rootly != Azure terminal state)", "elimination_condition": "ServiceNow ticket has full payload AND matching Azure alert in terminal state AND no orphan in Rootly"},
+    {"id": "H4", "claim": "Recent IaC change introduced alert misconfiguration", "elimination_condition": "git log of alert IaC on relevant tf files shows no change in last N days OR change is correctness-preserving"}
+  ],
+  "frames_planned": ["sherlock-holmes", "sre-maniac", "simplicity-maniac", "socrates-contrarian"],
+  "verifier_distinct_from_producer": "verification-engineer at P8 (NOT same subagent_type as P7 producer)"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/Microsoft.AlertsManagement/alerts/7ca25b09-e05e-cced-606d-cc4d91d5000e/history/default",
+  "name": "vpp-resource-unhealthy",
+  "properties": {
+    "alertId": "7ca25b09-e05e-cced-606d-cc4d91d5000e",
+    "modifications": [
+      {
+        "comments": "",
+        "description": "State changed from 'New' to 'Closed' by 'Alex.Torres@eneco.com'",
+        "modificationEvent": "StateChange",
+        "modifiedAt": "2026-05-11T15:06:40.5917898+00:00",
+        "modifiedBy": "Alex.Torres@eneco.com",
+        "newValue": "Closed",
+        "oldValue": "New"
+      },
+      {
+        "comments": "",
+        "description": "Action group mcc-ag-dyntr-jbju-prd executed (alert processing rule: mcc-apr-vpp-prd-rtok)",
+        "modificationEvent": "ActionsTriggered",
+        "modifiedAt": "2026-05-11T13:12:43.8047304Z",
+        "modifiedBy": "System",
+        "newValue": "",
+        "oldValue": ""
+      },
+      {
+        "comments": "",
+        "description": "Alert fired",
+        "modificationEvent": "AlertCreated",
+        "modifiedAt": "2026-05-11T13:12:43.2790702Z",
+        "modifiedBy": "System",
+        "newValue": "",
+        "oldValue": ""
+      }
+    ]
+  },
+  "type": "Microsoft.AlertsManagement/alerts"
+}

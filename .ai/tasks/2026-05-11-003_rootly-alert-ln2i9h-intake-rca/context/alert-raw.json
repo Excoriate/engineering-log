@@ -1,0 +1,19 @@
+═══ ALERT TRIAGE (Generic) ═══
+TITLE:       CPUThrottlingHigh
+DESCRIPTION: 49.76% throttling of CPU in namespace eneco-vpp for container otc-container in pod opentelemetry-collector-collector-566b6bd96-2htph.
+STATUS:      triggered
+URGENCY ID:  8824cd16-edb5-4bc3-8d0b-0ab833b1a8ac
+RECIPIENT:   N/A
+
+─── SOURCE DATA ───
+ALERTS       [{"annotations":{"description":"49.76% throttling of CPU in namespace eneco-vpp for container otc-co
+COMMONANNOTA {"description":"49.76% throttling of CPU in namespace eneco-vpp for container otc-container in pod o
+COMMONLABELS {"alertname":"CPUThrottlingHigh","container":"otc-container","label_team":"trade-platform","namespac
+EXTERNALURL  https://console-openshift-console.apps.eneco-vpp-dev.ceap.nl/monitoring
+GROUPKEY     {}/{namespace="eneco-vpp"}/{team="trade-platform"}:{alertname="CPUThrottlingHigh"}
+GROUPLABELS  {"alertname":"CPUThrottlingHigh"}
+RECEIVER     eneco-vpp/alertmanagerconfig/rootly-trade-platform
+
+─── ESCALATION ───
+TARGETS:     EscalationPolicy → 1b6ee744-4aca-45ed-9d00-2d1d2b5edbfa
+ROUTING:     EscalationPolicy → 1b6ee744-4aca-45ed-9d00-2d1d2b5edbfa

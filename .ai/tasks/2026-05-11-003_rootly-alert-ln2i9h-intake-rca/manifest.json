@@ -1,0 +1,86 @@
+{
+  "task_id": "2026-05-11-003",
+  "slug": "rootly-alert-ln2i9h-intake-rca",
+  "task_root": ".ai/tasks/2026-05-11-003_rootly-alert-ln2i9h-intake-rca",
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/"
+  ],
+  "created": "2026-05-11",
+  "modified": "2026-05-11",
+  "created_files": [
+    ".ai/tasks/2026-05-11-003_rootly-alert-ln2i9h-intake-rca/manifest.json",
+    ".ai/tasks/2026-05-11-003_rootly-alert-ln2i9h-intake-rca/requirements/01-task-requirements-initial.md"
+  ],
+  "modified_files": [
+    ".ai/runtime/current-task.json"
+  ],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "adversarial_dispatches_resolved": [
+    {
+      "agent_type": "sherlock-holmes",
+      "artifact_path": ".ai/tasks/2026-05-11-003_rootly-alert-ln2i9h-intake-rca/context/sherlock-diagnosis-attack.md",
+      "outcome": "PROBLEMATIC — diagnosis attacked successfully. Critical findings: (1) IaC source attribution wrong (FBE chart cited for eneco-vpp pod by name-match alone); (2) causal direction asserted, not earned (memory precedes CPU by 10d); (3) D-ALT-C debug:detailed exporter is simpler explanation; (4) team attribution via PromQL group_left, not CR metadata; (5) local clones 6mo stale — live oc is the only truth surface.",
+      "source_verified": true
+    },
+    {
+      "agent_type": "socrates-contrarian",
+      "artifact_path": ".ai/tasks/2026-05-11-003_rootly-alert-ln2i9h-intake-rca/context/socrates-framing-attack.md",
+      "outcome": "PROBLEMATIC — framing attacked successfully. Critical findings: F6 TERMINAL route rationalized (own rule yields HANDOVER); F1.3/F3.1 causal direction contradicted by temporal data; F3.3 migration regression (pre→post dropped spec.resources); F2.1 Rootly stock urgency-tier description quoted as team calibration.",
+      "source_verified": true
+    },
+    {
+      "agent_type": "socrates-contrarian-post-draft",
+      "artifact_path": "log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/auxiliary/socrates-post-draft-attack.md",
+      "outcome": "PROCEED-WITH-CHANGES — 12 must-fix items; strongest = Check 6 HANDOVER inversion was rhetorical only (eneco-oncall-intake-enrich was never named in deliverable). All 12 must-fix items absorbed in revised rca.md per Absorption map.",
+      "source_verified": true
+    },
+    {
+      "agent_type": "el-demoledor-post-draft",
+      "artifact_path": "log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/auxiliary/el-demoledor-post-draft-attack.md",
+      "outcome": "DELAY-AND-FIX — 19 breaks (4 CRITICAL, 8 HIGH, 7 MEDIUM); strongest = S3-V1 scratchpad in published RCA; S1-V1 TL;DR forward-reference; S2-V3 unprobed 'vendor stock' claim. All critical+high breaks absorbed in revised rca.md per Absorption map.",
+      "source_verified": true
+    }
+  ],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    {
+      "claim": "Alert ln2I9h canonical payload exists and decodes",
+      "witness_type": "external-runtime-output",
+      "witness": "rootly-alert-decode.sh stdout saved at antecedents/rootly-alert-raw-decoded.txt + rootly-alert-payload.json"
+    },
+    {
+      "claim": "30-day rule history pattern (Known rule × Novel target)",
+      "witness_type": "external-runtime-output",
+      "witness": "rootly-api.sh /v1/alerts saved at proofs/outputs/rootly-cputhrottlinghigh-30d-history.tsv (30 rows; pagination caveat noted)"
+    },
+    {
+      "claim": "Rootly tier descriptions are workspace defaults (not team-authored)",
+      "witness_type": "external-runtime-output",
+      "witness": "rootly-api.sh /v1/alert_urgencies saved at proofs/outputs/rootly-alert-urgencies.tsv (4 rows; Critical+High share identical description, team_id:null, batch-created 2025-11-18)"
+    },
+    {
+      "claim": "Diagnosis is contested — 4 competing hypotheses with dependency structure (H-B/H-D upstream of H-A; H-C orthogonal)",
+      "witness_type": "external-agent-artifact",
+      "witness": "context/sherlock-diagnosis-attack.md (Sherlock §0 demolished file-source attribution; D-ALT-A and D-ALT-C produced)"
+    },
+    {
+      "claim": "Phase 6D routing is HANDOVER (not TERMINAL); the rationalization was caught and fixed",
+      "witness_type": "external-agent-artifact",
+      "witness": "auxiliary/socrates-post-draft-attack.md Check 6 (rationalization survived first absorption; revised RCA now has explicit Recommended next action section + frontmatter mode:HANDOVER)"
+    },
+    {
+      "claim": "Reader-pressure surfaces validated — TL;DR + Decision card + L12 are action-first and standalone",
+      "witness_type": "external-agent-artifact",
+      "witness": "auxiliary/el-demoledor-post-draft-attack.md S1-V1/V2/V3 (forward-reference TL;DR + phone-actionable branch deficiencies caught and fixed)"
+    }
+  ],
+  "predecessor_task": "2026-05-11-002_rotating-expired-argocd-secrets",
+  "skills_invoked": ["eneco-oncall-intake-rootly"],
+  "skills_pending": ["rca-holistic"],
+  "compression_mode": "Normal",
+  "domain_class": "investigation",
+  "control_plane_artifact": false,
+  "crubvg": {"C": 1, "R": 0, "U": 2, "B": 0, "V": 1, "G": 1, "total": 5}
+}

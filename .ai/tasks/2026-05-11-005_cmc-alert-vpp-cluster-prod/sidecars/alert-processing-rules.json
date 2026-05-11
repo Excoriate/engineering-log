@@ -1,0 +1,50 @@
+WARNING: Preview version of extension is disabled by default for extension installation, enabled for modules without stable versions. 
+WARNING: Please run 'az config set extension.dynamic_install_allow_preview=true or false' to config it specifically. 
+WARNING: The command requires the extension alertsmanagement. It will be installed first.
+WARNING: No stable version of 'alertsmanagement' to install. Preview versions allowed.
+WARNING: The installed extension 'alertsmanagement' is in preview.
+WARNING: Command group 'monitor alert-processing-rule' is in preview and under development. Reference and support levels: https://aka.ms/CLI_refstatus
+[
+  {
+    "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcc-rg-alerts-prd-zizq/providers/Microsoft.AlertsManagement/actionRules/mcc-apr-vpp-prd-rtok",
+    "location": "global",
+    "name": "mcc-apr-vpp-prd-rtok",
+    "properties": {
+      "actions": [
+        {
+          "actionGroupIds": [
+            "/subscriptions/6c1ab7bd-97b5-4179-8077-ac85acf7bd03/resourceGroups/mcc-rg-dynatrace-prd/providers/Microsoft.Insights/actionGroups/mcc-ag-dyntr-jbju-prd"
+          ],
+          "actionType": "AddActionGroups"
+        }
+      ],
+      "conditions": null,
+      "description": "This alert processing rule sends fired alerts to Dynatrace",
+      "enabled": true,
+      "schedule": null,
+      "scopes": [
+        "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0"
+      ]
+    },
+    "resourceGroup": "mcc-rg-alerts-prd-zizq",
+    "systemData": {
+      "createdAt": "2026-03-02T09:01:18.033010+00:00",
+      "createdBy": "d3e43deb-c981-4f86-9e12-baf6e7a5790b",
+      "createdByType": "Application",
+      "lastModifiedAt": "2026-03-02T09:01:18.033010+00:00",
+      "lastModifiedBy": "d3e43deb-c981-4f86-9e12-baf6e7a5790b",
+      "lastModifiedByType": "Application"
+    },
+    "tags": {
+      "AZDOProject": "MCC Landing Zone",
+      "BusinessUnit": "CMC",
+      "DR": "NON-DR-ENABLED",
+      "costCenter": "0",
+      "deployedFromFolder": "043_subs-vpp-workload",
+      "deploymentType": "Terraform",
+      "environment": "eneco",
+      "owner": "CMC"
+    },
+    "type": "Microsoft.AlertsManagement/actionRules"
+  }
+]

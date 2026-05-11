@@ -1,0 +1,31 @@
+{
+  "value": [
+    {
+      "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/providers/Microsoft.AlertsManagement/alerts/7ca25b09-e05e-cced-606d-cc4d91d5000e",
+      "name": "vpp-resource-unhealthy",
+      "properties": {
+        "essentials": {
+          "actionStatus": {
+            "isSuppressed": false
+          },
+          "alertRule": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/scheduledqueryrules/vpp-resource-unhealthy",
+          "alertState": "New",
+          "description": "",
+          "lastModifiedDateTime": "2026-05-11T13:12:43.2790702Z",
+          "lastModifiedUserName": "System",
+          "monitorCondition": "Fired",
+          "monitorService": "Log Alerts V2",
+          "severity": "Sev0",
+          "signalType": "Log",
+          "sourceCreatedId": "22ed515b-24d3-26ce-3fb3-09cfc5158afb",
+          "startDateTime": "2026-05-11T13:12:43.2790702Z",
+          "targetResource": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceGroup": "",
+          "targetResourceName": "f007df01-9295-491c-b0e9-e3981f2df0b0",
+          "targetResourceType": ""
+        }
+      },
+      "type": "microsoft.alertsmanagement/alerts"
+    }
+  ]
+}

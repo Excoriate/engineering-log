@@ -1,0 +1,117 @@
+{
+  "ID": "bdf7ed9c-4151-40fd-aacb-755823f1eaf5",
+  "alerts": [
+    {
+      "endsAt": "0001-01-01T00:00:00Z",
+      "labels": {
+        "pod": "opentelemetry-collector-collector-566b6bd96-2htph",
+        "team": "trade-platform",
+        "severity": "info",
+        "alertname": "CPUThrottlingHigh",
+        "container": "otc-container",
+        "namespace": "eneco-vpp",
+        "label_team": "trade-platform"
+      },
+      "status": "firing",
+      "startsAt": "2026-05-11T11:45:29.281Z",
+      "annotations": {
+        "summary": "Processes experience elevated CPU throttling.",
+        "description": "49.76% throttling of CPU in namespace eneco-vpp for container otc-container in pod opentelemetry-collector-collector-566b6bd96-2htph.",
+        "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh"
+      },
+      "fingerprint": "26cc818be9951810",
+      "generatorURL": "https://console-openshift-console.apps.eneco-vpp-dev.ceap.nl/monitoring/graph?g0.expr=%28sum+by+%28container%2C+pod%2C+namespace%29+%28increase%28container_cpu_cfs_throttled_periods_total%7Bcontainer%21%3D%22%22%2Cnamespace%3D%22eneco-vpp%22%7D%5B5m%5D%29%29+%2F+sum+by+%28container%2C+pod%2C+namespace%29+%28increase%28container_cpu_cfs_periods_total%7Bnamespace%3D%22eneco-vpp%22%7D%5B5m%5D%29%29+%3E+%2825+%2F+100%29%29+%2A+on+%28namespace%2C+pod%29+group_left+%28label_team%29+kube_pod_labels%7Bjob%3D%22kube-state-metrics%22%2Cnamespace%3D%22eneco-vpp%22%7D&g0.tab=1"
+    }
+  ],
+  "rootly": {
+    "title": "CPUThrottlingHigh",
+    "description": "49.76% throttling of CPU in namespace eneco-vpp for container otc-container in pod opentelemetry-collector-collector-566b6bd96-2htph.",
+    "alert_source_url": "https://console-openshift-console.apps.eneco-vpp-dev.ceap.nl/monitoring/graph?g0.expr=%28sum+by+%28container%2C+pod%2C+namespace%29+%28increase%28container_cpu_cfs_throttled_periods_total%7Bcontainer%21%3D%22%22%2Cnamespace%3D%22eneco-vpp%22%7D%5B5m%5D%29%29+%2F+sum+by+%28container%2C+pod%2C+namespace%29+%28increase%28container_cpu_cfs_periods_total%7Bnamespace%3D%22eneco-vpp%22%7D%5B5m%5D%29%29+%3E+%2825+%2F+100%29%29+%2A+on+%28namespace%2C+pod%29+group_left+%28label_team%29+kube_pod_labels%7Bjob%3D%22kube-state-metrics%22%2Cnamespace%3D%22eneco-vpp%22%7D&g0.tab=1",
+    "alerting_targets": [
+      {
+        "id": "1b6ee744-4aca-45ed-9d00-2d1d2b5edbfa",
+        "type": "EscalationPolicy"
+      }
+    ]
+  },
+  "status": "firing",
+  "version": "4",
+  "groupKey": "{}/{namespace=\"eneco-vpp\"}/{team=\"trade-platform\"}:{alertname=\"CPUThrottlingHigh\"}",
+  "receiver": "eneco-vpp/alertmanagerconfig/rootly-trade-platform",
+  "externalURL": "https://console-openshift-console.apps.eneco-vpp-dev.ceap.nl/monitoring",
+  "groupLabels": {
+    "alertname": "CPUThrottlingHigh"
+  },
+  "alert_fields": [
+    {
+      "kind": "custom",
+      "value": "eneco-vpp",
+      "template": "{{ alert.data.commonLabels.namespace }}",
+      "alert_field_id": "2a83962c-c648-45b9-a3bc-3891b780f7c6",
+      "alert_source_field_id": "fd42a8bc-d366-4999-b97a-bf375f5cde1c"
+    },
+    {
+      "kind": "custom",
+      "value": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+      "template": "{{ alert.data.commonAnnotations.runbook_url }}",
+      "alert_field_id": "52283ab0-18ae-4407-afd3-4961f591d2ff",
+      "alert_source_field_id": "1561f8fc-af3b-45f3-8468-ace9d072458d"
+    },
+    {
+      "kind": "custom",
+      "value": "development",
+      "template": "development",
+      "alert_field_id": "7dea5571-200c-40b4-9b6c-f3fbc9a90f99",
+      "alert_source_field_id": "c13cf975-5663-4305-abde-b5996ed45d87"
+    },
+    {
+      "kind": "external_url",
+      "value": "https://console-openshift-console.apps.eneco-vpp-dev.ceap.nl/monitoring/graph?g0.expr=%28sum+by+%28container%2C+pod%2C+namespace%29+%28increase%28container_cpu_cfs_throttled_periods_total%7Bcontainer%21%3D%22%22%2Cnamespace%3D%22eneco-vpp%22%7D%5B5m%5D%29%29+%2F+sum+by+%28container%2C+pod%2C+namespace%29+%28increase%28container_cpu_cfs_periods_total%7Bnamespace%3D%22eneco-vpp%22%7D%5B5m%5D%29%29+%3E+%2825+%2F+100%29%29+%2A+on+%28namespace%2C+pod%29+group_left+%28label_team%29+kube_pod_labels%7Bjob%3D%22kube-state-metrics%22%2Cnamespace%3D%22eneco-vpp%22%7D&g0.tab=1",
+      "template": "{{ alert.data.alerts[0].generatorURL }}",
+      "alert_field_id": "f9dd38bd-8f50-4b5f-88ea-a976b9db83d2",
+      "alert_source_field_id": "5d772678-5d05-41ce-8ad4-53354001d769"
+    },
+    {
+      "kind": "title",
+      "value": "CPUThrottlingHigh",
+      "template": "{{ alert.data.commonLabels.alertname }}",
+      "alert_field_id": "2cd6727a-d14e-4af1-8132-78fa03891769",
+      "alert_source_field_id": "2349799c-0063-4d42-b9df-3dc30342fad0"
+    },
+    {
+      "kind": "description",
+      "value": "49.76% throttling of CPU in namespace eneco-vpp for container otc-container in pod opentelemetry-collector-collector-566b6bd96-2htph.",
+      "template": "{{ alert.data.commonAnnotations.description }}",
+      "alert_field_id": "89b895d5-d238-4aeb-815c-98b85bdae6ec",
+      "alert_source_field_id": "8692f013-6692-4532-92f0-a952fd77d214"
+    }
+  ],
+  "commonLabels": {
+    "pod": "opentelemetry-collector-collector-566b6bd96-2htph",
+    "team": "trade-platform",
+    "severity": "info",
+    "alertname": "CPUThrottlingHigh",
+    "container": "otc-container",
+    "namespace": "eneco-vpp",
+    "label_team": "trade-platform"
+  },
+  "routing_rules": [
+    {
+      "id": "f4a0e4c1-f2ab-4ee8-8309-21b56db807ad",
+      "targets": [
+        {
+          "id": "1b6ee744-4aca-45ed-9d00-2d1d2b5edbfa",
+          "type": "EscalationPolicy"
+        }
+      ]
+    }
+  ],
+  "truncatedAlerts": 0,
+  "alert_urgency_id": "8824cd16-edb5-4bc3-8d0b-0ab833b1a8ac",
+  "commonAnnotations": {
+    "summary": "Processes experience elevated CPU throttling.",
+    "description": "49.76% throttling of CPU in namespace eneco-vpp for container otc-container in pod opentelemetry-collector-collector-566b6bd96-2htph.",
+    "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh"
+  },
+  "rootly_alert_status": "triggered"
+}

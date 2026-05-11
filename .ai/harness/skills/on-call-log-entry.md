@@ -1,0 +1,105 @@
+---
+name: on-call-log-entry
+description: On-call incident log entry workflow — guides creation of complete incident log with slack intake, context, holistic RCA, and fix documents. Prevents common evidence-labeling and structure mistakes.
+type: skill
+globs: ["log/employer/eneco/02_on_call_shift/**"]
+---
+
+# Skill: on-call-log-entry
+
+## Trigger Phrases
+
+- "log this incident"
+- "create on-call log"
+- "document this on-call"
+- "write the RCA for"
+- "incident log for"
+- "on-call shift entry"
+- "create incident directory"
+
+## Why Rules Alone Fail
+
+Rules list the structure but don't sequence the creation steps or prevent the most common failure: writing the RCA before the Context Ledger, leading to undefined acronyms and unverified claims.
+
+## Files Touched (minimum 4)
+
+1. `log/employer/eneco/02_on_call_shift/{YYYY_MM_DD}_{slug}/slack-intake.txt`
+2. `log/employer/eneco/02_on_call_shift/{YYYY_MM_DD}_{slug}/context.md`
+3. `log/employer/eneco/02_on_call_shift/{YYYY_MM_DD}_{slug}/rca.md`
+4. `log/employer/eneco/02_on_call_shift/{YYYY_MM_DD}_{slug}/fix.md`
+
+## Steps (in order — DO NOT skip or reorder)
+
+1. **Create directory** `log/employer/eneco/02_on_call_shift/{YYYY_MM_DD}_{slug}/`
+   - Slug: kebab-case incident description (e.g., `fbe-create-orphan-namespace`)
+   - Done-when: directory exists
+
+2. **Save raw intake** → `slack-intake.txt`
+   - Paste Slack message verbatim
+   - Never edit or summarize the intake
+   - Done-when: file contains raw intake text
+
+3. **Build Context Ledger** → start `context.md`
+   - Table: every acronym used in this incident → definition → code artifact → relevance
+   - Zero-context reader test: would a new engineer understand after reading just this table?
+   - Done-when: every acronym in the intake is in the table
+
+4. **Map the evidence** → continue `context.md`
+   - Document investigation probes with full commands and output
+   - Label every claim: `A1 FACT` / `A2 INFER` / `A3 UNVERIFIED[blocked: reason]`
+   - Done-when: root cause has A1 evidence
+
+5. **Write fix first** → `fix.md`
+   - Write the fix commands BEFORE the full RCA narrative
+   - Include verification commands
+   - Label each command's expected output
+   - Done-when: fix is executable end-to-end
+
+6. **Write holistic RCA** → `rca.md`
+   - Follow L1-L12 layer structure (see `on-call-incident-workflow.md` rule)
+   - Every claim carries A1/A2/A3 label — no unverified claims as facts
+   - Done-when: all 12 layers complete
+
+7. **Extract durable lessons** (dual-path: markdown FIRST → JSON second)
+   - If `$SECOND_BRAIN_PATH` or `$SECOND_BRAIN_VAULT_LOCAL` is set:
+     1. Write markdown companion FIRST to `$SECOND_BRAIN_PATH/llm-wiki/learnings/{lessons|gotchas}/`
+     2. THEN add entry to `.ai/memory/lessons-learned.json`
+     3. Acceptance: markdown file MUST exist before JSON entry is written
+   - If Second Brain not configured: write JSON only
+   - Done-when: at least one lesson extracted or explicit "incident is one-off" decision recorded
+
+8. **Update ubiquitous language** → `.ai/harness/ddd-ubiquitous-language.md`
+   - Add any new domain terms discovered during the incident
+   - Enforcement: run this grep to find potential new terms that may be missing:
+     ```bash
+     grep -oE '\b[A-Z][A-Za-z]{2,}\b' rca.md | sort -u | comm -23 - \
+       <(grep '^\*\*' .ai/harness/ddd-ubiquitous-language.md | sed 's/\*\*//g' | awk '{print $1}' | sort -u)
+     ```
+   - Non-empty output = potential unlisted terms; check each one
+   - Done-when: all terms from Context Ledger are in ubiquitous language AND the grep above returns empty for all new capitalized terms
+
+## Invariants (what breaks if skipped)
+
+- Skip step 3 (Context Ledger) → RCA full of undefined acronyms, zero-context reader fails
+- Skip step 4 (evidence labeling) → unverified claims stated as facts = harness violation
+- Skip step 5 (fix first) → fix commands incomplete when RCA is needed urgently
+- Skip step 7 (lessons) → incident knowledge lost, same pattern will be rediscovered next shift
+
+## Verification
+
+- All 4 files exist and are non-empty
+- `rca.md` contains `A1 FACT` at least once
+- `rca.md` has `## Context Ledger` section
+- No new domain terms in RCA that are absent from `ddd-ubiquitous-language.md`
+- `lessons-learned.json` is valid JSON after update
+
+## Impact
+
+HIGH — prevents the most common quality failure in on-call logs: unverifiable claims and undefined acronyms that make the RCA useless to the next-shift engineer.
+
+## Relevant Subagents
+
+- `/rca-holistic` — generates L1-L12 holistic RCA
+- `/eneco-oncall-intake-slack` — harvests and triages Slack intake
+- `/eneco-oncall-intake-rootly` — decodes Rootly alert payloads
+- `/eneco-oncall-intake-enrich` — deep investigation with probes

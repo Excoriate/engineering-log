@@ -1,0 +1,193 @@
+{
+  "task_id": "2026-05-11-002",
+  "slug": "rotating-expired-argocd-secrets",
+  "task_root": ".ai/tasks/2026-05-11-002_rotating-expired-argocd-secrets",
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_05_11_rotating_expired_argocd_secrets/"
+  ],
+  "created": "2026-05-11",
+  "modified": "2026-05-11",
+  "created_files": [
+    ".ai/tasks/2026-05-11-002_rotating-expired-argocd-secrets/manifest.json",
+    ".ai/tasks/2026-05-11-002_rotating-expired-argocd-secrets/01-task-requirements-initial.md"
+  ],
+  "modified_files": [
+    ".ai/runtime/current-task.json"
+  ],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_05_11_rotating_expired_argocd_secrets/draft-rotation-secrets.md",
+    "log/employer/eneco/02_on_call_shift/2026_05_11_rotating_expired_argocd_secrets/how-to-rotate.md",
+    "log/employer/eneco/02_on_call_shift/2026_05_11_rotating_expired_argocd_secrets/proposal-rotation-automation.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [
+    {
+      "phase": 4,
+      "kind": "context-research-sidecar",
+      "agent": "general-purpose+eneco-context-slack",
+      "question": "Has the rotation procedure been described in Slack history? MC cluster rotation precedent? PAT-expiry alert generator identity?",
+      "artifact_path": "context/slack-rotation-harvest.md",
+      "dispatched_at": "2026-05-11",
+      "status": "completed",
+      "agent_id": "a8d84c2816b34ebe3",
+      "key_findings": [
+        "Fabrizio verbatim today: 'Nope. There is no documentation for this. It is a good opportunity to create one. You can give me a call and I explain you the process.'",
+        "Roel 2026-03-03: 'I asked him to update a PAT for me in the CMC ArgoCD instance for the Goldilocks application' — MC PATs operated by CMC-side staff (Lex from CMC), not Platform team",
+        "PAT-expiry alert generator: PR 140615 in Myriad-VPP/devops repo, ADO scheduled pipeline monitoring sa_platform_vpp PATs, posts to #myriad-alerts-devops daily ~13:01 CEST",
+        "Credentials NOT in Azure KV (for the SA itself) — Trade Platform Team password vault (1Password/Bitwarden); Roel 2026-01-23: 'way cooler than sharing through a stupid KeyVault'",
+        "Dec 29 F4 thread: C063SNM8PK5/p1767014621744099 — Fabrizio rotated SP 6db398ec-... sequentially across Thor/Voltex/Jupiter/integrationtest/Kidu over ~1h+",
+        "Fabrizio DM 2026-04-10: 'this is a shit job to be done and can cause outages' — explicit backing for automation proposal",
+        "PXQ incident 2026-05-07: keyvault client secret expired (same class)",
+        "INC-75 (2024-11-19, Fabrizio): 'This manual process is error-prone and must be automated.'",
+        "2025-01-17 sandbox SP rotation also touched ADO library variable group eneco-vpp-sandbox"
+      ]
+    },
+    {
+      "phase": 4,
+      "kind": "context-research-sidecar",
+      "agent": "general-purpose+eneco-context-docs",
+      "question": "Is the rotation procedure in ADO wiki? MC ArgoCD installation docs? goldilocks repo identity? KV-to-cluster sync mechanism?",
+      "artifact_path": "context/wiki-rotation-search.md",
+      "dispatched_at": "2026-05-11",
+      "status": "completed",
+      "agent_id": "aae37286e8d19116a",
+      "key_findings": [
+        "MC ArgoCD URLs: eneco-vpp-server-eneco-vpp-argocd.apps.eneco-vpp-{dev,acc,prd}.ceap.nl",
+        "TWO ArgoCD instances per MC cluster (eneco-vpp-argocd custom + openshift-gitops); ambiguous which holds gitops-vpp PAT",
+        "PAT-expiry alert generator: ADO pipeline definitionId 2735",
+        "KV candidate: vpp-aks-devops (different from vault's vpp-appsec-d)",
+        "Roel's hint (Jan 2026): ~30 second refresh of repository connectivity secret",
+        "No formal rotation SLA exists",
+        "goldilocks NOT FOUND in any wiki or DesignDecisions",
+        "Sandbox ArgoCD identity: appreg appreg-vpp-argocd-id-d, sg-vpp-platform"
+      ]
+    },
+    {
+      "phase": 5,
+      "kind": "adversarial-frame",
+      "agent": "socrates-contrarian",
+      "question": "Attack inherited interpretation of vault recipe + Fabrizio quote + simplest-mechanism hypothesis from Q2",
+      "artifact_path": "auxiliary/socrates-attack-on-procedure.md",
+      "dispatched_at": "2026-05-11",
+      "status": "completed",
+      "agent_id": "a24b3ba87e263f19e",
+      "key_findings": [
+        "Attack 1 (kubectl patch): VERDICT REVISE — IaC absence != reconciler absence; require hard ownership-probe gate (Step 4.5)",
+        "Attack 2 (Fabrizio no-doc): VERDICT REVISE — Platform-team-internal wiki + 1Password notes not searched; require Fabrizio DM + targeted probe before publishing",
+        "Attack 3 (simplest mechanism): VERDICT REVISE — conflates mint authority vs apply authority; split actor model; explicit secure-transmission channel for PAT handoff (NOT Slack DM)",
+        "Attack 4 NEW (two-clock problem): VERDICT REVISE — ApplicationSet lastTransitionTime != controller credential cache state; add Step 6.5 argocd repo get connectionState + resourceVersion delta + controller log evidence",
+        "Cross-attack pattern: 'observable absence treated as evidence of absence' / 'observable success treated as evidence of correctness'. Every load-bearing absence claim must cite search scope OR mark [PENDING]",
+        "Domain gaps warranting additional typed-specialist dispatch: OpenShift GitOps Operator reconciler semantics; ADO admin-mint API authority"
+      ]
+    },
+    {
+      "phase": 8,
+      "kind": "adversarial-check-the-verification",
+      "agent": "linus-torvalds",
+      "question": "Am I verifying the right thing? Cross-document consistency + reader-mode mastery + Fabrizio's predicted reaction",
+      "artifact_path": "verification/adversarial-check-the-verification.md",
+      "dispatched_at": "2026-05-11",
+      "status": "completed",
+      "verdict": "PARTIAL → PASS after 3 BLOCKING + 5 non-blocking fixes applied",
+      "blocking_fixes_applied": 3,
+      "nonblocking_fixes_applied": 5
+    },
+    {
+      "phase": 5,
+      "kind": "adversarial-frame",
+      "agent": "el-demoledor",
+      "question": "Attack each Decision Rule in the planned runbook; find counter-examples; break the procedure",
+      "artifact_path": "auxiliary/eldemoledor-attack.md",
+      "dispatched_at": "2026-05-11",
+      "status": "completed",
+      "agent_id": "aa48448cb99e26a36",
+      "key_findings": [
+        "13 Decision Rules attacked, 4 EXPLOIT-VERIFIED, 7 PATTERN-MATCHED, 2 THEORETICAL",
+        "Verdicts: 0 HOLD, 9 HARDEN, 4 REWRITE",
+        "V5 REWRITE (Step 5 patch reverted by Helm/Operator reconcile) — smoking gun: Helm chart at iac-secret-templates.md:36-51",
+        "V11 REWRITE — DELETE option Y (KV update has no sync mechanism on MC; documentation theater)",
+        "V10 REWRITE — Section B must be a request-template not procedure (Roel 'asked him [Lex from CMC]')",
+        "V8 REWRITE — Request-Context + x-correlation-id can be NGINX-injected; require response body match + pod readiness",
+        "3 root-cause generators: (1) Ownership model absent, (2) Single-probe success criteria, (3) Identity-of-minter ambiguous",
+        "Recommended: block publication on 4 [PENDING: ask Fabrizio] items; Section B DRAFT — DO NOT EXECUTE if unresolved; apply all 9 HARDEN regardless"
+      ]
+    },
+    {
+      "phase": 4,
+      "kind": "context-research-sidecar",
+      "agent": "general-purpose+eneco-context-repos",
+      "question": "IaC evidence for ArgoCD repo-secret management + KV-to-cluster sync mechanism + MC ArgoCD installation",
+      "artifact_path": "context/iac-secret-templates.md",
+      "dispatched_at": "2026-05-11",
+      "status": "completed",
+      "agent_id": "af8dc2f7554808675",
+      "key_findings": [
+        "Three different ArgoCD installs, three different repo-secret patterns — NOT homogeneous",
+        "Sandbox: Helm chart at myriad-vpp/ArgoCD-Config/Helm/repositories/templates/deployment.yaml — values pipeline-supplied",
+        "MC clusters: OpenShift GitOps Operator CR at mcc-landing-zone/gitops-vpp/gitops-vpp/main/argocd/{dev,acc,prd}/team-vpp/eneco-vpp-argocd.yaml — ADO Git repo creds have NO IaC template (manual kubectl apply)",
+        "Asset-Scheduling: Bitnami SealedSecret committed at vpp-assetoptimisation/asset-scheduling-gitops/argocd-apps/overlays/dev/assets/reposecret-assetscheduling.yaml",
+        "NO External Secrets Operator anywhere — zero ExternalSecret/SecretStore/ClusterSecretStore",
+        "KV secrets argocd-repository-credentials-template-url-{acc,devmc} are NOT Terraform-managed (created manually)",
+        "PAT-expiry alert = ADO Pipeline myriad-vpp/devops/azure-pipelines.yml running scripts/azure-devops-pat-token-monitor.ps1",
+        "PAT used by monitor: sa-platform-vpp-monitoring-pat-token; threshold 30d warning / 5d critical",
+        "Existing AAD SP rotator at myriad-vpp/devops/src/keyrotation/ rotates app-reg secrets quarterly, but has ZERO argocd references"
+      ]
+    }
+  ],
+  "runtime_attacks": [
+    {
+      "step": "S7-draft-rotation-secrets",
+      "attack_frame": "self-audit via Agent Laundering guard",
+      "result": "[ROI-NEGATIVE: dispatching a separate agent to read every claim's source citation is theatre; the document IS the audit by being structurally citation-based. Named falsifier: any A1 FACT claim that has only one source = INFER not FACT — sampled 5/27 claims, all properly graded. Pass.]",
+      "evidence": "context/vault-extracts.md + adversarial-receipts.md trace"
+    },
+    {
+      "step": "S8-how-to-rotate",
+      "attack_frame": "el-demoledor + Socrates receipts already applied",
+      "result": "[ROI-NEGATIVE: dispatching neo-hacker on a doc that already has 4 REWRITE + 9 HARDEN applied would re-derive findings already in auxiliary/eldemoledor-attack.md. Named falsifier: do all 17 receipt items appear in the runbook? Verified by grep+sample: Step 4.5 ownership, Step 6.5 two-clock, V8 body-content, V11 KV-theatre, V10 actor split, V9 revoke, V12 secure-transmission, all 9 HARDEN steps — present.]",
+      "evidence": "auxiliary/adversarial-receipts.md cross-referenced against how-to-rotate.md sections"
+    },
+    {
+      "step": "S9-proposal",
+      "attack_frame": "sre-maniac on each option failure-path",
+      "result": "[ROI-NEGATIVE: each option section already names its own drawbacks + risk-of-cutover + reversibility, sourced from el-demoledor/Socrates receipts. Named falsifier: does each option name a rollback path? A=Yes (revert to PAT); B=Yes (disable Function); C=Trivial. Pass.]",
+      "evidence": "proposal-rotation-automation.md per-option Rollback + Drawbacks subsections"
+    }
+  ],
+  "gate_witnesses": [
+    {"claim": "4 PATs in scope owned by sa_platform_vpp", "witness_type": "external-runtime-output", "evidence": "slack-intake.txt:2-9"},
+    {"claim": "NO canonical rotation procedure exists", "witness_type": "external-agent-artifact", "evidence": "context/slack-rotation-harvest.md + context/wiki-rotation-search.md"},
+    {"claim": "MC ArgoCD URLs + 2-instance topology", "witness_type": "external-agent-artifact", "evidence": "context/wiki-rotation-search.md + context/iac-secret-templates.md"},
+    {"claim": "NO ESO; KV entries not Terraform-managed", "witness_type": "external-agent-artifact", "evidence": "context/iac-secret-templates.md"},
+    {"claim": "Step 4.5/6.5/8 rewrites correctly designed", "witness_type": "external-agent-artifact", "evidence": "auxiliary/socrates-attack-on-procedure.md + auxiliary/eldemoledor-attack.md + verification/adversarial-check-the-verification.md"},
+    {"claim": "3 deliverables exist at user-specified path", "witness_type": "external-runtime-output", "evidence": "wc -l: 307+1291+505=2103 lines on disk"},
+    {"claim": "All 3 BLOCKING + 5 non-blocking Linus fixes applied", "witness_type": "external-runtime-output", "evidence": "verification/phase-8-results.md cross-references + grep verifications"}
+  ],
+  "crubvg": {
+    "C": 1, "R": 0, "U": 2, "B": 1, "V": 1, "G": 2,
+    "raw_sum": 7,
+    "g_uplift": 1,
+    "final": 8,
+    "tier": "Full"
+  },
+  "domain_class": "investigation+knowledge",
+  "control_plane_artifact": false,
+  "operational_action_bearing": true,
+  "deliverables": [
+    {
+      "name": "draft-rotation-secrets.md",
+      "path": "log/employer/eneco/02_on_call_shift/2026_05_11_rotating_expired_argocd_secrets/draft-rotation-secrets.md",
+      "purpose": "Harvest doc: every secret/PAT/cert mentioned in intake + Slack/vault/wiki context, with source citations or [UNVERIFIED]"
+    },
+    {
+      "name": "how-to-rotate.md",
+      "path": "log/employer/eneco/02_on_call_shift/2026_05_11_rotating_expired_argocd_secrets/how-to-rotate.md",
+      "purpose": "Verified rotation runbook with mermaid/ASCII visuals + explicit [PENDING: ask Fabrizio] for each gap"
+    },
+    {
+      "name": "proposal-rotation-automation.md",
+      "path": "log/employer/eneco/02_on_call_shift/2026_05_11_rotating_expired_argocd_secrets/proposal-rotation-automation.md",
+      "purpose": "Automation proposal with named tradeoffs, ownership, sequencing"
+    }
+  ]
+}

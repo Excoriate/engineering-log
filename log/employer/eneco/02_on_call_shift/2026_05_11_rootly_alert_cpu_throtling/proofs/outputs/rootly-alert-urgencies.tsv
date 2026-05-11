@@ -1,0 +1,4 @@
+Critical	1	Alerts that require immediate attention	2025-11-18T01:12:50.503-08:00	null
+High	2	Alerts that require immediate attention	2025-11-18T01:14:05.902-08:00	null
+Medium	3	Alerts that require prompt attention	2025-11-18T01:14:05.856-08:00	null
+Low	4	Alerts that can be addressed in due course	2025-11-18T01:14:05.875-08:00	null

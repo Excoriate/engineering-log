@@ -1,0 +1,71 @@
+{
+  "id": null,
+  "short_id": "ln2I9h",
+  "created_at": "2026-05-11T04:45:30.390-07:00",
+  "started_at": "2026-05-11T04:45:29.281-07:00",
+  "ended_at": null,
+  "status": "acknowledged",
+  "source": "alertmanager",
+  "summary": "CPUThrottlingHigh",
+  "alert_urgency": {
+    "id": "8824cd16-edb5-4bc3-8d0b-0ab833b1a8ac",
+    "team_id": 4392,
+    "name": "Low",
+    "description": "Alerts that can be addressed in due course",
+    "position": 4,
+    "deleted_at": null,
+    "created_at": "2025-11-18T01:14:05.875-08:00",
+    "updated_at": "2025-11-18T01:17:04.486-08:00",
+    "urgency": "low",
+    "color": "#7748F6"
+  },
+  "environments": [],
+  "services": [],
+  "groups": [
+    {
+      "id": "e04f0c98-bbf4-4d92-a534-8883172d56cd",
+      "name": "trade-platform",
+      "slug": "trade-platform",
+      "team_id": 4392,
+      "deleted_at": null,
+      "created_at": "2025-10-24T00:39:17.678-07:00",
+      "updated_at": "2026-04-07T01:47:53.463-07:00",
+      "description": "",
+      "opsgenie_id": null,
+      "users_count": 8,
+      "incidents_count": 2,
+      "pagerduty_id": null,
+      "color": "#FAEBB7",
+      "victor_ops_id": null,
+      "position": 5,
+      "slack_channels": [],
+      "slack_aliases": [
+        {
+          "id": "S0ADA9HGT60",
+          "name": "trade-platform-on-call"
+        }
+      ],
+      "pagertree_id": null,
+      "external_id": null,
+      "notify_emails": [],
+      "cortex_id": null,
+      "backstage_id": null,
+      "alerts_email_enabled": false,
+      "alerts_email_address": "group-0809e649e580cc19d49c8cede190caa2@email.rootly.com",
+      "pagerduty_service_id": null,
+      "service_now_ci_sys_id": null,
+      "alert_urgency_id": null,
+      "opslevel_id": null,
+      "admins_count": 1,
+      "auto_add_members_when_attached": false,
+      "alert_broadcast_enabled": false,
+      "alert_broadcast_channel": {},
+      "incident_broadcast_enabled": false,
+      "incident_broadcast_channel": {},
+      "jsmops_id": null,
+      "synced_from": null,
+      "synced_at": null
+    }
+  ],
+  "alert_routing_rule_id": null
+}

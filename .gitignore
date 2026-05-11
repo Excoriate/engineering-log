@@ -18,3 +18,15 @@ node_modules/
 
 # Snyk Security Extension - AI Rules (auto-generated)
 .cursor/rules/snyk_rules.mdc
+
+# AI harness: ephemeral context (do not commit)
+.ai/*.txt
+.ai/*.xml
+.ai/repomix-*
+# AI harness: committed artifacts (DO commit these)
+!.ai/harness/
+!.ai/memory/
+!.ai/tasks/
+# Task proof output captures (often full Terraform state, AAD client secrets, tokens).
+# GitHub push protection rejects these — keep files locally; do not track.
+.ai/tasks/**/proofs/outputs/

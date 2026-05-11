@@ -1,0 +1,57 @@
+{
+  "actions": null,
+  "autoMitigate": false,
+  "checkWorkspaceAlertsStorageConfigured": null,
+  "createdWithApiVersion": "2023-03-15-preview",
+  "criteria": {
+    "allOf": [
+      {
+        "dimensions": [],
+        "failingPeriods": {
+          "minFailingPeriodsToAlert": 1,
+          "numberOfEvaluationPeriods": 1
+        },
+        "metricMeasureColumn": null,
+        "metricName": null,
+        "operator": "GreaterThan",
+        "query": "AzureActivity| where  CategoryValue == \"ServiceHealth\"\r\n",
+        "resourceIdColumn": "_ResourceId",
+        "threshold": 1.0,
+        "timeAggregation": "Count"
+      }
+    ]
+  },
+  "description": "",
+  "displayName": "vpp-resource-unhealthy",
+  "enabled": true,
+  "etag": null,
+  "evaluationFrequency": "0:05:00",
+  "id": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/microsoft.insights/scheduledqueryrules/vpp-resource-unhealthy",
+  "isLegacyLogAnalyticsRule": null,
+  "isWorkspaceAlertsStorageConfigured": null,
+  "kind": null,
+  "location": "westeurope",
+  "muteActionsDuration": null,
+  "name": "vpp-resource-unhealthy",
+  "overrideQueryTimeRange": null,
+  "resourceGroup": "mcprd-rg-vpp-p-res",
+  "scopes": [
+    "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/Microsoft.OperationalInsights/workspaces/vpp-log-analyt-p"
+  ],
+  "severity": 0,
+  "skipQueryValidation": null,
+  "systemData": {
+    "createdAt": "2024-01-24T16:12:31.862162+00:00",
+    "createdBy": "eelke.hoffman@conclusion.nl",
+    "createdByType": "User",
+    "lastModifiedAt": "2024-01-24T16:12:31.862162+00:00",
+    "lastModifiedBy": "eelke.hoffman@conclusion.nl",
+    "lastModifiedByType": "User"
+  },
+  "tags": {},
+  "targetResourceTypes": [
+    "Microsoft.OperationalInsights/workspaces"
+  ],
+  "type": "Microsoft.Insights/scheduledQueryRules",
+  "windowSize": "0:05:00"
+}

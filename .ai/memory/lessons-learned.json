@@ -1,15 +1,72 @@
-{
-  "version": 1,
-  "entries": [
-    {
-      "id": "verify-own-prior-claim-via-parallel-adversarial-evaluator",
-      "summary": "When the task is to verify coordinator's own prior claim (Slack reply, ADR, assertion), dispatch an adversarial reviewer AND an evaluator in parallel. One lens alone misses either the conceptual or the methodology error class.",
-      "severity": "high",
-      "confidence": "validated",
-      "last_validated": "2026-04-21",
-      "category": "memory",
-      "source_episode": "[[2026-04-21-oncall-erik-lumbela-argocd-sandbox]]",
-      "tags": ["adversarial", "self-verification", "reviewer-dispatch", "oncall", "diagnosis"]
-    }
-  ]
-}
+[
+  {
+    "id": "LL-001",
+    "scope": "log/employer/eneco/**",
+    "category": "convention",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "When verifying your own prior claim (Slack reply, ADR, assertion), dispatch an adversarial reviewer AND an evaluator in parallel. One lens alone misses either the conceptual or the methodology error class.",
+    "root_cause": "A single reviewer focuses either on conceptual soundness OR methodology — not both. Self-verification fails because the verifier shares the same frame as the original claimant.",
+    "fix": "Dispatch socrates-contrarian (concept attack) and evaluator (methodology check) in parallel. Wait for both receipts before accepting the claim as verified.",
+    "references": [],
+    "added": "2026-04-21",
+    "last_validated": "2026-04-21",
+    "task_origin": "2026-04-21-oncall-erik-lumbela-argocd-sandbox"
+  },
+  {
+    "id": "LL-002",
+    "scope": "log/employer/eneco/**",
+    "category": "error-pattern",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "ArgoCD access requires three planes: AAD group membership + Enterprise App assignment (groupMembershipClaims:ApplicationGroup) + AppProject role binding. Any missing plane = silent denial.",
+    "root_cause": "ArgoCD RBAC has three independent permission planes. AAD membership alone is insufficient. The Enterprise App must have groupMembershipClaims:ApplicationGroup set, AND the AppProject must grant the matching role. Missing any one produces silent denial, not an error.",
+    "fix": "Check all three planes in sequence: (1) az ad group member check; (2) verify Enterprise App groupMembershipClaims setting; (3) kubectl get appproject and check roleBindings. Fix whichever plane is missing.",
+    "references": [],
+    "added": "2026-04-21",
+    "last_validated": "2026-04-21",
+    "task_origin": "2026-04-21-oncall-erik-lumbela-argocd-sandbox"
+  },
+  {
+    "id": "LL-003",
+    "scope": "log/employer/eneco/**",
+    "category": "tool-gotcha",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "ADO stage with trigger:none + approval gate that times out → stage silently skips. The 2-hour-exact delta in Timeline Checkpoint.Approval records distinguishes timeout (ADO default) from 'plan no change'. Read Timeline records, not just pipeline logs.",
+    "root_cause": "ADO's default approval timeout is 2 hours. When trigger:none prevents automatic queuing and the approval window expires, the stage is marked skipped — not failed. Pipeline logs show 'skipped', not 'timed out', creating ambiguity.",
+    "fix": "Read the build Timeline API records and check Checkpoint.Approval delta. 2h-exact delta = ADO default approval timeout. Distinguish from plan-no-change skip by checking if Terraform ran at all.",
+    "references": [],
+    "added": "2026-04-21",
+    "last_validated": "2026-04-21",
+    "task_origin": "ado-silent-state-drift-pattern"
+  },
+  {
+    "id": "LL-004",
+    "scope": "log/employer/eneco/**",
+    "category": "error-pattern",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "Rootly resolve does NOT close upstream Azure Monitor alerts. RCA action steps must explicitly drive both Rootly and Microsoft.AlertsManagement/alerts/<id> to terminal state. Resolving only one leaves a zombie alert.",
+    "root_cause": "Rootly and Azure Monitor alerts are independent systems. Rootly resolve is an incident management action; it does not call the Azure API to fire off alert resolution. Azure Monitor alerts remain active until explicitly resolved via az monitor or REST API.",
+    "fix": "After resolving in Rootly, also run: az rest --method POST --url '/subscriptions/{sub}/providers/Microsoft.AlertsManagement/alerts/{id}/changestate?api-version=2019-05-05-preview&newState=Closed'. Confirm both planes show terminal state.",
+    "references": [],
+    "added": "2026-04-21",
+    "last_validated": "2026-04-21",
+    "task_origin": "rootly-azure-convergence-pattern"
+  },
+  {
+    "id": "LL-005",
+    "scope": "log/employer/eneco/**",
+    "category": "error-pattern",
+    "severity": "medium",
+    "confidence": "validated",
+    "summary": "CCoE Key Vault module hardcodes ServiceApiLatency Avg>1000ms alert — fires on low-volume bootstrap KVs ~every 2-3.5 weeks across all products. This alert class is structurally noisy, not operationally actionable.",
+    "root_cause": "CCoE baseline module has a hardcoded alert threshold that is not tuned for bootstrap/low-volume Key Vaults. Bootstrap KVs have sporadic request patterns that naturally exceed the latency threshold.",
+    "fix": "On receipt of CCoE KeyVault latency alert on a bootstrap KV: verify it is a bootstrap KV (low traffic expected), verify no active operations in flight, close as expected-noise. Do not escalate or page unless concurrent with a real incident.",
+    "references": [],
+    "added": "2026-04-21",
+    "last_validated": "2026-04-21",
+    "task_origin": "ccoe-keyvault-bootstrap-alert-noise"
+  }
+]

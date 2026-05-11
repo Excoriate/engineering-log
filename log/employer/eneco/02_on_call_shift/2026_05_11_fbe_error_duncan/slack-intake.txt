@@ -1,0 +1,17 @@
+https://eneco-online.slack.com/lists/T039G7V20/F0ACUPDV7HU?record_id=Rec0B3SKFGNRW
+
+Hi! Tried creating an FBE this morning, but it errors out on terraform deploy. See this link: https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_build/results?buildId=1638601&view=logs&j=daa640cf-a2c4-58a5-7feb-9d96d0790d3d&t=7b0ba95f-d443-5122-9330-553da9b26bb9
+
+Could you have a look?
+Alex Torres  [9:59 AM]
+@Duncan Teegelaar -
+I’ll take a look, but retry it, and let me know how it went.
+The error seems to be transient, hence my suggestion.Duncan Teegelaar  [9:59 AM]
+Okay, I'll retry!
+Duncan Teegelaar  [10:14 AM]
+It errored out even quicker this time :sadge:
+Alex Torres  [10:14 AM]
+No worries, I’ll take a look.
+[10:17 AM]Paste here the second pipeline that failed please./
+
+https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_build/results?buildId=163[…]-52be-2818-520ebf295b7a&s=a3813e30-f650-581b-089b-fb9d9cadcd17

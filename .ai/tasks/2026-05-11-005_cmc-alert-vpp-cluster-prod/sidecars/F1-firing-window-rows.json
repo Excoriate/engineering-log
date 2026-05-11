@@ -1,0 +1,12 @@
+[
+  {
+    "ActivityStatusValue": "Resolved",
+    "CorrelationId": "05f54640-f10b-4383-9d60-48f4f83dbf17",
+    "EventDataId": "662512f2-724e-4459-b207-48e2cd5d28ce",
+    "Level": "Warning",
+    "OperationNameValue": "Microsoft.ServiceHealth/incident/action",
+    "TableName": "PrimaryResult",
+    "TimeGenerated": "2026-05-11T13:10:36.3600226Z",
+    "_ResourceId": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0"
+  }
+]

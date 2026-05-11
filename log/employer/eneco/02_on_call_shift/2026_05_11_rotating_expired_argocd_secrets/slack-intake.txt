@@ -1,0 +1,64 @@
+| :----------------------------------------------------------------------------------: |
+|     Expiration PAT Tokens Report - Service Account  [sa_platform_vpp@eneco.com]      |
+| :----------------------------------------------------------------------------------: |
+|         PAT Token Name                                       | ExpireDate |  Status  |
+| :----------------------------------------------------------- | :--------: | :------: |
+| argo-cd-sandbox                                              | 05/10/2026 | Critical |
+| argo-cd-devmc-cmc-goldilocks-repository                      | 06/01/2026 | Warning  |
+| argo-cd-accmc-cmc-goldilocks-repository                      | 06/01/2026 | Warning  |
+| argo-cd-prdmc-cmc-goldilocks-repository                      | 06/01/2026 | Warning  |
+
+
+https://eneco-online.slack.com/archives/C063YNAD5QA/p1778495545088229
+
+previous task done, where after the fix, an underling error was causing the kidu wasn't deployuing due to auth errors.
+From the previous agent
+
+```
+When: 2026-05-08
+  Event: PAT expiration report posted in #myriad-alerts-devops flagging argo-cd-sandbox PAT as Critical, ExpireDate 05/10/2026
+  Source: Fabrizio's screenshot
+  ────────────────────────────────────────
+  When: 2026-05-10T12:40:13Z
+  Event: ArgoCD ApplicationSet vpp-feature-branch-environments first reports ApplicationGenerationFromParamsError: authentication required
+    against VPP.GitOps
+  Source: kubectl describe applicationset vpp-feature-branch-environments -n argocd
+  ────────────────────────────────────────
+  When: 2026-05-11T08:00:43Z
+  Event: Duncan triggers FBE-create (build 1638601, blocked separately by F2 orphan — the fix I applied)
+  Source: ADO build metadata
+  ────────────────────────────────────────
+  When: 2026-05-11T10:33:15Z
+  Event: Stage 6 of pipeline 1639150 commits feature-branch-environments/kidu.yaml to VPP.GitOps. Push succeeds; ArgoCD can't read it (PAT still
+
+    expired).
+  Source: ADO log 222 of 1639150
+  ────────────────────────────────────────
+  When: 2026-05-11 ~12:23 (now)
+  Event: Fabrizio re-asks about PAT renewal; you accept the action item "after lunch"
+  Source: Slack thread
+
+  The argo-cd-sandbox PAT expired at exactly the moment the ApplicationSet started failing. That's the proximate cause of:
+
+  - kidu namespace having zero service pods
+  - URL returning HTTP 404
+  - Pester 1/4 (only "namespace exists" passes; pods/URL fail)
+  - 3 other slots (kidu, boltz, enel) having no app-of-apps in ArgoCD
+
+  The 8 slot app-of-apps that ARE healthy (afi, ionix, ishtar, jupiter, operations, thor, veku, voltex) survived because the ApplicationSet
+  generated them BEFORE the PAT expired — once Application CRDs are in etcd they persist; the auth break only blocks NEW generation.
+
+  What this means for Duncan + the team
+
+  - No FBE delete/recreate needed. Once you rotate the PAT after lunch and update the corresponding repo-* Opaque secret in the argocd
+  namespace, the ApplicationSet reconciles automatically (it has been retrying every minute for ~22 hours). Within ~3-5 min of the PAT update,
+  kidu's child Applications materialize and pods come up.
+  - The CVE issue I identified earlier is downstream: even after PAT rotation, the 12 services with CVE-vulnerable transitive deps won't have
+  docker images in ACR for Duncan's branch → pods will deploy with ImagePullBackOff for those, but asset, gatewaynl, frontend,
+  alarmpreprocessing, assetmonitor, alarmengine (the 7 that built successfully) WILL come up. Whether Duncan's specific feature is testable
+  depends on which services it touches.
+  - Blast radius confirmation: every FBE create/destroy attempt across the platform since 2026-05-10T12:40 has been hitting this silent failure.
+   That's why kidu, boltz, enel have no app-of-apps.
+```
+
+Check /Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors

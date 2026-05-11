@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": []
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".ai/harness/hooks/session-start.sh",
+            "timeout": 10,
+            "statusMessage": "Loading harness anchor context..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".ai/harness/hooks/session-end.sh",
+            "timeout": 10,
+            "statusMessage": "Running harness health check..."
+          }
+        ]
+      }
+    ]
+  }
+}
