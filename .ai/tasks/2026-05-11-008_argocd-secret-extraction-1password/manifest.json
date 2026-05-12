@@ -1,0 +1,27 @@
+{
+  "task_id": "2026-05-11-008",
+  "slug": "argocd-secret-extraction-1password",
+  "task_root": ".ai/tasks/2026-05-11-008_argocd-secret-extraction-1password",
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_05_11_rotating_expired_argocd_secrets/**"
+  ],
+  "created": "2026-05-11",
+  "created_files": [],
+  "modified_files": [],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [],
+  "compression_mode": "Normal",
+  "crubvg": {"C": 2, "R": 1, "U": 2, "B": 0, "V": 1, "G": 1, "total": 7},
+  "domain_class": "implementation",
+  "control_plane_artifact": false,
+  "success_criteria": [
+    "Confirmed verdict (viable/partial/not-viable) per secret class with named falsifier",
+    "Secrets either stored in 1Password Job Eneco vault (verified via op item get) or written as per-secret files in on-call folder",
+    "CLI rotation spec written to outcome/cli-spec.md",
+    "Zero secret values echoed in conversation",
+    "No writes to log/ other than designated extraction outputs"
+  ]
+}

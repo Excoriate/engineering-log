@@ -1,0 +1,27 @@
+{
+  "task_id": "2026-05-11-007",
+  "slug": "oncall-week-knowledge-harvest",
+  "task_root": ".ai/tasks/2026-05-11-007_oncall-week-knowledge-harvest",
+  "allowed_external_paths": [
+    ".ai/memory/lessons-learned.json",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/2026-05-11-pat-expiry-argocd-auth-break.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-cmc-alert-vpp-resource-unhealthy-2026-05-11.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-otel-collector-cpu-throttling-dev-cluster.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-credential-expiry-incident-history-2024-2026.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-azure-monitor-out-of-iac-alert-discipline.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-openshift-sanity-check-azure-alert-rule-out.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-azure-alert-close-two-plane.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-oncall-shift-2026-05-11-quad-incident.md"
+  ],
+  "created": "2026-05-11T00:00:00Z",
+  "modified": "2026-05-11T00:00:00Z",
+  "created_files": [],
+  "modified_files": [],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [],
+  "vault_path_pending": true,
+  "notes": "allowed_external_paths will be extended with $SECOND_BRAIN_PATH/llm-wiki/** after Phase 2 confirms vault location."
+}
