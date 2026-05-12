@@ -1,0 +1,14 @@
+On ACC a FTO subscription for Strike Price topic is missing
+https://portal.azure.com/#@Eneco.onmicrosoft.com/resource/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e/resourceGroups/mcdta-rg-vpp-a-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-a/topics/assetplanning-asset-strike-price-schedule-created-v1/subscriptions
+
+If I compare with another topic (complete power schedule for instance) I can see the subscription is presented (flextrade-optimizer-sub):
+https://portal.azure.com/#@Eneco.onmicrosoft.com/resource/subscriptions/b524d084-edf5-449d-8e92-999ebbaf485e/resourceGroups/mcdta-rg-vpp-a-messaging/providers/Microsoft.ServiceBus/namespaces/vpp-sbus-a/topics/assetplanning-asset-complete-power-schedule-created-v1/subscriptions
+
+I see that the subscription was listed in the service-bus-subscription manager for strike price
+https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/servicebus-subscriptions-manager?path=/contracts/producers/vpp_core/flex-trade-optimizer.yaml&version=GBmain&line=248&lineEnd=248&lineStartColumn=5&lineEndColumn=71&lineStyle=plain&_a=contents
+
+the same way as for  complete power schedule
+https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/servicebus-subscriptions-manager?path=/contracts/producers/vpp_core/flex-trade-optimizer.yaml&version=GBmain&line=284&lineEnd=284&lineStartColumn=5&lineEndColumn=73&lineStyle=plain&_a=contents
+
+Could you please help to understand why the subscription for strike price on ACC is missing?
+It is blocking the promotion of release to PROD for FTO.

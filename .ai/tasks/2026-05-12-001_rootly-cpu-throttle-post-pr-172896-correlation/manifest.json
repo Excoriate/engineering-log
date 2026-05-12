@@ -1,0 +1,33 @@
+{
+  "task_id": "2026-05-12-001",
+  "slug": "rootly-cpu-throttle-post-pr-172896-correlation",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-12-001_rootly-cpu-throttle-post-pr-172896-correlation",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/"
+  ],
+  "created": "2026-05-12",
+  "modified": "2026-05-12",
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "completed_adversarial_dispatches": [
+    {"frame": "sherlock-holmes", "verdict": "VERDICT-PARTIALLY-FALSIFIED", "receipt": "verification/sherlock-attack-on-followup-verdict.md", "applied": ["W1 REBUT", "W3 DEFER", "branch-claim RESOLVE", "W4-1 RESOLVE", "W4-2 RESOLVE", "W4-3 RESOLVE", "W4-4 RESOLVE", "W2 DEFER-tracked"]}
+  ],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    {"claim": "PR 172896 changes only wiki markdown", "witness": "Sherlock W1 probe set (git log + git show --stat + find for IaC templating); external_agent_artifact: verification/sherlock-attack-on-followup-verdict.md L29-43", "type": "external-agent-artifact"},
+    {"claim": "PR 172896 is NOT merged to origin/main", "witness": "git merge-base --is-ancestor bec3c72 origin/main → exit 1 (captured live in this session)", "type": "external-runtime-output"},
+    {"claim": "zero prod alerts in trade-platform group in 24h", "witness": "Rootly listAlerts API response captured live (20 alerts; none with prd.ceap.nl external_url)", "type": "external-runtime-output"},
+    {"claim": "bF0Rn7 still acknowledged-not-resolved on dev pod 58d5f587f5-92vpd", "witness": "Rootly get_alert_by_short_id JSON: ended_at=null, status=acknowledged", "type": "external-runtime-output"}
+  ],
+  "domain_class": "investigation",
+  "control_plane_artifact": false,
+  "crubvg": {"C":1,"R":0,"U":2,"B":1,"V":1,"G":2,"total":7},
+  "phase_compression_mode": "Full",
+  "status": "active",
+  "hypotheses": [
+    "H1: PR 172896 raised capacity but resources still undersized — alerts persist with same signature",
+    "H2: PR 172896 not yet propagated to prd (pipeline lag, approval gate, env-scope mismatch) — alerts firing on old state",
+    "H3: Different metric/resource firing — not a PR-improvement question"
+  ]
+}

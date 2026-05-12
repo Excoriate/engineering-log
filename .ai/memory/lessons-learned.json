@@ -188,5 +188,57 @@
     "added": "2026-05-11",
     "last_validated": "2026-05-11",
     "task_origin": "2026-05-11-007_oncall-week-knowledge-harvest"
+  },
+  {
+    "id": "LL-013",
+    "scope": "log/employer/eneco/**",
+    "category": "iac-state-hygiene",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "SBSM (servicebus-subscriptions-manager) has THREE CD pipeline patterns, not the two its docs describe: (1) cd-myriad-platform (8574) auto-deploys on myriad-platform.yaml + infra/terragrunt/** changes; (2) cd-<consumer-team> per-contract auto-deploy pipelines exist for major consumers (e.g. cd-flex-trade-optimizer = 8995) and auto-trigger on their own contract yaml + infra/terragrunt/**/subscription_creator/** changes with NO approval gates; (3) cd-general (8573) is manual-trigger fallback for contracts WITHOUT a dedicated pipeline (used today only by asset-scheduling). Repo docs (docs/internals/cicd/cd-ado-pipeline-configuration.md) describe only patterns 1 and 3 — pattern 2 is undocumented and a likely source of incorrect on-call diagnoses. Pipeline-success != contract-realization: a Terragrunt apply --auto-approve can exit 0 while one of N for_each-keyed resources is silently absent from Azure; only an externally-witnessable parity probe (yaml entries vs Azure resources per env) proves full realization.",
+    "root_cause": "Three independent issues: (a) docs/internals/cicd/cd-ado-pipeline-configuration.md is stale and lists only cd-myriad-platform and cd-general; (b) per-contract auto-deploy pipelines are registered via just ado-pipelines-register without doc updates; (c) Terragrunt apply --auto-approve --non-interactive can return success codes despite a single-resource silent skip whose root mechanism is uncharacterized (likely provider-level partial failure on parallel for_each resource creation).",
+    "fix": "On-call triage for 'subscription missing on SBSM-managed contract': (1) az servicebus topic show — falsify topic-missing; (2) grep contract yaml for (topic_name, subscription_name, environment_name) tuple — falsify contract-missing; (3) az pipelines list --query for cd-<consumer-team> to identify the actual deployment pipeline (do NOT assume cd-general); (4) parity probe ALL subs for same consumer+env — 1/N missing localises to single-resource drift; 0/N localises to pipeline never ran; (5) MANDATORY gate-zero before any pipeline trigger: terragrunt state list against the affected env backend — state-has-resource branches to terragrunt state rm + re-apply (no-op apply trap), state-lacks-resource branches to pipeline re-trigger. References RCA at log/employer/eneco/02_on_call_shift/2026_05_12_topic_not_found/rca.md with full evidence chain.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_05_12_topic_not_found/rca.md"
+    ],
+    "added": "2026-05-12",
+    "last_validated": "2026-05-12",
+    "task_origin": "2026-05-12-001_topic-not-found"
+  },
+  {
+    "id": "LL-014",
+    "scope": "log/**",
+    "category": "agent-discipline",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "Adversarial subagent dispatch MUST include explicit 'Write your receipt to <absolute-path>, return only the file path' instruction; coordinator MUST run `test -s` on each artifact before consuming the agent's output. Brain rule NN-2 mandates that subagent artifacts are always written to disk. Brain rule 'Delegation discipline: >200 prescriptive tokens = agent-as-file-writer' applies to nearly all adversarial dispatches (Sherlock/Socrates/El-Demoledor prompts are typically 400-600 tokens). Returning prose in task notifications is NOT compliant — the receipt only lives in conversation history and is invisible to future sessions, audit, and lessons-learned harvesting.",
+    "root_cause": "Tone-bypass — user framings like 'quick check first', 'just take a look', 'wdyt' relax coordinator discipline despite brain explicitly stating 'tone is signal, never exemption'. The relaxation manifests as: skipping manifest.json init, skipping P1 preflight mirror to disk, skipping artifact-write instructions in subagent prompts, skipping post-dispatch `test -s` verification. Real incident: 2026-05-12 FTO strike-price RCA had three adversarial reviewers (sherlock, socrates, el-demoledor) return prose to task notifications; zero files written by agents; coordinator detected the violation only when user asked directly. Receipts had to be reconstructed verbatim post-hoc into .ai/tasks/2026-05-12-001_topic-not-found/adversarial/*.md.",
+    "fix": "Mandatory dispatch template for adversarial subagents: prompt MUST end with 'Write your full receipt as a markdown file to <absolute-path>/<reviewer-name>.md including frontmatter (task_id, agent, status, summary, date). Return ONLY the file path on completion. The coordinator will Read the file.' Coordinator post-dispatch MUST: (1) wait for completion notification; (2) run `test -s <path>` to verify non-empty file; (3) Read the file to consume the receipt; (4) update manifest.json adversarial_receipts[] with the path. Pre-flight rule: when emitting GATE-CLEARED, also create manifest.json with task_id/slug/task_root/external_writes/adversarial_receipts/gate_witnesses fields. The 'quick check first' / 'simple task' framing does NOT downgrade these mandates.",
+    "references": [
+      ".ai/tasks/2026-05-12-001_topic-not-found/manifest.json",
+      ".ai/tasks/2026-05-12-001_topic-not-found/adversarial/sherlock-holmes-investigation-rigor.md",
+      ".ai/tasks/2026-05-12-001_topic-not-found/adversarial/socrates-contrarian-assumption-attack.md",
+      ".ai/tasks/2026-05-12-001_topic-not-found/adversarial/el-demoledor-break-the-fix.md"
+    ],
+    "added": "2026-05-12",
+    "last_validated": "2026-05-12",
+    "task_origin": "2026-05-12-001_topic-not-found"
+  },
+  {
+    "id": "LL-015",
+    "scope": "log/employer/eneco/**",
+    "category": "error-pattern",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "Azure AD AADSTS650057 on `az` CLI against an Eneco custom API is structurally ambiguous: the error blames the client's app registration, but the load-bearing missing entity is almost always on the resource side or in a separate runtime directory object. Three gates control whether AAD will issue a delegated token: (1) `resource.api.preAuthorizedApplications` includes the client appId; (2) tenant-wide `oauth2PermissionGrant` (consentType=AllPrincipals) exists for client+resource+scope; (3) per-user `oauth2PermissionGrant` (consentType=Principal) exists for client+resource+scope+user. Group membership (`appRoleAssignedTo` for a group) and `appRoleAssignmentRequired` are DIFFERENT gates that affect what the token CONTAINS, not whether AAD issues one. Eneco BTM convention does not use `preAuthorizedApplications`, so new joiners hit (3)-only paths and fail until they consent once via `az login --scope api://<resource>/<scope>`.",
+    "root_cause": "BTM platform-AAD convention relies on per-user consent rather than admin pre-authorization. Per-user consent grants are runtime directory objects invisible to Terraform; they drift independently of IaC. Each new joiner must complete the interactive consent step manually; no automation, no onboarding doc captures this. PR 172140 ('Fix not being able to get tokens from public clients (bruno)') added Bruno redirect URIs but did NOT add Azure CLI to preAuthorizedApplications, so anyone reading the commit assumes az CLI now works tenant-wide — it does not.",
+    "fix": "Triage in three commands: (a) `az ad app show --id <api-guid> --query api.preAuthorizedApplications`; (b) `az rest GET /v1.0/oauth2PermissionGrants?$filter=clientId eq '<client-sp-id>' and resourceId eq '<resource-sp-id>' and consentType eq 'AllPrincipals'`; (c) same filter with `principalId eq '<user-oid>'`. The first non-empty result names the gate. If all empty, run `az login --scope api://<api-guid>/<scope>` interactively to create the per-user grant. Durable fix options: admin-grant tenant-wide consent (`az ad app permission grant --id <client> --api <resource> --scope <scope>`) or declare `pre_authorized_applications` in IaC (changes BTM convention; needs platform-AAD sign-off and security review).",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/fix.md"
+    ],
+    "added": "2026-05-12",
+    "last_validated": "2026-05-12",
+    "task_origin": "2026-05-12-003_oncall-aad-permissions-johnson-lobo-avd-e2e"
   }
 ]

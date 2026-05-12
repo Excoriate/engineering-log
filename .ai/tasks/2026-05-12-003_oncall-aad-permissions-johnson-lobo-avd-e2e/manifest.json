@@ -1,0 +1,38 @@
+{
+  "task_id": "2026-05-12-003",
+  "slug": "oncall-aad-permissions-johnson-lobo-avd-e2e",
+  "task_root": ".ai/tasks/2026-05-12-003_oncall-aad-permissions-johnson-lobo-avd-e2e",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/context.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/rca.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/fix.md"
+  ],
+  "created": "2026-05-12",
+  "modified": "2026-05-12",
+  "created_files": [
+    ".ai/tasks/2026-05-12-003_oncall-aad-permissions-johnson-lobo-avd-e2e/01-task-requirements-initial.md",
+    ".ai/tasks/2026-05-12-003_oncall-aad-permissions-johnson-lobo-avd-e2e/manifest.json",
+    ".ai/runtime/current-task.json"
+  ],
+  "modified_files": [],
+  "external_writes": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/context.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/rca.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/fix.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/memory/lessons-learned.json"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "completed_adversarial_dispatches": [
+    {"agent": "sherlock-holmes", "verdict": "REQUEST_PROBE", "receipt": ".ai/tasks/2026-05-12-003_oncall-aad-permissions-johnson-lobo-avd-e2e/verification/sherlock-receipt.md", "outcome": "H9 surfaced; discriminating probe ran; root cause revised"},
+    {"agent": "bertrand-russell", "verdict": "NEEDS_REPAIR", "receipt": ".ai/tasks/2026-05-12-003_oncall-aad-permissions-johnson-lobo-avd-e2e/verification/russell-receipt.md", "outcome": "A2 equivocation + A5 quantifier defect repaired in synthesis"}
+  ],
+  "gate_witnesses": [
+    {"claim": "preAuthorizedApplications empty on 0abb4cf9", "witness": "az ad app show output captured 2026-05-12, p4-live-aad-probes.md"},
+    {"claim": "johnson.lobo IS in sg-vpp-btm-developers", "witness": "az ad group member check {value:true}"},
+    {"claim": "Niels.Witte + Anastasia.Zenchik have Principal-scoped grants; johnson does not", "witness": "Graph /oauth2PermissionGrants filter output captured 2026-05-12"},
+    {"claim": "appRoleAssignmentRequired false", "witness": "az ad sp show output"}
+  ],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}

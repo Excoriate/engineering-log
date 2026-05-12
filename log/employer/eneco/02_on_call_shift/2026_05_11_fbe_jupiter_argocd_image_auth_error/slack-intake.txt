@@ -1,0 +1,3 @@
+My FBE (jupiter) is not updating/syncing the images, due to an authentication error as far as I can tell.
+
+https://argocd.dev.vpp.eneco.com/applications/jupiter/dispatchermfrr?view=tree&resource=&conditions=true

@@ -1,0 +1,12 @@
+I am trying to run end-to-end testcases on AVD. I am logged in using the subscription ID c7425e5b-a7d4-49f1-a45e-23f230783fa5
+
+I have been added to the correct group and this group has right permission/roles. My team members can run the tests on AVD without any issues.
+
+Why i can't run the test's? i am unable to figure out the issue. please help.
+
+Authentication failed
+invalid_client: AADSTS650057: Invalid resource. The client has requested access to a resource which is not listed in the requested permissions in the client's application registration. Client app ID: 04b07795-8ddb-461a-bbee-02f9e1bf7b46(Microsoft Azure CLI). Resource value from request: api://0abb4cf9-70e9-4acf-9ad9-b0a75af7ace3. Resource app ID: 0abb4cf9-70e9-4acf-9ad9-b0a75af7ace3. List of valid resources from app registration: . Trace ID: 76cd12d5-f2b2-4da5-bb03-d7ebdb564800 Correlation ID: 80bb596e-2d7b-4f88-b4ee-8406415a4bd3 Timestamp: 2026-05-12 10:30:43Z. ($error_uri)
+
+You can log an issue at Azure CLI GitHub Repository and we will assist you in resolving it.
+
+https://grid-eneco.enterprise.slack.com/lists/T039G7V20/F0ACUPDV7HU?record_id=Rec0B36SVGD7Y

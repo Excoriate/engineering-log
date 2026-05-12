@@ -1,0 +1,5 @@
+Repos,
+AAD: /Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/Eneco.Infrastructure/main/terraform/platform/aad
+
+
+Eneco user: johnson.lobo@eneco.com

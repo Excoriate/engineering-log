@@ -1,11 +1,7 @@
 {
-  "task_id": "2026-05-11-008",
-  "slug": "argocd-secret-extraction-1password",
-  "task_root": ".ai/tasks/2026-05-11-008_argocd-secret-extraction-1password",
-  "phase": 1,
-  "preflight_complete": true,
-  "domain_class": "implementation",
-  "compression_mode": "Normal",
-  "created": "2026-05-11",
-  "previous_orphan_acknowledged": "2026-05-11-007_oncall-week-knowledge-harvest was at phase 1 (incomplete). Superseded by 008."
+  "task_id": "2026-05-12-001",
+  "slug": "fbe-jupiter-argocd-auth",
+  "task_root": ".ai/tasks/2026-05-12-001_fbe-jupiter-argocd-auth",
+  "phase": "4",
+  "preflight_complete": true
 }

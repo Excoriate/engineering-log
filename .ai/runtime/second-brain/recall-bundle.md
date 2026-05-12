@@ -36,8 +36,8 @@ created: 2026-04-21
 updated: 2026-04-24
 review_after: 2026-05-15
 
-## High-Priority Lessons
-- [high] When verifying your own prior claim (Slack reply, ADR, assertion), dispatch an adversarial reviewer AND an evaluator in parallel. One lens alone misses either the conceptual or the methodology error class.[scope: log/employer/eneco/**]
-- [high] ArgoCD access requires three planes: AAD group membership + Enterprise App assignment (groupMembershipClaims:ApplicationGroup) + AppProject role binding. Any missing plane = silent denial.[scope: log/employer/eneco/**]
-- [high] ADO stage with trigger:none + approval gate that times out → stage silently skips. The 2-hour-exact delta in Timeline Checkpoint.Approval records distinguishes timeout (ADO default) from 'plan no change'. Read Timeline records, not just pipeline logs.[scope: log/employer/eneco/**]
-- [high] Rootly resolve does NOT close upstream Azure Monitor alerts. RCA action steps must explicitly drive both Rootly and Microsoft.AlertsManagement/alerts/<id> to terminal state. Resolving only one leaves a zombie alert.[scope: log/employer/eneco/**]
+## Available Context Notes
+- repos/mc-vpp-infrastructure
+- repos/memory-system-architecture
+- repos/web-clipper-reading-inbox-configuration
+- tools/second-brain-hooks

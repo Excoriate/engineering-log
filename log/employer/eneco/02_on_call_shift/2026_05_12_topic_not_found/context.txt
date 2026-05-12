@@ -1,0 +1,9 @@
+Repos:
+Service Bus Subscriptions manager.
+/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/servicebus-subscriptions-manager
+
+Very important to understand how servicebus subscriptions manager works:
+/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/servicebus-subscriptions-manager/docs
+
+And the contracts:
+/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/servicebus-subscriptions-manager/contracts

@@ -1,0 +1,27 @@
+{
+  "task_id": "2026-05-12-001",
+  "slug": "fbe-jupiter-argocd-auth",
+  "task_root": ".ai/tasks/2026-05-12-001_fbe-jupiter-argocd-auth",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_fbe_jupiter_argocd_image_auth_error/context.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_fbe_jupiter_argocd_image_auth_error/rca.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_fbe_jupiter_argocd_image_auth_error/fix.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_05_11_fbe_jupiter_argocd_image_auth_error/fbe-skill-reflection.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe/fbe-argocd-credential-architecture.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe/_index.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/pattern-argocd-per-application-source-credential-gap.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/recipe-register-missing-credential-template.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/2026-05-12-jupiter-source1-credential-gap.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/_index.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/recipe-rotate-argocd-sandbox-pat.md"
+  ],
+  "created_files": [],
+  "modified_files": [],
+  "external_writes": [
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe/fbe-argocd-credential-architecture.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}
