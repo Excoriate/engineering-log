@@ -1,0 +1,178 @@
+--- Map Delta First ---
+.ai/tasks/2026-05-12-001_fbe-jupiter-argocd-auth/context
+.ai/tasks/2026-05-11-008_argocd-secret-extraction-1password/context
+.ai/tasks/2026-04-21-002_redis-alerts-override-impl/context
+.ai/tasks/2026-04-13-001_acc-clientgateway-issue/context
+.ai/tasks/2026-04-13-001_acc-clientgateway-issue/context/ai-map.md
+.ai/tasks/2026-04-13-001_acc-clientgateway-issue/context/docs-map.md
+.ai/tasks/2026-04-13-001_acc-clientgateway-issue/context/codebase-map.md
+.ai/tasks/2026-04-13-001_acc-clientgateway-issue/context/config-map.md
+.ai/tasks/2026-05-11-002_rotating-expired-argocd-secrets/context
+.ai/tasks/2026-05-11-002_rotating-expired-argocd-secrets/context/ai-map.md
+.ai/tasks/2026-05-11-002_rotating-expired-argocd-secrets/context/docs-map.md
+.ai/tasks/2026-05-11-002_rotating-expired-argocd-secrets/context/automation-map.md
+.ai/tasks/2026-05-11-002_rotating-expired-argocd-secrets/context/codebase-map.md
+.ai/tasks/2026-05-11-002_rotating-expired-argocd-secrets/context/config-map.md
+.ai/tasks/2026-05-11-002_rotating-expired-argocd-secrets/context/discovery-map.md
+.ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/context
+.ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/02-map
+.ai/tasks/2026-05-11-005_cmc-alert-vpp-cluster-prod/04-context
+.ai/tasks/2026-05-11-004_harness-scaffold/context
+.ai/tasks/2026-04-26-001_mfrr-activation-crashloop-verify-and-fix/context
+.ai/tasks/2026-04-26-001_mfrr-activation-crashloop-verify-and-fix/context/maps
+.ai/tasks/2026-05-11-003_rootly-alert-ln2i9h-intake-rca/context
+.ai/tasks/2026-05-11-003_rootly-alert-ln2i9h-intake-rca/context/p2-map.md
+.ai/tasks/2026-03-09-002_diagnose-rust-cli/context
+.ai/tasks/2026-03-09-002_diagnose-rust-cli/docs-map.txt
+.ai/tasks/2026-03-09-002_diagnose-rust-cli/codebase-map.txt
+.ai/tasks/2026-03-09-002_diagnose-rust-cli/ai-map.txt
+.ai/tasks/2026-03-09-002_diagnose-rust-cli/config-map.txt
+.ai/tasks/2026-03-27-001_gurobi-throttling-rca-review/context
+.ai/tasks/2026-04-13-001_argocd-dev-endpoint-unreachable/context
+.ai/tasks/2026-04-13-001_argocd-dev-endpoint-unreachable/context/docs-map.txt
+.ai/tasks/2026-04-13-001_argocd-dev-endpoint-unreachable/context/codebase-map.txt
+.ai/tasks/2026-04-13-001_argocd-dev-endpoint-unreachable/context/ai-map.txt
+.ai/tasks/2026-04-13-001_argocd-dev-endpoint-unreachable/context/config-map.txt
+.ai/tasks/2026-04-26-003_2ndbrain-knowledge-build-pbbtbv-lessons/context
+.ai/tasks/2026-03-09-001_append-adversarial-review/context
+.ai/tasks/2026-04-26-002_rootly-alert-pbbtbv-rca/context
+.ai/tasks/2026-04-26-002_rootly-alert-pbbtbv-rca/context/map-config.md
+.ai/tasks/2026-04-26-002_rootly-alert-pbbtbv-rca/context/map-discovery.md
+.ai/tasks/2026-04-26-002_rootly-alert-pbbtbv-rca/context/map-docs.md
+.ai/tasks/2026-04-26-002_rootly-alert-pbbtbv-rca/context/map-ai.md
+.ai/tasks/2026-04-26-002_rootly-alert-pbbtbv-rca/context/map-codebase.md
+.ai/tasks/2026-05-12-001_topic-not-found/context
+.ai/tasks/2026-03-09-001_service-bus-alert-runbook/context
+.ai/tasks/2026-03-09-001_service-bus-alert-runbook/context/00-auth-context.txt
+.ai/tasks/2026-03-09-001_service-bus-alert-runbook/docs-map.txt
+.ai/tasks/2026-03-09-001_service-bus-alert-runbook/codebase-map.txt
+.ai/tasks/2026-03-09-001_service-bus-alert-runbook/ai-map.txt
+.ai/tasks/2026-03-09-001_service-bus-alert-runbook/config-map.txt
+.ai/tasks/2026-05-13-001_enrich-work-eneco/context
+--- git status ---
+ M .ai/runtime/current-task.json
+ D log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/context.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/fix.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/rca.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/repos.txt
+ D log/employer/eneco/02_on_call_shift/2026_05_11_aad_permissions_e2e_avd_tests_johnson_lobos/slack-intake.txt
+ D log/employer/eneco/02_on_call_shift/2026_05_11_fbe_jupiter_argocd_image_auth_error/context.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_fbe_jupiter_argocd_image_auth_error/fbe-skill-reflection.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_fbe_jupiter_argocd_image_auth_error/fix.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_fbe_jupiter_argocd_image_auth_error/rca.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_fbe_jupiter_argocd_image_auth_error/slack-intake.txt
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/antecedents/p4-evidence-corpus.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/antecedents/rootly-alert-meta.json
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/antecedents/rootly-alert-payload.json
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/antecedents/rootly-alert-raw-decoded.txt
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/antecedents/sherlock-diagnosis-attack.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/antecedents/socrates-framing-attack.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/auxiliary/cross-rca-correlation-with-005.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/auxiliary/el-demoledor-post-draft-attack.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/auxiliary/socrates-post-draft-attack.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/oc-probes.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/output/rca.md
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/proofs/outputs/rootly-alert-urgencies.tsv
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/proofs/outputs/rootly-cputhrottlinghigh-30d-history.tsv
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/proofs/outputs/rootly-otc-container-history.tsv
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/proofs/scripts/replay-rootly-intake.sh
+ D log/employer/eneco/02_on_call_shift/2026_05_11_rootly_alert_cpu_throtling/rca-2026-05-12-followup.md
+?? .ai/runtime/second-brain/consolidation-attestation.json
+?? .ai/tasks/2026-05-13-001_enrich-work-eneco/context/01-task-requirements-final.md
+?? .ai/tasks/2026-05-13-001_enrich-work-eneco/context/01-task-requirements-initial.md
+?? .ai/tasks/2026-05-13-001_enrich-work-eneco/context/02-context-universe-map.md
+?? .ai/tasks/2026-05-13-001_enrich-work-eneco/context/03-source-evidence-synthesis.md
+?? .ai/tasks/2026-05-13-001_enrich-work-eneco/lessons-learned/obsidian-cli-path-read.md
+?? .ai/tasks/2026-05-13-001_enrich-work-eneco/manifest.json
+?? .ai/tasks/2026-05-13-001_enrich-work-eneco/outcome/summary.md
+?? .ai/tasks/2026-05-13-001_enrich-work-eneco/plan/plan.md
+?? .ai/tasks/2026-05-13-001_enrich-work-eneco/verification/results.md
+?? .ai/tasks/2026-05-13-001_logic-app-slack-fbe-query/01-task-requirements-initial.md
+?? .ai/tasks/2026-05-13-001_logic-app-slack-fbe-query/context/01-map.txt
+?? .ai/tasks/2026-05-13-001_logic-app-slack-fbe-query/manifest.json
+?? log/employer/eneco/02_on_call_shift/2026_05_12_aad_permissions_e2e_avd_tests_johnson_lobos/context.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_aad_permissions_e2e_avd_tests_johnson_lobos/fix.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_aad_permissions_e2e_avd_tests_johnson_lobos/rca.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_aad_permissions_e2e_avd_tests_johnson_lobos/repos.txt
+?? log/employer/eneco/02_on_call_shift/2026_05_12_aad_permissions_e2e_avd_tests_johnson_lobos/slack-intake.txt
+?? log/employer/eneco/02_on_call_shift/2026_05_12_fbe_jupiter_argocd_image_auth_error/context.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_fbe_jupiter_argocd_image_auth_error/fbe-skill-reflection.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_fbe_jupiter_argocd_image_auth_error/fix.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_fbe_jupiter_argocd_image_auth_error/rca.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_fbe_jupiter_argocd_image_auth_error/slack-intake.txt
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/antecedents/p4-evidence-corpus.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/antecedents/rootly-alert-meta.json
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/antecedents/rootly-alert-payload.json
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/antecedents/rootly-alert-raw-decoded.txt
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/antecedents/sherlock-diagnosis-attack.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/antecedents/socrates-framing-attack.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/auxiliary/cross-rca-correlation-with-005.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/auxiliary/el-demoledor-post-draft-attack.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/auxiliary/socrates-post-draft-attack.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/oc-probes.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/output/rca.md
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/proofs/outputs/rootly-alert-urgencies.tsv
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/proofs/outputs/rootly-cputhrottlinghigh-30d-history.tsv
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/proofs/outputs/rootly-otc-container-history.tsv
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/proofs/scripts/replay-rootly-intake.sh
+?? log/employer/eneco/02_on_call_shift/2026_05_12_rootly_alert_cpu_throtling/rca-2026-05-12-followup.md
+--- git log ---
+5b5de1c feat: better nvim config
+662d385 feat: better nvim config
+254c357 fix: ghostty confgi
+8c27f52 docs: engineering logs
+4fe3c06 docs: engineering logs
+874a357 docs: add missing harness
+4b2af44 docs: add missing harness
+8b720c4 docs: add missing harness
+b619b26 docs: better c prompt
+137c153 feat: add skill for sb
+5cc12ee docs: add rca on recent alert
+76e5ed0 feat: add github agent, add mcp skill
+b110c7d docs: recent logs
+5f5e450 docs: add alert analysis, andrunbook
+6443056 docs: add alert analysis and runbook
+a160f42 docs: analysis
+4d42793 docs: troubleshoot pipeline failure
+87e1e3d feat: add new claude code prompt version
+66f8bc5 chore: add troubleshooting document
+d9e54a8 chore: add troubleshooting document
+--- root entries ---
+.
+./.ai
+./.ai/harness
+./.ai/memory
+./.ai/runtime
+./.ai/tasks
+./.ai/unspecified
+./.claude
+./.claude/rules
+./.claude/skills
+./.cursor
+./.cursor/rules
+./.gemini
+./.gemini/skills
+./.git
+./.git/cursor
+./.git/gk
+./.git/hooks
+./.git/info
+./.git/logs
+./.git/objects
+./.git/refs
+./.github
+./.github/ISSUE_TEMPLATE
+./.github/PULL_REQUEST_TEMPLATE
+./.github/workflows
+./.idea
+./.vscode
+./docs
+./docs/guides
+./engineering
+./engineering/azure_keyvault_rotation
+./log
+./log/employer
+./scratchpad
+--- az availability ---
+/opt/homebrew/bin/az
+2.86.0

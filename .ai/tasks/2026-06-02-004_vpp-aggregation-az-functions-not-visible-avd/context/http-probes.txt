@@ -1,0 +1,79 @@
+# HTTP fingerprint probes — agg.dev.vpp.eneco.com (dev aggregation ingress)
+# captured: 2026-06-02 (laptop, public internet, user Alex.Torres@eneco.com session not used for these)
+
+===================================================================
+URL: https://agg.dev.vpp.eneco.com/
+HTTP/1.1 200 OK
+Date: Tue, 02 Jun 2026 09:09:53 GMT
+Content-Type: text/plain; charset=utf-8
+>> HTTP=200 ctype=text/plain; charset=utf-8 size=62 connect=0.029883s ssl=0.048583s
+--- body (first 300 bytes) ---
+{"AssemblyVersion":"1.0.0.0","PackageName":"SiteRegistry.API"}
+
+===================================================================
+URL: https://agg.dev.vpp.eneco.com/api/siteregistry
+HTTP/1.1 200 OK
+Date: Tue, 02 Jun 2026 09:09:53 GMT
+Content-Type: text/plain; charset=utf-8
+>> HTTP=200 ctype=text/plain; charset=utf-8 size=62 connect=0.020455s ssl=0.040804s
+--- body (first 300 bytes) ---
+{"AssemblyVersion":"1.0.0.0","PackageName":"SiteRegistry.API"}
+
+===================================================================
+URL: https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/healthz
+HTTP/1.1 404 Not Found
+Date: Tue, 02 Jun 2026 09:09:53 GMT
+>> HTTP=404 ctype= size=0 connect=0.019892s ssl=0.040644s
+--- body (first 300 bytes) ---
+
+
+===================================================================
+URL: https://agg.dev.vpp.eneco.com/api/telemetryfunctiontestsfn/healthz
+HTTP/1.1 404 Not Found
+Date: Tue, 02 Jun 2026 09:09:54 GMT
+>> HTTP=404 ctype= size=0 connect=0.018522s ssl=0.037119s
+--- body (first 300 bytes) ---
+
+
+===================================================================
+URL: https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn
+HTTP/1.1 301 Moved Permanently
+Date: Tue, 02 Jun 2026 09:09:54 GMT
+Content-Type: text/html
+Location: http://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/
+>> HTTP=301 ctype=text/html size=162 connect=0.019690s ssl=0.038548s
+--- body (first 300 bytes) ---
+<html>
+<head><title>301 Moved Permanently</title></head>
+<body>
+<center><h1>301 Moved Permanently</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+
+===================================================================
+URL: https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/api/healthz
+HTTP/1.1 404 Not Found
+Date: Tue, 02 Jun 2026 09:09:54 GMT
+>> HTTP=404 ctype= size=0 connect=0.019669s ssl=0.041282s
+--- body (first 300 bytes) ---
+
+
+===================================================================
+URL: https://agg.dev.vpp.eneco.com/healthz
+HTTP/1.1 200 OK
+Date: Tue, 02 Jun 2026 09:09:54 GMT
+Content-Type: application/json
+>> HTTP=200 ctype=application/json size=68 connect=0.020496s ssl=0.040987s
+--- body (first 300 bytes) ---
+{"status":"Healthy","totalDuration":"00:00:00.0000036","entries":{}}
+
+===================================================================
+URL: https://agg.dev.vpp.eneco.com/api/telemetry/healthz
+HTTP/1.1 404 Not Found
+Date: Tue, 02 Jun 2026 09:09:54 GMT
+>> HTTP=404 ctype= size=0 connect=0.017806s ssl=0.036271s
+--- body (first 300 bytes) ---
+
+

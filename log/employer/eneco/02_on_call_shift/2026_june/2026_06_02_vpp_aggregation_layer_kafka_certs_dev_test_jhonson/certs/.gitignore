@@ -1,0 +1,4 @@
+# Private TLS/Kafka key material — MUST NOT be committed.
+# Files remain on disk (as requested) but are excluded from git.
+*
+!.gitignore

@@ -1,0 +1,418 @@
+{
+  "name": "vpp-fbe-deletion-trigger",
+  "state": "Enabled",
+  "location": "westeurope",
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "actions": {
+      "ComposeGetAndSplitValue": {
+        "inputs": "@split(body('ParseJson')?['actions'][0]['value'], '_')",
+        "runAfter": {
+          "ParseJson": [
+            "Succeeded"
+          ]
+        },
+        "type": "Compose"
+      },
+      "Condition": {
+        "actions": {
+          "Replace_Entity_(V2)": {
+            "inputs": {
+              "body": {
+                "PartitionKey": "@{body('Tableget')?['value'][0]['PartitionKey']}",
+                "RowKey": "@{body('Tableget')?['value'][0]['RowKey']}",
+                "Timestamp": "@{body('Tableget')?['value'][0]['Timestamp']}",
+                "active": "@{body('Tableget')?['value'][0]['active']}",
+                "branch": "@{body('Tableget')?['value'][0]['branch']}",
+                "createdby": "@{body('Tableget')?['value'][0]['createdby']}",
+                "env": "@{body('Tableget')?['value'][0]['env']}",
+                "queue": "@{body('Tableget')?['value'][0]['queue']}",
+                "slackresponse": "no"
+              },
+              "headers": {
+                "If-Match": "*"
+              },
+              "host": {
+                "connection": {
+                  "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                }
+              },
+              "method": "put",
+              "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('featurebranchenvdetails')}/entities/etag(PartitionKey='@{encodeURIComponent(body('Tableget')?['value'][0]['PartitionKey'])}',RowKey='@{encodeURIComponent(body('Tableget')?['value'][0]['RowKey'])}')"
+            },
+            "runAfter": {
+              "Update_Slack_Message_After_Response_-_No": [
+                "Succeeded"
+              ]
+            },
+            "type": "ApiConnection"
+          },
+          "Send_No_Response_Message": {
+            "inputs": {
+              "body": {
+                "channel": "@{body('ParseJson')?['user']['id']}",
+                "text": "You have selected 'No'. The @{variables('env')} environment will be deleted shortly."
+              },
+              "headers": {
+                "Authorization": "Bearer [REDACTED_SLACK_BOT_TOKEN]",
+                "Content-Type": "application/json"
+              },
+              "method": "POST",
+              "uri": "https://slack.com/api/chat.postMessage"
+            },
+            "runAfter": {
+              "Send_an_HTTP_request_to_Azure_DevOps": [
+                "Succeeded"
+              ]
+            },
+            "type": "Http"
+          },
+          "Send_an_HTTP_request_to_Azure_DevOps": {
+            "inputs": {
+              "body": {
+                "Body": "{\n    \"stagesToSkip\":[\n       \n    ],\n    \"resources\":{\n       \"repositories\":{\n          \"self\":{\n             \"refName\":\"refs/heads/development\"\n          }\n       }\n    },\n    \"templateParameters\": {\n        \"environment\": \"@{variables('env')}\"\n       },\n    \"variables\":{\n       \"bypassEnvironmentOwnerValidation\":{\n          \"isSecret\":false,\n          \"value\":\"true\"\n       }\n    }\n }",
+                "Method": "POST",
+                "Uri": "Myriad%20-%20VPP/_apis/pipelines/2629/runs?api-version=6.0-preview.1"
+              },
+              "host": {
+                "connection": {
+                  "name": "@parameters('$connections')['visualstudioteamservices-1']['connectionId']"
+                }
+              },
+              "method": "post",
+              "path": "/httprequest",
+              "queries": {
+                "account": "enecomanagedcloud"
+              }
+            },
+            "type": "ApiConnection"
+          },
+          "Update_Slack_Message_After_Response_-_No": {
+            "inputs": {
+              "body": {
+                "attachments": [
+                  {
+                    "attachment_type": "default",
+                    "callback_id": "@{body('ParseJson')?['callback_id']}",
+                    "color": "#3AA3E3",
+                    "text": "You have already made a selection. No further action is needed."
+                  }
+                ],
+                "channel": "@{body('ParseJson')?['channel']['id']}",
+                "text": "You have selected 'No'. The buttons are now disabled.",
+                "ts": "@{body('ParseJson')?['message_ts']}"
+              },
+              "headers": {
+                "Authorization": "Bearer [REDACTED_SLACK_BOT_TOKEN]",
+                "Content-Type": "application/json"
+              },
+              "method": "POST",
+              "uri": "https://slack.com/api/chat.update"
+            },
+            "runAfter": {
+              "Send_No_Response_Message": [
+                "Succeeded"
+              ]
+            },
+            "type": "Http"
+          }
+        },
+        "else": {
+          "actions": {
+            "Replace_Entity_(V2)-copy": {
+              "inputs": {
+                "body": {
+                  "PartitionKey": "@{body('Tableget')?['value'][0]['PartitionKey']}",
+                  "RowKey": "@{body('Tableget')?['value'][0]['RowKey']}",
+                  "Timestamp": "@{body('Tableget')?['value'][0]['Timestamp']}",
+                  "active": "@{body('Tableget')?['value'][0]['active']}",
+                  "branch": "@{body('Tableget')?['value'][0]['branch']}",
+                  "createdby": "@{body('Tableget')?['value'][0]['createdby']}",
+                  "env": "@{body('Tableget')?['value'][0]['env']}",
+                  "queue": "@{body('Tableget')?['value'][0]['queue']}",
+                  "slackresponse": "yes"
+                },
+                "headers": {
+                  "If-Match": "*"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+                  }
+                },
+                "method": "put",
+                "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('featurebranchenvdetails')}/entities/etag(PartitionKey='@{encodeURIComponent(body('Tableget')?['value'][0]['PartitionKey'])}',RowKey='@{encodeURIComponent(body('Tableget')?['value'][0]['RowKey'])}')"
+              },
+              "runAfter": {
+                "Update_Slack_Message_After_Yes": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ApiConnection"
+            },
+            "Send_Yes_Response_Message": {
+              "inputs": {
+                "body": {
+                  "channel": "@{body('ParseJson')?['user']['id']}",
+                  "text": "You have selected 'Yes'. The @{variables('env')} environment will remain active."
+                },
+                "headers": {
+                  "Authorization": "Bearer [REDACTED_SLACK_BOT_TOKEN]",
+                  "Content-Type": "application/json"
+                },
+                "method": "POST",
+                "uri": "https://slack.com/api/chat.postMessage"
+              },
+              "type": "Http"
+            },
+            "Update_Slack_Message_After_Yes": {
+              "inputs": {
+                "body": {
+                  "attachments": [
+                    {
+                      "attachment_type": "default",
+                      "callback_id": "@{body('ParseJson')?['callback_id']}",
+                      "color": "#3AA3E3",
+                      "text": "You have already made a selection. No further action is needed."
+                    }
+                  ],
+                  "channel": "@{body('ParseJson')?['channel']['id']}",
+                  "text": "You have selected 'Yes'. The buttons are now disabled.",
+                  "ts": "@{body('ParseJson')?['message_ts']}"
+                },
+                "headers": {
+                  "Authorization": "Bearer [REDACTED_SLACK_BOT_TOKEN]",
+                  "Content-Type": "application/json"
+                },
+                "method": "POST",
+                "uri": "https://slack.com/api/chat.update"
+              },
+              "runAfter": {
+                "Send_Yes_Response_Message": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http"
+            }
+          }
+        },
+        "expression": {
+          "and": [
+            {
+              "equals": [
+                "@variables('condition')",
+                "no"
+              ]
+            }
+          ]
+        },
+        "runAfter": {
+          "Tableget": [
+            "Succeeded"
+          ]
+        },
+        "type": "If"
+      },
+      "Initialize_variable": {
+        "inputs": {
+          "variables": [
+            {
+              "name": "condition",
+              "type": "string",
+              "value": "@{outputs('ComposeGetAndSplitValue')[0]}"
+            }
+          ]
+        },
+        "runAfter": {
+          "ComposeGetAndSplitValue": [
+            "Succeeded"
+          ]
+        },
+        "type": "InitializeVariable"
+      },
+      "Initialize_variable_1": {
+        "inputs": {
+          "variables": [
+            {
+              "name": "env",
+              "type": "string",
+              "value": "@{outputs('ComposeGetAndSplitValue')[1]}"
+            }
+          ]
+        },
+        "runAfter": {
+          "Initialize_variable": [
+            "Succeeded"
+          ]
+        },
+        "type": "InitializeVariable"
+      },
+      "ParseJson": {
+        "inputs": {
+          "content": "@json(decodeUriComponent(triggerBody()['$formdata'][0]['value']))",
+          "schema": {
+            "properties": {
+              "actions": {
+                "items": {
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "type",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "runAfter": {},
+        "type": "ParseJson"
+      },
+      "Tableget": {
+        "inputs": {
+          "host": {
+            "connection": {
+              "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+            }
+          },
+          "method": "get",
+          "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('featurebranchenvdetails')}/entities",
+          "queries": {
+            "$filter": "env eq '@{variables('env')}'"
+          }
+        },
+        "runAfter": {
+          "Initialize_variable_1": [
+            "Succeeded"
+          ]
+        },
+        "type": "ApiConnection"
+      }
+    },
+    "contentVersion": "1.0.0.0",
+    "outputs": {},
+    "parameters": {
+      "$connections": {
+        "defaultValue": {},
+        "type": "Object"
+      }
+    },
+    "triggers": {
+      "HTTPTrigger": {
+        "inputs": {
+          "schema": {
+            "properties": {
+              "action_ts": {
+                "type": "string"
+              },
+              "actions": {
+                "items": {
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "type",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "attachment_id": {
+                "type": "string"
+              },
+              "callback_id": {
+                "type": "string"
+              },
+              "channel": {
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "enterprise": {
+                "type": "object"
+              },
+              "is_app_unfurl": {
+                "type": "boolean"
+              },
+              "is_enterprise_install": {
+                "type": "boolean"
+              },
+              "message_ts": {
+                "type": "string"
+              },
+              "original_message": {
+                "type": "object"
+              },
+              "response_url": {
+                "type": "string"
+              },
+              "team": {
+                "properties": {
+                  "domain": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "token": {
+                "type": "string"
+              },
+              "trigger_id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "user": {
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "kind": "Http",
+        "type": "Request"
+      }
+    }
+  }
+}

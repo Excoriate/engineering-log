@@ -240,5 +240,142 @@
     "added": "2026-05-12",
     "last_validated": "2026-05-12",
     "task_origin": "2026-05-12-003_oncall-aad-permissions-johnson-lobo-avd-e2e"
+  },
+  {
+    "id": "LL-016",
+    "scope": "log/employer/eneco/**",
+    "category": "tool-gotcha",
+    "severity": "medium",
+    "confidence": "validated",
+    "summary": "Azure Key Vault stores a secret VALUE as an opaque string. `az keyvault secret show --query value` with the DEFAULT/`-o json` output returns it JSON-escaped (wrapping quotes + literal \\n on a single line), which looks like a corrupt/malformed PEM. `-o tsv` (or `az keyvault secret download --file`) returns the raw byte-clean multi-line PEM. The Azure Portal's single-line 'Secret value' field reproduces the same visual symptom. Therefore 'the PEM from Key Vault is not in good format' is almost always a READ-METHOD artifact, not corrupt storage. Confirm storage is fine: re-read with -o tsv, then openssl x509 -noout -subject. Validate a cert SET in 3 moves: parse+dates (openssl x509 -dates), chain verify (openssl verify -CAfile ca leaf), key<->cert public-half match (diff <(openssl pkey -in key -pubout) <(openssl x509 -in cert -noout -pubkey)).",
+    "root_cause": "JSON output must escape newline (0x0A) as the two characters backslash-n and wrap strings in quotes; reading the JSON/Portal view and concluding the stored secret is broken confuses the read encoding with the storage.",
+    "fix": "Re-read: az keyvault secret show --vault-name <kv> --name <k> --query value -o tsv > out.pem . Detect the artifact: grep -cF '\\n' out.pem (0 = clean). Then verify with openssl as above.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_layer_kafka_certs_dev_test_jhonson/rca-feynman.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_layer_kafka_certs_dev_test_jhonson/cert-inspection-cookbook.md"
+    ],
+    "added": "2026-06-02",
+    "last_validated": "2026-06-02",
+    "task_origin": "2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test"
+  },
+  {
+    "id": "LL-017",
+    "scope": "log/employer/eneco/**",
+    "category": "security-process",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "On-call requests to 'provide the Kafka certificate' (or any cert) frequently include a PRIVATE KEY (e.g. kafka-sslkey). Handing private keys over Slack/email copies them into durable, searchable, off-platform storage that cannot be reliably revoked — a secret-handling anti-pattern. The intended pattern is runtime fetch by the application via managed identity / RBAC; a human needing the raw key by hand signals local dev/test, a consumer not wired to KV, or missing KV access. Correct resolution = SELF-SERVE: grant the requester KV read RBAC + give them the correct `-o tsv` retrieval command, so the key never traverses chat. If a key has already been shared, ROTATE it. Minimum-exposure handoff if unavoidable = secret manager / 1Password share, never plain Slack/email, delete after use.",
+    "root_cause": "Key Vault exists so secrets are NOT copied into uncontrolled systems; manual extraction + chat hand-off bypasses that boundary and creates an unrevocable leak.",
+    "fix": "Redirect the request to self-serve KV access + retrieval command; flag rotation if the key was already shared; never paste private-key material into Slack, email, or the agent transcript. Also relevant: vpp-agg-* KVs are firewall-restricted per env (need MC SP login + IP whitelist via eneco-tools-connect-mc-environments, then whitelist-OFF); the Sandbox vault vpp-agg-sb is reachable directly.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_layer_kafka_certs_dev_test_jhonson/diagnosis.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_layer_kafka_certs_dev_test_jhonson/slack-reply.md"
+    ],
+    "added": "2026-06-02",
+    "last_validated": "2026-06-02",
+    "task_origin": "2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test"
+  },
+  {
+    "id": "LL-018",
+    "scope": "log/employer/eneco/**",
+    "category": "error-pattern",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "A pipeline step running `az boards`/`az repos` WITHOUT --organization/--project triggers the azure-devops CLI's git-remote context auto-detection: it reads `git config remote.origin.url` and calls `GET <org>/<project>/_git/<repo>/vsts/info` (cached in ~/.azure/azuredevops/cache/remotes.json). On an EPHEMERAL Microsoft-hosted agent the cache is ALWAYS cold, so the call fires every run. Under the project setting enforceJobAuthScope=true the project-scoped Build Service token (System.AccessToken) is denied that repo-context read -> `TF401019: The Git repository ... does not exist or you do not have permissions ... 404` (a 404-masks-403). The lowercased repo id in the error == the /vsts/info URL repo id, byte-for-byte. This makes a *Boards* command emit a *git-repository* error even though tagging never reads the repo. Switching the agent pool does NOT fix it: the auth identity is the project Build Service identity, INDEPENDENT of the pool (a pool swap only masks via a different az/extension version or a cached broad credential, and costs a second runner + job split).",
+    "root_cause": "The CLI's implicit context auto-detection is a privileged repo-context read; under a scoped pipeline token it is denied. The script relied on auto-detection instead of explicit context. Onset is external (no code change): a long-static script breaks when enforceJobAuthScope is enabled or the hosted agent's az/azure-devops extension version starts performing the cold-cache /vsts/info detection.",
+    "fix": "Pass explicit, detection-free context: `az boards query --organization \"$SYSTEM_COLLECTIONURI\" --project \"$SYSTEM_TEAMPROJECT\" --detect false`. The /vsts/info call then never happens (verified: `--debug | grep -c vsts/info` = 0). NOTE: `az boards work-item show/update` accept --org/--detect but REJECT --project (work items are org-global by id: `unrecognized arguments: --project`) -- use two contexts. Only `az boards query` needs the fix (work-item show/update never call /vsts/info). Do NOT 'switch to the Core Platform runner' as the fix. Triage: (1) `az repos show` proves the repo exists -> it's permission, not missing; (2) is the failing call an az boards/az repos call without --org? (3) `az devops invoke build generalSettings --query enforceJobAuthScope`.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/fix.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/feynman-explanation.md"
+    ],
+    "added": "2026-06-02",
+    "last_validated": "2026-06-02",
+    "task_origin": "2026-06-02-001_btm-pipeline-failed-git-error"
+  },
+  {
+    "id": "LL-019",
+    "scope": "log/employer/eneco/**",
+    "category": "incident-methodology",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "GREEN step != realized effect. A bash pipeline step with no `set -e` that runs a command inside a process substitution (`while read ...; do ...; done < <(cmd)`) SWALLOWS cmd's non-zero exit, so the ADO task succeeds while the work silently never happened (BTM: `az boards query` returned TF401019, the tag was never applied, build stayed green for ~6 weeks). Detection/fix: verify the REALIZED effect (the tag/resource/state), never the step status. Two more reusable moves from this incident: (a) DATE a silent onset by bisecting historical build logs for the error string -- `az devops invoke build builds maxTime=<date> ... resultFilter=succeeded` -> timeline -> the step's log -> grep; this turned 'weeks or months ago' into a 10-day window (2026-04-15 OK -> 04-25 broken) and, with no code change in that window, proved an external/org trigger. (b) For a COSMETIC post-deploy step (no continueOnError) make failures loud-but-NON-blocking via `echo ##vso[task.logissue type=error]` + `##vso[task.complete result=SucceededWithIssues]` -- a bare `set -euo pipefail` would convert a transient WIT 5xx or a future cross-project item into a deploy-blocking RED build.",
+    "root_cause": "Process substitution runs in a child whose exit code does not propagate to the parent; without set -e the parent exits 0. The original also clobbered tags: a flat `az boards query` returns only System.Id (no System.Tags), so the old `read -r id tags` got tags='' and wrote `System.Tags=; TAG`, replacing the tag list -- harmless only because BtM items had no other tags.",
+    "fix": "Capture command output into a variable (so set -e / explicit check can catch failure) instead of piping into a process substitution; assert the realized effect in verification; read-modify-write the UNION for additive fields (System.Tags), never overwrite; use SucceededWithIssues for non-blocking visibility on cosmetic steps. Onset-bisection one-liner template lives in the incident's rca.md L11.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/azure-boards-add-tag.fixed.sh"
+    ],
+    "added": "2026-06-02",
+    "last_validated": "2026-06-02",
+    "task_origin": "2026-06-02-001_btm-pipeline-failed-git-error"
+  },
+  {
+    "id": "LL-020",
+    "scope": "log/employer/eneco/**",
+    "category": "networking-ingress",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "nginx ingress prefix-mount WITHOUT rewrite-target makes a HEALTHY app 404 its own routes. agg.dev telemetryfunctiontestsfn 404: ingress path /telemetryfunctiontestsfn/ (pathType Prefix, no rewrite) forwards the unstripped path to an Azure Functions host that serves /healthz at ROOT. siteregistry works ONLY because mounted at '/'. deliveryreportfn 404s identically (systemic). Topology: DNS->App Gateway vpp-agw-d (WAF_v2, Basic pass-through, 20.76.210.221)->AKS nginx v1.14.0 (50.85.91.121, ns vpp-agg)->ClusterIP:8080->pod.",
+    "root_cause": "AGIC->nginx migration (PR 150758, Nov-2025) switched ingress class to nginx and dropped the appgw annotation, but never added the nginx equivalent. The chart's only prefix-strip was appgw.ingress.kubernetes.io/backend-path-prefix (AGIC), which nginx silently ignores. nginx.ingress.kubernetes.io/rewrite-target was never committed (git -S = 0). Legacy migration gap, not a regression. Verified vs live helm release v215 chart 0.1.27 (annotations:{}).",
+    "fix": "Add to the chart values (Eneco.Vpp.Aggregation/azure-pipeline/Helm/<svc>/values.yaml; mirror in deliveryreportfn): path /<svc>(/|$)(.*) + nginx.ingress.kubernetes.io/use-regex:'true' + nginx.ingress.kubernetes.io/rewrite-target:/$2 (class already nginx). Proven by composition (backend /healthz=200). Restores /healthz only; the *fn are timer/Kafka-triggered QA test functions (ADR AL006), no HTTP functions (/api/*=404,/admin/*=401). Alternative: use canonical OpenShift agg.dev-mc (Route rewrite already correct) but it is internal-only (needs AVD whitelist, wiki 44740). NOT a fix: image re-sync or AVD whitelist.",
+    "references": [
+      ".ai/tasks/2026-06-02-004_vpp-aggregation-az-functions-not-visible-avd/outcome/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_az_functions_not_visible_avd/"
+    ],
+    "added": "2026-06-02",
+    "last_validated": "2026-06-02",
+    "task_origin": "2026-06-02-004"
+  },
+  {
+    "id": "LL-021",
+    "scope": "log/employer/eneco/**",
+    "category": "incident-methodology",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "Triage heuristic for 'X not accessible from AVD': a clean HTTP 404 over a working TCP/TLS connect means the edge is UP and ROUTING -> it is a PATH problem, NOT network. Do not chase AVD whitelist/VNET/Private Endpoint on a 404 (those give timeout/403). Bisect ingress vs backend with `kubectl -n <ns> port-forward svc/<svc> 8080:8080`: if backend /healthz=200 but /<prefix>/healthz=404, the bug is the ingress prefix/rewrite, not the app. A service mounted at '/' is the false-negative control that hides prefix-rewrite bugs across siblings. Also: prove origin with the nginx access log (upstream IP + status), not header heuristics (Server header may be absent even on 200s). And verify deploy-state from the LIVE helm release (decode secret sh.helm.release.v1.<rel>.vN: data.release | base64 -d | base64 -d | gunzip | jq) rather than stale local clones.",
+    "root_cause": "AVD framing biases toward a network hypothesis; the status code + a port-forward bisection localize the real layer in two probes.",
+    "fix": "Apply the 404-over-clean-connect heuristic; bisect with port-forward; cite access log for origin; decode live helm release for deployed values.",
+    "references": [
+      ".ai/tasks/2026-06-02-004_vpp-aggregation-az-functions-not-visible-avd/outcome/feynman-explainer.md"
+    ],
+    "added": "2026-06-02",
+    "last_validated": "2026-06-02",
+    "task_origin": "2026-06-02-004"
+  },
+  {
+    "id": "LL-022",
+    "scope": "log/employer/eneco/**",
+    "category": "credential-management",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "VPP Aggregation Layer Kafka (ESP/Axual) mTLS CLIENT certs (CN esp-eet-vpp-{dt,acc,prd}.streaming.eneco.com) are issued as a password-protected PFX by Networking4All (Jenke van Gerven) front-ending the Trust Provider B.V./DigiCert PKI, requested via ServiceNow, ~1yr validity, MANUAL (no ACME). The PFX is split with openssl into kafka-cacert/kafka-clientcert/kafka-sslkey + keystore password. OWNER: Fabrizio Zavalloni (operator who runs esp-eet-vpp-* renewals) + Roel van de Grint (Axual apps + Networking4All contact). RUNBOOK: wiki 'Myriad - Aggregation Layer / Runbook certificate rotation aggregation layer' (Page 50903) via ArgoCD app esp-certificate-agg -> recreate 'keys' k8s secret -> update PFX password in keyvault -> restart. MONITORING BLIND SPOT: the #expiring-certificates Slack bot AND the ESP expiry pipeline (definitionId 2735 -> myriad-alerts-devops) only list NOT-YET-expired certs; once a cert expires it disappears from the digest, so an already-expired cert is invisible. No documented sandbox->runtime propagation; runbook is prod-centric. RECURRENCE: near-identical agg-layer expiry 2025-09-08 (same KVs vpp-agg-sb / vpp-agg-appsec-{d,a,p}).",
+    "root_cause": "Manual reseller-issued PFX + prod-only runbook + expiry monitoring that hides already-expired certs + sandbox-vault (vpp-agg-sb) vs runtime-vault (vpp-agg-appsec-{d,a,p}) divergence: a 2026-05-29 rotation landed only in sandbox and was never propagated to runtime, so dev (esp-eet-vpp-dt) and acc (esp-eet-vpp-acc) certs both stayed EXPIRED from 2026-01-10.",
+    "fix": "On agg-layer Kafka cert expiry: (1) align with Fabrizio first (a company-wide ESP rotation may already be in flight - Dec-2025 effort); (2) follow runbook 50903 per environment; (3) request re-issue via Networking4All/ServiceNow if no valid PFX exists (acc had none); (4) ALWAYS verify the RUNTIME vault vpp-agg-appsec-{d,a,p}, not just sandbox vpp-agg-sb; (5) add an ALREADY-EXPIRED-aware expiry alarm (the current digest only catches not-yet-expired). LL-006 class.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_layer_kafka_certs_dev_test_jhonson/cross-environment-findings.md",
+      ".ai/tasks/2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test/context/05-docs-kafka-cert-rotation.md",
+      ".ai/tasks/2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test/context/06-slack-kafka-cert.md"
+    ],
+    "added": "2026-06-02",
+    "last_validated": "2026-06-02",
+    "task_origin": "2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test"
+  },
+  {
+    "id": "LL-023",
+    "scope": "log/employer/eneco/**",
+    "category": "investigation-methodology",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "A K8s Secret present in some environments but missing in ONE (pod FailedMount \"secret X not found\") is usually a DEPLOY-PATH ENROLLMENT GAP, not dead code. Different envs can use different deploy paths: MC may deploy a Helm chart via a GitOps app-of-apps + OCI registry, while a sandbox/legacy env uses an in-repo pipeline that omits it. A single repo string-search can FALSE-NEGATIVE (glob push-loops like `for i in $(ls Helm/)` never contain the literal chart path) - verify via CONSUMERS (OCI registry, GitOps repo). Use ownerReferences (NOT managedFields) as the manual-vs-controller discriminator: on K8s 1.31.x even CSI-projected secrets can have empty managedFields. CSI SecretProviderClass secretObjects are projected only while a pod mounts the SPC as a CSI volume (mount-coupled, can orphan when an unrelated mounting pod scales to 0); ESO is mount-independent.",
+    "root_cause": "Investigations stop at \"where is X defined?\" (grep) instead of \"what deploys X in THIS environment?\". Env-specific deploy paths diverge (GitOps+OCI vs legacy in-repo Helm). managedFields can be empty for controller-projected secrets, making it an invalid provenance signal. CSI projected secrets are a side-effect of an active SPC CSI-volume mount, not standalone objects.",
+    "fix": "Triage \"secret in env B but missing in env A\": (1) kubectl get secret X -o json -> ownerReferences absent + no helm/csi labels => hand-made; (2) check BOTH deploy paths incl. the GitOps repo + OCI registry, never trust one ado-repo-search; (3) if wiring via CSI, the CONSUMING pods MUST mount the SPC CSI volume or the projection orphans - prefer ESO; (4) NEVER delete a shared chart/template another environment still renders from (verify cross-env consumption first). Full chain: task 2026-06-02-001 RCA.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_layer_sandbox_broken_jhonson/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_layer_sandbox_broken_jhonson/adversarial/sherlock-root-cause.md"
+    ],
+    "added": "2026-06-02",
+    "last_validated": "2026-06-02",
+    "task_origin": "2026-06-02-001_vpp-aggregation-layer-sandbox-broken"
   }
 ]

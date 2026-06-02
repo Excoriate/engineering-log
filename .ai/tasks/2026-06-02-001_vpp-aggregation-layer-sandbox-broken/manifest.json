@@ -1,0 +1,42 @@
+{
+  "task_id": "2026-06-02-001",
+  "slug": "vpp-aggregation-layer-sandbox-broken",
+  "task_root": ".ai/tasks/2026-06-02-001_vpp-aggregation-layer-sandbox-broken",
+  "domain_class": "investigation",
+  "control_plane_artifact": false,
+  "compression_mode": "Full",
+  "crubvg_provisional": 7,
+  "created": "2026-06-02",
+  "requester": "jhonson (named in incident folder)",
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_layer_sandbox_broken_jhonson",
+    "/Users/alextorresruiz/Documents/obsidian/llm-wiki/learnings/lessons",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory"
+  ],
+  "allowed_external_paths_authorization": "log incident folder = user-named target; Second Brain llm-wiki + .claude/memory = standing authorization per rules/governance/llm-wiki-protocol.md + memory-freshness.md + brain memory mandate",
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_layer_sandbox_broken_jhonson/ (context.md, rca.md, fix.md, how-to-feynman-explainer.md, evidence/, adversarial/, verification/)",
+    ".ai/memory/lessons-learned.json (appended LL-023, atomic jq+mv, no existing entries modified)",
+    "$SECOND_BRAIN/llm-wiki/learnings/lessons/eneco-secret-deploy-path-enrollment-gap.md (dual-path companion)",
+    "~/.claude/projects/.../memory/feedback_oncall_secret_deploy_path_gap.md (+ MEMORY.md pointer)"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "adversarial_receipts": [
+    "adversarial/sherlock-root-cause.md",
+    "adversarial/sre-fix-failure-path.md",
+    "adversarial/goal-fidelity.md",
+    "adversarial/00-receipts.md"
+  ],
+  "runtime_attacks": [
+    "live read-only Sandbox probes (AKS vpp-aks01-d, KV vpp-agg-sb): keys provenance, SPC scope, pod status, cert expiry — evidence/live-sandbox-probe.md"
+  ],
+  "gate_witnesses": [
+    {"claim": "keys created manually (no ownerReferences)", "witness": "evidence/live-sandbox-probe.md (kubectl -o json) + sherlock receipt"},
+    {"claim": "common deployed in MC via GitOps+OCI, not by Sandbox pipeline", "witness": "coordinator-verified helm-chart-push.yaml + GitOps common/dev/{Chart,values}.yaml"},
+    {"claim": "CSI SPC excludes keys; *fn mount secret:keys directly", "witness": "live kubectl get secretproviderclass + sre-maniac receipt"},
+    {"claim": "correct eet-vpp-dt certs in KV, valid to 2027-01-09", "witness": "az keyvault + openssl x509 (evidence/live-sandbox-probe.md)"},
+    {"claim": "pods 1/1 Running ~19h (resolved)", "witness": "live kubectl get pods"},
+    {"claim": "deliverable matches verbatim ask + UAC", "witness": "adversarial/goal-fidelity.md (post-fix)"}
+  ]
+}

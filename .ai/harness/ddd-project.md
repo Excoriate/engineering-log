@@ -34,7 +34,7 @@ type: ddd
 | Second Brain (Obsidian) | HIGH | `$SECOND_BRAIN_PATH` set; `.ai/runtime/second-brain/` present |
 | Claude Code | HIGH | `.claude/settings.local.json` present; CLAUDE.md generated |
 | Cursor | MEDIUM | `.cursor/rules/` has rules wired up |
-| Bash (hook scripts) | LOW | `.ai/harness/hooks/` scripts only |
+| Bash (hook/scripts) | MEDIUM | `.ai/harness/hooks/` and `.ai/harness/scripts/` provide session hooks, guard, allocator, validator |
 
 No compilable source code. No formatters needed. `post-edit.sh` is a no-op for this repo.
 
@@ -57,11 +57,12 @@ No compilable source code. No formatters needed. `post-edit.sh` is a no-op for t
 ├── ddd-ubiquitous-language.md   # Domain vocabulary
 ├── rules/
 │   ├── RULES.md                 # Index
-│   ├── governance/              # 10 governance rules (always-on)
+│   ├── governance/              # 12 governance rules (always-on)
 │   ├── structure/               # Repository structure
 │   ├── markdown/                # Markdown conventions
 │   └── domain/                  # On-call incident workflow
-├── hooks/                       # Hook scripts (session-start, session-end, post-edit)
+├── hooks/                       # Hook scripts (session-start, session-end, post-edit, task-workspace-guard)
+├── scripts/                     # Harness utilities (claim-task-id.sh, validator)
 └── skills/                      # Skills (on-call-log-entry)
 ```
 
@@ -69,7 +70,7 @@ No compilable source code. No formatters needed. `post-edit.sh` is a no-op for t
 
 | Agent | Root File | Rules Wired | Hooks Wired |
 |-------|-----------|-------------|-------------|
-| Claude Code | CLAUDE.md ✓ | .claude/rules/ ✓ | .claude/settings.json ✓ |
+| Claude Code | CLAUDE.md ✓ | .claude/rules/ ✓ | .claude/settings.json ✓ (SessionStart/Stop/PostToolUse guard) |
 | Cursor | — | .cursor/rules/ ✓ | — |
 | Gemini CLI | GEMINI.md ✓ | inline in GEMINI.md ✓ | — |
 | Codex CLI | AGENTS.md ✓ | via AGENTS.md ✓ | — |

@@ -1,0 +1,25 @@
+{
+  "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-delete-handler/runs/08584230120817721305479915538CU56/actions/Parse_Slack_Response",
+  "name": "Parse_Slack_Response",
+  "properties": {
+    "canResubmit": false,
+    "code": "NotSpecified",
+    "correlation": {
+      "actionTrackingId": "8af469e7-2b6a-4651-868b-58a845d8ec5f",
+      "clientTrackingId": "08584230120817721305479915538CU56"
+    },
+    "endTime": "2026-05-12T14:06:47.688967Z",
+    "outputsLink": {
+      "contentHash": {
+        "algorithm": "md5",
+        "value": "YzvwR/Vq1PcLa8hH6cNmfQ=="
+      },
+      "contentSize": 36217,
+      "contentVersion": "\"0x8DEB02FB4A26408\"",
+      "uri": "https://prod-68.westeurope.logic.azure.com:443/workflows/7ae536b66cd8434dab0145117f8dcd26/runs/08584230120817721305479915538CU56/actions/Parse_Slack_Response/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230120817721305479915538CU56%2Factions%2FParse_Slack_Response%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=ElnYb0Mdu_TT2U_PXoPcPDsj45EpmU4wMR0pM_-FQsQ"
+    },
+    "startTime": "2026-05-12T14:06:47.6886846Z",
+    "status": "Succeeded"
+  },
+  "type": "Microsoft.Logic/workflows/runs/actions"
+}

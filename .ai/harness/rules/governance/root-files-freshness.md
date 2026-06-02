@@ -1,6 +1,6 @@
 ---
 name: root-files-freshness
-description: Root files freshness mandate — AGENTS.md, CLAUDE.md, GEMINI.md must stay synchronized with .ai/harness/AGENTS.md. NO EXCEPTIONS.
+description: Root files freshness mandate — AGENTS.md, CLAUDE.md, GEMINI.md must stay synchronized with `.ai/harness/AGENTS.md`. NO EXCEPTIONS.
 type: governance
 stack: generic
 globs: ["**/*"]

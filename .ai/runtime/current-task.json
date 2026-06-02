@@ -1,7 +1,1 @@
-{
-  "task_id": "2026-05-12-001",
-  "slug": "fbe-jupiter-argocd-auth",
-  "task_root": ".ai/tasks/2026-05-12-001_fbe-jupiter-argocd-auth",
-  "phase": "4",
-  "preflight_complete": true
-}
+{"task_id":"2026-06-02-002","slug":"vpp-aggregation-layer-kafka-certs-dev-test","task_root":".ai/tasks/2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test","phase":7,"domain_class":"investigation","compression_mode":"full","preflight_complete":true,"started":"2026-06-02","manifest":".ai/tasks/2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test/manifest.json"}

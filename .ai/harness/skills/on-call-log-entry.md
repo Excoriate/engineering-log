@@ -3,6 +3,8 @@ name: on-call-log-entry
 description: On-call incident log entry workflow — guides creation of complete incident log with slack intake, context, holistic RCA, and fix documents. Prevents common evidence-labeling and structure mistakes.
 type: skill
 globs: ["log/employer/eneco/02_on_call_shift/**"]
+trigger: "log this incident, create on-call log, document this on-call, write the RCA"
+impact: HIGH
 ---
 
 # Skill: on-call-log-entry

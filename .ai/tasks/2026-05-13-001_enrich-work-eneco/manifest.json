@@ -1,0 +1,78 @@
+{
+  "task_id": "2026-05-13-001",
+  "slug": "enrich-work-eneco",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_enrich-work-eneco",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_enrich-work-eneco",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/runtime",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/build-ledgers",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/knowledge-checks",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-btm",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-service-bus",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-howto"
+  ],
+  "created": [
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-btm/btm-hermes-azure-cli-aadsts650057-consent-gap.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-oncall-shift-2026-05-12-four-issue-followup.md",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/build-ledgers/2026-05-13-001-enrich-work-eneco-build.md",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/knowledge-checks/2026-05-13-001-enrich-work-eneco-check.md"
+  ],
+  "modified": [
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-btm/_index.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/2026-05-12-jupiter-source1-credential-gap.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-otel-collector-cpu-throttling-dev-cluster.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-service-bus/eneco-servicebus-subscription-manager-operating-model.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-howto/eneco-howto-manage-servicebus-subscription-contracts.md"
+  ],
+  "external_writes": [
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-btm/btm-hermes-azure-cli-aadsts650057-consent-gap.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-btm/_index.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/2026-05-12-jupiter-source1-credential-gap.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-oncall-shift-2026-05-12-four-issue-followup.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/eneco-otel-collector-cpu-throttling-dev-cluster.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-service-bus/eneco-servicebus-subscription-manager-operating-model.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-howto/eneco-howto-manage-servicebus-subscription-contracts.md",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/build-ledgers/2026-05-13-001-enrich-work-eneco-build.md",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/knowledge-checks/2026-05-13-001-enrich-work-eneco-check.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [
+    {
+      "claim": "Build mutations are accounted for and graph-resolvable",
+      "attack": "verify-mutation-ledger.sh filesystem and wikilink verification",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_enrich-work-eneco/verification/results.md"
+    },
+    {
+      "claim": "Created notes are readable by the actual Obsidian CLI consumer",
+      "attack": "obsidian read path=... for both created notes",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_enrich-work-eneco/verification/results.md"
+    },
+    {
+      "claim": "The focused knowledge-check report satisfies the check skill contract",
+      "attack": "verify-check-report.sh required-section and coverage-equation verification",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_enrich-work-eneco/verification/results.md"
+    }
+  ],
+  "gate_witnesses": [
+    {
+      "gate": 3,
+      "claim": "Vault consumer surface can read created notes",
+      "witness_type": "external-runtime-output",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_enrich-work-eneco/verification/results.md"
+    },
+    {
+      "gate": 7,
+      "claim": "Verification method caught a graph defect and the route changed",
+      "witness_type": "external-runtime-output",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_enrich-work-eneco/verification/results.md"
+    },
+    {
+      "gate": 8,
+      "claim": "Build and check artifacts passed their skill validators",
+      "witness_type": "external-runtime-output",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_enrich-work-eneco/verification/results.md"
+    }
+  ]
+}

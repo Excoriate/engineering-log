@@ -1,0 +1,141 @@
+{
+  "value": [
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-delete-handler/runs/08584230120817721305479915538CU56/actions/For_each",
+      "name": "For_each",
+      "properties": {
+        "canResubmit": false,
+        "code": "NotSpecified",
+        "correlation": {
+          "actionTrackingId": "8638292d-56bf-40db-b2a9-7eede3e03545",
+          "clientTrackingId": "08584230120817721305479915538CU56"
+        },
+        "endTime": "2026-05-12T14:06:47.9120157Z",
+        "inputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "hkFy4ciY5+fDNrYBqLIjfg=="
+          },
+          "contentSize": 2571,
+          "contentVersion": "hkFy4ciY5+fDNrYBqLIjfg==",
+          "metadata": {
+            "foreachItemsCount": 8
+          },
+          "uri": "https://prod-68.westeurope.logic.azure.com:443/workflows/7ae536b66cd8434dab0145117f8dcd26/runs/08584230120817721305479915538CU56/actions/For_each/contents/ActionInputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230120817721305479915538CU56%2Factions%2FFor_each%2Fcontents%2FActionInputs%2Fread&sv=1.0&sig=QOt93EWHmrxT2OHGFeJLuIbxzn-2pouILdNVAy9krlA"
+        },
+        "startTime": "2026-05-12T14:06:44.4463369Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-delete-handler/runs/08584230120817721305479915538CU56/actions/Get_entities_(V2)",
+      "name": "Get_entities_(V2)",
+      "properties": {
+        "canResubmit": true,
+        "code": "OK",
+        "correlation": {
+          "actionTrackingId": "5b9c672d-32a2-441d-a593-0b9664377abb",
+          "clientTrackingId": "08584230120817721305479915538CU56"
+        },
+        "endTime": "2026-05-12T14:06:44.2740762Z",
+        "inputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "KbSmhNoVwP7vBCm4rO2Bqg=="
+          },
+          "contentSize": 318,
+          "contentVersion": "KbSmhNoVwP7vBCm4rO2Bqg==",
+          "uri": "https://prod-68.westeurope.logic.azure.com:443/workflows/7ae536b66cd8434dab0145117f8dcd26/runs/08584230120817721305479915538CU56/actions/Get_entities_(V2)/contents/ActionInputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230120817721305479915538CU56%2Factions%2FGet_entities_%28V2%29%2Fcontents%2FActionInputs%2Fread&sv=1.0&sig=WGwxCkxi0vHzcAkBscPRK9TcuWlL1NpSX5CcTD1vPv8"
+        },
+        "outputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "0RZ26PqhNt1A09ME4zfKow=="
+          },
+          "contentSize": 3463,
+          "contentVersion": "0RZ26PqhNt1A09ME4zfKow==",
+          "uri": "https://prod-68.westeurope.logic.azure.com:443/workflows/7ae536b66cd8434dab0145117f8dcd26/runs/08584230120817721305479915538CU56/actions/Get_entities_(V2)/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230120817721305479915538CU56%2Factions%2FGet_entities_%28V2%29%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=DeU_jOYRvQQU3u7eGvsoArI7EXrq5R6vhrEU1qxNQPw"
+        },
+        "startTime": "2026-05-12T14:06:44.1132594Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-delete-handler/runs/08584230120817721305479915538CU56/actions/Lookup_Slack_User_by_Email",
+      "name": "Lookup_Slack_User_by_Email",
+      "properties": {
+        "canResubmit": false,
+        "code": "NotSpecified",
+        "correlation": {
+          "actionTrackingId": "da2989ef-9895-48ef-aa57-e520f9dc8556",
+          "clientTrackingId": "08584230120817721305479915538CU56"
+        },
+        "endTime": "2026-05-12T14:06:47.58292Z",
+        "outputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "pLwCvH/ReRFjnDU/V/6RYg=="
+          },
+          "contentSize": 32023,
+          "contentVersion": "\"0x8DEB02FB4A2B1C8\"",
+          "uri": "https://prod-68.westeurope.logic.azure.com:443/workflows/7ae536b66cd8434dab0145117f8dcd26/runs/08584230120817721305479915538CU56/actions/Lookup_Slack_User_by_Email/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230120817721305479915538CU56%2Factions%2FLookup_Slack_User_by_Email%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=0hpzDAjmtAgum_1LA3J310DXfK-HmcyOOlCBZY5T4pU"
+        },
+        "startTime": "2026-05-12T14:06:47.5812993Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-delete-handler/runs/08584230120817721305479915538CU56/actions/Parse_Slack_Response",
+      "name": "Parse_Slack_Response",
+      "properties": {
+        "canResubmit": false,
+        "code": "NotSpecified",
+        "correlation": {
+          "actionTrackingId": "8af469e7-2b6a-4651-868b-58a845d8ec5f",
+          "clientTrackingId": "08584230120817721305479915538CU56"
+        },
+        "endTime": "2026-05-12T14:06:47.688967Z",
+        "outputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "YzvwR/Vq1PcLa8hH6cNmfQ=="
+          },
+          "contentSize": 36217,
+          "contentVersion": "\"0x8DEB02FB4A26408\"",
+          "uri": "https://prod-68.westeurope.logic.azure.com:443/workflows/7ae536b66cd8434dab0145117f8dcd26/runs/08584230120817721305479915538CU56/actions/Parse_Slack_Response/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230120817721305479915538CU56%2Factions%2FParse_Slack_Response%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=ElnYb0Mdu_TT2U_PXoPcPDsj45EpmU4wMR0pM_-FQsQ"
+        },
+        "startTime": "2026-05-12T14:06:47.6886846Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-delete-handler/runs/08584230120817721305479915538CU56/actions/Send_DM_to_User",
+      "name": "Send_DM_to_User",
+      "properties": {
+        "canResubmit": false,
+        "code": "NotSpecified",
+        "correlation": {
+          "actionTrackingId": "ed650eb1-fe35-4ebb-a7aa-3fd6445ccbc6",
+          "clientTrackingId": "08584230120817721305479915538CU56"
+        },
+        "endTime": "2026-05-12T14:06:47.8027064Z",
+        "outputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "OohEi1H7G/pUSP8g+LPaAw=="
+          },
+          "contentSize": 30409,
+          "contentVersion": "\"0x8DEB02FB4A2D8B1\"",
+          "uri": "https://prod-68.westeurope.logic.azure.com:443/workflows/7ae536b66cd8434dab0145117f8dcd26/runs/08584230120817721305479915538CU56/actions/Send_DM_to_User/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230120817721305479915538CU56%2Factions%2FSend_DM_to_User%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=vj3bTVmihxAp5UDJHZvPzQ9iD58XBLDADdU8dYaJMj0"
+        },
+        "startTime": "2026-05-12T14:06:47.8023717Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    }
+  ]
+}

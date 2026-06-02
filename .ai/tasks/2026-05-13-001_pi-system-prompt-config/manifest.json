@@ -1,0 +1,23 @@
+{
+  "task_id": "2026-05-13-001",
+  "slug": "pi-system-prompt-config",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_pi-system-prompt-config",
+  "allowed_external_paths": [],
+  "created": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_pi-system-prompt-config/01-task-requirements-initial.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-05-13-001_pi-system-prompt-config/manifest.json"
+  ],
+  "modified": [],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    {
+      "gate": "truth-surface",
+      "claim": "Pi separates SYSTEM.md default prompt replacement from AGENTS.md context files",
+      "witness_type": "external-source",
+      "witness_path": "/Users/alextorresruiz/.nvm/versions/node/v24.2.0/lib/node_modules/@earendil-works/pi-coding-agent/README.md"
+    }
+  ]
+}

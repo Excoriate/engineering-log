@@ -40,29 +40,33 @@ engineering-log/
     │   ├── ddd-ubiquitous-language.md
     │   ├── rules/      # Centralized rules
     │   ├── skills/     # Centralized skills
-    │   ├── hooks/      # Hook scripts
+    │   ├── hooks/      # Hook scripts, including task-workspace-guard.sh
+    │   ├── scripts/    # Harness utilities (claim-task-id.sh, validator)
     │   └── specs/      # Log entry templates and specs
     ├── memory/
     │   └── lessons-learned.json
     ├── tasks/          # Task workspaces (.ai/tasks/{task_id}_{slug}/)
-    └── runtime/        # Runtime state (recall bundle, current-task.json)
+    └── runtime/        # Runtime state (recall bundle, current-task/{session_id}.json; legacy current-task.json ignored)
 ```
 
 ## Placement Rules
 
 - **On-call logs**: `log/employer/eneco/02_on_call_shift/{YYYY_MM_DD}_{slug}/`
 - **Alert incident logs**: `log/employer/eneco/00_incident_sre/{slug}/`
-- **Task workspaces**: `.ai/tasks/{YYYY-MM-DD-NNN}_{slug}/`
+- **Task workspaces**: `.ai/tasks/{task_id}_{slug}/`
+- **Task IDs**: allocate with `.ai/harness/scripts/claim-task-id.sh <slug>`; do not list existing tasks and pick the next number
+- **Per-session state**: `.ai/runtime/current-task/{session_id}.json`; legacy `.ai/runtime/current-task.json` is compatibility residue
 - **Draft notes**: `scratchpad/` (no structure requirement)
 - **Persistent memory**: `.ai/memory/lessons-learned.json` ONLY
 
 ## File Naming
 
 - Markdown files: `kebab-case.md` (lowercase, hyphens)
-- Directories: `snake_case` or `{NNN}_{slug}` pattern
+- Directories: `snake_case`, `{NNN}_{slug}`, or task workspace `{YYYY-MM-DD-NNN}_{slug}` pattern
 - Task slugs: `[a-z0-9]+(-[a-z0-9]+)*`
 
 ## Harness Files
 
 `.ai/harness/` is the single source of truth. Do NOT edit generated wrappers directly.
-Generated wrappers: `.claude/rules/`, `.cursor/rules/`, `.gemini/skills/`
+Generated wrappers: `.claude/rules/`, `.cursor/rules/`, `.claude/skills/`, `.cursor/skills/`, `.codex/skills/`, `.gemini/skills/`
+Harness scripts live under `.ai/harness/scripts/`; task workspace allocation goes through `claim-task-id.sh`.

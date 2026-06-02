@@ -1,0 +1,209 @@
+{
+  "value": [
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584230178637719046368815125CU117/actions/Condition_1",
+      "name": "Condition_1",
+      "properties": {
+        "canResubmit": false,
+        "code": "NotSpecified",
+        "correlation": {
+          "actionTrackingId": "99e4ac58-92dd-4982-8835-94a7cc266d9c",
+          "clientTrackingId": "08584230178637719046368815125CU117"
+        },
+        "endTime": "2026-05-12T12:30:25.8240928Z",
+        "outputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "fIMP3jZpiZXBJ92VcjblWg=="
+          },
+          "contentSize": 2447,
+          "contentVersion": "fIMP3jZpiZXBJ92VcjblWg==",
+          "uri": "https://prod-238.westeurope.logic.azure.com:443/workflows/e61c9e7c552446df82956bdf33489c1b/runs/08584230178637719046368815125CU117/actions/Condition_1/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230178637719046368815125CU117%2Factions%2FCondition_1%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=sA3_4WtfeMO48mFcr7qFqCZt4ucJVzb9JURohraOXT0"
+        },
+        "startTime": "2026-05-12T12:30:25.8237591Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584230178637719046368815125CU117/actions/For_each_1",
+      "name": "For_each_1",
+      "properties": {
+        "canResubmit": false,
+        "code": "NotSpecified",
+        "correlation": {
+          "actionTrackingId": "d0e63da9-1355-46b3-9577-f38c07113d93",
+          "clientTrackingId": "08584230178637719046368815125CU117"
+        },
+        "endTime": "2026-05-12T12:30:25.8516523Z",
+        "inputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "i2X4l4qlAYmwNedBVkCO8Q=="
+          },
+          "contentSize": 1638,
+          "contentVersion": "i2X4l4qlAYmwNedBVkCO8Q==",
+          "metadata": {
+            "foreachItemsCount": 9
+          },
+          "uri": "https://prod-238.westeurope.logic.azure.com:443/workflows/e61c9e7c552446df82956bdf33489c1b/runs/08584230178637719046368815125CU117/actions/For_each_1/contents/ActionInputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230178637719046368815125CU117%2Factions%2FFor_each_1%2Fcontents%2FActionInputs%2Fread&sv=1.0&sig=4_yFbf2DPYBV9Mv5rxTi7Hf4YkyCM3PN-8nxc_o-OjQ"
+        },
+        "startTime": "2026-05-12T12:30:22.2431157Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584230178637719046368815125CU117/actions/Get_entities_(V2)",
+      "name": "Get_entities_(V2)",
+      "properties": {
+        "canResubmit": true,
+        "code": "OK",
+        "correlation": {
+          "actionTrackingId": "df4155cd-3689-4204-a794-c18011d4d9a2",
+          "clientTrackingId": "08584230178637719046368815125CU117"
+        },
+        "endTime": "2026-05-12T12:30:21.8952723Z",
+        "inputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "sjdLALIZQveFzWqR5Mzw0w=="
+          },
+          "contentSize": 361,
+          "contentVersion": "sjdLALIZQveFzWqR5Mzw0w==",
+          "uri": "https://prod-238.westeurope.logic.azure.com:443/workflows/e61c9e7c552446df82956bdf33489c1b/runs/08584230178637719046368815125CU117/actions/Get_entities_(V2)/contents/ActionInputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230178637719046368815125CU117%2Factions%2FGet_entities_%28V2%29%2Fcontents%2FActionInputs%2Fread&sv=1.0&sig=M8Z1io234wFqmfJDbGQefebqLongp-1Zyu8LHHGCBtU"
+        },
+        "outputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "Gwhtvayfrz15skVRcyKQQQ=="
+          },
+          "contentSize": 2569,
+          "contentVersion": "Gwhtvayfrz15skVRcyKQQQ==",
+          "uri": "https://prod-238.westeurope.logic.azure.com:443/workflows/e61c9e7c552446df82956bdf33489c1b/runs/08584230178637719046368815125CU117/actions/Get_entities_(V2)/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230178637719046368815125CU117%2Factions%2FGet_entities_%28V2%29%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=3PjXeT4dSVMaDxcHd6KZhEOU3hVogvhnMcZ-InkOumY"
+        },
+        "startTime": "2026-05-12T12:30:21.8104856Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584230178637719046368815125CU117/actions/Initialize_variable",
+      "name": "Initialize_variable",
+      "properties": {
+        "canResubmit": true,
+        "code": "NotSpecified",
+        "correlation": {
+          "actionTrackingId": "d4c0d5c4-e520-4360-bf2b-1c33b0a365e5",
+          "clientTrackingId": "08584230178637719046368815125CU117"
+        },
+        "endTime": "2026-05-12T12:30:22.1449283Z",
+        "inputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "aGmzvRn6icJ9dufNHpVfBw=="
+          },
+          "contentSize": 92,
+          "contentVersion": "aGmzvRn6icJ9dufNHpVfBw==",
+          "uri": "https://prod-238.westeurope.logic.azure.com:443/workflows/e61c9e7c552446df82956bdf33489c1b/runs/08584230178637719046368815125CU117/actions/Initialize_variable/contents/ActionInputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230178637719046368815125CU117%2Factions%2FInitialize_variable%2Fcontents%2FActionInputs%2Fread&sv=1.0&sig=YhRoFP5gRbZR3N4PqmaNNJsgCTx-Eadi9Gpy8s2JpSA"
+        },
+        "startTime": "2026-05-12T12:30:22.061049Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584230178637719046368815125CU117/actions/Parse_JSON",
+      "name": "Parse_JSON",
+      "properties": {
+        "canResubmit": true,
+        "code": "OK",
+        "correlation": {
+          "actionTrackingId": "6765faf8-6d61-4f80-b272-5510031a8f1d",
+          "clientTrackingId": "08584230178637719046368815125CU117"
+        },
+        "endTime": "2026-05-12T12:30:21.9641597Z",
+        "inputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "fmZCYw+4W9dF/gtLJ/GKWw=="
+          },
+          "contentSize": 2098,
+          "contentVersion": "fmZCYw+4W9dF/gtLJ/GKWw==",
+          "uri": "https://prod-238.westeurope.logic.azure.com:443/workflows/e61c9e7c552446df82956bdf33489c1b/runs/08584230178637719046368815125CU117/actions/Parse_JSON/contents/ActionInputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230178637719046368815125CU117%2Factions%2FParse_JSON%2Fcontents%2FActionInputs%2Fread&sv=1.0&sig=lHXsWgfe4iyQpAPFffELINtuV6iWSVaD7rRc0svfEyw"
+        },
+        "outputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "rebIymSvum9ywSGr6/mjKQ=="
+          },
+          "contentSize": 1787,
+          "contentVersion": "rebIymSvum9ywSGr6/mjKQ==",
+          "uri": "https://prod-238.westeurope.logic.azure.com:443/workflows/e61c9e7c552446df82956bdf33489c1b/runs/08584230178637719046368815125CU117/actions/Parse_JSON/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230178637719046368815125CU117%2Factions%2FParse_JSON%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=nt8lQJrHJDwt8GoUtv5GrkGaG4pF7bI6k9BDKh5SfBE"
+        },
+        "startTime": "2026-05-12T12:30:21.9627429Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584230178637719046368815125CU117/actions/Send_an_HTTP_request_to_Azure_DevOps",
+      "name": "Send_an_HTTP_request_to_Azure_DevOps",
+      "properties": {
+        "canResubmit": false,
+        "code": "NotSpecified",
+        "correlation": {
+          "actionTrackingId": "54325c7b-968d-4f95-869d-0b012571ad32",
+          "clientTrackingId": "08584230178637719046368815125CU117"
+        },
+        "endTime": "2026-05-12T12:30:25.7651393Z",
+        "outputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "YgMM1xHUTvgnwvUdc+KfSw=="
+          },
+          "contentSize": 12110,
+          "contentVersion": "\"0x8DEB0223E7B10F0\"",
+          "uri": "https://prod-238.westeurope.logic.azure.com:443/workflows/e61c9e7c552446df82956bdf33489c1b/runs/08584230178637719046368815125CU117/actions/Send_an_HTTP_request_to_Azure_DevOps/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230178637719046368815125CU117%2Factions%2FSend_an_HTTP_request_to_Azure_DevOps%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=qMZzq7rbnmdPDIchUVstDG_j4E6SKUWiVFFAylK9VSU"
+        },
+        "startTime": "2026-05-12T12:30:25.7647276Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584230178637719046368815125CU117/actions/Set_variable",
+      "name": "Set_variable",
+      "properties": {
+        "canResubmit": true,
+        "code": "NotSpecified",
+        "correlation": {
+          "actionTrackingId": "fd3e461c-4c87-4aac-a649-8c9330b24332",
+          "clientTrackingId": "08584230178637719046368815125CU117"
+        },
+        "endTime": "2026-05-12T12:30:22.2079505Z",
+        "inputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "ThK3PM3Bqi1xmEFHE1Hx7A=="
+          },
+          "contentSize": 60,
+          "contentVersion": "ThK3PM3Bqi1xmEFHE1Hx7A==",
+          "uri": "https://prod-238.westeurope.logic.azure.com:443/workflows/e61c9e7c552446df82956bdf33489c1b/runs/08584230178637719046368815125CU117/actions/Set_variable/contents/ActionInputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230178637719046368815125CU117%2Factions%2FSet_variable%2Fcontents%2FActionInputs%2Fread&sv=1.0&sig=Qw31JZrXjVZftKok1q6wx_8LUY9IlLj_9MgoxO_j1Wo"
+        },
+        "outputsLink": {
+          "contentHash": {
+            "algorithm": "md5",
+            "value": "mgTb4A4FTCg0MIfUFPkc7w=="
+          },
+          "contentSize": 69,
+          "contentVersion": "mgTb4A4FTCg0MIfUFPkc7w==",
+          "uri": "https://prod-238.westeurope.logic.azure.com:443/workflows/e61c9e7c552446df82956bdf33489c1b/runs/08584230178637719046368815125CU117/actions/Set_variable/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230178637719046368815125CU117%2Factions%2FSet_variable%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=vCTLtY4NwW2BwKEpVrks5dmsqa9i55YB4pfhyv4f9yo"
+        },
+        "startTime": "2026-05-12T12:30:22.1701654Z",
+        "status": "Succeeded"
+      },
+      "type": "Microsoft.Logic/workflows/runs/actions"
+    }
+  ]
+}

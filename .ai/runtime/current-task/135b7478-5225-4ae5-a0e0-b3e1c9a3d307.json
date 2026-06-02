@@ -1,0 +1,12 @@
+{
+  "task_id": "2026-06-02-002",
+  "slug": "vpp-aggregation-layer-kafka-certs-dev-test",
+  "task_root": ".ai/tasks/2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test",
+  "phase": 8,
+  "domain_class": "investigation",
+  "compression_mode": "full",
+  "preflight_complete": true,
+  "started": "2026-06-02",
+  "session_id": "135b7478-5225-4ae5-a0e0-b3e1c9a3d307",
+  "manifest": ".ai/tasks/2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test/manifest.json"
+}

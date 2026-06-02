@@ -1,0 +1,203 @@
+{
+  "name": "vpp-fbe-autodelete-trigger",
+  "state": "Enabled",
+  "location": "westeurope",
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "actions": {
+      "For_each_1": {
+        "actions": {
+          "Condition_1": {
+            "actions": {
+              "Send_an_HTTP_request_to_Azure_DevOps": {
+                "inputs": {
+                  "body": {
+                    "Body": "{\n    \"stagesToSkip\":[\n       \n    ],\n    \"resources\":{\n       \"repositories\":{\n          \"self\":{\n             \"refName\":\"refs/heads/development\"\n          }\n       }\n    },\n    \"templateParameters\": {\n        \"environment\": \"@{items('For_each_1')?['env']}\"\n       },\n    \"variables\":{\n       \"bypassEnvironmentOwnerValidation\":{\n          \"isSecret\":false,\n          \"value\":\"true\"\n       }\n    }\n }",
+                    "Method": "POST",
+                    "Uri": "Myriad%20-%20VPP/_apis/pipelines/2629/runs?api-version=6.0-preview.1"
+                  },
+                  "host": {
+                    "connection": {
+                      "name": "@parameters('$connections')['visualstudioteamservices-1']['connectionId']"
+                    }
+                  },
+                  "method": "post",
+                  "path": "/httprequest",
+                  "queries": {
+                    "account": "enecomanagedcloud"
+                  }
+                },
+                "type": "ApiConnection"
+              }
+            },
+            "else": {
+              "actions": {}
+            },
+            "expression": {
+              "and": [
+                {
+                  "lessOrEquals": [
+                    "@item()?['Timestamp']",
+                    "@variables('todays Day')"
+                  ]
+                }
+              ]
+            },
+            "type": "If"
+          }
+        },
+        "foreach": "@body('Parse_JSON')?['value']",
+        "runAfter": {
+          "Set_variable": [
+            "Succeeded"
+          ]
+        },
+        "type": "Foreach"
+      },
+      "Get_entities_(V2)": {
+        "inputs": {
+          "host": {
+            "connection": {
+              "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+            }
+          },
+          "method": "get",
+          "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('featurebranchenvdetails')}/entities",
+          "queries": {
+            "$filter": "active eq 'used'",
+            "$select": "active,env,Timestamp,createdby"
+          }
+        },
+        "runAfter": {},
+        "type": "ApiConnection"
+      },
+      "Initialize_variable": {
+        "inputs": {
+          "variables": [
+            {
+              "name": "todays Day",
+              "type": "string",
+              "value": "@{utcNow()}"
+            }
+          ]
+        },
+        "runAfter": {
+          "Parse_JSON": [
+            "Succeeded"
+          ]
+        },
+        "type": "InitializeVariable"
+      },
+      "Parse_JSON": {
+        "inputs": {
+          "content": "@body('Get_entities_(V2)')",
+          "schema": {
+            "properties": {
+              "odata.metadata": {
+                "type": "string"
+              },
+              "value": {
+                "items": {
+                  "properties": {
+                    "Timestamp": {
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "string"
+                    },
+                    "env": {
+                      "type": "string"
+                    },
+                    "odata.etag": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "odata.etag",
+                    "Timestamp",
+                    "active",
+                    "env"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "runAfter": {
+          "Get_entities_(V2)": [
+            "Succeeded"
+          ]
+        },
+        "type": "ParseJson"
+      },
+      "Set_variable": {
+        "inputs": {
+          "name": "todays Day",
+          "value": "@addDays(utcNow(), -4)"
+        },
+        "runAfter": {
+          "Initialize_variable": [
+            "Succeeded"
+          ]
+        },
+        "type": "SetVariable"
+      }
+    },
+    "contentVersion": "1.0.0.0",
+    "outputs": {},
+    "parameters": {
+      "$connections": {
+        "defaultValue": {},
+        "type": "Object"
+      }
+    },
+    "triggers": {
+      "Recurrence": {
+        "evaluatedRecurrence": {
+          "frequency": "Week",
+          "interval": 1,
+          "schedule": {
+            "hours": [
+              "14"
+            ],
+            "minutes": [
+              30
+            ],
+            "weekDays": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday"
+            ]
+          },
+          "timeZone": "W. Europe Standard Time"
+        },
+        "recurrence": {
+          "frequency": "Week",
+          "interval": 1,
+          "schedule": {
+            "hours": [
+              "14"
+            ],
+            "minutes": [
+              30
+            ],
+            "weekDays": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday"
+            ]
+          },
+          "timeZone": "W. Europe Standard Time"
+        },
+        "type": "Recurrence"
+      }
+    }
+  }
+}

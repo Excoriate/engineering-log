@@ -57,6 +57,16 @@ Encountering a term not in this list → add it BEFORE completing the log entry.
 | **Terraform** | IaC tool for Azure resource provisioning. Used by FBE-create pipeline. | `eneco-platform-mc-vpp-infra` |
 | **Terragrunt** | Terraform orchestration wrapper. Used in MC-VPP-Infrastructure. | MC-VPP-Infrastructure context |
 
+## Azure DevOps — Pipelines & Auth
+
+| Term | Definition | Relevance |
+|------|-----------|-----------|
+| **Team BtM** | Behind-The-Meter team's board area in `Myriad - VPP` (`System.AreaId = 6393`, area path `Myriad - VPP\Team BtM`). | BTM work items + PR auto-tagging |
+| **TF401019** | ADO error: "The Git repository … does not exist or you do not have permissions … 404." A **404-masks-403** — usually a permission/scope denial, not a deleted repo (confirm repo exists with `az repos show`). | BTM `az boards` auto-detection incident (2026-06-02) |
+| **enforceJobAuthScope** | Project Pipelines setting "Limit job authorization scope to current project". When `true`, the pipeline job token (`System.AccessToken`) is **project-scoped**, not collection-scoped. The identity is the project Build Service identity — **pool-independent**. | The scope gate behind TF401019 |
+| **`az boards` auto-detection (`/vsts/info`)** | When `az boards`/`az repos` omit `--org/--project`, the CLI resolves context from `git remote origin` via `GET …/_git/<repo>/vsts/info` (cached; cold on ephemeral agents → fires every run). A project-scoped token can be denied this read → TF401019. Disable with `--detect false` + explicit `--org/--project`. NB: `az boards work-item show/update` reject `--project`. | Root cause of the BTM tag failure |
+| **sre-managed-linux** | A self-hosted ADO agent pool ("Core Platform Azure runner"). Switching tagging onto it can MASK an auth/scope issue (different `az`/extension version or cached credential) but does NOT fix the cause, and costs a second runner + a split job. | Sibling Agg team's workaround (PR 178802) |
+
 ## Document Conventions
 
 | Term | Definition |

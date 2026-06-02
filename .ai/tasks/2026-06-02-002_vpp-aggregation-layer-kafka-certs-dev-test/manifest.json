@@ -1,0 +1,45 @@
+{
+  "task_id": "2026-06-02-002",
+  "slug": "vpp-aggregation-layer-kafka-certs-dev-test",
+  "task_root": ".ai/tasks/2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test",
+  "domain_class": "investigation",
+  "control_plane_artifact": false,
+  "compression_mode": "FULL",
+  "crubvg": {"C": 2, "R": 1, "U": 2, "B": 1, "V": 1, "G": 1, "final": 8, "note": "escalated: live secret retrieval across 3 envs + KV firewall mutations (reverted)"},
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_layer_kafka_certs_dev_test_jhonson"
+  ],
+  "external_writes_summary": "Under the authorized log folder: certs/ (sandbox VALID), certs-mc-dev/ (EXPIRED), certs-mc-test-acc/ (EXPIRED), README.md, diagnosis.md, rca-feynman.md, cert-inspection-cookbook.md, cross-environment-findings.md, slack-reply.md. All certs*/ have .gitignore excluding key material.",
+  "git_mutations": [],
+  "azure_mutations": [
+    {"op": "keyvault network-rule add", "target": "vpp-agg-appsec-d (sub 839af51e)", "ip": "84.86.32.39", "reverted": true, "verified_removed": true},
+    {"op": "keyvault network-rule add", "target": "vpp-agg-appsec-a (sub b524d084)", "ip": "84.86.32.39", "reverted": true, "verified_removed": true},
+    {"op": "az account set", "target": "shared default sub (iactest)", "reverted": true, "note": "restored original default"}
+  ],
+  "mc_sessions": [
+    {"env": "dev", "sp_login": "enecotfvppmclogindev", "config": "isolated AZURE_CONFIG_DIR=/tmp/mc-azcfg-dev", "shared_session_clobbered": false, "logged_out": true},
+    {"env": "acc", "sp_login": "enecotfvppmcloginacc", "config": "isolated AZURE_CONFIG_DIR=/tmp/mc-azcfg-acc", "shared_session_clobbered": false, "logged_out": true}
+  ],
+  "pending_adversarial_dispatches": [],
+  "adversarial_receipts": [
+    {"reviewer": "sherlock-holmes", "verdict": "format REBUTTED; env-scope FALSIFIED -> drove the MC Dev/Acc retrieval that surfaced the expiry incident", "receipt": ".ai/tasks/2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test/adversarial/sherlock-root-cause.md"},
+    {"reviewer": "el-demoledor", "verdict": "PEM sound; RESOLVE-1 Java keystore (confirmed: runtime vaults ship PKCS12); RESOLVE-2 key exposure (mitigated: gitignore + /tmp shred; Dropbox sync inactive per owner)", "receipt": ".ai/tasks/2026-06-02-002_vpp-aggregation-layer-kafka-certs-dev-test/adversarial/demoledor-break-the-fix.md"}
+  ],
+  "runtime_attacks": [
+    {"step": "sandbox retrieve", "result": "valid PEM; root cause = -o json read artifact"},
+    {"step": "MC Dev retrieve (appsec-d)", "result": "leaf esp-eet-vpp-dt EXPIRED 2026-01-10; legacy kafka-cacert mangled; kafka-dev-* base64+PKCS12"},
+    {"step": "MC Acc retrieve (appsec-a)", "result": "leaf esp-eet-vpp-acc EXPIRED 2026-01-10; kafka-test-* clean PEM + PKCS12"}
+  ],
+  "gate_witnesses": [
+    {"claim": "sandbox PEM valid; root cause read-method", "witness": "openssl + az json/tsv contrast"},
+    {"claim": "MC Dev + Acc runtime certs expired 2026-01-10", "witness": "openssl x509 -enddate/-checkend on live-pulled values"},
+    {"claim": "whitelist reverted, no drift", "witness": "az keyvault network-rule list shows IP gone on both vaults"}
+  ],
+  "key_finding": "VPP-Agg Kafka client certs: MC Dev (esp-eet-vpp-dt) + MC Acc/test (esp-eet-vpp-acc) both EXPIRED 2026-01-10. Only valid cert = sandbox vpp-agg-sb (esp-eet-vpp-dt, ->2027), rotated 2026-05-29 but never propagated to runtime vaults. LL-006 credential-expiry class.",
+  "open_items": [
+    "Cert owner: propagate valid sandbox esp-eet-vpp-dt into vpp-agg-appsec-d; redeploy dev",
+    "Cert owner: RE-ISSUE esp-eet-vpp-acc (no valid copy exists); publish to vpp-agg-appsec-a; redeploy acc",
+    "Confirm consumer type (librdkafka PEM vs Java PKCS12 keystore - both present in runtime vaults)",
+    "LL-006 class fix: expiry alarm + automated rotation/propagation"
+  ]
+}

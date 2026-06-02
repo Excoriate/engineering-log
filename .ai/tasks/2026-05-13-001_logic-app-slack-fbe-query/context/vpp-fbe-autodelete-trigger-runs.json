@@ -1,0 +1,965 @@
+{
+  "nextLink": "https://management.azure.com:443/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs?api-version=2016-06-01&%24skiptoken=eyJuZXh0UGFydGl0aW9uS2V5IjoiMSE4IU9VTkZNa0ktIiwibmV4dFJvd0tleSI6IjEhODQhUlRZeFF6bEZOME0xTlRJME5EWkVSamd5T1RVMlFrUkdNek0wT0RsRE1VSmZNRGcxT0RReU5qWTBOalkyTlRrNU1UZzFOVE0yTkRZek5EVXpNVEEtIn0%3d",
+  "value": [
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584230178637719046368815125CU117",
+      "name": "08584230178637719046368815125CU117",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584230178637719046368815125CU117"
+        },
+        "endTime": "2026-05-12T12:30:25.9016599Z",
+        "outputs": {},
+        "startTime": "2026-05-12T12:30:21.7074579Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584230178637719046368815125CU117"
+          },
+          "endTime": "2026-05-12T12:30:21.7058684Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584230178637719046368815125CU117",
+          "scheduledTime": "2026-05-12T12:30:22Z",
+          "startTime": "2026-05-12T12:30:21.7056828Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-05-12T12:30:21.7074579Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584231042629240063927243698CU121",
+      "name": "08584231042629240063927243698CU121",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584231042629240063927243698CU121"
+        },
+        "endTime": "2026-05-11T12:30:24.8213669Z",
+        "outputs": {},
+        "startTime": "2026-05-11T12:30:22.5549307Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584231042629240063927243698CU121"
+          },
+          "endTime": "2026-05-11T12:30:22.553701Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584231042629240063927243698CU121",
+          "scheduledTime": "2026-05-11T12:30:22Z",
+          "startTime": "2026-05-11T12:30:22.5535789Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-05-11T12:30:22.5549307Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584233634632631776231035163CU112",
+      "name": "08584233634632631776231035163CU112",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584233634632631776231035163CU112"
+        },
+        "endTime": "2026-05-08T12:30:23.7901206Z",
+        "outputs": {},
+        "startTime": "2026-05-08T12:30:22.2157542Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584233634632631776231035163CU112"
+          },
+          "endTime": "2026-05-08T12:30:22.214552Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584233634632631776231035163CU112",
+          "scheduledTime": "2026-05-08T12:30:22Z",
+          "startTime": "2026-05-08T12:30:22.2144092Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-05-08T12:30:22.2157542Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584234498636989090363555780CU118",
+      "name": "08584234498636989090363555780CU118",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584234498636989090363555780CU118"
+        },
+        "endTime": "2026-05-07T12:30:23.6845152Z",
+        "outputs": {},
+        "startTime": "2026-05-07T12:30:21.7798168Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584234498636989090363555780CU118"
+          },
+          "endTime": "2026-05-07T12:30:21.7787937Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584234498636989090363555780CU118",
+          "scheduledTime": "2026-05-07T12:30:22Z",
+          "startTime": "2026-05-07T12:30:21.7786769Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-05-07T12:30:21.7798168Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584235362629982705183123718CU125",
+      "name": "08584235362629982705183123718CU125",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584235362629982705183123718CU125"
+        },
+        "endTime": "2026-05-06T12:30:24.3476798Z",
+        "outputs": {},
+        "startTime": "2026-05-06T12:30:22.4806325Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584235362629982705183123718CU125"
+          },
+          "endTime": "2026-05-06T12:30:22.4794656Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584235362629982705183123718CU125",
+          "scheduledTime": "2026-05-06T12:30:22Z",
+          "startTime": "2026-05-06T12:30:22.4793154Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-05-06T12:30:22.4806325Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584236226634239226400696116CU236",
+      "name": "08584236226634239226400696116CU236",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584236226634239226400696116CU236"
+        },
+        "endTime": "2026-05-05T12:30:29.743651Z",
+        "outputs": {},
+        "startTime": "2026-05-05T12:30:22.0559793Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584236226634239226400696116CU236"
+          },
+          "endTime": "2026-05-05T12:30:22.0538235Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584236226634239226400696116CU236",
+          "scheduledTime": "2026-05-05T12:30:21Z",
+          "startTime": "2026-05-05T12:30:22.0536637Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-05-05T12:30:22.0559793Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584237090644945597397725969CU117",
+      "name": "08584237090644945597397725969CU117",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584237090644945597397725969CU117"
+        },
+        "endTime": "2026-05-04T12:30:25.1771916Z",
+        "outputs": {},
+        "startTime": "2026-05-04T12:30:20.98439Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584237090644945597397725969CU117"
+          },
+          "endTime": "2026-05-04T12:30:20.9831784Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584237090644945597397725969CU117",
+          "scheduledTime": "2026-05-04T12:30:21Z",
+          "startTime": "2026-05-04T12:30:20.9830266Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-05-04T12:30:20.98439Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584239682647951801894140713CU238",
+      "name": "08584239682647951801894140713CU238",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584239682647951801894140713CU238"
+        },
+        "endTime": "2026-05-01T12:30:24.8964302Z",
+        "outputs": {},
+        "startTime": "2026-05-01T12:30:20.6836257Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584239682647951801894140713CU238"
+          },
+          "endTime": "2026-05-01T12:30:20.6825336Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584239682647951801894140713CU238",
+          "scheduledTime": "2026-05-01T12:30:21Z",
+          "startTime": "2026-05-01T12:30:20.6824054Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-05-01T12:30:20.6836257Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584240546640297894636290739CU122",
+      "name": "08584240546640297894636290739CU122",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584240546640297894636290739CU122"
+        },
+        "endTime": "2026-04-30T12:30:23.6464626Z",
+        "outputs": {},
+        "startTime": "2026-04-30T12:30:21.4492715Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584240546640297894636290739CU122"
+          },
+          "endTime": "2026-04-30T12:30:21.4479812Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584240546640297894636290739CU122",
+          "scheduledTime": "2026-04-30T12:30:21Z",
+          "startTime": "2026-04-30T12:30:21.4477966Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-30T12:30:21.4492715Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584241410644838172671047654CU164",
+      "name": "08584241410644838172671047654CU164",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584241410644838172671047654CU164"
+        },
+        "endTime": "2026-04-29T12:30:23.2683332Z",
+        "outputs": {},
+        "startTime": "2026-04-29T12:30:20.9949729Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584241410644838172671047654CU164"
+          },
+          "endTime": "2026-04-29T12:30:20.993891Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584241410644838172671047654CU164",
+          "scheduledTime": "2026-04-29T12:30:21Z",
+          "startTime": "2026-04-29T12:30:20.9937685Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-29T12:30:20.9949729Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584242274647440436706891746CU116",
+      "name": "08584242274647440436706891746CU116",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584242274647440436706891746CU116"
+        },
+        "endTime": "2026-04-28T12:30:22.2797283Z",
+        "outputs": {},
+        "startTime": "2026-04-28T12:30:20.7351561Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584242274647440436706891746CU116"
+          },
+          "endTime": "2026-04-28T12:30:20.7337499Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584242274647440436706891746CU116",
+          "scheduledTime": "2026-04-28T12:30:21Z",
+          "startTime": "2026-04-28T12:30:20.7335459Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-28T12:30:20.7351561Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584243138639535299120872188CU125",
+      "name": "08584243138639535299120872188CU125",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584243138639535299120872188CU125"
+        },
+        "endTime": "2026-04-27T12:30:22.8371243Z",
+        "outputs": {},
+        "startTime": "2026-04-27T12:30:21.5252768Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584243138639535299120872188CU125"
+          },
+          "endTime": "2026-04-27T12:30:21.5241722Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584243138639535299120872188CU125",
+          "scheduledTime": "2026-04-27T12:30:21Z",
+          "startTime": "2026-04-27T12:30:21.5240572Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-27T12:30:21.5252768Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584245730659843448449654743CU233",
+      "name": "08584245730659843448449654743CU233",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584245730659843448449654743CU233"
+        },
+        "endTime": "2026-04-24T12:30:22.8617487Z",
+        "outputs": {},
+        "startTime": "2026-04-24T12:30:19.4943945Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584245730659843448449654743CU233"
+          },
+          "endTime": "2026-04-24T12:30:19.4933586Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584245730659843448449654743CU233",
+          "scheduledTime": "2026-04-24T12:30:19Z",
+          "startTime": "2026-04-24T12:30:19.4932403Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-24T12:30:19.4943945Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584246594662354743125453169CU126",
+      "name": "08584246594662354743125453169CU126",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584246594662354743125453169CU126"
+        },
+        "endTime": "2026-04-23T12:30:20.8977032Z",
+        "outputs": {},
+        "startTime": "2026-04-23T12:30:19.2432436Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584246594662354743125453169CU126"
+          },
+          "endTime": "2026-04-23T12:30:19.2422273Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584246594662354743125453169CU126",
+          "scheduledTime": "2026-04-23T12:30:19Z",
+          "startTime": "2026-04-23T12:30:19.242111Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-23T12:30:19.2432436Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584247458666066337109156001CU119",
+      "name": "08584247458666066337109156001CU119",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584247458666066337109156001CU119"
+        },
+        "endTime": "2026-04-22T12:30:20.2847005Z",
+        "outputs": {},
+        "startTime": "2026-04-22T12:30:18.8721803Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584247458666066337109156001CU119"
+          },
+          "endTime": "2026-04-22T12:30:18.8710764Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584247458666066337109156001CU119",
+          "scheduledTime": "2026-04-22T12:30:19Z",
+          "startTime": "2026-04-22T12:30:18.8709525Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-22T12:30:18.8721803Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584248322667548149486590853CU112",
+      "name": "08584248322667548149486590853CU112",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584248322667548149486590853CU112"
+        },
+        "endTime": "2026-04-21T12:30:20.2304431Z",
+        "outputs": {},
+        "startTime": "2026-04-21T12:30:18.7240937Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584248322667548149486590853CU112"
+          },
+          "endTime": "2026-04-21T12:30:18.7228987Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584248322667548149486590853CU112",
+          "scheduledTime": "2026-04-21T12:30:19Z",
+          "startTime": "2026-04-21T12:30:18.7227706Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-21T12:30:18.7240937Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584249186660472584050634126CU232",
+      "name": "08584249186660472584050634126CU232",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584249186660472584050634126CU232"
+        },
+        "endTime": "2026-04-20T12:30:21.0411212Z",
+        "outputs": {},
+        "startTime": "2026-04-20T12:30:19.4316183Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584249186660472584050634126CU232"
+          },
+          "endTime": "2026-04-20T12:30:19.4304479Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584249186660472584050634126CU232",
+          "scheduledTime": "2026-04-20T12:30:19Z",
+          "startTime": "2026-04-20T12:30:19.430327Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-20T12:30:19.4316183Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584251778663368602024090800CU239",
+      "name": "08584251778663368602024090800CU239",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584251778663368602024090800CU239"
+        },
+        "endTime": "2026-04-17T12:30:20.6977277Z",
+        "outputs": {},
+        "startTime": "2026-04-17T12:30:19.1419964Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584251778663368602024090800CU239"
+          },
+          "endTime": "2026-04-17T12:30:19.1408413Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584251778663368602024090800CU239",
+          "scheduledTime": "2026-04-17T12:30:19Z",
+          "startTime": "2026-04-17T12:30:19.1407253Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-17T12:30:19.1419964Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584252642665601447984416101CU238",
+      "name": "08584252642665601447984416101CU238",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584252642665601447984416101CU238"
+        },
+        "endTime": "2026-04-16T12:30:19.9796859Z",
+        "outputs": {},
+        "startTime": "2026-04-16T12:30:18.9188152Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584252642665601447984416101CU238"
+          },
+          "endTime": "2026-04-16T12:30:18.9176125Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584252642665601447984416101CU238",
+          "scheduledTime": "2026-04-16T12:30:19Z",
+          "startTime": "2026-04-16T12:30:18.9174417Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-16T12:30:18.9188152Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584253506668009770733098212CU127",
+      "name": "08584253506668009770733098212CU127",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584253506668009770733098212CU127"
+        },
+        "endTime": "2026-04-15T12:30:20.4413335Z",
+        "outputs": {},
+        "startTime": "2026-04-15T12:30:18.6778101Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584253506668009770733098212CU127"
+          },
+          "endTime": "2026-04-15T12:30:18.6767363Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584253506668009770733098212CU127",
+          "scheduledTime": "2026-04-15T12:30:19Z",
+          "startTime": "2026-04-15T12:30:18.6766088Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-15T12:30:18.6778101Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584254370660044570962466520CU164",
+      "name": "08584254370660044570962466520CU164",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584254370660044570962466520CU164"
+        },
+        "endTime": "2026-04-14T12:30:21.2982855Z",
+        "outputs": {},
+        "startTime": "2026-04-14T12:30:19.4743113Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584254370660044570962466520CU164"
+          },
+          "endTime": "2026-04-14T12:30:19.4732825Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584254370660044570962466520CU164",
+          "scheduledTime": "2026-04-14T12:30:19Z",
+          "startTime": "2026-04-14T12:30:19.4731279Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-14T12:30:19.4743113Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584255234661874822436776054CU161",
+      "name": "08584255234661874822436776054CU161",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584255234661874822436776054CU161"
+        },
+        "endTime": "2026-04-13T12:30:20.6176073Z",
+        "outputs": {},
+        "startTime": "2026-04-13T12:30:19.2914188Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584255234661874822436776054CU161"
+          },
+          "endTime": "2026-04-13T12:30:19.2902258Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584255234661874822436776054CU161",
+          "scheduledTime": "2026-04-13T12:30:19Z",
+          "startTime": "2026-04-13T12:30:19.2901041Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-13T12:30:19.2914188Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584257826664195090621641264CU167",
+      "name": "08584257826664195090621641264CU167",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584257826664195090621641264CU167"
+        },
+        "endTime": "2026-04-10T12:30:20.4306041Z",
+        "outputs": {},
+        "startTime": "2026-04-10T12:30:19.0593116Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584257826664195090621641264CU167"
+          },
+          "endTime": "2026-04-10T12:30:19.0582089Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584257826664195090621641264CU167",
+          "scheduledTime": "2026-04-10T12:30:19Z",
+          "startTime": "2026-04-10T12:30:19.0580767Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-10T12:30:19.0593116Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584258690667224292408116677CU118",
+      "name": "08584258690667224292408116677CU118",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584258690667224292408116677CU118"
+        },
+        "endTime": "2026-04-09T12:30:20.320202Z",
+        "outputs": {},
+        "startTime": "2026-04-09T12:30:18.7564117Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584258690667224292408116677CU118"
+          },
+          "endTime": "2026-04-09T12:30:18.7552873Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584258690667224292408116677CU118",
+          "scheduledTime": "2026-04-09T12:30:19Z",
+          "startTime": "2026-04-09T12:30:18.7551564Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-09T12:30:18.7564117Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584259554659002068122728016CU163",
+      "name": "08584259554659002068122728016CU163",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584259554659002068122728016CU163"
+        },
+        "endTime": "2026-04-08T12:30:21.3955023Z",
+        "outputs": {},
+        "startTime": "2026-04-08T12:30:19.5785902Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584259554659002068122728016CU163"
+          },
+          "endTime": "2026-04-08T12:30:19.5775166Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584259554659002068122728016CU163",
+          "scheduledTime": "2026-04-08T12:30:19Z",
+          "startTime": "2026-04-08T12:30:19.5773787Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-08T12:30:19.5785902Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584260418661898319011885726CU112",
+      "name": "08584260418661898319011885726CU112",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584260418661898319011885726CU112"
+        },
+        "endTime": "2026-04-07T12:30:20.694192Z",
+        "outputs": {},
+        "startTime": "2026-04-07T12:30:19.2889525Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584260418661898319011885726CU112"
+          },
+          "endTime": "2026-04-07T12:30:19.2878813Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584260418661898319011885726CU112",
+          "scheduledTime": "2026-04-07T12:30:19Z",
+          "startTime": "2026-04-07T12:30:19.2877535Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-07T12:30:19.2889525Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584261282663904535492106297CU114",
+      "name": "08584261282663904535492106297CU114",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584261282663904535492106297CU114"
+        },
+        "endTime": "2026-04-06T12:30:24.9053506Z",
+        "outputs": {},
+        "startTime": "2026-04-06T12:30:19.0883679Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584261282663904535492106297CU114"
+          },
+          "endTime": "2026-04-06T12:30:19.0872573Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584261282663904535492106297CU114",
+          "scheduledTime": "2026-04-06T12:30:19Z",
+          "startTime": "2026-04-06T12:30:19.0871322Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-06T12:30:19.0883679Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584263874667548363661222428CU161",
+      "name": "08584263874667548363661222428CU161",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584263874667548363661222428CU161"
+        },
+        "endTime": "2026-04-03T12:30:21.3791802Z",
+        "outputs": {},
+        "startTime": "2026-04-03T12:30:18.7244807Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584263874667548363661222428CU161"
+          },
+          "endTime": "2026-04-03T12:30:18.722918Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584263874667548363661222428CU161",
+          "scheduledTime": "2026-04-03T12:30:19Z",
+          "startTime": "2026-04-03T12:30:18.7227524Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-03T12:30:18.7244807Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584264738662506333615774299CU237",
+      "name": "08584264738662506333615774299CU237",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584264738662506333615774299CU237"
+        },
+        "endTime": "2026-04-02T12:30:26.5952016Z",
+        "outputs": {},
+        "startTime": "2026-04-02T12:30:19.2285829Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584264738662506333615774299CU237"
+          },
+          "endTime": "2026-04-02T12:30:19.2270982Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584264738662506333615774299CU237",
+          "scheduledTime": "2026-04-02T12:30:19Z",
+          "startTime": "2026-04-02T12:30:19.2269537Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-02T12:30:19.2285829Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    },
+    {
+      "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/runs/08584265602665972571205421108CU119",
+      "name": "08584265602665972571205421108CU119",
+      "properties": {
+        "correlation": {
+          "clientTrackingId": "08584265602665972571205421108CU119"
+        },
+        "endTime": "2026-04-01T12:30:22.4655722Z",
+        "outputs": {},
+        "startTime": "2026-04-01T12:30:18.8816731Z",
+        "status": "Succeeded",
+        "trigger": {
+          "code": "OK",
+          "correlation": {
+            "clientTrackingId": "08584265602665972571205421108CU119"
+          },
+          "endTime": "2026-04-01T12:30:18.8804528Z",
+          "name": "Recurrence",
+          "originHistoryName": "08584265602665972571205421108CU119",
+          "scheduledTime": "2026-04-01T12:30:19Z",
+          "startTime": "2026-04-01T12:30:18.8803287Z",
+          "status": "Succeeded"
+        },
+        "waitEndTime": "2026-04-01T12:30:18.8816731Z",
+        "workflow": {
+          "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger/versions/08584726993135484784",
+          "name": "08584726993135484784",
+          "type": "Microsoft.Logic/workflows/versions"
+        }
+      },
+      "type": "Microsoft.Logic/workflows/runs"
+    }
+  ]
+}

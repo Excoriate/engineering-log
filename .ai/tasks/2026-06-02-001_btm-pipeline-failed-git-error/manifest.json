@@ -1,0 +1,54 @@
+{
+  "task_id": "2026-06-02-001",
+  "slug": "btm-pipeline-failed-git-error",
+  "task_root": ".ai/tasks/2026-06-02-001_btm-pipeline-failed-git-error",
+  "domain_class": "investigation",
+  "control_plane_artifact": false,
+  "compression_mode": "full",
+  "crubvg": { "C": 1, "R": 0, "U": 2, "B": 1, "V": 2, "G": 1, "total": 7 },
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error"
+  ],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/context.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/rca.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/fix.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/how-to-fix.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/feynman-explanation.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error/azure-boards-add-tag.fixed.sh",
+    ".ai/memory/lessons-learned.json (LL-018, LL-019)",
+    ".ai/harness/ddd-ubiquitous-language.md (ADO pipelines & auth terms)"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "adversarial_receipts": [
+    ".ai/tasks/2026-06-02-001_btm-pipeline-failed-git-error/adversarial/sherlock-causal-chain.md (REBUT: diagnosis survives; mechanism = cold-cache; E12 INFER kept)",
+    ".ai/tasks/2026-06-02-001_btm-pipeline-failed-git-error/adversarial/sre-fix-failure-modes.md (root-fix ship-able; hardening fixes accepted: union + non-blocking + contexts)",
+    ".ai/tasks/2026-06-02-001_btm-pipeline-failed-git-error/adversarial/goal-fidelity.md (Feynman written, onset closed, status line + de-rated claims accepted)",
+    ".ai/tasks/2026-06-02-001_btm-pipeline-failed-git-error/context/ado-auth-scope-docs.md (librarian MS-Learn evidence)"
+  ],
+  "runtime_attacks": [
+    "az boards --debug repro: detection ON issues /_git/<repo>/vsts/info (matches TF401019); --detect false removes it (0 calls)",
+    "shellcheck + bash -n CLEAN on fixed script; read-only dry-run: 426514 SKIP (has DEV), tagless -> clean DEV",
+    "discovered + fixed: az boards work-item show/update reject --project (two-context split); query returns no System.Tags (union read needed)",
+    "onset bisection: build 1608485 (04-15) clean, build 1621832 (04-25) TF401019 -> external trigger, no code change"
+  ],
+  "gate_witnesses": [
+    "E1 build 1663945 log43 TF401019 (external runtime)",
+    "E4/E5 az boards --debug repro cold/warm/--detect-false (external runtime)",
+    "E6 generalSettings enforceJobAuthScope=true (external API)",
+    "E9 PR178802 diff = pool swap only (external API)",
+    "E10 work items AreaId6393 project=Myriad-VPP (external API)",
+    "E13 onset bisection 04-15 clean -> 04-25 broken (external runtime)",
+    "E14 --project rejected by work-item show/update (external CLI)",
+    "feynman-explanation.md PASSED how-to-feynman validator (external script)"
+  ],
+  "note_concurrency": "manifest.json deleted by concurrent repo activity ~11:16 + recreated; ~30 other log folders show deleted in working tree (not this task); lessons-learned.json reached LL-017 via concurrent task 2026-06-02-002.",
+  "open_items": [
+    "Apply the fix = PR on Eneco.Vpp.BehindTheMeter (external git mutation) — NOT done; awaiting user authorization.",
+    "In-pipeline system.debug=true trace would promote E12 (exact ACL) INFER -> FACT.",
+    "Exact onset date/trigger (setting vs image) needs org audit log (A3)."
+  ],
+  "created": "2026-06-02",
+  "status": "complete"
+}

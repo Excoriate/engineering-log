@@ -1,0 +1,25 @@
+{
+  "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-delete-handler/runs/08584230120817721305479915538CU56/actions/Lookup_Slack_User_by_Email",
+  "name": "Lookup_Slack_User_by_Email",
+  "properties": {
+    "canResubmit": false,
+    "code": "NotSpecified",
+    "correlation": {
+      "actionTrackingId": "da2989ef-9895-48ef-aa57-e520f9dc8556",
+      "clientTrackingId": "08584230120817721305479915538CU56"
+    },
+    "endTime": "2026-05-12T14:06:47.58292Z",
+    "outputsLink": {
+      "contentHash": {
+        "algorithm": "md5",
+        "value": "pLwCvH/ReRFjnDU/V/6RYg=="
+      },
+      "contentSize": 32023,
+      "contentVersion": "\"0x8DEB02FB4A2B1C8\"",
+      "uri": "https://prod-68.westeurope.logic.azure.com:443/workflows/7ae536b66cd8434dab0145117f8dcd26/runs/08584230120817721305479915538CU56/actions/Lookup_Slack_User_by_Email/contents/ActionOutputs?api-version=2016-06-01&se=2026-05-13T09%3A00%3A00.0000000Z&sp=%2Fruns%2F08584230120817721305479915538CU56%2Factions%2FLookup_Slack_User_by_Email%2Fcontents%2FActionOutputs%2Fread&sv=1.0&sig=0hpzDAjmtAgum_1LA3J310DXfK-HmcyOOlCBZY5T4pU"
+    },
+    "startTime": "2026-05-12T14:06:47.5812993Z",
+    "status": "Succeeded"
+  },
+  "type": "Microsoft.Logic/workflows/runs/actions"
+}

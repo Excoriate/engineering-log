@@ -48,7 +48,7 @@ scratchpad/               # Draft notes
 .ai/harness/              # Harness centralized files (DDD, rules, skills)
 .ai/memory/               # Persistent memory (lessons-learned.json)
 .ai/tasks/                # Task workspaces (.ai/tasks/{task_id}_{slug}/)
-.ai/runtime/              # Runtime state (recall bundle, current-task.json)
+.ai/runtime/              # Runtime state (recall bundle, per-session current-task sentinels)
 ```
 
 ## On-Call Log Convention
@@ -88,14 +88,22 @@ See `.ai/harness/rules/domain/` for on-call workflow rules.
 - When Second Brain is available: dual-path writes (markdown companion first, then JSON entry)
 - Format: see `.ai/harness/rules/governance/memory-freshness.md`
 
+## Task Workspace
+
+- Allocate task IDs with `.ai/harness/scripts/claim-task-id.sh <slug>`; NEVER list existing tasks and pick the next number manually
+- Write task artifacts under `.ai/tasks/{task_id}_{slug}/`
+- Publish per-session state to `.ai/runtime/current-task/{session_id}.json`; the legacy singleton `.ai/runtime/current-task.json` is inert compatibility residue
+- Add exact absolute external paths to the current task manifest `allowed_external_paths` before writing outside the repo
+- See `.ai/harness/rules/governance/task-workspace.md`
+
 ## Agent Configuration
 
 | Agent | Root File | Rules | Skills |
 |-------|-----------|-------|--------|
 | Claude Code | CLAUDE.md | .claude/rules/ | .claude/skills/ |
-| Cursor | — | .cursor/rules/ | — |
+| Cursor | — | .cursor/rules/ | .cursor/skills/ |
 | Gemini CLI | GEMINI.md | inline in GEMINI.md | .gemini/skills/ |
-| Codex CLI | AGENTS.md | — | .codex/skills/ |
+| Codex CLI | AGENTS.md | via AGENTS.md | .codex/skills/ |
 
 ## Rules Index
 

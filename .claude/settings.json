@@ -16,6 +16,19 @@
         ]
       }
     ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "TASK_WORKSPACE_GUARD_EXIT=2 .ai/harness/hooks/task-workspace-guard.sh",
+            "timeout": 10,
+            "statusMessage": "Checking task workspace boundaries..."
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "matcher": "",

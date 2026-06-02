@@ -1,0 +1,29 @@
+# Direct-to-backend probes (port-forward, bypassing ingress) — captured 2026-06-02
+===== BACKEND: telemetryfunctiontestsfn (svc :8080 -> local 18080) =====
+  /                                          -> HTTP=200 ctype=text/html size=149794  body:<!DOCTYPE html> <html> <head>     <title>Your Azure Function App is up and running.</title
+  /healthz                                   -> HTTP=200 ctype=text/plain; charset=utf-8 size=7  body:Healthy
+  /health                                    -> HTTP=404 ctype= size=0  body:
+  /api/healthz                               -> HTTP=404 ctype= size=0  body:
+  /telemetryfunctiontestsfn/healthz          -> HTTP=404 ctype= size=0  body:
+  /swagger/index.html                        -> HTTP=404 ctype= size=0  body:
+  /api/telemetry                             -> HTTP=404 ctype= size=0  body:
+  /api/siteregistry                          -> HTTP=404 ctype= size=0  body:
+
+===== BACKEND: siteregistry (svc :8080 -> local 18081) for comparison =====
+  /                                          -> HTTP=200 ctype=text/plain; charset=utf-8 size=62  body:{"AssemblyVersion":"1.0.0.0","PackageName":"SiteRegistry.API"}
+  /healthz                                   -> HTTP=200 ctype=application/json size=68  body:{"status":"Healthy","totalDuration":"00:00:00.0000031","entries":{}}
+  /health                                    -> HTTP=404 ctype= size=0  body:
+  /api/healthz                               -> HTTP=404 ctype= size=0  body:
+  /telemetryfunctiontestsfn/healthz          -> HTTP=404 ctype= size=0  body:
+  /swagger/index.html                        -> HTTP=404 ctype= size=0  body:
+  /api/telemetry                             -> HTTP=404 ctype= size=0  body:
+  /api/siteregistry                          -> HTTP=200 ctype=text/plain; charset=utf-8 size=62  body:{"AssemblyVersion":"1.0.0.0","PackageName":"SiteRegistry.API"}
+
+(port-forward logs:)
+==> /tmp/pf1.log <==
+Handling connection for 18080
+Handling connection for 18080
+
+==> /tmp/pf2.log <==
+Handling connection for 18081
+Handling connection for 18081

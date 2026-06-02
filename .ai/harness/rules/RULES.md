@@ -25,6 +25,7 @@ Edit centralized source → update wrappers. See `governance/rules-codebase-sync
 | actionable-artifact-gate | `governance/actionable-artifact-gate.md` | `.claude/rules/governance/actionable-artifact-gate.md` | `.cursor/rules/governance-actionable-artifact-gate.mdc` |
 | rules-codebase-sync | `governance/rules-codebase-sync.md` | `.claude/rules/governance/rules-codebase-sync.md` | `.cursor/rules/governance-rules-codebase-sync.mdc` |
 | specs-driven | `governance/specs-driven.md` | `.claude/rules/governance/specs-driven.md` | `.cursor/rules/governance-specs-driven.mdc` |
+| task-workspace | `governance/task-workspace.md` | `.claude/rules/governance/task-workspace.md` | `.cursor/rules/governance-task-workspace.mdc` |
 
 ## Structure Rules (globs: `**/*`)
 

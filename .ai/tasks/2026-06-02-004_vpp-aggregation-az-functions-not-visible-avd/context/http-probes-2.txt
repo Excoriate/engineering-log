@@ -1,0 +1,12 @@
+# Follow-up probes: trailing slash + health/route variants
+URL: https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/                -> HTTP=404 ctype= size=0
+URL: https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/health          -> HTTP=404 ctype= size=0
+URL: https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/api/health      -> HTTP=404 ctype= size=0
+URL: https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/swagger/index.html -> HTTP=404 ctype= size=0
+URL: https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/swagger/v1/swagger.json -> HTTP=404 ctype= size=0
+URL: https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/api/siteregistry -> HTTP=404 ctype= size=0
+URL: https://agg.dev.vpp.eneco.com/api/siteregistry/healthz                 -> HTTP=200 ctype=application/json size=68
+    body: {"status":"Healthy","totalDuration":"00:00:00.0000034","entries":{}}
+URL: https://agg.dev.vpp.eneco.com/siteregistry/healthz                     -> HTTP=404 ctype= size=0
+URL: https://agg.dev.vpp.eneco.com/telemetry/healthz                        -> HTTP=404 ctype= size=0
+URL: https://agg.dev.vpp.eneco.com/telemetrytestsfn/healthz                 -> HTTP=404 ctype= size=0

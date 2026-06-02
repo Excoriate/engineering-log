@@ -1,0 +1,19 @@
+{
+  "task_id": "2026-06-02-001",
+  "slug": "btm-pipeline-failed-git-error",
+  "task_root": ".ai/tasks/2026-06-02-001_btm-pipeline-failed-git-error",
+  "domain_class": "investigation",
+  "control_plane_artifact": false,
+  "compression_mode": "full",
+  "crubvg": { "C": 1, "R": 0, "U": 2, "B": 1, "V": 2, "G": 1, "total": 7 },
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_btm_pipeline_failed_git_error"
+  ],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [],
+  "created": "2026-06-02",
+  "status": "in_progress"
+}

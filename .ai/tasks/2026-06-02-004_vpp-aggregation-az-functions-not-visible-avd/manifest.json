@@ -1,0 +1,49 @@
+{
+  "task_id": "2026-06-02-004",
+  "slug": "vpp-aggregation-az-functions-not-visible-avd",
+  "task_root": ".ai/tasks/2026-06-02-004_vpp-aggregation-az-functions-not-visible-avd",
+  "domain_class": "investigation",
+  "control_plane_artifact": false,
+  "compression_mode": "Full",
+  "crubvg": { "C": 2, "R": 0, "U": 2, "B": 2, "V": 1, "G": 2, "total": 9 },
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_az_functions_not_visible_avd/"
+  ],
+  "created_files": [
+    "outcome/rca.md", "outcome/fix.md", "outcome/context.md", "outcome/feynman-explainer.md",
+    "context/evidence-ledger.md", "context/network-topology.md", "context/http-probes.txt",
+    "context/http-probes-2.txt", "context/backend-portforward-probes.txt",
+    "context/lane-a-gitops-helm.md", "context/lane-b-slack-history.md", "context/lane-c-docs-intent.md",
+    "plan/plan.md", "verification/sherlock-receipt.md", "verification/socrates-receipt.md",
+    "verification/adversarial-receipts.md", "verification/anti-slop-receipt.md",
+    "01-task-requirements-initial.md"
+  ],
+  "modified_files": [
+    ".ai/memory/lessons-learned.json (appended LL-020, LL-021)",
+    ".ai/runtime/current-task.json (left pointing at concurrent task 002 to avoid clobbering)"
+  ],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_az_functions_not_visible_avd/{rca,fix,context,feynman-explainer}.md",
+    "~/Documents/obsidian/llm-wiki/learnings/lessons/2026-06-02-nginx-ingress-prefix-no-rewrite-404.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "adversarial_completed": [
+    "sherlock-holmes -> verification/sherlock-receipt.md (core RC holds via nginx access log; BLOCKING scope correction accepted)",
+    "socrates-contrarian -> verification/socrates-receipt.md (technical core robust; goal-fidelity + reconciliation findings accepted)"
+  ],
+  "runtime_attacks": [
+    "edge curl agg.dev (404 telemetry / 200 siteregistry)",
+    "deliveryreportfn control (404)",
+    "port-forward backend (/healthz=200 vs prefixed=404)",
+    "decoded live helm release v215 chart 0.1.27 (no rewrite)",
+    "nginx access log: upstream 10.0.1.167:8080 returned 404 (sherlock)"
+  ],
+  "gate_witnesses": [
+    "external-runtime: nginx access log proves origin (sherlock-receipt.md)",
+    "external-runtime: backend port-forward /healthz=200 (backend-portforward-probes.txt)",
+    "external-runtime: az resource graph + app-gateway show (network-topology.md)",
+    "external-agent: sherlock-receipt.md (causal chain)",
+    "external-agent: socrates-receipt.md (assumptions/goal-fidelity)"
+  ]
+}

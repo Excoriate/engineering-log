@@ -1,0 +1,9 @@
+[
+  {
+    "id": "/subscriptions/7b1ba02e-bac6-4c45-83a0-7f0d3104922e/resourceGroups/rg-vpp-app-sb-401/providers/Microsoft.Logic/workflows/vpp-fbe-autodelete-trigger",
+    "location": "westeurope",
+    "name": "vpp-fbe-autodelete-trigger",
+    "resourceGroup": "rg-vpp-app-sb-401",
+    "type": "Microsoft.Logic/workflows"
+  }
+]

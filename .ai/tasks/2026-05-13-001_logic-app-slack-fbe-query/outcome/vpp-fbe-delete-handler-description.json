@@ -1,0 +1,182 @@
+{
+  "name": "vpp-fbe-delete-handler",
+  "state": "Enabled",
+  "location": "westeurope",
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "actions": {
+      "For_each": {
+        "actions": {
+          "Lookup_Slack_User_by_Email": {
+            "inputs": {
+              "body": "email=@{items('For_each')['createdby']}",
+              "headers": {
+                "Authorization": "Bearer [REDACTED_SLACK_BOT_TOKEN]",
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              "method": "POST",
+              "uri": "https://slack.com/api/users.lookupByEmail"
+            },
+            "runtimeConfiguration": {
+              "contentTransfer": {
+                "transferMode": "Chunked"
+              }
+            },
+            "type": "Http"
+          },
+          "Parse_Slack_Response": {
+            "inputs": {
+              "content": "@body('Lookup_Slack_User_by_Email')",
+              "schema": {
+                "properties": {
+                  "ok": {
+                    "type": "boolean"
+                  },
+                  "user": {
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "runAfter": {
+              "Lookup_Slack_User_by_Email": [
+                "Succeeded"
+              ]
+            },
+            "type": "ParseJson"
+          },
+          "Send_DM_to_User": {
+            "inputs": {
+              "body": {
+                "attachments": [
+                  {
+                    "actions": [
+                      {
+                        "name": "Yes",
+                        "text": "Yes",
+                        "type": "button",
+                        "value": "yes_@{items('For_each')['env']}"
+                      },
+                      {
+                        "name": "No",
+                        "text": "No",
+                        "type": "button",
+                        "value": "no_@{items('For_each')['env']}"
+                      }
+                    ],
+                    "attachment_type": "default",
+                    "callback_id": "delete_confirmation_@{items('For_each')['env']}",
+                    "color": "#3AA3E3",
+                    "fallback": "You are unable to choose an option",
+                    "text": "Choose an option"
+                  }
+                ],
+                "channel": "@{body('Parse_Slack_Response')['user']['id']}",
+                "text": "Do you want to keep the @{items('For_each')['env']} environment active which is deployed against the @{items('For_each')['branch']} branch?"
+              },
+              "headers": {
+                "Authorization": "Bearer [REDACTED_SLACK_BOT_TOKEN]",
+                "Content-Type": "application/json"
+              },
+              "method": "POST",
+              "uri": "https://slack.com/api/chat.postMessage"
+            },
+            "runAfter": {
+              "Parse_Slack_Response": [
+                "Succeeded"
+              ]
+            },
+            "runtimeConfiguration": {
+              "contentTransfer": {
+                "transferMode": "Chunked"
+              }
+            },
+            "type": "Http"
+          }
+        },
+        "foreach": "@body('Get_entities_(V2)').value",
+        "runAfter": {
+          "Get_entities_(V2)": [
+            "Succeeded"
+          ]
+        },
+        "type": "Foreach"
+      },
+      "Get_entities_(V2)": {
+        "inputs": {
+          "host": {
+            "connection": {
+              "name": "@parameters('$connections')['azuretables-1']['connectionId']"
+            }
+          },
+          "method": "get",
+          "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('featurebranchenvdetails')}/entities",
+          "queries": {
+            "$filter": "active eq 'used'"
+          }
+        },
+        "runAfter": {},
+        "type": "ApiConnection"
+      }
+    },
+    "contentVersion": "1.0.0.0",
+    "outputs": {},
+    "parameters": {
+      "$connections": {
+        "defaultValue": {},
+        "type": "Object"
+      }
+    },
+    "triggers": {
+      "Recurrence": {
+        "evaluatedRecurrence": {
+          "frequency": "Week",
+          "interval": 1,
+          "schedule": {
+            "hours": [
+              "14"
+            ],
+            "minutes": [
+              6
+            ],
+            "weekDays": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday"
+            ]
+          },
+          "timeZone": "UTC"
+        },
+        "recurrence": {
+          "frequency": "Week",
+          "interval": 1,
+          "schedule": {
+            "hours": [
+              "14"
+            ],
+            "minutes": [
+              6
+            ],
+            "weekDays": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday"
+            ]
+          },
+          "timeZone": "UTC"
+        },
+        "type": "Recurrence"
+      }
+    }
+  }
+}

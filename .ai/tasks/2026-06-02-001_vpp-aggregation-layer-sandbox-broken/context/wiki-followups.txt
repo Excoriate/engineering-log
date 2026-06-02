@@ -1,0 +1,84 @@
+===== 1) Certificate Renewal how-to =====
+# /Way of Working/DevOps & Platform/Tutorials-HowTos/Certificates and Secrets/Certificate Renewal
+<!-- Page ID: 12196 | Wiki: Myriad---VPP.wiki -->
+
+
+Note:
+
+Also view [ESP-certificate-setup](https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_wiki?pageId=6791&friendlyName=ESP-certificate-setup#)
+
+
+
+![image.png](/.attachments/image-4d3733a1-3f58-4d61-93bf-608a8b2841c5.png)
+
+# Renewal
+Is via an email request to Jenke van Gerven j.vangerven@networking4all.com
+
+www.networking4all.com
+
+Generally an email will be sent to fm_VPP_support mailbox by Jenke to inform us of an upcoming certificate expiry.
+
+![image.png](/.attachments/image-9bfdfb27-025a-4c87-b516-02f603c2ca5b.png)
+
+# Deployment
+Certificates reside in keyvault.
+![image.png](/.attachments/image-0696f5a2-42be-4d39-b755-19659f3f9e09.png)
+
+# To trigger the upload to app-gateway
+
+![image.png](/.attachments/image-aebac4e0-2756-4ff9-9271-a77cf324dc55.png)
+
+
+# Alerting
+
+We have alerting in place to check for expiry, we need to update the old certificate to point to the new ones
+
+![image.png](/.attachments/image-eabc37cd-4cf8-49aa-b5ae-306e1d70590f.png)
+
+![image.png](/.attachments/image-e029e2cc-12a6-4f48-b341-ecb2234e1651.png)
+
+===== 2) Secret expiry pipeline how-to =====
+# /Way of Working/DevOps & Platform/Tutorials-HowTos/Certificates and Secrets/Secret expiry pipeline
+<!-- Page ID: 36619 | Wiki: Myriad---VPP.wiki -->
+
+Secrets expire.
+We have the following pipeline https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_build?definitionId=2735 which checks for expiring certificates and posts a message to myriad-alerts-devops channel
+
+
+For secrets related to appregistrations the idea is that they will be recorded in the keyvault vpp-aks-devops
+
+===== 3) ArgoCD Sandbox how-to =====
+# /Way of Working/DevOps & Platform/Tutorials-HowTos/ArgoCD/ArgoCD Sandbox
+<!-- Page ID: 42802 | Wiki: Myriad---VPP.wiki -->
+
+# Applications managed by ArgoCD
+This document describes the configuration of ArgoCD on the Sandbox cluster and applications that
+are managed through ArgoCD.
+
+## 1. ArgoCD itself
+Context: ArgoCD was installed based on the kubernetes manifests on ArgoCD's GitHub. After installation, the definitions were imported into ArgoCD itself.
+
+|Installation method|ArgoCD application file|Kubernetes Namespace|External URL|
+|-|-|-|-|
+|Kustomize|[here](https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP.GitOps?path=/argocd-configuration/applications/argocd.application.yaml)|argocd|https://argocd.dev.vpp.eneco.com|
+
+### Applied customizations:
+#### Microsoft Azure Entra Login:
+- OIDC configuration is patched into the argocd-cm configmap using Kustomize (see [argocd-cm.yaml](https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP.GitOps?path=/argocd/overlays/sandbox/argocd-cm.yaml))
+- The clientsecret for the app registration is manually added to secret argocd-secret with key: oidc.azure.clientSecret
+- The clientsecret is read in argocd-cm through a reference to the key in argocd-secret
+- The clientsecret can be found in Azure Entra App Registration _appreg-vpp-argocd-id-d_ with name _argocd-configmap-argocd-secret-oidc-azure-clientSecret_
+
+#### Authorization:
+- Members of Azure Entra Security Group _sg-vpp-platform_ are assigned the _org-admin_ role through the configuration in [argocd-rbac-cm.yaml](https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP.GitOps?path=/argocd/overlays/sandbox/argocd-rbac-cm.yaml)
+
+#### Ingress:
+- URL: https://argocd.dev.vpp.eneco.com
+- Ingress is handled through the Azure Application Gateway instance on sandbox
+- The Ingress TLS certificate is loaded from Azure KeyVault through the Azure KeyVault CSI Driver
+  - related files:
+    - [secretproviderclass.yaml](https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP.GitOps?path=/argocd/base/secretproviderclass.yaml) defines the secretproviderclass for the CSI driver    
+  - The patch in [argocd-server-secrets-store-volume.patch.yaml](https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP.GitOps?path=/argocd/base/argocd-server-secrets-store-volume.patch.yaml) patches a volume and a volumeMount into the _argocd-server_ deployment which triggers the CSI driver to load the secrets from Azure KeyVault and create the Kubernetes secret
+  - The secret is referenced in [ingress.yaml](https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP.GitOps?path=/argocd/overlays/sandbox/ingress.yaml) which uses it as the TLS certificate for the ingress.
+  - Since TLS is terminated by the Ingress Controller, the argocd-server runs in insecure mode, so it runs on HTTP inside the cluster. This is handled by the configmap [_argocd-cmd-params-cm_](https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP.GitOps?path=/argocd/overlays/sandbox/argocd-cmd-params.cm.yaml)
+
