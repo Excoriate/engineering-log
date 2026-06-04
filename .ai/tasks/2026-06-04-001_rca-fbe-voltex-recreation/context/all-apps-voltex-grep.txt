@@ -1,0 +1,15 @@
+fbe-afi-monitoring	dest=afi-monitoring	proj=default
+fbe-ionix-monitoring	dest=ionix-monitoring	proj=default
+fbe-ishtar-monitoring	dest=ishtar-monitoring	proj=default
+fbe-jupiter-monitoring	dest=jupiter-monitoring	proj=default
+fbe-kidu-monitoring	dest=kidu-monitoring	proj=default
+fbe-operations-monitoring	dest=operations-monitoring	proj=default
+fbe-thor-monitoring	dest=thor-monitoring	proj=default
+fbe-veku-monitoring	dest=veku-monitoring	proj=default
+fbe-voltex-monitoring	dest=voltex-monitoring	proj=default
+grafana	dest=monitoring	proj=default
+grafana-dashboards	dest=monitoring	proj=default
+influxdb-vpp-agg-monitoring	dest=vpp-agg-monitoring	proj=default
+kube-prometheus-stack	dest=monitoring-stack	proj=default
+voltex-app-of-apps	dest=voltex	proj=vpp-core
+vpp-monitoring	dest=sandbox-monitoring	proj=default

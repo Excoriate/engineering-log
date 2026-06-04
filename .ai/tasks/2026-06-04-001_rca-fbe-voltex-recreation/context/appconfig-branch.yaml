@@ -1,0 +1,205 @@
+Shared:
+  # Azure AD
+  AzureAdAuthentication:Instance: "https://login.microsoftonline.com/"
+
+  # Swagger
+  SwaggerOptions:Enabled: "true"
+
+  # Swagger Azure AD
+  SwaggerOptions:AzureAd:Enabled: "true"
+  SwaggerOptions:AzureAd:Instance: "https://login.microsoftonline.com/"
+  SwaggerOptions:AzureAd:Scopes:0: "api://ea5f10d6-8534-4638-8a47-0c7025fc8807/api_access"
+  SwaggerOptions:AzureAd:TenantId: https://${keyVaultName}.vault.azure.net/secrets/AzureAdAuthentication-TenantId
+  SwaggerOptions:AzureAd:ClientId: https://${keyVaultName}.vault.azure.net/secrets/aad-auth-clientid-swagger
+
+  # Application Insights
+  ApplicationInsights:ConnectionString: https://${keyVaultName}.vault.azure.net/secrets/connectionstrings-application-insights
+
+  # Eventual Consistency
+  EventualConsistencyCosmosDbOptions:ConnectionString: https://${keyVaultName}.vault.azure.net/secrets/connectionstrings-cosmosdbmongo-account-generic
+
+  # Open Telemetry Metrics
+  OpenTelemetryOptions:CollectorEndpoint: "http://opentelemetry-collector-collector.${environment}-monitoring.svc.cluster.local:4317"
+
+  # Seeding Api Key
+  SeedingApiKey: https://${keyVaultName}.vault.azure.net/secrets/seeding-api-key
+
+  # Leader Election
+  LeaderElection:LeaseDurationInSeconds: "15"
+  LeaderElection:LeaseRenewDeadlineInSeconds: "10"
+  LeaderElection:LeaseRetryPeriodInSeconds: "2"
+
+  # Scala gateway
+  ScalaGatewayClientOptions:DatabaseName: "vpp-cosmosdb-d"
+  ScalaGatewayClientOptions:UseGatewayMode: "true"
+  ScalaGatewayClientOptions:ConnectionString: https://${keyVaultName}.vault.azure.net/secrets/scala-gateway-connection-string
+
+  # Serilog
+  Serilog:MinimumLevel:Default: "Information"
+  Serilog:MinimumLevel:Override:Microsoft.AspNetCore: "Warning"
+  Serilog:MinimumLevel:Override:Microsoft.EntityFrameworkCore: "Warning"
+  Serilog:MinimumLevel:Override:Microsoft.IdentityModel: "Error"
+  Serilog:MinimumLevel:Override:System: "Warning"
+
+  # Messaging
+
+  ## Azure ServiceBus
+  MessagingOptions:AzureServiceBus:ConnectionString: https://${keyVaultName}.vault.azure.net/secrets/connectionstrings-azureservicebus
+
+  ### Topics
+  MessagingOptions:AzureServiceBus:Topics:AlarmHeartbeat: "topic-alarm-heartbeat-event"
+  MessagingOptions:AzureServiceBus:Topics:AlarmHeartbeatV2: "topic-alarm-heartbeat-event-2"
+  MessagingOptions:AzureServiceBus:Topics:AlarmSolved: "topic-alarm-solved-event"
+  MessagingOptions:AzureServiceBus:Topics:AlarmSignalsBatch: "topic-alarm-signals-batch-event"
+  MessagingOptions:AzureServiceBus:Topics:AssetAutoFallbackToLastSteeringModeChanged: "topic-asset-autofallbacktolaststeeringmode-changed"
+  MessagingOptions:AzureServiceBus:Topics:AssetAvailabilityEvent: "topic-asset-availability-event"
+  MessagingOptions:AzureServiceBus:Topics:AssetAvailabilitySchedule: "topic-assetplanning-availabilityschedule-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetAvailabilityStreamCopy: "topic-asset-availability-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetCapacityForecastSchedule: "topic-assetplanning-capacityforecast-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetCongestionRestrictionsSchedule: "topic-assetplanning-congestionrestrictions-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetCongestionRestrictionsClaimCheck: "topic-assetplanning-congestionrestrictions-claimcheck"
+  MessagingOptions:AzureServiceBus:Topics:AssetCongestionRestrictionsStreamCopy: "topic-assetplanning-congestionrestrictions-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetConfiguredSteeringMode: "topic-asset-configured-steering-mode-updated"
+  MessagingOptions:AzureServiceBus:Topics:AssetDeleted: "topic-asset-deleted"
+  MessagingOptions:AzureServiceBus:Topics:AssetDispatcherCycleOutput: "topic-asset-dispatcher-cycle-output"
+  MessagingOptions:AzureServiceBus:Topics:AssetEffectiveSteeringMode: "topic-asset-effective-steering-mode"
+  MessagingOptions:AzureServiceBus:Topics:AssetDefaultMarketUpdated: "topic-asset-default-market-updated"
+  MessagingOptions:AzureServiceBus:Topics:AssetMarketStatusUpdated: "topic-asset-market-status-updated"
+  MessagingOptions:AzureServiceBus:Topics:AssetFeasiblePowerSchedule: "topic-assetplanning-feasiblepowerschedule-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetFeasiblePowerScheduleStreamCopy: "topic-asset-feasible-power-schedule-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetUncertaintyCorrectedForecastSchedule: "topic-assetplanning-uncertaintycorrectedforecastschedule-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetEnergyCapacityForecast: "topic-assetplanning-assetenergycapacityforecast-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetEnergyCapacityForecastStreamCopy: "topic-assetplanning-assetenergycapacityforecast-created-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AligneAssetSalesPlanAggregated: "topic-assetplanning-aligneassetsalesplanaggregated-created"
+  MessagingOptions:AzureServiceBus:Topics:AligneAssetSalesPlanAggregatedStreamCopy: "topic-assetplanning-aligneassetsalesplanaggregated-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:UncertaintyCorrectedForecastClaimCheck: "topic-assetplanning-uncertaintycorrectedforecast-claimcheck"
+  MessagingOptions:AzureServiceBus:Topics:FlexCapacityCorrectedClaimCheck: "topic-assetplanning-flexcapacitycorrected-claimcheck"
+  MessagingOptions:AzureServiceBus:Topics:AssetFlexCapacityCorrectedSchedule: "topic-assetplanning-flexcapacitycorrectedschedule-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetFlexCapacitySchedule: "topic-assetplanning-flexcapacityschedule-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetFlexCapacityCorrectedStreamCopy: "topic-assetplanning-flexcapacitycorrectedschedule-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetFlexReservationSchedule: "topic-assetplanning-flexreservationschedule-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetFlexReservationStreamCopy: "topic-asset-flex-reservation-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetFlexReservationShadowModeStreamCopy: "topic-asset-flex-reservation-shadow-mode-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetIotTelemetryStreamCopy: THIS-VALUE-IS-ONLY-HERE-SO-ESPMESSAGECONSUMER-DOESNT-BREAK
+  MessagingOptions:AzureServiceBus:Topics:AssetPowerSchedule: "topic-assetplanning-powerschedule-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetPowerScheduleStreamCopy: "topic-asset-power-schedule-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetPowerScheduleShadowModeStreamCopy: "topic-asset-power-schedule-shadow-mode-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetProductionForecastSchedule: "topic-assetplanning-productionforecastschedule-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetProductionForecastStreamCopy: "topic-asset-production-forecast-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetRampRateForecastSchedule: "topic-assetplanning-ramprateforecast-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetRampRateForecastScheduleStreamCopy: "topic-asset-ramprate-forecast-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetRegistered: "topic-asset-registerd"
+  MessagingOptions:AzureServiceBus:Topics:AssetStrikePriceSchedule: "topic-assetplanning-strikepriceschedule-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetStrikePricesStreamCopy: "topic-asset-strike-prices-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:AssetUpdated: "topic-asset-updated"
+  MessagingOptions:AzureServiceBus:Topics:AssetVppStatusUpdated: "topic-asset-vpp-status-updated"
+  MessagingOptions:AzureServiceBus:Topics:BalancingReserveContractReportStreamCopy: "topic-marketinteraction-balancing-reserve-contract-report-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:CapacityForecastClaimCheck: "topic-assetplanning-capacityforecast-claimcheck"
+  MessagingOptions:AzureServiceBus:Topics:CapacityOperatingClaimCheck: "topic-assetplanning-capacityoperating-claimcheck"
+  MessagingOptions:AzureServiceBus:Topics:CurtailmentScheduleStreamCopy: "topic-curtailment-schdule-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:DataPrepEndToEndTestingAssetActualPowerHistoryUpdate: "topic-dataprep-endtoendtesting-actualpowerhistory-update"
+  MessagingOptions:AzureServiceBus:Topics:DataPrepEndToEndTestingAssetCleanup: "topic-dataprep-endtoendtesting-asset-cleanup"
+  MessagingOptions:AzureServiceBus:Topics:DataPrepEndToEndTestingAssetMarketAllocationUpdate: "topic-dataprep-endtoendtesting-marketallocation-update"
+  MessagingOptions:AzureServiceBus:Topics:DataPrepEndToEndTestingAssetScheduleCleanup: "topic-dataprep-endtoendtesting-assetschedule-cleanup"
+  MessagingOptions:AzureServiceBus:Topics:DataPrepEndToEndTestingPortfolioCleanup: "topic-dataprep-endtoendtesting-portfolio-cleanup"
+  MessagingOptions:AzureServiceBus:Topics:DistributedEnergyResourceEventV2StreamCopy: "topic-distributed-energy-resource-event-v2-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:FleetOptimizerInputCreated: "topic-fleetoptimizer-input-created"
+  MessagingOptions:AzureServiceBus:Topics:FleetOptimizerOutputCreated: "topic-fleetoptimizer-output-created"
+  MessagingOptions:AzureServiceBus:Topics:FleetOptimizerInfeasibleSolution: "topic-fleetoptimizer-infeasible-solution"
+  MessagingOptions:AzureServiceBus:Topics:FleetOptimizerFallbackOutputCreated: "topic-fleetoptimizer-fallback-output-created"
+  MessagingOptions:AzureServiceBus:Topics:FleetOptimizerInfeasibleFallbackSolution: "topic-fleetoptimizer-infeasible-fallback-solution"
+  MessagingOptions:AzureServiceBus:Topics:FleetOptimizerUpdate: "topic-asset-fleet-optimizer-status-updated"
+  MessagingOptions:AzureServiceBus:Topics:FlexMarketBidsStreamCopy: "topic-marketinteraction-flex-market-bids-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:FlexReservationClaimCheck: "topic-assetplanning-flexreservation-claimcheck"
+  MessagingOptions:AzureServiceBus:Topics:ForwardPricesStreamCopy: "topic-forward-prices-stream-copy"
+  MessagingOptions:AzureServiceBus:Topics:MarketAllocationClaimCheck: "topic-market-allocation-claim-check"
+  MessagingOptions:AzureServiceBus:Topics:MarketAllocationUpdate: "topic-asset-market-allocation-status-updated"
+  MessagingOptions:AzureServiceBus:Topics:MarketEnablementStatusUpdate: "topic-asset-market-enablement-status-updated"
+  MessagingOptions:AzureServiceBus:Topics:PortfolioBidLadder: "topic-marketinteraction-portfolio-bid-ladder"
+  MessagingOptions:AzureServiceBus:Topics:PortfolioBidLadderV2: "topic-marketinteraction-portfolio-bid-ladder-2"
+  MessagingOptions:AzureServiceBus:Topics:PortfolioContractV2: "topic-marketinteraction-portfolio-contract-2"
+  MessagingOptions:AzureServiceBus:Topics:PortfolioSetpointSummaryV2: "topic-portfolio-setpoints-summary-2"
+  MessagingOptions:AzureServiceBus:Topics:PortfolioSetpointV2: "topic-portfolioservice-setpoints-2"
+  MessagingOptions:AzureServiceBus:Topics:PowerScheduleClaimCheck: "topic-assetplanning-powerschedule-claimcheck"
+  MessagingOptions:AzureServiceBus:Topics:ProductionForecastClaimCheck: "topic-assetplanning-productionForecast-claimcheck"
+  MessagingOptions:AzureServiceBus:Topics:RampRateForecastClaimCheck: "topic-assetplanning-ramprateforecast-claimcheck"
+  MessagingOptions:AzureServiceBus:Topics:ReferenceSignalV2: "topic-reference-signal-calculated-2"
+  MessagingOptions:AzureServiceBus:Topics:ReferenceSignalCycleOutput: "topic-reference-signal-cycle-output"
+  MessagingOptions:AzureServiceBus:Topics:ResultingVariables: "topic-resulting-variables-calculated"
+  MessagingOptions:AzureServiceBus:Topics:StrikePriceClaimCheck: "topic-assetplanning-strikeprice-claimcheck"
+  MessagingOptions:AzureServiceBus:Topics:TelemetryCreated: "topic-telemetry-event"
+  MessagingOptions:AzureServiceBus:Topics:TelemetryCreatedV2: "topic-telemetry-event-2"
+  MessagingOptions:AzureServiceBus:Topics:VppDeviationCreated: "topic-vpp-deviation-created-event"
+  MessagingOptions:AzureServiceBus:Topics:AssetPowerScheduleOverwrite: "topic-assetplanning-powerschedule-overwrite-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetFlexReservationOverwrite: "topic-assetplanning-flexreservation-overwrite-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetPowerCapacityOverwrite: "topic-assetplanning-powercapacity-overwrite-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetMarketAllocationOverwrite: "topic-assetplanning-marketallocation-overwrite-created"
+  MessagingOptions:AzureServiceBus:Topics:AssetMarketAllocationSchedule: "topic-assetplanning-marketallocation-created"
+
+  # Event Hubs
+  MessagingOptions:AzureEventHub:EventHubs:Telemetry: "iot-telemetry"
+  MessagingOptions:AzureEventHub:EventHubs:TelemetryV2: "iot-telemetry-2"
+  MessagingOptions:AzureEventHub:EventHubs:ReferenceSignal: "reference-signal-output"
+  MessagingOptions:AzureEventHub:EventHubs:ReferenceSignalCalculated: "reference-signal-calculated"
+  MessagingOptions:AzureEventHub:EventHubs:ResultingVariables: "resulting-variables-2"
+  MessagingOptions:AzureEventHub:EventHubs:PortfolioSetpoint: "dispatcher-output"
+  MessagingOptions:AzureEventHub:EventHubs:PtuDataPoints: "ptu-datapoints"
+  MessagingOptions:AzureEventHub:EventHubs:LogbookEvent: "logbook-event"
+  MessagingOptions:AzureEventHub:Namespace: "vpp-evh-${alternateEnvironmentSuffix}"
+  MessagingOptions:AzureEventHub:ConnectionString: "https://${keyVaultName}.vault.azure.net/secrets/connectionstrings-azureeventhub"
+
+  EventHubOptions:EventHubConnectionString: "https://${keyVaultName}.vault.azure.net/secrets/connectionstrings-azure-eventhub-premium"
+  EventHubOptions:BlobContainerConnectionString: "https://${keyVaultName}.vault.azure.net/secrets/connectionstrings-azure-eventhub-premium-storage-account"
+
+  # Kafka
+
+  ## General
+  Kafka:ApplicationId: https://${keyVaultName}.vault.azure.net/secrets/esp-applicationId
+  Kafka:SchemaRegistryUrl: "https://schemas.dtaaz.esp.eneco.com"
+  Kafka:Tenant: "eneco"
+  Kafka:UseSSL: "true"
+  Kafka:Environment: "dev"
+
+  ### Axual Kafka
+  Kafka:ApplicationVersion: "1"
+  Kafka:CALocation: "certs/ca-cert.pem"
+  Kafka:CertificateLocation: "certs/client-cert.pem"
+  Kafka:DiscoveryEndpointUrl: "https://discovery.dtaaz.esp.eneco.com"
+  Kafka:KeystoreLocation: "certs/ssl-key.pfx"
+  Kafka:Certificates:CACertificate: https://${keyVaultName}.vault.azure.net/secrets/kafka-dev-caCertificate
+  Kafka:Certificates:ClientCertificate: https://${keyVaultName}.vault.azure.net/secrets/kafka-dev-clientCertificate
+  Kafka:Certificates:SslKeyCertificate: https://${keyVaultName}.vault.azure.net/secrets/kafka-dev-sslKeyCertificate
+  Kafka:Certificates:SslKeyPassword: "https://${keyVaultName}.vault.azure.net/secrets/kafka-dev-sslKeyPassword"
+
+  #### Confluent Kafka
+  Kafka:BootstrapServers: "bootstrap.dtaaz.esp.eneco.com:9094"
+  Kafka:Instance: "dta"
+  Kafka:EnableErrorHandler: "true"
+  Kafka:EnableLogHandler: "false"
+  Kafka:EnableFullyQualifiedNamingForTopic: "true"
+  Kafka:SslCaCertificatePem: https://${keyVaultName}.vault.azure.net/secrets/kafka-dev-ssl-ca-certificate-pem
+  Kafka:SslClientCertificatePem: https://${keyVaultName}.vault.azure.net/secrets/kafka-dev-ssl-client-certificate-pem
+  Kafka:SslKeyPem: https://${keyVaultName}.vault.azure.net/secrets/kafka-dev-ssl-key-pem
+  Kafka:SslKeyPassword: "https://${keyVaultName}.vault.azure.net/secrets/kafka-dev-ssl-key-password"
+
+  # Kafka topics
+  Kafka:Topics:OperatorAlarmAndLogEvents_v1: "coo-vpp-operator-alarmandlogevents-1"
+
+  # Grpc
+  GrpcConnections:AssetService: "http://asset:30303"
+  GrpcConnections:AssetPlanning: "http://assetplanning:30303"
+
+  # THE KEYS BELOW WERE IN THE APPCONFIG INSTANCE, BUT NOT IN THE SCRIPT FILES. PLEASE REMOVE THEM FROM THIS YAML FILE IF THEY ARE NO LONGER NEEDED
+  AzureAdAuthentication:TenantId: https://${keyVaultName}.vault.azure.net/secrets/AzureAdAuthentication-TenantId
+  MessagingOptions:AzureServiceBus:Topics:PortfolioContract: "topic-marketinteraction-portfolio-contract"
+
+  # Multi Country
+  MultiCountryOptions:SupportedTenants:0: "TENNETNL"
+  MultiCountryOptions:SupportedTenants:1: "TENNETDE"
+  MultiCountryOptions:SupportedTenants:2: "ELIA"
+  MultiCountryOptions:SupportedTenants:3: "DE50HERTZ"
+  MultiCountryOptions:TimeZones:TENNETNL: "W. Europe Standard Time"
+  MultiCountryOptions:TimeZones:TENNETDE: "W. Europe Standard Time"
+  MultiCountryOptions:TimeZones:ELIA: "W. Europe Standard Time"
+  MultiCountryOptions:TimeZones:DE50HERTZ: "W. Europe Standard Time"
+

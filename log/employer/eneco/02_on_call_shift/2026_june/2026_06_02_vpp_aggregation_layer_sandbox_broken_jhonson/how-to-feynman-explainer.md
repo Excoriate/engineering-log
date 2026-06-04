@@ -68,12 +68,12 @@ Read that twice. If you can recite it, you can predict this failure in any chart
 stateDiagram-v2
     [*] --> Scheduled
     Scheduled --> MountingVolumes: kubelet prepares pod
-    MountingVolumes --> SecretLookup: needs Secret "keys"
+    MountingVolumes --> SecretLookup: needs Secret keys
     SecretLookup --> Mounted: Secret exists
     SecretLookup --> FailedMount: Secret ABSENT
-    FailedMount --> SecretLookup: retry (forever)
-    Mounted --> Running: container starts, reads /app/certs
-    Running --> KafkaMTLS: connect to ESP with client cert + key
+    FailedMount --> SecretLookup: retry forever
+    Mounted --> Running: container starts reads app certs
+    Running --> KafkaMTLS: connect to ESP with client cert and key
 ```
 
 > **Cognitive job:** show the failure is *before* the container runs. That's why the app has no error logs and "nothing is failing in the namespace" can be true while pods are stuck — the symptom lives in the kubelet, not the app.

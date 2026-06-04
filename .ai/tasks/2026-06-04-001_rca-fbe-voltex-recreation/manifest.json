@@ -1,0 +1,46 @@
+{
+  "task_id": "2026-06-04-001",
+  "slug": "rca-fbe-voltex-recreation",
+  "task_root": ".ai/tasks/2026-06-04-001_rca-fbe-voltex-recreation",
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_03_failed_recreation_fbe_voltex_stefan"
+  ],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_03_failed_recreation_fbe_voltex_stefan/context.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_03_failed_recreation_fbe_voltex_stefan/rca.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_03_failed_recreation_fbe_voltex_stefan/fix.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_03_failed_recreation_fbe_voltex_stefan/how-to-feynman-explainer.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [
+    "read-only live probes 2026-06-04; one benign argocd refresh annotation patch (non-destructive)",
+    "APPLIED 2026-06-04 (authorized): Step1 patched job seed-assets-alarmengine-postsync-1779187628 finalizers=[] (deleted); Step2 force-deleted zombie pods frontend-8556c9dffd-7t9w5 + monitor-5b45c988c5-sr45x; deadlock cleared -> ApplicationSet auto-recreated voltex-app-of-apps + 21 children; seed now 204; frontend Healthy w/ endpoint. Step4 NOT needed."
+  ],
+  "gate_witnesses": [
+    {
+      "claim": "finalizer deadlock (deletionTimestamp+resources-finalizer, auto-sync skipped)",
+      "witness": "sherlock-causal-verify.md CONFIRMED E2/E4/E6/E7/E8 with exact-match live kubectl"
+    },
+    {
+      "claim": "ApplicationSet auto-recreates voltex once stuck object clears; no pipeline rerun",
+      "witness": "sre-fix-safety.md O3 CONFIRMED via live applicationset-controller logs"
+    },
+    {
+      "claim": "clearing deadlock necessary-not-sufficient; seed-500 is recurrence generator",
+      "witness": "socrates-assumptions-goal.md + sre-fix-safety.md O5 (convergent)"
+    },
+    {
+      "claim": "Stefan branch changes alarmengine image tag 0.117.dev->0.153.feat.49017e3 + adds new-TSO app_configuration.yaml",
+      "witness": "az devops items diff main vs branch (live)"
+    },
+    {
+      "claim": "afi (clean-seed slot) also runs 0.153.feat (b968212) -> seed-500 is voltex-specific content, not feature-build-class",
+      "witness": "az devops afi alarmengine values-override"
+    },
+    {
+      "claim": "fix resolves incident AND branch exonerated",
+      "witness": "live post-fix: app-of-apps Synced/Healthy; 20/21 children Healthy; alarmengine seed StatusCode 204 (was 500); frontend endpoint 10.0.1.157; secret-provider-kv restored"
+    }
+  ]
+}

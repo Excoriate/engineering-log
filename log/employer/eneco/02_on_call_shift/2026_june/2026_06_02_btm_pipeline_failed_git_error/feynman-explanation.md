@@ -107,9 +107,9 @@ sequenceDiagram
     Sh->>CLI: az boards query --wiql ...  (no --org/--project)
     CLI->>ADO: GET /_git/eneco.vpp.behindthemeter/vsts/info   (cold cache)
     ADO-->>CLI: 404  TF401019 (project-scoped token denied)
-    Note over CLI,Sh: error printed to stderr; exit code non-zero
-    Note over Sh: but no set -e + inside  done < <( )  → exit code SWALLOWED
-    Sh-->>Job: exit 0  → step SUCCEEDED
+    Note over CLI,Sh: error on stderr, exit code non-zero
+    Note over Sh: no set -e, process substitution swallows exit code
+    Sh-->>Job: exit 0, step SUCCEEDED
     Note over Job: build GREEN, DEV tag never written
 ```
 

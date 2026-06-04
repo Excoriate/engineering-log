@@ -109,22 +109,22 @@ The structural fact: **MC and Sandbox use *different deploy paths*.** MC = GitOp
 
 ```mermaid
 sequenceDiagram
-    participant CD as Sandbox deploy (legacy ADO Helm)
+    participant CD as Sandbox deploy legacy ADO Helm
     participant K as kubelet
-    participant S as Secret "keys"
-    participant P as *fn pod
-    participant ESP as ESP/Kafka
+    participant S as Secret keys
+    participant P as fn pod
+    participant ESP as ESP Kafka
 
-    CD->>K: deploy *fn Deployment (mounts plain volume "keys")
-    Note over CD: deploys *fn + secretprovider; NEVER `common` (which defines keys)
-    K->>S: look up Secret "keys" in vpp-agg
-    alt keys exists (MC via GitOps `common`, or hand-made in Sandbox)
+    CD->>K: deploy fn Deployment, mounts volume keys
+    Note over CD: deploys fn and secretprovider, never common chart
+    K->>S: look up Secret keys in vpp-agg
+    alt keys exists MC GitOps common or hand-made in Sandbox
         S-->>K: found
-        K->>P: mount /app/certs, start container
-        P->>ESP: mTLS connect (client-cert + ssl-key, verify ca-cert)
-    else keys absent (Sandbox, before fix)
+        K->>P: mount app certs, start container
+        P->>ESP: mTLS connect client-cert ssl-key verify ca-cert
+    else keys absent Sandbox before fix
         S-->>K: NOT FOUND
-        K-->>P: MountVolume.SetUp failed — pod never Ready (retries forever)
+        K-->>P: MountVolume failed, pod never Ready
     end
 ```
 
@@ -177,20 +177,20 @@ The divergence: **the chart that renders `keys` is installed in MC (GitOps) and 
 
 ```mermaid
 flowchart LR
-    subgraph MC["MC dev/acc/prod"]
-      GitOps["Eneco.Vpp.Aggregation.GitOps (ArgoCD app-of-apps)"] -->|pull OCI common + env=DevMC/Acc| COMMONmc["common chart -> renders keys"]
-      GitOps --> FNmc["*fn charts"]
+    subgraph MC["MC dev acc prod"]
+      GitOps["Aggregation GitOps ArgoCD app-of-apps"] -->|pull OCI common| COMMONmc["common chart renders keys"]
+      GitOps --> FNmc["fn charts"]
     end
     subgraph SB["Sandbox"]
-      PIPE["legacy in-repo ADO Helm pipeline (deploy.yaml, env vpp-agg/afi)"] --> FNsb["*fn charts (Deployments)"]
-      PIPE --> SPCHART["secretprovider chart (CSI SPC)"]
-      PIPE -. "NO step" .-> COMMONsb["common chart (defines keys)"]
-      SPCHART --> CSIs["application-secret / ingress-tls / dockerpullsecret (NOT keys)"]
+      PIPE["legacy ADO Helm pipeline vpp-agg"] --> FNsb["fn chart Deployments"]
+      PIPE --> SPCHART["secretprovider chart CSI SPC"]
+      PIPE -. no common step .-> COMMONsb["common chart defines keys"]
+      SPCHART --> CSIs["application-secret ingress-tls dockerpullsecret"]
       FNsb --> NEEDS["pods need Secret keys"]
       COMMONsb -. not installed in Sandbox .-> NEEDS
       NEEDS --> MISSING["keys never created by Sandbox CD"]
     end
-    OCI["build: glob push every chart -> oci://vppacra.azurecr.io/helm-agg"] --> GitOps
+    OCI["glob push charts to OCI helm-agg"] --> GitOps
 ```
 
 > **Visual job:** prove `common` (hence `keys`) is alive in MC via GitOps+OCI but never installed by the Sandbox pipeline — so the Sandbox pods need a secret their own deploy path never creates. The earlier "`ado-repo-search "Helm/common" = 0 hits`" was a **false negative**: the push-loop iterates `ls azure-pipeline/Helm/` (a glob), so the literal string never appears.
@@ -200,13 +200,13 @@ flowchart LR
 ```mermaid
 timeline
     title vpp-agg keys-secret incident evolution
-    2023-2025 : `common` chart authored with inline committed certs; MC deploys it via GitOps+OCI; Sandbox never enrolled
-    ~late 2025 : (reporter's account) certs expire; Sandbox keys absent; pods cannot mount ("broken >6 months") [INFERRED]
-    2025-12-09 : new eet-vpp-dt client cert issued (notBefore)
-    2026-05-29 : kafka-cacert/clientcert/sslkey + keystorepassword (re)created in KV vpp-agg-sb
-    2026-06-01 08:56 : Johnson creates Secret keys by hand in vpp-agg
-    2026-06-01 ~13:48-14:36 : *fn charts redeployed (helm releases v222/v223) -> pods Running
-    2026-06-02 : Nuno finds "nothing failing now" (already fixed); this RCA produced
+    2023-2025 : common chart authored, MC deploys via GitOps OCI, Sandbox never enrolled
+    late 2025 : certs expire, Sandbox keys absent, pods cannot mount INFERRED
+    2025-12-09 : new eet-vpp-dt client cert issued
+    2026-05-29 : kafka secrets recreated in KV vpp-agg-sb
+    2026-06-01 : Johnson creates Secret keys by hand in vpp-agg
+    2026-06-01 : fn charts redeployed, pods Running
+    2026-06-02 : Nuno finds nothing failing, RCA produced
 ```
 
 `A1` timestamps from KV metadata, the live `keys` `creationTimestamp`, and Helm release secret dates. `A2`/caveat (sherlock S4): **no evidence shows a `keys` secret ever existed in Sandbox before 2026-06-01.** The "~6 months / expired" rests on Johnson's recollection ("most probably more than 6 months") + the new cert's `notBefore`. "Never-created-in-Sandbox" vs "created-by-hand-once-then-lost" **cannot be distinguished** from current evidence (the original events have aged out); the most parsimonious reading is that a human applied `keys` at some past point and it was lost on a namespace/redeploy, and "expired cert" is why fresh material was needed. Either way the structural cause (Sandbox's deploy path never creates `keys`) is unchanged.

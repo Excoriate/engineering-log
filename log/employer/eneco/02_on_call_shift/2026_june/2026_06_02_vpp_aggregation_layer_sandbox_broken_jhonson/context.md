@@ -47,28 +47,28 @@ In Eneco's **Sandbox** Kubernetes cluster, ten aggregation-layer function pods c
 
 ```mermaid
 flowchart TD
-    subgraph Git["Git: Eneco.Vpp.Aggregation (branch development)"]
-      SEC["common/templates/secret.yaml\nkind: Secret name=keys\n(base64 certs committed inline)\nbranches: ns==vpp-agg (Sandbox) / DevMC / Acceptance\nchart 'common' -> OCI -> deployed in MC via GitOps"]
-      SPCt["secretprovider/templates/secretprovider.yaml\nSecretProviderClass\nsecretObjects: ingress-tls, dockerpullsecret, application-secret\n(keys NOT included)"]
-      DEP["*fn/templates/deployment.yaml\nvolume 'keys' -> secret 'keys'\nmount /app/certs"]
+    subgraph Git["Git Eneco.Vpp.Aggregation development branch"]
+      SEC["common secret.yaml defines keys\ninline certs, branches vpp-agg DevMC Acceptance\nOCI chart deployed in MC via GitOps"]
+      SPCt["secretprovider SecretProviderClass\nprojects ingress-tls dockerpullsecret application-secret\nkeys NOT included"]
+      DEP["fn deployment.yaml\nvolume keys mounts app certs"]
     end
-    subgraph KV["Azure Key Vault vpp-agg-sb (source of truth)"]
-      KC["kafka-cacert / kafka-clientcert / kafka-sslkey\nkafkasslkeystorepassword\n(CN esp-eet-vpp-dt, valid 2025-12-09 .. 2027-01-09)"]
+    subgraph KV["Azure Key Vault vpp-agg-sb"]
+      KC["kafka-cacert clientcert sslkey keystorepassword\nCN esp-eet-vpp-dt valid 2025-12-09 to 2027-01-09"]
     end
-    subgraph K8s["AKS vpp-aks01-d / namespace vpp-agg"]
-      CSI["CSI driver + SPC secret-provider-agg-kv"]
-      APPSEC["Secret application-secret / ingress-tls / dockerpullsecret\n(CSI-projected, since 2025-01-20)"]
-      KEYS["Secret keys\n(created MANUALLY 2026-06-01, no Helm/ArgoCD/CSI owner)"]
-      POD["10x *fn pods\nmount keys at /app/certs -> talk Kafka mTLS to ESP"]
+    subgraph K8s["AKS vpp-aks01-d namespace vpp-agg"]
+      CSI["CSI driver SPC secret-provider-agg-kv"]
+      APPSEC["CSI-projected application-secret ingress-tls dockerpullsecret"]
+      KEYS["Secret keys manual 2026-06-01\nno Helm ArgoCD or CSI owner"]
+      POD["10 fn pods mount keys at app certs\nKafka mTLS to ESP"]
     end
 
-    SEC -. "NOT installed by Sandbox's legacy pipeline (MC installs it via GitOps)" .-> KEYS
+    SEC -. Sandbox pipeline never installs common .-> KEYS
     SPCt --> CSI
     KV --> CSI --> APPSEC
-    KV -. "certs present but NOT wired to keys (the gap)" .-> KEYS
+    KV -. KV certs not wired to keys .-> KEYS
     KEYS --> POD
     DEP --> POD
-    POD -->|mTLS| ESP["ESP / Kafka brokers *.esp.eneco.com:9094"]
+    POD -->|mTLS| ESP["ESP Kafka brokers port 9094"]
 ```
 
 The dotted lines are the failure. The inline-Helm `common` chart **is** deployed in MC (the GitOps app-of-apps pulls the OCI-published chart with `container.env=DevMC`/`Acceptance`), so `keys` renders there. But Sandbox is served by the **legacy in-repo ADO Helm pipeline**, which deploys `*fn`+`secretprovider` and **never `common`**, and Sandbox is **not enrolled** in the GitOps app-of-apps — so the `ns==vpp-agg` branch (which targets Sandbox's own namespace) lives in a chart nobody installs in Sandbox. Separately, the Key-Vault→CSI path that *works* for three other secrets never had `keys` added to it. The pod requires `keys`, so it stayed stuck until a human created the Secret by hand.

@@ -1,0 +1,2 @@
+fbe-voltex-monitoring	sync=Synced	health=Healthy
+voltex-app-of-apps	sync=OutOfSync	health=Progressing

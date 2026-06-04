@@ -1,0 +1,41 @@
+{
+  "name": "voltex-app-of-apps",
+  "project": "vpp-core",
+  "source": null,
+  "sources": [
+    {
+      "helm": {
+        "valueFiles": [
+          "values.yaml",
+          "values.vppcore.sandbox.yaml"
+        ],
+        "valuesObject": {
+          "global": {
+            "argocd": {
+              "namespace": "voltex"
+            },
+            "featureBranchEnvironment": {
+              "branch": "feature/fbe-826335-update-appconfig-with-new-tso",
+              "enabled": true,
+              "keyVaultName": "vpp-fbe-voltex-tga",
+              "name": "voltex"
+            },
+            "namespace": "voltex"
+          }
+        }
+      },
+      "path": "Helm/vpp-core-app-of-apps",
+      "repoURL": "https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration",
+      "targetRevision": "feature/fbe-826335-update-appconfig-with-new-tso"
+    }
+  ],
+  "syncStatus": "OutOfSync",
+  "revision": null,
+  "health": "Progressing",
+  "conditions": null,
+  "opState": {
+    "phase": "Succeeded",
+    "message": "successfully synced (all tasks run)",
+    "syncRevision": ""
+  }
+}
