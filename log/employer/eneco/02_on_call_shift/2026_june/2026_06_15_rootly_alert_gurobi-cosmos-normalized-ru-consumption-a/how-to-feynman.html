@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How-to (Feynman) — diagnosing the Gurobi Cosmos RU alert from first principles</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --bg-elev: #161b22;
+  --bg-elev-2: #1c2230;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-muted: #9aa7b4;
+  --accent: #58a6ff;
+  --accent-soft: rgba(88,166,255,0.14);
+  --code-bg: #161b22;
+  --code-text: #e6edf3;
+  --badge-green-bg: rgba(63,185,80,0.16);
+  --badge-green-fg: #56d364;
+  --badge-green-bd: rgba(63,185,80,0.45);
+  --badge-amber-bg: rgba(210,153,34,0.16);
+  --badge-amber-fg: #e3b341;
+  --badge-amber-bd: rgba(210,153,34,0.45);
+  --badge-red-bg: rgba(248,81,73,0.16);
+  --badge-red-fg: #ff7b72;
+  --badge-red-bd: rgba(248,81,73,0.45);
+  --table-stripe: #11161d;
+  --table-head: #1c2230;
+  --pill-bg: rgba(88,166,255,0.16);
+  --pill-fg: #79b8ff;
+  --shadow: 0 8px 24px rgba(0,0,0,0.4);
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+html.theme-light {
+  --bg: #ffffff;
+  --bg-elev: #f6f8fa;
+  --bg-elev-2: #eef1f4;
+  --border: #d0d7de;
+  --text: #1f2328;
+  --text-muted: #57606a;
+  --accent: #0969da;
+  --accent-soft: rgba(9,105,218,0.10);
+  --code-bg: #f6f8fa;
+  --code-text: #1f2328;
+  --badge-green-bg: rgba(26,127,55,0.12);
+  --badge-green-fg: #1a7f37;
+  --badge-green-bd: rgba(26,127,55,0.4);
+  --badge-amber-bg: rgba(154,103,0,0.12);
+  --badge-amber-fg: #9a6700;
+  --badge-amber-bd: rgba(154,103,0,0.4);
+  --badge-red-bg: rgba(207,34,46,0.10);
+  --badge-red-fg: #cf222e;
+  --badge-red-bd: rgba(207,34,46,0.4);
+  --table-stripe: #f6f8fa;
+  --table-head: #eef1f4;
+  --pill-bg: rgba(9,105,218,0.12);
+  --pill-fg: #0969da;
+  --shadow: 0 8px 24px rgba(140,149,159,0.2);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.layout { display: grid; grid-template-columns: 280px minmax(0,1fr); gap: 0; max-width: 1280px; margin: 0 auto; }
+
+.sidebar {
+  position: sticky; top: 0; align-self: start;
+  height: 100vh; overflow-y: auto;
+  padding: 24px 16px 48px 24px;
+  border-right: 1px solid var(--border);
+}
+.sidebar h2.toc-title {
+  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted); margin: 0 0 12px 0; border: 0; padding: 0;
+}
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc li { margin: 1px 0; }
+.toc a {
+  display: block; padding: 4px 10px; border-radius: 6px;
+  color: var(--text-muted); font-size: 0.86rem; line-height: 1.35;
+  border-left: 2px solid transparent;
+}
+.toc a:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
+.toc a.active { color: var(--accent); background: var(--accent-soft); border-left-color: var(--accent); font-weight: 600; }
+.toc a.lvl-3 { padding-left: 24px; font-size: 0.8rem; }
+
+.main { min-width: 0; padding: 24px 32px 120px 32px; }
+.content { max-width: 860px; margin: 0 auto; }
+
+.doc-header {
+  background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px;
+  padding: 22px 24px; margin: 8px 0 32px 0; box-shadow: var(--shadow);
+}
+.doc-header h1 { margin: 0 0 10px 0; font-size: 1.7rem; line-height: 1.25; border: 0; padding: 0; }
+.doc-meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 0.85rem; color: var(--text-muted); }
+.doc-meta .meta-item { display: inline-flex; align-items: center; gap: 6px; }
+.doc-meta code { font-family: var(--mono); font-size: 0.82rem; }
+.status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--pill-bg); color: var(--pill-fg);
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 3px 12px; font-size: 0.76rem; font-weight: 600;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.status-pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+.content h1 { font-size: 1.55rem; }
+.content h2 {
+  font-size: 1.32rem; margin: 40px 0 14px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border); scroll-margin-top: 20px; line-height: 1.3;
+}
+.content h3 { font-size: 1.1rem; margin: 28px 0 10px; scroll-margin-top: 20px; }
+.content h1:first-child { margin-top: 0; }
+.content p { margin: 0 0 16px; }
+.content ul, .content ol { margin: 0 0 16px; padding-left: 26px; }
+.content li { margin: 4px 0; }
+.content li > p { margin: 0 0 8px; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 32px 0; }
+
+.content h2, .content h3 { position: relative; }
+.heading-anchor {
+  position: absolute; left: -22px; top: 0; opacity: 0;
+  color: var(--text-muted); font-weight: 400; padding-right: 6px;
+  text-decoration: none;
+}
+.content h2:hover .heading-anchor, .content h3:hover .heading-anchor { opacity: 1; }
+
+code:not(pre code) {
+  font-family: var(--mono); font-size: 0.86em;
+  background: var(--bg-elev-2); border: 1px solid var(--border);
+  border-radius: 5px; padding: 1px 5px;
+}
+pre {
+  background: var(--code-bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 18px; overflow-x: auto;
+  margin: 0 0 18px; line-height: 1.5;
+}
+pre code {
+  font-family: var(--mono); font-size: 0.84rem; color: var(--code-text);
+  background: none; border: 0; padding: 0; white-space: pre;
+}
+
+.mermaid-wrap {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px; margin: 0 0 18px; overflow-x: auto;
+  text-align: center;
+}
+.mermaid-wrap pre { border: 0; background: transparent; margin: 0; text-align: left; }
+
+.table-scroll { overflow-x: auto; margin: 0 0 20px; border: 1px solid var(--border); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: var(--table-head); color: var(--text);
+  text-align: left; font-weight: 600; padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+tbody td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--table-stripe); }
+tbody tr:last-child td { border-bottom: 0; }
+table code { white-space: nowrap; }
+
+blockquote {
+  margin: 0 0 18px; padding: 12px 18px;
+  background: var(--accent-soft); border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0; color: var(--text);
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+.badge {
+  display: inline-block; font-family: var(--mono); font-weight: 700;
+  font-size: 0.74em; line-height: 1.4; padding: 1px 6px; border-radius: 5px;
+  border: 1px solid; white-space: nowrap; letter-spacing: 0.01em;
+}
+.badge-green { background: var(--badge-green-bg); color: var(--badge-green-fg); border-color: var(--badge-green-bd); }
+.badge-amber { background: var(--badge-amber-bg); color: var(--badge-amber-fg); border-color: var(--badge-amber-bd); }
+.badge-red   { background: var(--badge-red-bg);   color: var(--badge-red-fg);   border-color: var(--badge-red-bd); }
+.sev { font-weight: 700; font-size: 0.92em; padding: 0 3px; border-radius: 4px; }
+.sev-high { color: var(--badge-red-fg); }
+.sev-med { color: var(--badge-amber-fg); }
+.sev-low { color: var(--badge-green-fg); }
+
+.theme-toggle {
+  position: fixed; top: 14px; right: 16px; z-index: 50;
+  background: var(--bg-elev); color: var(--text);
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 7px 14px; font-size: 0.8rem; font-family: var(--sans);
+  cursor: pointer; box-shadow: var(--shadow); display: inline-flex; align-items: center; gap: 7px;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.menu-toggle { display: none; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static; height: auto; max-height: none; overflow: visible;
+    border-right: 0; border-bottom: 1px solid var(--border); padding: 16px 20px;
+  }
+  .sidebar.collapsed .toc { display: none; }
+  .menu-toggle {
+    display: inline-flex; align-items: center; gap: 8px; width: 100%;
+    background: var(--bg-elev); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 9px 12px; font-size: 0.85rem; cursor: pointer;
+    font-family: var(--sans); margin-bottom: 10px; justify-content: space-between;
+  }
+  .main { padding: 16px 18px 80px; }
+  .doc-header h1 { font-size: 1.4rem; }
+  .content h2 { font-size: 1.2rem; }
+}
+
+@media print {
+  :root, html.theme-dark {
+    --bg: #ffffff; --bg-elev: #ffffff; --bg-elev-2: #f3f4f6; --border: #cccccc;
+    --text: #111111; --text-muted: #444444; --accent: #0b4fa8; --accent-soft: #eef3fb;
+    --code-bg: #f6f8fa; --code-text: #111111; --table-stripe: #f6f8fa; --table-head: #eef1f4;
+  }
+  body { font-size: 11pt; }
+  .theme-toggle, .menu-toggle { display: none !important; }
+  .layout { display: block; max-width: none; }
+  .sidebar { position: static; height: auto; border: 0; border-bottom: 1px solid #ccc; page-break-after: avoid; padding: 0 0 12px; }
+  .sidebar .toc, .sidebar.collapsed .toc { display: block !important; }
+  .main { padding: 0; }
+  .content { max-width: none; }
+  pre, blockquote, table, .table-scroll, .mermaid-wrap { page-break-inside: avoid; }
+  a { color: #0b4fa8; }
+  thead th { position: static; }
+}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light theme">
+  <span id="themeIcon">&#9788;</span><span id="themeLabel">Light</span>
+</button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="true">
+      <span>Contents</span><span aria-hidden="true">&#9776;</span>
+    </button>
+    <h2 class="toc-title">On this page</h2>
+    <nav class="toc" id="toc" aria-label="Table of contents"></nav>
+  </aside>
+
+  <main class="main">
+    <div class="content">
+      <header class="doc-header">
+        <h1>How-to (Feynman) — diagnosing the Gurobi Cosmos RU alert from first principles</h1>
+        <div class="doc-meta">
+          <span class="status-pill">pending_review</span>
+          <span class="meta-item">&#128197; <code>2026-06-15T17:45:00Z</code></span>
+          <span class="meta-item">task <code>2026-06-15-001</code></span>
+          <span class="meta-item">how-to-feynman</span>
+        </div>
+      </header>
+      <article id="article"></article>
+    </div>
+  </main>
+</div>
+
+<script type="text/markdown" id="md-source">---
+title: "How-to (Feynman) — diagnosing the Gurobi Cosmos RU alert from first principles"
+description: "Teaching walkthrough so you can understand and independently replicate the diagnosis"
+timestamp: 2026-06-15T17:45:00Z
+status: pending_review
+category: how-to-feynman
+authors: ["Alex Torres Ruiz (with Claude Code)"]
+task_id: 2026-06-15-001
+agent: coordinator
+summary: >-
+  First-principles teaching doc for the gurobi-cosmos-normalized-ru-consumption alert: what RU and
+  NormalizedRUConsumption really are (per-partition MAX), why a 77.67% average is neither reassuring nor
+  alarming on its own, the under-read/over-read trap and the metric that ends the argument (the HTTP-429
+  RATE = 2.82%, within Microsoft's healthy band), the step-by-step investigation with the WHY, the
+  "aha" moments (rate-not-count, micro-burst-not-sustained, sensor-vs-system, stale-clone reversal),
+  a replication decision tree, and self-tests.
+---
+
+# How I diagnosed it — and how you can, alone, next time
+
+**Knowledge contract.** After this you should be able to, *without help*: (1) explain what `NormalizedRUConsumption` measures and why 77.67% is neither reassuring nor alarming by itself; (2) name the *one* metric that ends the noise-vs-real argument and compute it; (3) run the 6-probe sequence that turns the alert into a verdict; (4) avoid the three traps that produced two *wrong* intermediate conclusions before the right one. If you can't, this doc failed — tell me where.
+
+---
+
+## 1. First principles (build the model before any command)
+
+**Cosmos bills in Request Units (RU/s).** Every op costs RU; you provision a budget per second. Exceed it and Cosmos **rejects** the excess with HTTP **429** (Mongo surfaces it as error **16500**). The client backs off and retries. [A1: Microsoft Learn.]
+
+**`NormalizedRUConsumption` is the subtle part.** It is *not* "average fullness." It is:
+
+> the **MAX**, across all physical partitions, of (RU consumed ÷ RU provisioned), per 1-minute interval, 0–100%.
+
+Two consequences that break naive intuition [A1: MS Learn]:
+
+- **100% ≠ guaranteed throttling** — it's the *busiest* partition in that minute; and a per-minute Max of 100% can be a *single-second spike*, not a full minute at the ceiling.
+- **<100% ≠ safe** — one hot partition can throttle while the account number looks moderate.
+
+So the metric is a **utilization gauge**, not an **impact** measure. The alert here fires on the **PT15M average** of those per-minute maxes being **>75%**. "77.67%" therefore means: *over 15 minutes, the worst-partition-each-minute averaged 77.67%* — which can be a few brief 100% spikes dragging up an otherwise-low average. **You cannot tell impact from this number.** Only the **429 rate** can.
+
+---
+
+## 2. What this system is (so the numbers mean something)
+
+VPP optimises energy-asset dispatch for TenneT markets. **FleetOptimizer** builds a math model; **Gurobi** (a solver) solves it. The Gurobi platform's **Cluster Manager** stores **input models, solutions, and 30-day job history** in this Cosmos DB [A1: Gurobi docs]. Big models/solutions go through **GridFS** → split into binary chunks in the **`fs.chunks`** collection (its `{files_id,n}` index is the GridFS fingerprint). Solves arrive in **bursts** → short, write-heavy spikes on `fs.chunks`. Hold this; it predicts what we find.
+
+---
+
+## 3. The trap — I was wrong *twice* before I was right (this is the real lesson)
+
+Watch my read swing, because each swing is a trap you'll meet:
+
+- **Read #1 (under-read):** "77.67%, barely over 75, *averaged* → probably noise." Tempting, lazy, and **not yet evidence**.
+- **Read #2 (over-read):** I pulled the throttle counters and saw **586 HTTP-429 + ~16,555 Mongo-16500** and a "34.5% of ops" figure. "It's a *severe* throttle, ~1/3 of ops!" That felt rigorous — and was **also wrong**, because 16,555 is the **Mongo-protocol count inflated by driver retries** (a rejected op retries up to ~9×, each emitting another 16500). I'd grabbed a real number and divided by the wrong denominator.
+- **Read #3 (right):** compute the metric **Microsoft's own action framework uses** — the **HTTP-429 *rate***: `429 ÷ TotalRequests = 586 ÷ 20,792 = ` **2.82%**. Microsoft says **1–5% 429 with acceptable latency is healthy, no action**. So this is **real but minor** throttling — a spiky micro-burst that tripped a *conservative leading gauge*, not an outage.
+
+> **The discipline:** *don't trust a utilization gauge for impact, and don't trust a raw rejection count either — compute the **rate** with the right denominator.* The 429 rate is observable, discriminating, and the exact figure Microsoft's threshold is defined on. It ended the argument that both my instincts got wrong.
+
+And the burst *shape* confirmed "minor": `TotalRequestUnits` showed the hot minutes served only **~3,292 RU/min ≈ 55 RU/s on average** — i.e. the 100% readings were **brief sub-second spikes**, not a sustained 9-minute wall.
+
+---
+
+## 4. The investigation, step by step — with the WHY
+
+Each probe was chosen to *flip a decision*, not to collect data.
+
+| # | Probe | WHY (decision it flips) | Found |
+|---|-------|-------------------------|-------|
+| 1 | Read the alert payload | Pin scope: resource, metric, threshold, env, aggregation. | Account-level NormalizedRU>75% avg/PT15M, acc, autoMitigate. |
+| 2 | `NormalizedRU` Max+Avg per minute | Flat graze or spike-average? | Per-minute Max 100% in ~9 min. |
+| 3 | **`TotalRequests` 429 ÷ total = RATE** | *The* pivot — real client impact? | **2.82%** → within Microsoft's healthy band. |
+| 3b | `TotalRequestUnits`/min on the collection | Sustained or micro-burst? | ~3,292 RU/min peak (≈55 RU/s avg) → **micro-burst**. |
+| 4 | Split NormalizedRU by `CollectionName` | Which collection? (fix targets it) | **`fs.chunks`** 100% vs next 16%. |
+| 5 | `collection throughput show` | Under-provisioned? autoscale? | autoscale **max 1000 RU/s**, ~5 GB, single partition. |
+| 6 | `alert show` + `list` + fired-instances + `git log` | Who owns it? what changed? | Team IaC alert; **429 alert was removed**; no config change (just the sensor). |
+
+Order matters: 3+3b is the noise-vs-real-vs-minor fork; 4→6 turns "minor throttle" into "where, and why the page."
+
+---
+
+## 5. The "aha" moments (the transferable insight)
+
+1. **Rate, not count.** 16,555 Mongo-16500 events (retry-inflated) screamed "severe"; 586 ÷ 20,792 = **2.82%** said "healthy band." Same incident, opposite verdicts — the **rate with the right denominator** is the truth.
+2. **Micro-burst, not sustained.** Per-minute *Max* = 100% looked like a 9-minute wall; `TotalRequestUnits` (~55 RU/s avg) revealed brief sub-second spikes. Average-of-maxes hides shape.
+3. **Sensor vs system ("it was not broken before").** Nothing in the DB changed (activity log empty). The **alert** changed — the team swapped a lagging 429 alarm for a leading RU>75% gauge. "Not broken before" = "didn't *page* before."
+4. **Stale-clone reversal.** My first IaC read (a Jan-27 clone, *before* the redesign) said "this alert isn't in code." After `git pull`: it's **team-authored IaC, deliberately built.** Pull before trusting an IaC negative.
+
+---
+
+## 6. The mechanism, in one picture
+
+```text
+FleetOptimizer fires a batch of solves (bursty)
+        │  brief, write-heavy GridFS chunk I/O
+        ▼
+  fs.chunks  ── single partition (~5 GB), autoscale max 1000 RU/s
+        │  sub-second demand spikes  >  1000 RU/s
+        ▼
+  Cosmos rejects the excess → 586 HTTP-429  =  2.82% of requests  (Microsoft "healthy" 1–5%)
+        │  per-minute NormalizedRU Max = 100% in ~9 brief spikes (RU served ≈ 55/s avg)
+        ▼
+  PT15M average of those maxes = 77.67%  >  75% → leading gauge fires (Sev2)
+        ▼
+  burst ends → autoMitigate → alert resolves itself (~15 min)
+```
+
+So the fix order is: **calibrate the alert first** (page on the 429 *rate* >5%, warn on RU%), then **raise the ceiling** (reduce spikes + noise), then maybe **move GridFS blobs off Cosmos** (durable, if the third-party app allows). See [`fix.md`](./fix.md).
+
+---
+
+## 7. Replicate it yourself — the decision tree
+
+```text
+Alert: gurobi-cosmos-normalized-ru-consumption fires
+   │
+   ├─ 1. Resolved already? (autoMitigate) ── single short fire = low urgency
+   │
+   ├─ 2. Compute the 429 RATE = (TotalRequests StatusCode=429) ÷ (TotalRequests all) for the window
+   │        │
+   │        ├─ rate ≤ ~5% AND self-resolved ─→ within Microsoft's healthy band → ACK + link the RCA
+   │        └─ rate > 5% OR sustained across windows OR solves failing ─→ ESCALATE to Nuno
+   │        (⚠ do NOT use the Mongo-16500 count or NormalizedRU% as the impact figure — both overstate)
+   │
+   ├─ 3. Split by CollectionName → expect fs.chunks; if different, partition design changed → dig
+   │
+   └─ 4. Check Gurobi job history for the window → did solves complete? (the metric can't tell you)
+```
+
+Exact commands: [`rca.md`](./rca.md) §L11. ~6 `az` calls and one `git log`.
+
+---
+
+## 8. Meta-lessons (carry these to the next incident)
+
+- **Utilization ≠ impact; count ≠ rate.** Confirm a saturation alert with the **429 rate** (right denominator), not the gauge and not the raw rejection count.
+- **Average hides shape.** A PT15M average of per-minute maxes can be brief micro-bursts — pull the per-minute series *and* `TotalRequestUnits`.
+- **Pull before you trust an IaC negative.** "Not in code" from a stale clone is not evidence.
+- **Separate sensor from system.** "It broke" might mean "we started watching."
+- **Name the fix tier and order it by evidence.** When impact is in the healthy band, alert *calibration* outranks capacity spend.
+
+---
+
+## 9. Self-test (if you can't answer, re-read the marked section)
+
+1. The account shows 60% NormalizedRU and a partition is throwing 429s. How? (§1)
+2. Two engineers compute "throttle %": one gets 34.5%, one gets 2.82%. Both used real numbers. Who's right and why? (§3, §5.1)
+3. Per-minute Max = 100% for 9 minutes. How do you tell a 9-minute wall from brief spikes? (§3, §5.2)
+4. Which single number decides ack-vs-escalate, and what's its denominator? (§3, §7)
+5. Why is re-calibrating the alert the *first* fix here, ahead of buying more RU? (§6, `fix.md` T2)
+</script>
+
+<script>
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  try {
+    var saved = localStorage.getItem("rca-theme");
+    if (saved === "light") { root.classList.remove("theme-dark"); root.classList.add("theme-light"); }
+  } catch (e) {}
+  function syncToggle() {
+    var light = root.classList.contains("theme-light");
+    document.getElementById("themeLabel").textContent = light ? "Dark" : "Light";
+    document.getElementById("themeIcon").innerHTML = light ? "&#9789;" : "&#9788;";
+  }
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var light = root.classList.toggle("theme-light");
+    root.classList.toggle("theme-dark", !light);
+    try { localStorage.setItem("rca-theme", light ? "light" : "dark"); } catch (e) {}
+    syncToggle();
+    if (window.__renderMermaid) window.__renderMermaid();
+  });
+  syncToggle();
+
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function slugify(s) {
+    return s.toLowerCase().replace(/<[^>]+>/g, "").replace(/[`*_~]/g, "")
+      .replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+  }
+
+  function inline(text) {
+    var tokens = [];
+    text = text.replace(/`([^`]+)`/g, function (_, c) {
+      tokens.push("<code>" + esc(c) + "</code>");
+      return " " + (tokens.length - 1) + " ";
+    });
+    text = esc(text);
+    text = text.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, label, url) {
+      return '<a href="' + url + '">' + label + "</a>";
+    });
+    text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    text = text.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>");
+    text = text.replace(/ (\d+) /g, function (_, i) { return tokens[+i]; });
+    return text;
+  }
+
+  function renderTable(rows) {
+    function cells(line) {
+      var t = line.trim().replace(/^\|/, "").replace(/\|$/, "");
+      var out = []; var cur = ""; var i;
+      for (i = 0; i < t.length; i++) {
+        if (t[i] === "\\" && t[i + 1] === "|") { cur += "|"; i++; }
+        else if (t[i] === "|") { out.push(cur); cur = ""; }
+        else cur += t[i];
+      }
+      out.push(cur);
+      return out.map(function (c) { return c.trim(); });
+    }
+    var head = cells(rows[0]);
+    var body = rows.slice(2);
+    var h = '<div class="table-scroll"><table><thead><tr>';
+    head.forEach(function (c) { h += "<th>" + inline(c) + "</th>"; });
+    h += "</tr></thead><tbody>";
+    body.forEach(function (line) {
+      if (!line.trim()) return;
+      var cs = cells(line);
+      h += "<tr>";
+      cs.forEach(function (c) { h += "<td>" + inline(c) + "</td>"; });
+      h += "</tr>";
+    });
+    h += "</tbody></table></div>";
+    return h;
+  }
+
+  function isTableSep(s) { return /^\s*\|?[\s:|-]+\|[\s:|-]*$/.test(s) && /-/.test(s); }
+
+  function parse(md) {
+    var lines = md.replace(/\r\n/g, "\n").split("\n");
+    var out = [];
+    var i = 0;
+    var listStack = [];
+
+    function closeLists(toIndent) {
+      while (listStack.length && listStack[listStack.length - 1].indent >= toIndent) {
+        out.push(listStack.pop().type === "ol" ? "</ol>" : "</ul>");
+      }
+    }
+    function closeAllLists() {
+      while (listStack.length) out.push(listStack.pop().type === "ol" ? "</ol>" : "</ul>");
+    }
+
+    while (i < lines.length) {
+      var line = lines[i];
+
+      var fence = line.match(/^```(.*)$/);
+      if (fence) {
+        closeAllLists();
+        var lang = fence[1].trim();
+        var buf = [];
+        i++;
+        while (i < lines.length && !/^```\s*$/.test(lines[i])) { buf.push(lines[i]); i++; }
+        i++;
+        var raw = buf.join("\n");
+        if (lang === "mermaid") {
+          out.push('<div class="mermaid-wrap"><div class="mermaid">' + esc(raw) + "</div>" +
+                   '<pre class="mermaid-fallback" style="display:none"><code>' + esc(raw) + "</code></pre></div>");
+        } else {
+          out.push('<pre><code class="language-' + esc(lang) + '">' + esc(raw) + "</code></pre>");
+        }
+        continue;
+      }
+
+      var hm = line.match(/^(#{1,6})\s+(.*)$/);
+      if (hm) {
+        closeAllLists();
+        var level = hm[1].length;
+        var txt = hm[2].trim();
+        var id = slugify(txt);
+        var innerHtml = inline(txt);
+        if (level >= 2) {
+          out.push("<h" + level + ' id="' + id + '">' +
+                   '<a class="heading-anchor" href="#' + id + '" aria-hidden="true">#</a>' +
+                   innerHtml + "</h" + level + ">");
+        } else {
+          out.push("<h" + level + ' id="' + id + '">' + innerHtml + "</h" + level + ">");
+        }
+        i++;
+        continue;
+      }
+
+      if (/^---+\s*$/.test(line)) { closeAllLists(); out.push("<hr />"); i++; continue; }
+
+      if (/^>\s?/.test(line)) {
+        closeAllLists();
+        var qbuf = [];
+        while (i < lines.length && /^>\s?/.test(lines[i])) {
+          qbuf.push(lines[i].replace(/^>\s?/, ""));
+          i++;
+        }
+        out.push("<blockquote>" + parse(qbuf.join("\n")) + "</blockquote>");
+        continue;
+      }
+
+      if (/\|/.test(line) && i + 1 < lines.length && isTableSep(lines[i + 1])) {
+        closeAllLists();
+        var tbuf = [line, lines[i + 1]];
+        i += 2;
+        while (i < lines.length && /\|/.test(lines[i]) && lines[i].trim() !== "") { tbuf.push(lines[i]); i++; }
+        out.push(renderTable(tbuf));
+        continue;
+      }
+
+      var um = line.match(/^(\s*)([-*+])\s+(.*)$/);
+      var om = line.match(/^(\s*)(\d+)\.\s+(.*)$/);
+      if (um || om) {
+        var m = um || om;
+        var indent = m[1].length;
+        var type = um ? "ul" : "ol";
+        closeLists(indent + 1);
+        if (!listStack.length || listStack[listStack.length - 1].indent < indent) {
+          out.push(type === "ol" ? "<ol>" : "<ul>");
+          listStack.push({ type: type, indent: indent });
+        } else if (listStack[listStack.length - 1].indent === indent &&
+                   listStack[listStack.length - 1].type !== type) {
+          out.push(listStack.pop().type === "ol" ? "</ol>" : "</ul>");
+          out.push(type === "ol" ? "<ol>" : "<ul>");
+          listStack.push({ type: type, indent: indent });
+        }
+        out.push("<li>" + inline(m[3]) + "</li>");
+        i++;
+        continue;
+      }
+
+      if (line.trim() === "") { closeAllLists(); i++; continue; }
+
+      closeAllLists();
+      var pbuf = [line];
+      i++;
+      while (i < lines.length) {
+        var nx = lines[i];
+        if (nx.trim() === "" || /^(#{1,6})\s/.test(nx) || /^```/.test(nx) ||
+            /^>\s?/.test(nx) || /^---+\s*$/.test(nx) ||
+            /^(\s*)([-*+])\s+/.test(nx) || /^(\s*)(\d+)\.\s+/.test(nx) ||
+            (/\|/.test(nx) && i + 1 < lines.length && isTableSep(lines[i + 1]))) {
+          break;
+        }
+        pbuf.push(nx);
+        i++;
+      }
+      out.push("<p>" + inline(pbuf.join(" ")) + "</p>");
+    }
+    closeAllLists();
+    return out.join("\n");
+  }
+
+  // Single-pass: each match position consumed once, so compound labels
+  // (A1 FACT) never get re-matched by the standalone A1 rule. Longest
+  // alternatives are listed first so the regex engine prefers them.
+  var BADGE_RE = /\bA1 FACT\b|\bA2 INFER\b|\bA3 UNVERIFIED\b|\bA1\b|\bA2\b|\bA3\b|\bUNVERIFIED\b|\bblocked\b|\bHIGH\b|\bMEDIUM\b|\bMINOR\b|\bLOW\b/g;
+  function badgeFor(tok) {
+    if (tok === "A1 FACT" || tok === "A1") return '<span class="badge badge-green">' + tok + "</span>";
+    if (tok === "A2 INFER" || tok === "A2") return '<span class="badge badge-amber">' + tok + "</span>";
+    if (tok === "A3 UNVERIFIED" || tok === "A3" || tok === "UNVERIFIED" || tok === "blocked")
+      return '<span class="badge badge-red">' + tok + "</span>";
+    if (tok === "HIGH") return '<span class="sev sev-high">HIGH</span>';
+    if (tok === "MEDIUM" || tok === "MINOR") return '<span class="sev sev-med">' + tok + "</span>";
+    if (tok === "LOW") return '<span class="sev sev-low">LOW</span>';
+    return tok;
+  }
+  function badgeText(s) {
+    return s.replace(BADGE_RE, function (m) { return badgeFor(m); });
+  }
+
+  function walkBadges(node) {
+    var SKIP = { CODE: 1, PRE: 1, A: 1, SCRIPT: 1, STYLE: 1 };
+    var children = Array.prototype.slice.call(node.childNodes);
+    children.forEach(function (child) {
+      if (child.nodeType === 3) {
+        var t = child.nodeValue;
+        if (!/(A[123]|UNVERIFIED|blocked|HIGH|MEDIUM|MINOR|LOW)/.test(t)) return;
+        var escd = esc(t);
+        var rep = badgeText(escd);
+        if (rep !== escd) {
+          var span = document.createElement("span");
+          span.innerHTML = rep;
+          child.parentNode.replaceChild(span, child);
+        }
+      } else if (child.nodeType === 1 && !SKIP[child.tagName]) {
+        walkBadges(child);
+      }
+    });
+  }
+
+  var srcEl = document.getElementById("md-source");
+  var md = srcEl.textContent;
+  md = md.replace(/^---\n[\s\S]*?\n---\n/, "");
+  var article = document.getElementById("article");
+  article.innerHTML = parse(md);
+  walkBadges(article);
+
+  var toc = document.getElementById("toc");
+  var headings = article.querySelectorAll("h2, h3");
+  var tocHtml = "<ul>";
+  headings.forEach(function (h) {
+    var lvl = h.tagName === "H3" ? "lvl-3" : "lvl-2";
+    var text = h.textContent.replace(/^#/, "").trim();
+    tocHtml += '<li><a class="' + lvl + '" href="#' + h.id + '">' + esc(text) + "</a></li>";
+  });
+  tocHtml += "</ul>";
+  toc.innerHTML = tocHtml;
+
+  var tocLinks = Array.prototype.slice.call(toc.querySelectorAll("a"));
+  var byId = {};
+  tocLinks.forEach(function (a) { byId[a.getAttribute("href").slice(1)] = a; });
+  if ("IntersectionObserver" in window && headings.length) {
+    var visible = {};
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { visible[en.target.id] = en.isIntersecting ? en.intersectionRatio : 0; });
+      var best = null, bestR = -1;
+      headings.forEach(function (h) { if ((visible[h.id] || 0) > bestR) { bestR = visible[h.id] || 0; best = h.id; } });
+      if (best && bestR > 0) {
+        tocLinks.forEach(function (a) { a.classList.remove("active"); });
+        if (byId[best]) byId[best].classList.add("active");
+      }
+    }, { rootMargin: "-8% 0px -70% 0px", threshold: [0, 0.25, 0.5, 1] });
+    headings.forEach(function (h) { obs.observe(h); });
+  }
+
+  var sidebar = document.getElementById("sidebar");
+  var menuToggle = document.getElementById("menuToggle");
+  menuToggle.addEventListener("click", function () {
+    var collapsed = sidebar.classList.toggle("collapsed");
+    menuToggle.setAttribute("aria-expanded", String(!collapsed));
+  });
+  if (window.matchMedia("(max-width: 900px)").matches) {
+    sidebar.classList.add("collapsed");
+    menuToggle.setAttribute("aria-expanded", "false");
+  }
+  toc.addEventListener("click", function (e) {
+    if (e.target.tagName === "A" && window.matchMedia("(max-width: 900px)").matches) {
+      sidebar.classList.add("collapsed");
+      menuToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  function showMermaidFallback() {
+    document.querySelectorAll(".mermaid-fallback").forEach(function (p) { p.style.display = "block"; });
+    document.querySelectorAll(".mermaid").forEach(function (d) { d.style.display = "none"; });
+  }
+  var hasMermaid = document.querySelector(".mermaid");
+  if (hasMermaid) {
+    var mermaidLoaded = false;
+    window.__renderMermaid = function () {
+      if (!mermaidLoaded || !window.mermaid) return;
+      try {
+        document.querySelectorAll(".mermaid").forEach(function (d) {
+          if (d.getAttribute("data-processed")) {
+            d.removeAttribute("data-processed");
+            d.innerHTML = d.getAttribute("data-src");
+          } else if (!d.getAttribute("data-src")) {
+            d.setAttribute("data-src", d.textContent);
+          }
+        });
+        var dark = root.classList.contains("theme-dark");
+        window.mermaid.initialize({ startOnLoad: false, theme: dark ? "dark" : "neutral", securityLevel: "loose" });
+        window.mermaid.run({ querySelector: ".mermaid" }).catch(showMermaidFallback);
+      } catch (err) { showMermaidFallback(); }
+    };
+    var s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
+    s.onload = function () {
+      mermaidLoaded = true;
+      document.querySelectorAll(".mermaid").forEach(function (d) { d.setAttribute("data-src", d.textContent); });
+      window.__renderMermaid();
+    };
+    s.onerror = showMermaidFallback;
+    document.head.appendChild(s);
+  }
+})();
+</script>
+</body>
+</html>

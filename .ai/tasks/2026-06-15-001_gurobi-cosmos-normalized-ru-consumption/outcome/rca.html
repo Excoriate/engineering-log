@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RCA — gurobi-cosmos-normalized-ru-consumption-a (Cosmos RU micro-burst, acceptance)</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --bg-elev: #161b22;
+  --bg-elev-2: #1c2230;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-muted: #9aa7b4;
+  --accent: #58a6ff;
+  --accent-soft: rgba(88,166,255,0.14);
+  --code-bg: #161b22;
+  --code-text: #e6edf3;
+  --badge-green-bg: rgba(63,185,80,0.16);
+  --badge-green-fg: #56d364;
+  --badge-green-bd: rgba(63,185,80,0.45);
+  --badge-amber-bg: rgba(210,153,34,0.16);
+  --badge-amber-fg: #e3b341;
+  --badge-amber-bd: rgba(210,153,34,0.45);
+  --badge-red-bg: rgba(248,81,73,0.16);
+  --badge-red-fg: #ff7b72;
+  --badge-red-bd: rgba(248,81,73,0.45);
+  --table-stripe: #11161d;
+  --table-head: #1c2230;
+  --pill-bg: rgba(88,166,255,0.16);
+  --pill-fg: #79b8ff;
+  --shadow: 0 8px 24px rgba(0,0,0,0.4);
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+html.theme-light {
+  --bg: #ffffff;
+  --bg-elev: #f6f8fa;
+  --bg-elev-2: #eef1f4;
+  --border: #d0d7de;
+  --text: #1f2328;
+  --text-muted: #57606a;
+  --accent: #0969da;
+  --accent-soft: rgba(9,105,218,0.10);
+  --code-bg: #f6f8fa;
+  --code-text: #1f2328;
+  --badge-green-bg: rgba(26,127,55,0.12);
+  --badge-green-fg: #1a7f37;
+  --badge-green-bd: rgba(26,127,55,0.4);
+  --badge-amber-bg: rgba(154,103,0,0.12);
+  --badge-amber-fg: #9a6700;
+  --badge-amber-bd: rgba(154,103,0,0.4);
+  --badge-red-bg: rgba(207,34,46,0.10);
+  --badge-red-fg: #cf222e;
+  --badge-red-bd: rgba(207,34,46,0.4);
+  --table-stripe: #f6f8fa;
+  --table-head: #eef1f4;
+  --pill-bg: rgba(9,105,218,0.12);
+  --pill-fg: #0969da;
+  --shadow: 0 8px 24px rgba(140,149,159,0.2);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.layout { display: grid; grid-template-columns: 280px minmax(0,1fr); gap: 0; max-width: 1280px; margin: 0 auto; }
+
+.sidebar {
+  position: sticky; top: 0; align-self: start;
+  height: 100vh; overflow-y: auto;
+  padding: 24px 16px 48px 24px;
+  border-right: 1px solid var(--border);
+}
+.sidebar h2.toc-title {
+  font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted); margin: 0 0 12px 0; border: 0; padding: 0;
+}
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc li { margin: 1px 0; }
+.toc a {
+  display: block; padding: 4px 10px; border-radius: 6px;
+  color: var(--text-muted); font-size: 0.86rem; line-height: 1.35;
+  border-left: 2px solid transparent;
+}
+.toc a:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
+.toc a.active { color: var(--accent); background: var(--accent-soft); border-left-color: var(--accent); font-weight: 600; }
+.toc a.lvl-3 { padding-left: 24px; font-size: 0.8rem; }
+
+.main { min-width: 0; padding: 24px 32px 120px 32px; }
+.content { max-width: 860px; margin: 0 auto; }
+
+.doc-header {
+  background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px;
+  padding: 22px 24px; margin: 8px 0 32px 0; box-shadow: var(--shadow);
+}
+.doc-header h1 { margin: 0 0 10px 0; font-size: 1.7rem; line-height: 1.25; border: 0; padding: 0; }
+.doc-meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 0.85rem; color: var(--text-muted); }
+.doc-meta .meta-item { display: inline-flex; align-items: center; gap: 6px; }
+.doc-meta code { font-family: var(--mono); font-size: 0.82rem; }
+.status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--pill-bg); color: var(--pill-fg);
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 3px 12px; font-size: 0.76rem; font-weight: 600;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.status-pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+.content h1 { font-size: 1.55rem; }
+.content h2 {
+  font-size: 1.32rem; margin: 40px 0 14px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border); scroll-margin-top: 20px; line-height: 1.3;
+}
+.content h3 { font-size: 1.1rem; margin: 28px 0 10px; scroll-margin-top: 20px; }
+.content h1:first-child { margin-top: 0; }
+.content p { margin: 0 0 16px; }
+.content ul, .content ol { margin: 0 0 16px; padding-left: 26px; }
+.content li { margin: 4px 0; }
+.content li > p { margin: 0 0 8px; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 32px 0; }
+
+.content h2, .content h3 { position: relative; }
+.heading-anchor {
+  position: absolute; left: -22px; top: 0; opacity: 0;
+  color: var(--text-muted); font-weight: 400; padding-right: 6px;
+  text-decoration: none;
+}
+.content h2:hover .heading-anchor, .content h3:hover .heading-anchor { opacity: 1; }
+
+code:not(pre code) {
+  font-family: var(--mono); font-size: 0.86em;
+  background: var(--bg-elev-2); border: 1px solid var(--border);
+  border-radius: 5px; padding: 1px 5px;
+}
+pre {
+  background: var(--code-bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 18px; overflow-x: auto;
+  margin: 0 0 18px; line-height: 1.5;
+}
+pre code {
+  font-family: var(--mono); font-size: 0.84rem; color: var(--code-text);
+  background: none; border: 0; padding: 0; white-space: pre;
+}
+
+.mermaid-wrap {
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px; margin: 0 0 18px; overflow-x: auto;
+  text-align: center;
+}
+.mermaid-wrap pre { border: 0; background: transparent; margin: 0; text-align: left; }
+
+.table-scroll { overflow-x: auto; margin: 0 0 20px; border: 1px solid var(--border); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: var(--table-head); color: var(--text);
+  text-align: left; font-weight: 600; padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+tbody td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tbody tr:nth-child(even) { background: var(--table-stripe); }
+tbody tr:last-child td { border-bottom: 0; }
+table code { white-space: nowrap; }
+
+blockquote {
+  margin: 0 0 18px; padding: 12px 18px;
+  background: var(--accent-soft); border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0; color: var(--text);
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+.badge {
+  display: inline-block; font-family: var(--mono); font-weight: 700;
+  font-size: 0.74em; line-height: 1.4; padding: 1px 6px; border-radius: 5px;
+  border: 1px solid; white-space: nowrap; letter-spacing: 0.01em;
+}
+.badge-green { background: var(--badge-green-bg); color: var(--badge-green-fg); border-color: var(--badge-green-bd); }
+.badge-amber { background: var(--badge-amber-bg); color: var(--badge-amber-fg); border-color: var(--badge-amber-bd); }
+.badge-red   { background: var(--badge-red-bg);   color: var(--badge-red-fg);   border-color: var(--badge-red-bd); }
+.sev { font-weight: 700; font-size: 0.92em; padding: 0 3px; border-radius: 4px; }
+.sev-high { color: var(--badge-red-fg); }
+.sev-med { color: var(--badge-amber-fg); }
+.sev-low { color: var(--badge-green-fg); }
+
+.theme-toggle {
+  position: fixed; top: 14px; right: 16px; z-index: 50;
+  background: var(--bg-elev); color: var(--text);
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 7px 14px; font-size: 0.8rem; font-family: var(--sans);
+  cursor: pointer; box-shadow: var(--shadow); display: inline-flex; align-items: center; gap: 7px;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.menu-toggle { display: none; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static; height: auto; max-height: none; overflow: visible;
+    border-right: 0; border-bottom: 1px solid var(--border); padding: 16px 20px;
+  }
+  .sidebar.collapsed .toc { display: none; }
+  .menu-toggle {
+    display: inline-flex; align-items: center; gap: 8px; width: 100%;
+    background: var(--bg-elev); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 9px 12px; font-size: 0.85rem; cursor: pointer;
+    font-family: var(--sans); margin-bottom: 10px; justify-content: space-between;
+  }
+  .main { padding: 16px 18px 80px; }
+  .doc-header h1 { font-size: 1.4rem; }
+  .content h2 { font-size: 1.2rem; }
+}
+
+@media print {
+  :root, html.theme-dark {
+    --bg: #ffffff; --bg-elev: #ffffff; --bg-elev-2: #f3f4f6; --border: #cccccc;
+    --text: #111111; --text-muted: #444444; --accent: #0b4fa8; --accent-soft: #eef3fb;
+    --code-bg: #f6f8fa; --code-text: #111111; --table-stripe: #f6f8fa; --table-head: #eef1f4;
+  }
+  body { font-size: 11pt; }
+  .theme-toggle, .menu-toggle { display: none !important; }
+  .layout { display: block; max-width: none; }
+  .sidebar { position: static; height: auto; border: 0; border-bottom: 1px solid #ccc; page-break-after: avoid; padding: 0 0 12px; }
+  .sidebar .toc, .sidebar.collapsed .toc { display: block !important; }
+  .main { padding: 0; }
+  .content { max-width: none; }
+  pre, blockquote, table, .table-scroll, .mermaid-wrap { page-break-inside: avoid; }
+  a { color: #0b4fa8; }
+  thead th { position: static; }
+}
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light theme">
+  <span id="themeIcon">&#9788;</span><span id="themeLabel">Light</span>
+</button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="true">
+      <span>Contents</span><span aria-hidden="true">&#9776;</span>
+    </button>
+    <h2 class="toc-title">On this page</h2>
+    <nav class="toc" id="toc" aria-label="Table of contents"></nav>
+  </aside>
+
+  <main class="main">
+    <div class="content">
+      <header class="doc-header">
+        <h1>RCA — gurobi-cosmos-normalized-ru-consumption-a (Cosmos RU micro-burst, acceptance)</h1>
+        <div class="doc-meta">
+          <span class="status-pill">pending_review</span>
+          <span class="meta-item">&#128197; <code>2026-06-15T17:45:00Z</code></span>
+          <span class="meta-item">task <code>2026-06-15-001</code></span>
+          <span class="meta-item">on-call-rca</span>
+        </div>
+      </header>
+      <article id="article"></article>
+    </div>
+  </main>
+</div>
+
+<script type="text/markdown" id="md-source">---
+title: "RCA — gurobi-cosmos-normalized-ru-consumption-a (Cosmos RU micro-burst, acceptance)"
+description: "Holistic root-cause analysis of the 2026-06-15 NormalizedRUConsumption Sev2 alert on cosmosdb-gurobi-platform-a"
+timestamp: 2026-06-15T17:45:00Z
+status: pending_review
+category: on-call-rca
+authors: ["Alex Torres Ruiz (with Claude Code)"]
+task_id: 2026-06-15-001
+agent: coordinator
+summary: >-
+  Spiky FleetOptimizer/Gurobi batch micro-bursts hit the hot fs.chunks (GridFS) collection's 1000 RU/s
+  autoscale ceiling for brief sub-minute intervals, producing 586 HTTP-429 rejections = 2.82% of
+  requests (inside Microsoft's 1-5% "healthy" band), which dragged the PT15M NormalizedRUConsumption
+  average to 77.67% and tripped the team's conservative leading >75% gauge (autoMitigate, self-resolved).
+  Real but MINOR/tolerable throttle of a chronic, mildly-under-provisioned single-partition collection.
+  Primary issue is alert CALIBRATION (page on a leading gauge with no tuned client-impact signal), not
+  urgent capacity. Fix: re-add a 429-RATE page (>5%) + demote RU gauge to Sev3; raise fs.chunks ceiling
+  (secondary); Blob-offload of GridFS is a feasibility-blocked candidate. Solve-success during the burst
+  is A3 (needs job-history read).
+---
+
+# RCA — `gurobi-cosmos-normalized-ru-consumption-a`
+
+**Incident:** Rootly [E89PYM](https://rootly.com/account/alerts/E89PYM) — Sev2 Azure Monitor metric alert, **acceptance**.
+**Resource:** `cosmosdb-gurobi-platform-a` (`rg-gurobi-platform-a`, sub `b524d084-edf5-449d-8e92-999ebbaf485e`).
+**Fired:** 2026-06-15T15:44:03Z · **Auto-resolved** (`autoMitigate: true`).
+**One-line cause:** Spiky FleetOptimizer/Gurobi batch I/O hit the hot **`fs.chunks` (GridFS)** collection's **1000 RU/s autoscale ceiling** in brief sub-minute spikes → **586 HTTP-429 rejections (2.82% of requests — within Microsoft's 1–5% "healthy" band)** → the PT15M average of `NormalizedRUConsumption` reached **77.67%** and tripped the team's **conservative leading >75% gauge**, which then self-resolved. **Real but minor/tolerable throttle of a chronic, mildly-under-provisioned collection — the headline issue is alert *calibration*, not urgent capacity.**
+
+> **Evidence labels.** `A1 FACT` = externally witnessed (live `az` output captured this session, file:line, or primary-source URL). `A2 INFER` = derived from A1 by named reasoning. `A3 UNVERIFIED[blocked: …]` = could not probe; blocking reason + resolving path named. Raw `az` captures: [`../context/04-live-azure-evidence.md`](../context/04-live-azure-evidence.md) (E1–E14).
+
+---
+
+## Context Ledger
+
+| Term | Definition | Artifact / Evidence | Relevance |
+|------|-----------|---------------------|-----------|
+| **VPP** | Virtual Power Plant — Eneco platform aggregating flexible energy assets for TenneT balancing markets. | ddd-ubiquitous-language | Why optimization runs. |
+| **FleetOptimizer (FTO)** | VPP component computing optimal asset dispatch; submits the solver jobs. | ADR C015 | The bursty client. |
+| **Gurobi** | Commercial mathematical-programming (MILP/LP) solver. | gurobi.com (A1) | The solver engine. |
+| **Gurobi platform / Cluster Manager** | Solver cluster (token server + compute nodes + control-plane Cluster Manager) whose DB stores models, solutions, job history. | Gurobi Remote Services docs (A1) | Owns this Cosmos DB. |
+| **Cosmos DB for MongoDB** | Azure Cosmos DB, MongoDB API, RU-billed. | `az cosmosdb show` → kind MongoDB, v7.0 (A1, E8) | The throttled resource. |
+| **RU/s** | Request Unit/s — Cosmos throughput currency. | MS Learn (A1) | The exhausted budget. |
+| **NormalizedRUConsumption** | 0–100% = **MAX** RU/s utilization **across partition key ranges**, per 1 min. | MS Learn (A1) | The metric that fired. |
+| **Autoscale** | Throughput scales 10%→max automatically; metric computed vs max. | MS Learn (A1) | fs.chunks max = 1000 RU/s. |
+| **GridFS / `fs.chunks`** | MongoDB large-object store; `fs.chunks` holds binary chunks (index `{files_id,n}` is the GridFS signature). | `collection show` (A1, E3) | The hot collection. |
+| **429 / Mongo 16500** | Rate-limit rejection: HTTP `429` (backend) / Mongo `16500` (protocol). | live metrics (A1, E2/E13) | Direct client-impact signal. |
+| **1–5% 429 = healthy** | Microsoft's action framework: 1–5% of requests as 429 with acceptable latency = healthy, no action. | MS Learn (A1) | This incident = 2.82% → healthy band. |
+| **autoMitigate** | Rule auto-resolves when condition clears. | `alert show` (A1, E4) | Why it self-cleared. |
+| **Action group `platform`** | Azure Monitor target → Rootly → escalation policy. | `src/alerts.tf:52` (A1) | Routing to E89PYM. |
+| **`gurobi-infrastructure`** | ADO repo owning the Cosmos IaC + alerts (HEAD `c17995a`, 2026-06-05). | git (A1, E10) | Where the alert lives + where a fix lands. |
+| **Nuno / #team-platform** | Escalation owner for the open Gurobi RU class. | recognition-week note (A2) | If persistent. |
+
+---
+
+## L1 — Business — Why the Gurobi platform exists
+
+The VPP earns by bidding aggregated flexibility into TenneT's balancing markets; **FleetOptimizer** turns dispatch into a math model and **Gurobi** solves it. [A2 INFER from VPP domain + ADR C015.] The Gurobi platform's **Cluster Manager** uses this Cosmos DB to store *"input models and their solutions for batch optimization"* + *"history information for jobs and batches"* (30-day retention). [A1: Gurobi Remote Services architecture.]
+
+When this DB throttles, FleetOptimizer batch model/solution I/O is rate-limited and **slows** (it does not necessarily fail — see L8). In **acceptance** this degrades pre-prod validation. A production `-p` sibling exists in the same structural class, so an unaddressed acc weakness is a **possible** early warning for prod — *with a caveat:* prod's **live** throughput was not probed this session and may already be provisioned higher. [A2 INFER; prod live throughput = A3.]
+
+---
+
+## L2 — Repo system
+
+| Repo (`enecomanagedcloud / Myriad - VPP`) | Role | This incident |
+|---|---|---|
+| **`gurobi-infrastructure`** (HEAD `c17995a`, 2026-06-05) | IaC: Cosmos account, private endpoint, metric alerts, token-server VMs. | **Owns the alert.** Fix lands here. (A1, E10) |
+| `gurobi-gitops` (`2ce81e4`, 2026-06-02) | ArgoCD/cluster config for Gurobi compute. | Compute side, not the DB. (A1) |
+| `gurobi-azuredevops` (`dfb464b`, 2025-07-11) | Pipelines. | Deploys the IaC. (A1) |
+
+> **Methodology note (load-bearing).** The local clone was stale at `3b2530b` (2026-01-27) — *before* the 2026-03-27 RCA. A first pass concluded "the alert isn't in IaC." After `git pull` to `c17995a`, that **reversed**: the alert *is* team-authored IaC (L5). Pull before trusting an IaC negative. [A1: `git log 3b2530b..c17995a`, E10.]
+
+---
+
+## L3 — Runtime architecture
+
+```mermaid
+flowchart LR
+  FTO["FleetOptimizer\n(bursty batch solves)"] --> CM["Gurobi Cluster Manager"]
+  CM -->|"PrivateEndpoint · MongoDB"| COS[("cosmosdb-gurobi-platform-a\nMongo 7.0 · West Europe · Eventual\npublic access DISABLED")]
+  COS --> DB[("db: grb_rsm")]
+  DB --> CHUNKS[["fs.chunks (GridFS, ~5 GB)\nunsharded · autoscale max 1000 RU/s\nHOT: peaked 100%"]]
+  DB --> OTHER["objects (16%) · 10 more collections\neach autoscale max 1000 RU/s"]
+  COS -. "NormalizedRUConsumption (account)" .-> AM["Azure Monitor alert\n(>75% avg PT15M, Sev2)"]
+  AM --> AG["action group: platform"] --> ROOTLY["Rootly E89PYM"]
+```
+
+Live account [A1, E8]: `kind MongoDB`, `v7.0`, single region **West Europe**, `Eventual`, `automaticFailover false`, `backup Periodic`, **`publicNetworkAccess Disabled`, `ipRules []`** (private-endpoint only — `src/mongodb.tf:24-39`; this is why control-plane reads needed no IP whitelist). Database `grb_rsm`, **12 collections**, each **dedicated autoscale max 1000 RU/s** [A1, E3]. Hot collection = **`fs.chunks`** (peaked 100% vs next `objects` 16% — A1, E11), **~5.1 GB → single physical partition at current size** (below the ~50 GB split threshold; it could split if it grows) [A1 size E14 + A2 inference], unsharded (`shardKey: null`, A1, E3).
+
+---
+
+## L4 — Application code flow (the burst path)
+
+Gurobi batch lifecycle [A1: Gurobi Remote Services architecture]: client uploads a batch (**input model → GridFS `fs.chunks`**); a compute node retrieves it, solves, **writes the solution back** (GridFS); job/batch metadata retained ~30 days. The `{files_id, n}` index on `fs.chunks` is the literal GridFS chunk signature [A1, E3], so "`fs.chunks` is GridFS" is schema-certain; "storing **Gurobi** models/solutions" is the inferential half [A2: GridFS convention + Gurobi docs]. Solves arrive in **bursts** → short, write-heavy spikes of chunk I/O concentrated on the single `fs.chunks` partition [A2, grounded in Gurobi burst/queue design + E12 burst shape].
+
+> **A3 UNVERIFIED[blocked: Cluster Manager app source + acc app/job logs not read].** Whether any solve **failed** (vs retried-and-completed) during the burst is not directly confirmed. The Mongo driver retries `16500` with backoff, and the burst was spiky/brief with a 2.82% 429 rate, so *slower-but-completed* is the strongly-favored outcome — but this is the one open question. Resolving path: Gurobi job history / acc app logs for 15:27–15:40Z (L8 T0).
+
+---
+
+## L5 — IaC / state / Azure — the three truths
+
+**Truth 1 — Spec (IaC `gurobi-infrastructure@c17995a`):** the alert is **team-authored** in `src/locals.tf:21-41`, rendered by `src/alerts.tf:19-54` (`for_each`, scoped to the **account**, routed to the `platform` action group). [A1]
+
+```hcl
+# src/locals.tf:21-41 (A1)
+gurobi-cosmos-normalized-ru-consumption = {
+  description = "Trigger when normalized RU consumption is greater than 75% for more than 5 minutes, ..."
+  severity = 2  enabled = true  frequency = "PT5M"  window_size = "PT15M"
+  criteria = { NormalizedRUConsumption = { metric_namespace = "Microsoft.DocumentDB/DatabaseAccounts"
+    operator = "GreaterThan"  aggregation = "Average"  threshold = 75 } }
+}
+```
+
+The only other Cosmos alert is `gurobi-cosmos-latency` (ServerSideLatency>99ms). **No 429/throttling alert** — it was deliberately removed (L6). `src/mongodb.tf:1-51` declares the account + private endpoint + db `grb_rsm` but **no throughput/autoscale** — collections + RU ceilings are created out-of-band by the Cluster Manager app. [A1]
+
+> **Stale-description flag (A1, demoledor C5.0.1):** the description says *"greater than 75% for more than **5 minutes**"* but `window_size = "PT15M"` (15 min). Commit `d7fc972`/PR 176135 widened the window to PT15M and **left the PT5M wording** — the implemented behaviour is a 15-min average, not a 5-min sustained check. Stale alert copy; fix in the same PR as T2.
+
+**Truth 2 — State (Terraform):** not inspected (backend not read); deployed alert matches spec (Truth 3) so alert drift is unlikely; throughput is intentionally not in state. [A3 UNVERIFIED[blocked: tfstate not read] — non-load-bearing; live Azure is the operational truth.]
+
+**Truth 3 — Azure (live):** the deployed rule is **semantically identical to the IaC — every criterion value matches** (Terraform `frequency`/`aggregation` serialize to ARM `evalFreq`/`timeAggregation`; values `NormalizedRUConsumption`, `GreaterThan 75`, `Average`, `PT15M`, `PT5M`, sev 2, enabled, `autoMitigate true`). **No deployment drift.** [A1, E4 — *semantic*, not byte-identical: the ARM key names differ from the HCL keys.] `fs.chunks` autoscale **max 1000 RU/s** (`throughput:100` floor, `instantMax:10000`) [A1, E3].
+
+**Reconciliation:** IaC alert ≡ live alert (no drift) ✓. IaC has *no* throughput ≡ live throughput set out-of-band ✓ — so the **RU ceiling has no IaC review surface** (drift-prone; see L10).
+
+---
+
+## L6 — The pipeline and how it actually runs
+
+`gurobi-infrastructure` is applied via its ADO pipeline; collections + RU ceilings are **not** pipeline-created — the Cluster Manager app provisions them at runtime. [A2 from "throughput not in IaC" (A1) + Cluster Manager owning its schema (A1).]
+
+The relevant recent change is the **alert redesign** [A1, E10]: `f956e9b` *"Update … normalized RU consumption alert and **remove throttling alert**"* + `d7fc972`/PR **176135** *"Adjust window size … to 15 minutes."* The team **swapped the lagging 429 alert for a leading NormalizedRU>75%/PT15M alert** — this is why the page "looks new."
+
+> **Steelman of the team's choice (socrates A1).** This was **not** a blunder. The removed 429 alert's own in-repo comment read *"We see 429 responses regularly when tasks run on Gurobi … 1 or 2 … set the threshold to 20 to prevent the alert from being triggered by normal behavior"* (`src/locals.tf:29-30` historic). Moving from a chronically-noisy 429-**count** alarm to a **leading saturation gauge** is exactly the org's own durable rule (*"watch NormalizedRUConsumption, not just 429 counts"*). The residual gap (L8) is not that they did this — it is that they kept **no tuned client-impact (429-rate) signal at all**, and left the leading gauge at Sev2.
+
+---
+
+## L7 — Timeline
+
+| Time (UTC) | Event | Evidence |
+|------------|-------|----------|
+| Ongoing (≥7 d) | `fs.chunks` per-minute Max hits 100% multiple times daily (Jun 8–15, ~16 spike-hours). Chronic. | A1, E7 |
+| 2026-03-27 | **Prior incident**: the *429* alert fired (24 throttles); real fix (autoscale/right-size) recommended. | A2, precedent |
+| ~Apr–Jun (`f956e9b`, PR 176135) | Team **removes 429 alert**, **adds** NormalizedRU>75%/PT15M/Sev2. | A1, E10 |
+| **15:27–15:40** | Spiky burst: per-minute Max NormalizedRU = 100% in ~9 min, but `TotalRequestUnits` peak only **~3,292 RU/min ≈ 55 RU/s avg** → brief sub-minute spikes, **not** sustained saturation. | A1, E1/E12 |
+| 15:28–15:38 | **Throttling**: 586 HTTP-429 + 16,555 Mongo-16500 events. Of **20,792** total requests, 429 = **2.82%** (within MS 1–5% healthy band). 16500 count is retry-inflated (≤9× per op). | A1, E2/E13 |
+| 15:41 | Burst ends; RU → ~8%. | A1, E1 |
+| 15:44:03 | **Alert fires** — PT15M avg = 77.67% > 75. | A1, E4 |
+| ~15:59 | **Auto-resolves** (`autoMitigate`). No 429/latency alert fired (no 429 rule exists). | A1, E5 |
+
+> **The 586-vs-16,555 gap is driver-retry amplification** (A1 MS Learn: SDKs retry 16500 up to ~9×), not an unexplained "metric-layer difference." The **HTTP-429 rate (2.82%)** is the figure Microsoft's action framework uses; the **34.5%** (16,555 ÷ 47,953 MongoRequests) is the protocol-layer, retry-inflated count and must **not** be read as "1/3 of distinct ops failed."
+
+> **The removed 429 alert *would* have fired by its own rule** (A1, `git show f956e9b`): its threshold was `≥20` 429s/PT5M; this window had **586** (peak 181/min) ≈ **29×** that. So *by count* it fires hard — yet *by Microsoft's rate framework* 2.82% is healthy. **That tension is the core alert-design problem** (L8 T2): a raw count alarm over-fires on spiky workloads; a rate alarm does not.
+
+---
+
+## L8 — Fix
+
+**Diagnosis class: `Verified Root Cause`** for the saturation mechanism (depth 2–3, A1-grounded); the specific saturator (`fs.chunks`) is now **A1** (per-collection split, E11). One residual is A3 (solve-success, L4).
+
+- **Depth 1 (proximate):** spiky Gurobi batch I/O hit `fs.chunks`'s 1000 RU/s autoscale ceiling in brief sub-minute spikes → 586 HTTP-429 (2.82%) → per-minute Max 100% for ~9 min → PT15M avg 77.67% > 75 → alert. [A1: E1/E2/E11/E12/E13]
+- **Depth 2 (enabling):** the hot collection is a **single-partition (~5 GB) GridFS store at only 1000 RU/s**; large-object chunk I/O in bursts spikes past the ceiling. Same ceiling class as March. [A1 + A2]
+- **Depth 3 (design/governance):** (a) the alert is a **leading gauge with no tuned client-impact (429-rate) signal**, at Sev2 — so it pages on micro-bursts that are *within Microsoft's healthy band*; (b) **throughput is out of IaC** (no review surface, drift-prone); (c) **GridFS-in-Cosmos** couples large-object volume to a small RU budget. [A1 + A2]
+
+**Is it "broken"? Minor/degraded, not down — and within Microsoft's tolerated band.** 429 rate 2.82% (healthy 1–5%), spiky and brief, self-resolved; Mongo driver retries `16500` with backoff. *Slower-but-completed* solves are strongly favored. **Not closeable as "fine" until T0 confirms solve success** (A3). Not a *configuration* regression (activity log empty since 05-15, A1 E9); a *workload-growth* regression is **not excluded** — June PT15M avg 77.67% vs March ≈39% is consistent with hotter bursts (A2, unresolved — L10).
+
+**Tiered remediation (full spec in [`fix.md`](./fix.md)) — note the priority order changed after the 2.82% finding:**
+
+| Tier | Action | Why | Priority |
+|------|--------|-----|----------|
+| **T0 — now** | Confirm Gurobi **job success** for 15:27–15:40 + check for batch resubmission. Don't close as "fine" until done. | The only A3 gap. | Gate |
+| **T2 — alert calibration (PRIMARY)** | Re-add a **429-RATE** page (`429/TotalRequests > ~5%`, per-env backtested — today's 2.82% would *not* fire); demote the RU>75% gauge to **Sev3** + fix its stale "5 minutes" description. | The leading gauge pages on healthy-band micro-bursts; pages should track real client impact. | **High** |
+| **T1 — capacity (secondary)** | Raise `fs.chunks` autoscale **max 1000 → 4000** (single partition serves up to 10k, so no shard needed; size from measured demand). Bring throughput into IaC. | Reduces spike-throttling + alert noise. Not urgent (2.82% is healthy). | Medium |
+| **T3 — durable candidate (feasibility-blocked A3)** | Offload GridFS large objects to **Blob Storage** (keep metadata in Cosmos), or shard `fs.chunks`. | Decouples large-object I/O from RU. | Candidate — depends on whether the third-party Gurobi Cluster Manager supports it (unverified). |
+
+---
+
+## L9 — Verification
+
+| Fix | Acceptance (externally witnessable) | Probe |
+|-----|------------------------------------|-------|
+| T0 | Job history shows solves in the window completed (or names failures) + no resubmission storm. | Gurobi Cluster Manager job history / acc app logs, 15:27–15:40. |
+| T2 | Backtest both rules vs the 7-day history: the **Sev2 429-rate** rule does **not** fire on 2.82% bursts but **does** fire >5%; the **Sev3** RU gauge fires informationally. Tune per-env. | `TotalRequests` 429 ÷ total over historical bursts. |
+| T1 | After raising the ceiling, a comparable burst keeps NormalizedRU Max <100% and 429 count → 0; chosen max > measured peak demand. | `NormalizedRUConsumption` Max + `TotalRequestUnits` on fs.chunks. |
+| T3 | If pursued: `fs.chunks` RU/s + `DataUsage` drop; NormalizedRU bursts no longer reach 100%; solve latency unchanged. | metrics before/after. |
+
+---
+
+## L10 — Lessons
+
+1. **`NormalizedRUConsumption` is a per-partition MAX, and a utilization gauge — not an impact metric.** Always confirm with the **HTTP-429 rate** (`TotalRequests StatusCode=429 ÷ TotalRequests`). Here 77.67% RU-average looked alarming but the real impact was **2.82% 429 — within Microsoft's healthy band**. [A1]
+2. **Average hides shape.** A PT15M average of per-minute maxes can be brief micro-bursts (`TotalRequestUnits` was ~55 RU/s avg) — pull the per-minute series *and* the RU-served series before calling it "sustained."
+3. **Count alarms over-fire on spiky workloads; rate alarms don't.** The removed 429-count alert (≥20) would have fired (586) while the 429-rate (2.82%) says healthy — pick the rate. Extends LL-007/008/012.
+4. **Don't read a deliberate redesign as a mistake.** The team *chose* the leading gauge (their 429s were noise); the gap is the missing tuned client-impact signal, not the gauge itself.
+5. **Pull before trusting an IaC negative** — a stale clone reversed the alert-provenance conclusion.
+6. **"Not broken before" can mean the *sensor* changed** (429→RU alert), not the system; check activity-log + alert git history.
+7. **GridFS in Cosmos couples large-object I/O to the RU budget**; a single unsharded chunk collection saturates first.
+8. **Throughput outside IaC has no review surface** — bring the ceiling into code.
+
+---
+
+## L11 — End-to-end command playbook (reproduce from cold)
+
+```bash
+sshwork                      # adds the Eneco ADO ssh key (for repo pulls)
+enecotfvppmcloginacc         # acc SP via 1Password; clear with: enecotflogout
+SUB=b524d084-edf5-449d-8e92-999ebbaf485e; RG=rg-gurobi-platform-a; ACC=cosmosdb-gurobi-platform-a
+RID="/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.DocumentDB/databaseAccounts/$ACC"
+
+# 1. The metric that fired (Max+Avg per minute).
+az monitor metrics list --resource "$RID" --metric NormalizedRUConsumption --aggregation Maximum Average \
+  --interval PT1M --start-time 2026-06-15T15:10:00Z --end-time 2026-06-15T16:10:00Z -o table
+# 2. THE decision pivot — true HTTP-429 RATE (not the retry-inflated 16500 count).
+az monitor metrics list --resource "$RID" --metric TotalRequests --aggregation Total \
+  --start-time 2026-06-15T15:26:00Z --end-time 2026-06-15T15:41:00Z --interval PT15M --query "value[0].timeseries[0].data[0].total"  # = denominator
+az monitor metrics list --resource "$RID" --metric TotalRequests --aggregation Total --filter "StatusCode eq '429'" \
+  --start-time 2026-06-15T15:26:00Z --end-time 2026-06-15T15:41:00Z --interval PT15M --query "value[0].timeseries[0].data[0].total"  # = 429s; rate = 429/total
+# 3. Which collection (per-CollectionName split, PT1M Max).
+az monitor metrics list --resource "$RID" --metric NormalizedRUConsumption --aggregation Maximum \
+  --filter "CollectionName eq '*'" --interval PT1M --start-time 2026-06-15T15:26:00Z --end-time 2026-06-15T15:41:00Z \
+  --query "reverse(sort_by(value[0].timeseries[].{c:metadatavalues[0].value,p:max(data[].maximum)}, &p))" -o table
+# 4. Burst shape (RU served/min) + ceiling + size.
+az monitor metrics list --resource "$RID" --metric TotalRequestUnits --aggregation Total --filter "CollectionName eq 'fs.chunks'" --interval PT1M --start-time 2026-06-15T15:26:00Z --end-time 2026-06-15T15:41:00Z -o table
+az cosmosdb mongodb collection throughput show --account-name "$ACC" -g "$RG" --database-name grb_rsm --name fs.chunks --subscription "$SUB" --query "resource.{ru:throughput,autoscaleMax:autoscaleSettings.maxThroughput,instantMax:instantMaximumThroughput}"
+# 5. Alert def + what else fired + what changed.
+az monitor metrics alert show -n gurobi-cosmos-normalized-ru-consumption-a -g "$RG" --subscription "$SUB"
+az monitor activity-log list --resource-id "$RID" --start-time 2026-05-15T00:00:00Z -o table   # empty => no config change
+git -C .../gurobi-infrastructure log --oneline -- '*locals*' '*alert*'
+enecotflogout
+```
+
+---
+
+## L12 — One-page on-call playbook (5-minute triage)
+
+**Alert: `gurobi-cosmos-normalized-ru-consumption-a` (acc/prd) — Cosmos RU micro-burst, Gurobi platform.**
+
+1. **Self-resolved?** `autoMitigate: true` → usually clears in ~15 min. A single resolved fire = low urgency.
+2. **THE decision: real client impact?** Compute the **HTTP-429 RATE** = `TotalRequests StatusCode=429 ÷ TotalRequests` for the window (cmd #2).
+   - **429 rate ≤ ~5% and self-resolved** → within Microsoft's healthy band → **ack, link this RCA**. (2026-06-15 was 2.82% → this case.)
+   - **429 rate > 5%, or sustained across windows, or solves failing** → escalate to **Nuno (fallback #team-platform)**.
+   - ⚠️ Do **not** use the Mongo-16500 count or the NormalizedRU% as the impact figure — they over-state it (retry-inflated / leading gauge).
+3. **Which collection?** cmd #3 — expect `fs.chunks`. If different, partition design changed → dig.
+4. **Did solves actually fail?** Gurobi job history for the window (the metric can't tell you).
+5. **Standing fixes** ([`fix.md`](./fix.md)): re-calibrate the alert (429-rate page + Sev3 gauge) is primary; raising the `fs.chunks` ceiling is secondary; Blob-offload is a candidate.
+
+---
+
+## Evidence index
+
+`A1` live probes captured 2026-06-15 via `az` (acc SP, control-plane), recorded verbatim in [`../context/04-live-azure-evidence.md`](../context/04-live-azure-evidence.md) (E1–E14). IaC `A1` from `gurobi-infrastructure@c17995a`. External `A1` from Microsoft Learn / Gurobi docs ([`../context/03-external-docs.md`](../context/03-external-docs.md)). Precedent `A2` from [`../context/02-precedent-and-canon.md`](../context/02-precedent-and-canon.md). Residual `A3`: solve-success during the burst (L4/L9 T0); prod live throughput (L1). This RCA was revised after a four-reviewer adversarial pass (sherlock-holmes, sre-maniac, el-demoledor, socrates-contrarian) — receipts in [`../adversarial/`](../adversarial/).
+</script>
+
+<script>
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  try {
+    var saved = localStorage.getItem("rca-theme");
+    if (saved === "light") { root.classList.remove("theme-dark"); root.classList.add("theme-light"); }
+  } catch (e) {}
+  function syncToggle() {
+    var light = root.classList.contains("theme-light");
+    document.getElementById("themeLabel").textContent = light ? "Dark" : "Light";
+    document.getElementById("themeIcon").innerHTML = light ? "&#9789;" : "&#9788;";
+  }
+  document.getElementById("themeToggle").addEventListener("click", function () {
+    var light = root.classList.toggle("theme-light");
+    root.classList.toggle("theme-dark", !light);
+    try { localStorage.setItem("rca-theme", light ? "light" : "dark"); } catch (e) {}
+    syncToggle();
+    if (window.__renderMermaid) window.__renderMermaid();
+  });
+  syncToggle();
+
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function slugify(s) {
+    return s.toLowerCase().replace(/<[^>]+>/g, "").replace(/[`*_~]/g, "")
+      .replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+  }
+
+  function inline(text) {
+    var tokens = [];
+    text = text.replace(/`([^`]+)`/g, function (_, c) {
+      tokens.push("<code>" + esc(c) + "</code>");
+      return " " + (tokens.length - 1) + " ";
+    });
+    text = esc(text);
+    text = text.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, label, url) {
+      return '<a href="' + url + '">' + label + "</a>";
+    });
+    text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    text = text.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>");
+    text = text.replace(/ (\d+) /g, function (_, i) { return tokens[+i]; });
+    return text;
+  }
+
+  function renderTable(rows) {
+    function cells(line) {
+      var t = line.trim().replace(/^\|/, "").replace(/\|$/, "");
+      var out = []; var cur = ""; var i;
+      for (i = 0; i < t.length; i++) {
+        if (t[i] === "\\" && t[i + 1] === "|") { cur += "|"; i++; }
+        else if (t[i] === "|") { out.push(cur); cur = ""; }
+        else cur += t[i];
+      }
+      out.push(cur);
+      return out.map(function (c) { return c.trim(); });
+    }
+    var head = cells(rows[0]);
+    var body = rows.slice(2);
+    var h = '<div class="table-scroll"><table><thead><tr>';
+    head.forEach(function (c) { h += "<th>" + inline(c) + "</th>"; });
+    h += "</tr></thead><tbody>";
+    body.forEach(function (line) {
+      if (!line.trim()) return;
+      var cs = cells(line);
+      h += "<tr>";
+      cs.forEach(function (c) { h += "<td>" + inline(c) + "</td>"; });
+      h += "</tr>";
+    });
+    h += "</tbody></table></div>";
+    return h;
+  }
+
+  function isTableSep(s) { return /^\s*\|?[\s:|-]+\|[\s:|-]*$/.test(s) && /-/.test(s); }
+
+  function parse(md) {
+    var lines = md.replace(/\r\n/g, "\n").split("\n");
+    var out = [];
+    var i = 0;
+    var listStack = [];
+
+    function closeLists(toIndent) {
+      while (listStack.length && listStack[listStack.length - 1].indent >= toIndent) {
+        out.push(listStack.pop().type === "ol" ? "</ol>" : "</ul>");
+      }
+    }
+    function closeAllLists() {
+      while (listStack.length) out.push(listStack.pop().type === "ol" ? "</ol>" : "</ul>");
+    }
+
+    while (i < lines.length) {
+      var line = lines[i];
+
+      var fence = line.match(/^```(.*)$/);
+      if (fence) {
+        closeAllLists();
+        var lang = fence[1].trim();
+        var buf = [];
+        i++;
+        while (i < lines.length && !/^```\s*$/.test(lines[i])) { buf.push(lines[i]); i++; }
+        i++;
+        var raw = buf.join("\n");
+        if (lang === "mermaid") {
+          out.push('<div class="mermaid-wrap"><div class="mermaid">' + esc(raw) + "</div>" +
+                   '<pre class="mermaid-fallback" style="display:none"><code>' + esc(raw) + "</code></pre></div>");
+        } else {
+          out.push('<pre><code class="language-' + esc(lang) + '">' + esc(raw) + "</code></pre>");
+        }
+        continue;
+      }
+
+      var hm = line.match(/^(#{1,6})\s+(.*)$/);
+      if (hm) {
+        closeAllLists();
+        var level = hm[1].length;
+        var txt = hm[2].trim();
+        var id = slugify(txt);
+        var innerHtml = inline(txt);
+        if (level >= 2) {
+          out.push("<h" + level + ' id="' + id + '">' +
+                   '<a class="heading-anchor" href="#' + id + '" aria-hidden="true">#</a>' +
+                   innerHtml + "</h" + level + ">");
+        } else {
+          out.push("<h" + level + ' id="' + id + '">' + innerHtml + "</h" + level + ">");
+        }
+        i++;
+        continue;
+      }
+
+      if (/^---+\s*$/.test(line)) { closeAllLists(); out.push("<hr />"); i++; continue; }
+
+      if (/^>\s?/.test(line)) {
+        closeAllLists();
+        var qbuf = [];
+        while (i < lines.length && /^>\s?/.test(lines[i])) {
+          qbuf.push(lines[i].replace(/^>\s?/, ""));
+          i++;
+        }
+        out.push("<blockquote>" + parse(qbuf.join("\n")) + "</blockquote>");
+        continue;
+      }
+
+      if (/\|/.test(line) && i + 1 < lines.length && isTableSep(lines[i + 1])) {
+        closeAllLists();
+        var tbuf = [line, lines[i + 1]];
+        i += 2;
+        while (i < lines.length && /\|/.test(lines[i]) && lines[i].trim() !== "") { tbuf.push(lines[i]); i++; }
+        out.push(renderTable(tbuf));
+        continue;
+      }
+
+      var um = line.match(/^(\s*)([-*+])\s+(.*)$/);
+      var om = line.match(/^(\s*)(\d+)\.\s+(.*)$/);
+      if (um || om) {
+        var m = um || om;
+        var indent = m[1].length;
+        var type = um ? "ul" : "ol";
+        closeLists(indent + 1);
+        if (!listStack.length || listStack[listStack.length - 1].indent < indent) {
+          out.push(type === "ol" ? "<ol>" : "<ul>");
+          listStack.push({ type: type, indent: indent });
+        } else if (listStack[listStack.length - 1].indent === indent &&
+                   listStack[listStack.length - 1].type !== type) {
+          out.push(listStack.pop().type === "ol" ? "</ol>" : "</ul>");
+          out.push(type === "ol" ? "<ol>" : "<ul>");
+          listStack.push({ type: type, indent: indent });
+        }
+        out.push("<li>" + inline(m[3]) + "</li>");
+        i++;
+        continue;
+      }
+
+      if (line.trim() === "") { closeAllLists(); i++; continue; }
+
+      closeAllLists();
+      var pbuf = [line];
+      i++;
+      while (i < lines.length) {
+        var nx = lines[i];
+        if (nx.trim() === "" || /^(#{1,6})\s/.test(nx) || /^```/.test(nx) ||
+            /^>\s?/.test(nx) || /^---+\s*$/.test(nx) ||
+            /^(\s*)([-*+])\s+/.test(nx) || /^(\s*)(\d+)\.\s+/.test(nx) ||
+            (/\|/.test(nx) && i + 1 < lines.length && isTableSep(lines[i + 1]))) {
+          break;
+        }
+        pbuf.push(nx);
+        i++;
+      }
+      out.push("<p>" + inline(pbuf.join(" ")) + "</p>");
+    }
+    closeAllLists();
+    return out.join("\n");
+  }
+
+  // Single-pass: each match position consumed once, so compound labels
+  // (A1 FACT) never get re-matched by the standalone A1 rule. Longest
+  // alternatives are listed first so the regex engine prefers them.
+  var BADGE_RE = /\bA1 FACT\b|\bA2 INFER\b|\bA3 UNVERIFIED\b|\bA1\b|\bA2\b|\bA3\b|\bUNVERIFIED\b|\bblocked\b|\bHIGH\b|\bMEDIUM\b|\bMINOR\b|\bLOW\b/g;
+  function badgeFor(tok) {
+    if (tok === "A1 FACT" || tok === "A1") return '<span class="badge badge-green">' + tok + "</span>";
+    if (tok === "A2 INFER" || tok === "A2") return '<span class="badge badge-amber">' + tok + "</span>";
+    if (tok === "A3 UNVERIFIED" || tok === "A3" || tok === "UNVERIFIED" || tok === "blocked")
+      return '<span class="badge badge-red">' + tok + "</span>";
+    if (tok === "HIGH") return '<span class="sev sev-high">HIGH</span>';
+    if (tok === "MEDIUM" || tok === "MINOR") return '<span class="sev sev-med">' + tok + "</span>";
+    if (tok === "LOW") return '<span class="sev sev-low">LOW</span>';
+    return tok;
+  }
+  function badgeText(s) {
+    return s.replace(BADGE_RE, function (m) { return badgeFor(m); });
+  }
+
+  function walkBadges(node) {
+    var SKIP = { CODE: 1, PRE: 1, A: 1, SCRIPT: 1, STYLE: 1 };
+    var children = Array.prototype.slice.call(node.childNodes);
+    children.forEach(function (child) {
+      if (child.nodeType === 3) {
+        var t = child.nodeValue;
+        if (!/(A[123]|UNVERIFIED|blocked|HIGH|MEDIUM|MINOR|LOW)/.test(t)) return;
+        var escd = esc(t);
+        var rep = badgeText(escd);
+        if (rep !== escd) {
+          var span = document.createElement("span");
+          span.innerHTML = rep;
+          child.parentNode.replaceChild(span, child);
+        }
+      } else if (child.nodeType === 1 && !SKIP[child.tagName]) {
+        walkBadges(child);
+      }
+    });
+  }
+
+  var srcEl = document.getElementById("md-source");
+  var md = srcEl.textContent;
+  md = md.replace(/^---\n[\s\S]*?\n---\n/, "");
+  var article = document.getElementById("article");
+  article.innerHTML = parse(md);
+  walkBadges(article);
+
+  var toc = document.getElementById("toc");
+  var headings = article.querySelectorAll("h2, h3");
+  var tocHtml = "<ul>";
+  headings.forEach(function (h) {
+    var lvl = h.tagName === "H3" ? "lvl-3" : "lvl-2";
+    var text = h.textContent.replace(/^#/, "").trim();
+    tocHtml += '<li><a class="' + lvl + '" href="#' + h.id + '">' + esc(text) + "</a></li>";
+  });
+  tocHtml += "</ul>";
+  toc.innerHTML = tocHtml;
+
+  var tocLinks = Array.prototype.slice.call(toc.querySelectorAll("a"));
+  var byId = {};
+  tocLinks.forEach(function (a) { byId[a.getAttribute("href").slice(1)] = a; });
+  if ("IntersectionObserver" in window && headings.length) {
+    var visible = {};
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { visible[en.target.id] = en.isIntersecting ? en.intersectionRatio : 0; });
+      var best = null, bestR = -1;
+      headings.forEach(function (h) { if ((visible[h.id] || 0) > bestR) { bestR = visible[h.id] || 0; best = h.id; } });
+      if (best && bestR > 0) {
+        tocLinks.forEach(function (a) { a.classList.remove("active"); });
+        if (byId[best]) byId[best].classList.add("active");
+      }
+    }, { rootMargin: "-8% 0px -70% 0px", threshold: [0, 0.25, 0.5, 1] });
+    headings.forEach(function (h) { obs.observe(h); });
+  }
+
+  var sidebar = document.getElementById("sidebar");
+  var menuToggle = document.getElementById("menuToggle");
+  menuToggle.addEventListener("click", function () {
+    var collapsed = sidebar.classList.toggle("collapsed");
+    menuToggle.setAttribute("aria-expanded", String(!collapsed));
+  });
+  if (window.matchMedia("(max-width: 900px)").matches) {
+    sidebar.classList.add("collapsed");
+    menuToggle.setAttribute("aria-expanded", "false");
+  }
+  toc.addEventListener("click", function (e) {
+    if (e.target.tagName === "A" && window.matchMedia("(max-width: 900px)").matches) {
+      sidebar.classList.add("collapsed");
+      menuToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  function showMermaidFallback() {
+    document.querySelectorAll(".mermaid-fallback").forEach(function (p) { p.style.display = "block"; });
+    document.querySelectorAll(".mermaid").forEach(function (d) { d.style.display = "none"; });
+  }
+  var hasMermaid = document.querySelector(".mermaid");
+  if (hasMermaid) {
+    var mermaidLoaded = false;
+    window.__renderMermaid = function () {
+      if (!mermaidLoaded || !window.mermaid) return;
+      try {
+        document.querySelectorAll(".mermaid").forEach(function (d) {
+          if (d.getAttribute("data-processed")) {
+            d.removeAttribute("data-processed");
+            d.innerHTML = d.getAttribute("data-src");
+          } else if (!d.getAttribute("data-src")) {
+            d.setAttribute("data-src", d.textContent);
+          }
+        });
+        var dark = root.classList.contains("theme-dark");
+        window.mermaid.initialize({ startOnLoad: false, theme: dark ? "dark" : "neutral", securityLevel: "loose" });
+        window.mermaid.run({ querySelector: ".mermaid" }).catch(showMermaidFallback);
+      } catch (err) { showMermaidFallback(); }
+    };
+    var s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
+    s.onload = function () {
+      mermaidLoaded = true;
+      document.querySelectorAll(".mermaid").forEach(function (d) { d.setAttribute("data-src", d.textContent); });
+      window.__renderMermaid();
+    };
+    s.onerror = showMermaidFallback;
+    document.head.appendChild(s);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "task_id": "2026-06-15-001",
+  "slug": "gurobi-cosmos-normalized-ru-consumption",
+  "task_root": ".ai/tasks/2026-06-15-001_gurobi-cosmos-normalized-ru-consumption",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_15_rootly_alert_gurobi-cosmos-normalized-ru-consumption-a"
+  ],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    {
+      "claim": "fs.chunks is THE saturator",
+      "witness": "context/04-live-azure-evidence.md E11 (per-collection PT1M split: fs.chunks 100% vs objects 16%) \u2014 live az output"
+    },
+    {
+      "claim": "throttle is minor (2.82% HTTP-429, within MS 1-5% healthy band)",
+      "witness": "context/04 E13 (586/20792) \u2014 live az output"
+    },
+    {
+      "claim": "micro-burst not sustained",
+      "witness": "context/04 E12 (TotalRequestUnits ~3292 RU/min peak) \u2014 live az output"
+    },
+    {
+      "claim": "alert is team-authored IaC, not portal",
+      "witness": "gurobi-infrastructure src/locals.tf:21-41 + alerts.tf:19-54 @c17995a; git E10"
+    },
+    {
+      "claim": "diagnosis survived adversarial attack",
+      "witness": "adversarial/{sherlock,sre-maniac,el-demoledor,socrates}.md + receipts-synthesis.md"
+    }
+  ],
+  "adversarial_receipts": [
+    "adversarial/sherlock-holmes.md",
+    "adversarial/sre-maniac.md",
+    "adversarial/el-demoledor.md",
+    "adversarial/socrates-contrarian.md",
+    "adversarial/receipts-synthesis.md"
+  ]
+}

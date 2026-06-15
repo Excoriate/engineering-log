@@ -46,6 +46,19 @@ Encountering a term not in this list → add it BEFORE completing the log entry.
 | **Event Hubs Checkpoint container** | Azure Blob container storing consumer group offsets for Event Hubs. Name is a **convention**, NOT an Azure SDK guarantee — do not assume a fixed name. | FBE event processing; see gotcha note in Second Brain |
 | **PostgreSQL** | Postgres database used by some VPP services. | Data persistence context |
 
+## Gurobi / VPP Optimization
+
+| Term | Definition | Code Artifact | Usage in This Repo |
+|------|-----------|--------------|-------------------|
+| **FleetOptimizer (FTO)** | VPP component that computes optimal energy-asset dispatch/allocation by expressing it as a math model and solving it with Gurobi. The bursty client of the Gurobi platform. | ADR C015-FleetOptimizer-Gurobi-model | Source of the batch-solve load behind Gurobi Cosmos alerts |
+| **Gurobi platform (Remote Services)** | Client-server solver cluster: token/license server + compute nodes + Cluster Manager. | `gurobi-infrastructure`, `gurobi-gitops`, `gurobi-azuredevops` repos | Owns `cosmosdb-gurobi-platform-a` |
+| **Gurobi Cluster Manager** | Gurobi's control plane (auth, monitoring, REST, Batch Management); its database stores input models, solutions, and 30-day job history. Creates its own Mongo collections at runtime (NOT Terraform-managed). | third-party Gurobi app | The consumer that drives Cosmos RU |
+| **`cosmosdb-gurobi-platform-a`** | The Gurobi Cluster Manager's Azure Cosmos DB for MongoDB (v7.0, db `grb_rsm`, private-endpoint only), in `rg-gurobi-platform-a`, acc sub `b524d084-…`. Per-collection autoscale, max 1000 RU/s. | `gurobi-infrastructure/src/mongodb.tf` | Resource in the 2026-06-15 RU alert |
+| **GridFS / `fs.chunks`** | MongoDB large-object store (`fs.files` metadata + `fs.chunks` binary chunks; index `{files_id,n}`). On `cosmosdb-gurobi-platform-a` it is the HOT, unsharded collection that saturates first. | `grb_rsm.fs.chunks` | Hot collection in the 2026-06-15 incident |
+| **NormalizedRUConsumption** | Azure Cosmos metric, 0–100% = **MAX** RU/s utilization **across partition key ranges**, per 1 min — a utilization GAUGE, not a client-impact metric. PT15M Average smooths brief spikes. | Azure Monitor metric | The metric the `gurobi-cosmos-normalized-ru-consumption-a` alert fires on |
+| **RU/s (Request Unit/s)** | Cosmos throughput currency; every op costs RU; exceeding the provisioned/autoscale ceiling → HTTP 429 / Mongo error 16500. | Cosmos provisioned/autoscale throughput | The exhausted budget |
+| **429 rate vs Mongo-16500 count** | Throttling impact = HTTP-429 RATE (`TotalRequests StatusCode=429 ÷ TotalRequests`); Microsoft healthy band = 1–5%. The Mongo `16500` COUNT is retry-inflated (≤9× per op) and must NOT be used as the impact figure. | Azure Monitor `TotalRequests`/`MongoRequests` | The correct throttle measure (LL-025) |
+
 ## Tooling
 
 | Term | Definition | Skills/Subagents |

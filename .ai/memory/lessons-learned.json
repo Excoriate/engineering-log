@@ -395,5 +395,55 @@
     "added": "2026-06-04",
     "last_validated": "2026-06-04",
     "task_origin": "2026-06-04-001"
+  },
+  {
+    "id": "LL-025",
+    "scope": "log/employer/eneco/**",
+    "category": "incident-methodology",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "Cosmos NormalizedRUConsumption is a per-partition-key-range MAX utilization GAUGE (0-100%, 1-min), NOT a client-impact metric. Confirm throttling with the HTTP-429 RATE = TotalRequests(StatusCode=429) / TotalRequests(all), per Microsoft's 1-5%-healthy / >5%-act framework. Do NOT use the gauge % or the Mongo error-16500 COUNT as the impact figure: 16500 is counted per protocol-op INCLUDING driver retries (up to ~9x), so it is inflated. STAKES-CLAIM: if on-call/RCA acts on the gauge or the 16500 count instead of the 429-rate, they over-provision RU or page on healthy-band noise (or, inversely, dismiss a real >5% throttle). 2026-06-15 gurobi-cosmos: 77.67% RU-avg + 16,555 16500-events implied 'severe ~34.5% throttle', but the true HTTP-429 rate was 586/20792 = 2.82% — INSIDE Microsoft's 1-5% healthy band. FALSIFIER: a window where 429-rate>5% was treated as noise, or where 16500-count equalled distinct-op failures (no retries) — either would break the rate-not-count rule. STAKES-CLASS: HIGH.",
+    "root_cause": "NormalizedRUConsumption = max over partition-key-ranges per minute; a PT15M Average of per-minute maxes can be brief sub-second spikes (confirm with TotalRequestUnits: the 2026-06-15 hot minutes served only ~3292 RU/min ~= 55 RU/s avg). Mongo 16500 counts every rejected protocol op incl. SDK retries, so its count >> distinct throttled ops and >> the backend HTTP-429 count (16,555 vs 586).",
+    "fix": "Triage a NormalizedRU alert with: az monitor metrics list --metric TotalRequests --filter \"StatusCode eq '429'\" (numerator) over the same metric all-status (denominator) => rate. <=5% + self-resolved = healthy/ack; >5% or sustained = act/escalate. Size autoscale from TotalRequestUnits demand, not the gauge. For spiky workloads, page on 429-rate>5% and demote the RU% gauge to a Sev3 warning.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_15_rootly_alert_gurobi-cosmos-normalized-ru-consumption-a/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_15_rootly_alert_gurobi-cosmos-normalized-ru-consumption-a/how-to-feynman.md"
+    ],
+    "added": "2026-06-15",
+    "last_validated": "2026-06-15",
+    "task_origin": "2026-06-15-001_gurobi-cosmos-normalized-ru-consumption"
+  },
+  {
+    "id": "LL-026",
+    "scope": "log/employer/eneco/**",
+    "category": "alert-noise",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "cosmosdb-gurobi-platform-a (rg-gurobi-platform-a, Mongo API, db grb_rsm) backs the Gurobi Cluster Manager. Its HOT collection is the unsharded GridFS fs.chunks at autoscale max 1000 RU/s; FleetOptimizer batch solves micro-burst it to 100% multiple times daily (chronic). The team (PR 176135, commit f956e9b) REMOVED the 429-count throttling alert and added a leading NormalizedRU>75%/PT15M/Sev2 gauge => there is now NO direct client-impact (429) page. STAKES-CLAIM: blind-ack misses a real >5% throttle; blind-page floods on-call on healthy-band micro-bursts. Triage routing: 429-RATE<=5% + self-resolved (autoMitigate) => ack + link the RCA; 429-rate>5% OR sustained across windows OR Gurobi solves failing => escalate to Nuno (fallback #team-platform). Throughput is NOT Terraform-managed (Cluster Manager app creates collections). FALSIFIER: prod -p live throughput differs from acc's 1000 RU/s (prod may be portal-bumped higher), or fs.chunks gets sharded / GridFS blobs moved to Blob Storage. STAKES-CLASS: HIGH.",
+    "root_cause": "Single-partition GridFS large-object I/O (input models/solutions) at a 1000 RU/s ceiling saturates during bursty parallel solves; chronic, mildly under-provisioned. The alert is a conservative leading gauge not tuned for a spiky workload, with no companion client-impact signal.",
+    "fix": "(T2/primary) re-add a 429-RATE page (>5%, per-env backtested) + demote RU gauge to Sev3 + fix its stale 'for more than 5 minutes' description (window is PT15M). (T1/secondary) raise fs.chunks autoscale max 1000->~4000 (single partition serves up to 10k RU/s, no shard needed; instantMax=10000) and bring throughput into IaC. (T3/candidate, feasibility A3) offload GridFS large objects to Blob Storage or shard fs.chunks — depends on the third-party Gurobi Cluster Manager supporting it. Verify prod separately.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_15_rootly_alert_gurobi-cosmos-normalized-ru-consumption-a/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_15_rootly_alert_gurobi-cosmos-normalized-ru-consumption-a/fix.md"
+    ],
+    "added": "2026-06-15",
+    "last_validated": "2026-06-15",
+    "task_origin": "2026-06-15-001_gurobi-cosmos-normalized-ru-consumption"
+  },
+  {
+    "id": "LL-027",
+    "scope": "log/**",
+    "category": "investigation-methodology",
+    "severity": "medium",
+    "confidence": "validated",
+    "summary": "git pull (fetch latest) before trusting an IaC NEGATIVE ('X is not in code'). A stale local clone flips provenance conclusions. STAKES-CLAIM: an 'X not in IaC' read from a stale clone routes the fix to the wrong place (portal/CCoE vs code). 2026-06-15: a Jan-27 gurobi-infrastructure clone (predating the 2026-03-27 RCA) said the NormalizedRU alert was not in IaC => 'externally provisioned'; pulling to the Jun-05 HEAD reversed it — the alert is team-authored (src/locals.tf) and the team had deliberately added it. For Eneco ADO repos the ssh key is loaded via the 'sshwork' alias (ssh-add ~/.ssh/work/eneco/eneco_personal); the MC acc SP login is 'enecotfvppmcloginacc' (1Password), cleared with 'enecotflogout'. FALSIFIER: a case where the freshly-pulled clone STILL lacks the artifact and it genuinely is portal/out-of-IaC. STAKES-CLASS: MEDIUM.",
+    "root_cause": "Investigations read whatever HEAD the local clone happens to be at; a months-stale clone is a silent context gap that an evidence-labeled A1 claim ('not in IaC') hides.",
+    "fix": "Before any 'not in IaC' / provenance claim: sshwork && git -C <repo> fetch --all && git pull --ff-only && git log -1; cross-check live Azure (az monitor metrics alert show / resource tags) which is more authoritative than the repo for what is deployed now.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_15_rootly_alert_gurobi-cosmos-normalized-ru-consumption-a/rca.md"
+    ],
+    "added": "2026-06-15",
+    "last_validated": "2026-06-15",
+    "task_origin": "2026-06-15-001_gurobi-cosmos-normalized-ru-consumption"
   }
 ]
