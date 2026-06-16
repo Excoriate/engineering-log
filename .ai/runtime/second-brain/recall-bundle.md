@@ -36,6 +36,13 @@ created: 2026-04-21
 updated: 2026-04-24
 review_after: 2026-05-15
 
+## High-Priority Lessons
+- [critical] A latent misconfiguration in a component currently scaled to zero / disabled / feature-flagged off is invisible until activation — treat any 'this can't fail because it never runs' surface as an unverified time bomb and verify it BEFORE enabling[scope: scaled-to-zero / disabled / feature-flagged components]
+- [high] Always read _index.md before writing to any vault folder[scope: **/*]
+- [high] Keep root docs and generated wrappers thin; mutable llm-wiki topology belongs only in centralized harness surfaces.[scope: .ai/harness/**]
+- [high] Completed import batches must reconcile __import_data_tmp or future runs will misread finished source material as pending residue.[scope: __import_data_tmp/**]
+- [high] Replace generic fallback scaffolds before adding domain-native reasoning machinery to specialist prompts[scope: std/subagents/software_engineering/**]
+
 ## Available Context Notes
 - repos/mc-vpp-infrastructure
 - repos/memory-system-architecture
