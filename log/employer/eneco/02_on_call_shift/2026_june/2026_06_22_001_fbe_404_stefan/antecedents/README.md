@@ -1,0 +1,3 @@
+# Antecedents
+
+These files are the inputs the RCA was built from — the inherited intake plus the confirmed diagnosis. `sre-intake.md` is the on-call context handover that framed the FBE 404 request; `probe-results.md` is the live, read-only A1 evidence ledger that confirmed the finalizer-wedge root cause and ruled out the credential-gap and PAT-expiry hypotheses; `fix-result.md` is the applied-and-verified record of the 404→200 recovery after the wedged `resources-finalizer` was cleared. Together they are the antecedent state the RCA in [`../output/rca.md`](../output/rca.md) reverse-engineers and explains.

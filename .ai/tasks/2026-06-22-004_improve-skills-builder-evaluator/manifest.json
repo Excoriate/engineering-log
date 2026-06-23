@@ -1,0 +1,53 @@
+{
+  "task_id": "2026-06-22-004",
+  "slug": "improve-skills-builder-evaluator",
+  "task_root": ".ai/tasks/2026-06-22-004_improve-skills-builder-evaluator",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-evaluator",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/SKILL.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/skill-design.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/scripts/validate-specimen.sh",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/scripts/validate-structure.sh",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/scripts/validate-skill-complete.sh",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/references/skill-structure.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/references/design-calibration-loop.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/references/l2-residency-contract.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/references/reference-doctrine.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/references/operational-skill-doctrine.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/references/operational-surfaces-contract.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/tests/test_validate-specimen.sh",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-builder/tests/test_validate-structure.sh",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-evaluator/SKILL.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-evaluator/scripts/evaluate_l1.py",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-evaluator/scripts/evaluate_golden.py",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-evaluator/references/skill-type-matrix.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-evaluator/tests/test_evaluate_l1.sh",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/stdlib/std/skills/01_context_engineering/skills-evaluator/tests/test_evaluate_golden.sh"
+  ],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "adversarial_completed": [
+    {"frame": "simplicity-maniac", "artifact": "adversarial/attack-granularity.md", "verdict": "9→7 heuristics + 1 GOLDEN; merge H-PARALLEL, narrow H-KIND, keep access-boundary separate", "receipt": "RESOLVE S1/S2/S3"},
+    {"frame": "kant-cognitive-scientist", "artifact": "adversarial/attack-attention-size.md", "verdict": "SPLIT not REPLACE; reject REASONING compress; count-dilution is real cost", "receipt": "RESOLVE K1/K2, PARTIAL K3"},
+    {"frame": "el-demoledor", "artifact": "adversarial/attack-tooling.md", "verdict": "all 4 script fixes broken as drafted; hardened+verified", "receipt": "RESOLVE D1/D2/D3/D4"},
+    {"frame": "socrates-contrarian", "artifact": "adversarial/attack-overfit.md", "verdict": "ops scoping unenforceable via classifier; substrate-gate ops lints; 4 universal", "receipt": "RESOLVE O1/O2/O3, DEFER O4→P8"}
+  ],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    {"claim": "Operational Surfaces is enforcement contract w/ BLOCKED-PATH", "witness": "coordinator read SKILL.md:1005-1069 (line 1018)", "type": "source-verified"},
+    {"claim": "classifier has no ops class; declared_substrate reads state-delta", "witness": "grep classify_skill_type.py:12 + evaluate_golden.py:105-127", "type": "source-verified"},
+    {"claim": "nothing consumes reference summary:", "witness": "grep skills-*/scripts → only JSON gate-count key", "type": "source-verified"},
+    {"claim": "G2-upgrade regression = 26/27 refs use summary", "witness": "el-demoledor executed corpus scan + coordinator probe (8 example refs lack description)", "type": "external-agent-artifact + coordinator-probe"},
+    {"claim": "all 3 hardened script fixes work (specimen L-1, G2 L-2, provenance L-3)", "witness": "coordinator ran regex against el-demoledor breaking inputs: 11/11 stub forms matched, 0/4 prose false-positive; G2 PASS 17 refs; provenance grep frontmatter-confined", "type": "external-runtime-output"},
+    {"claim": "builder net-negative L2 despite +8 heuristics", "witness": "check-skill-size.sh: 66046 bytes vs original 70369 (-4323); G6 PASS", "type": "external-runtime-output"},
+    {"claim": "8 new heuristics well-formed", "witness": "validate-knowledge.sh G8: 48 named heuristics (was 40), ALL GATES PASSED", "type": "external-runtime-output"},
+    {"claim": "evaluator strengthened GOLDEN-STATE-DELTA does not false-fail builder state-delta golden", "witness": "evaluate_golden.py skills-builder: band=READY findings=0 substrate=state-delta", "type": "external-runtime-output"},
+    {"claim": "L1-019/L1-020 provenance-gated, no false-fire on non-provenance", "witness": "evaluate_l1.py on non-provenance fixture: 0 L1-019/020 findings; builder: 0 findings", "type": "external-runtime-output"},
+    {"claim": "whole change-set coherent end-to-end", "witness": "validate-skill-complete.sh: skills-builder CERTIFIED(13/0), skills-evaluator CERTIFIED(13/0), eneco-sre exhibit CERTIFIED(14/0)", "type": "external-runtime-output"},
+    {"claim": "all test suites pass", "witness": "builder structure 15/15, specimen ALL PASS; evaluator L0/L1/GOLDEN suites ALL PASS", "type": "external-runtime-output"}
+  ],
+  "scope_decisions": [
+    {"decision": "4 semantic/ops evaluator lints (terse-value, hardcoded-category, access-boundary, verify-CLI) shipped as builder-doctrine-only, NOT evaluator lints", "reason": "socrates: classifier has no ops class; provenance-gated lints would regress on non-ops skills; semantic lints gameable. Recommended follow-up: add ops/state-delta class to classify_skill_type.py first, then build them substrate-gated."}
+}

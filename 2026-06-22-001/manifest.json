@@ -1,0 +1,13 @@
+{
+  "task_id": "2026-06-22-001",
+  "slug": "rootly-argocd-sync-alerts",
+  "task_root": "2026-06-22-001",
+  "allowed_external_paths": [],
+  "created": "2026-06-22T07:22:56Z",
+  "modified": "2026-06-22T07:22:56Z",
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}

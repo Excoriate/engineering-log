@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Enable Email Notifications When an Azure DevOps Pipeline Completes</title>
+<style>
+  :root{
+    --fg:#1b1f24; --muted:#57606a; --bg:#ffffff; --soft:#f6f8fa;
+    --border:#d0d7de; --accent:#0969da; --warn:#9a6700; --warnbg:#fff8c5;
+    --good:#1a7f37; --badbg:#fff1f0; --code:#24292f;
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+       color:var(--fg);background:var(--bg);line-height:1.6;margin:0;padding:0;}
+  main{max-width:880px;margin:0 auto;padding:40px 24px 80px;}
+  h1{font-size:1.9rem;line-height:1.25;border-bottom:2px solid var(--border);padding-bottom:.4em;}
+  h2{font-size:1.35rem;margin-top:2.2em;border-bottom:1px solid var(--border);padding-bottom:.3em;}
+  h3{font-size:1.1rem;margin-top:1.6em;}
+  p,li{font-size:1rem;}
+  code{background:var(--soft);padding:.15em .4em;border-radius:6px;font-size:.88em;
+       font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--code);}
+  pre{background:var(--soft);border:1px solid var(--border);border-radius:8px;padding:14px 16px;
+      overflow:auto;font-size:.84rem;line-height:1.45;}
+  pre code{background:none;padding:0;}
+  pre.ascii{background:#0d1117;color:#d1d9e0;border-color:#0d1117;}
+  table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92rem;}
+  th,td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top;}
+  th{background:var(--soft);}
+  blockquote{margin:1.2em 0;padding:.6em 1em;border-left:4px solid var(--accent);
+             background:var(--soft);color:var(--muted);}
+  .tldr{border:1px solid var(--border);border-left:5px solid var(--good);background:#f0fff4;
+        border-radius:8px;padding:14px 18px;}
+  .tldr strong{color:var(--good);}
+  .callout-warn{border-left:4px solid var(--warn);background:var(--warnbg);padding:.5em 1em;border-radius:6px;}
+  .mermaid{background:var(--soft);border:1px solid var(--border);border-radius:8px;padding:16px;margin:1em 0;text-align:center;}
+  .meta{color:var(--muted);font-size:.9rem;}
+  .takeaway{font-style:italic;color:var(--good);}
+  hr{border:none;border-top:1px solid var(--border);margin:2.4em 0;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<main>
+
+<h1>How to Enable Email Notifications When an Azure DevOps Pipeline Completes</h1>
+<p class="meta"><strong>Mastery level:</strong> you will be able to set this up <em>and</em> explain why one route needs no permissions and another needs an admin — so you never again ask for rights you don't need.</p>
+
+<h2>Audience and scope</h2>
+<p>Eneco Trade Platform engineers and the on-call platform team. Concrete target: org <code>enecomanagedcloud</code>, project <code>Myriad - VPP</code>, build pipeline <code>definitionId=8951</code>. Covers the <strong>portal</strong> path and the <strong>az CLI / REST</strong> path. It does <strong>not</strong> cover Slack/Teams webhook delivery or service-hook integrations — only email on build completion.</p>
+
+<h2>Knowledge Contract</h2>
+<p>After reading this, you can:</p>
+<ol>
+  <li><strong>draw</strong> how an Azure DevOps notification turns a finished build into an email (event → subscription → channel → inbox);</li>
+  <li><strong>explain why</strong> a <em>personal</em> subscription needs no special rights, but a <em>shared</em> one does;</li>
+  <li><strong>choose</strong> the right scope — personal, team, or project — for a given need;</li>
+  <li><strong>create</strong> a "build completes" email subscription both in the portal and via <code>az rest</code>;</li>
+  <li><strong>reject</strong> the over-privilege trap (asking for Project Administrator just to receive emails);</li>
+  <li><strong>defend and verify</strong> the choice — prove the subscription actually fires.</li>
+</ol>
+<p>This document does <strong>not</strong> make you able to author a <em>custom event-type</em> extension or change org-wide notification defaults — those are separate, rarer tasks.</p>
+
+<h2>TL;DR</h2>
+<div class="tldr">
+  <p>You almost certainly do <strong>not</strong> need the edit rights you were about to ask for.</p>
+  <p>If you want the email <strong>for yourself</strong>, create a <strong>personal</strong> subscription in <em>User settings → Notifications</em> — any project member can, no grant required.</p>
+  <p>Only a <strong>shared/team</strong> subscription (one address for many people, managed centrally) needs an admin, and the least-privilege grant for that is <strong>Team Administrator</strong>, <em>not</em> Project Administrator.</p>
+</div>
+
+<h2>First principles: what a "notification" actually is</h2>
+<p>Strip the UI away and an Azure DevOps notification is one row in a rules table. When something happens in the product, the platform <strong>publishes an event</strong>. A <strong>subscription</strong> is a standing rule that says: <em>"when an event of this type, matching this filter, is published from this scope, deliver it through this channel to this subscriber."</em> Email is just one channel type.</p>
+<p>So every subscription is made of exactly four parts:</p>
+<ul>
+  <li><strong>Event type</strong> — <em>what happened.</em> For us: <code>ms.vss-build.build-completed-event</code> ("Build completed"). (There are older <code>…-legacy-event</code> variants that <strong>cannot</strong> take new custom subscriptions — ignore them.)</li>
+  <li><strong>Filter</strong> — <em>which instances of that event you care about</em>, e.g. only one pipeline, or only failed builds.</li>
+  <li><strong>Scope</strong> — <em>which container the event must come from</em>, e.g. the <code>Myriad - VPP</code> project.</li>
+  <li><strong>Channel + subscriber</strong> — <em>how it's delivered and to whom</em>: an email channel, to a person or a team/group.</li>
+</ul>
+<p>The single fact that resolves your whole request is <strong>who the subscriber is</strong>, because that decides whose settings store the rule — and therefore who is allowed to edit it.</p>
+
+<pre class="ascii">   A subscription = one rule row
+   ┌───────────────────────────────────────────────┐
+   │ event type : ms.vss-build.build-completed-event │  WHAT happened
+   │ filter     : Build pipeline = 8951              │  WHICH builds
+   │ scope      : project "Myriad - VPP"             │  FROM where
+   │ subscriber : me  | a team | a project           │  TO whom  ◀── decides who may edit
+   │ channel    : EmailHtml → inbox                  │  HOW delivered
+   └───────────────────────────────────────────────┘</pre>
+<p>That box is the whole model. Keep it in your head: the <strong>subscriber</strong> field is the one that quietly determined you "didn't have edit rights" — you were editing the <em>project's</em> rules, not your own.</p>
+
+<h2>The model, end to end</h2>
+<p>Here is what exists and how it connects, from a build finishing to an email landing. The question this answers: <em>where does the rule live, and why does that location gate who can edit it?</em></p>
+
+<pre class="mermaid">
+flowchart LR
+    B["Pipeline 8951&lt;br/&gt;finishes"] --&gt;|publishes| E["Event:&lt;br/&gt;build-completed"]
+    E --&gt; M{"Match against&lt;br/&gt;subscriptions&lt;br/&gt;(filter + scope)"}
+    M --&gt; P["Personal sub&lt;br/&gt;subscriber = you&lt;br/&gt;stored in YOUR settings"]
+    M --&gt; T["Team sub&lt;br/&gt;subscriber = team&lt;br/&gt;stored in TEAM settings"]
+    M --&gt; J["Project sub&lt;br/&gt;subscriber = project&lt;br/&gt;stored in PROJECT settings"]
+    P --&gt;|EmailHtml| PM["your inbox"]
+    T --&gt;|EmailHtml + address| TM["team distribution list"]
+    J --&gt;|EmailHtml + address| JM["project-wide recipients"]
+</pre>
+<p>Read it left to right: the build emits <strong>one</strong> event; the platform tests it against <strong>all</strong> subscriptions; each matching subscription fires its own channel. The three branches differ only in <strong>who owns the rule's storage</strong>. A personal rule lives in <em>your</em> notification settings, so <em>you</em> edit it. A team or project rule lives in shared settings, so a <em>team/project admin</em> edits it. Nothing about the build or the event changed between the branches — only ownership did. That is the entire reason the "Project Settings → Notifications" page refused you: you were standing at the <em>project-owned</em> door.</p>
+<p class="takeaway">Takeaway: the same email can be produced by three different doors; pick the door whose owner is <em>you</em> whenever the audience is <em>you</em>.</p>
+
+<h2>Choose your route (the decision that prevents an over-privilege request)</h2>
+<p>Before touching anything, decide what you actually need. This tree turns "I want build emails" into the minimum action that delivers them.</p>
+
+<pre class="mermaid">
+flowchart TD
+    Q1{"Who needs the email?"}
+    Q1 --&gt;|Just me| PERS["PERSONAL subscription&lt;br/&gt;User settings → Notifications&lt;br/&gt;Permission: none (any project member)"]
+    Q1 --&gt;|A fixed team / distribution list| Q2{"Does a Team Admin exist&lt;br/&gt;who can set it up?"}
+    Q2 --&gt;|Yes / can be granted| TEAM["TEAM subscription&lt;br/&gt;Project Settings → Notifications&lt;br/&gt;Permission: Team Administrator"]
+    Q2 --&gt;|No, needs project-wide| PROJ["PROJECT subscription&lt;br/&gt;Project Settings → Notifications&lt;br/&gt;Permission: Project Administrators"]
+</pre>
+<p>Read each leaf as <em>route + where + the exact permission it costs</em>. The cost climbs as you move right: <strong>personal costs nothing</strong>, <strong>team costs the Team Administrator role</strong>, <strong>project costs full Project Administrators membership</strong>. The filer's original request — "grant me edit rights for Project Settings → Notifications" — is the <strong>rightmost, most expensive</strong> leaf, and it's only justified if the audience is genuinely project-wide. If the audience is "me" or even "my team", you move left and the permission cost collapses.</p>
+<p class="takeaway">Takeaway: the permission you need is a <em>consequence</em> of the audience you pick, not a prerequisite. Pick the audience first.</p>
+
+<h2>Permission reality (so nobody grants too much)</h2>
+<p>Microsoft's documentation is explicit about who can manage each scope. There is <strong>no</strong> narrow "edit notifications" toggle — the project-level grant is effectively <em>membership in Project Administrators</em>. That is why a request to "edit the notifications view" is really a request for broad project admin. The cheaper, correct grants are below.</p>
+<table>
+  <thead><tr><th>Subscription scope</th><th>Where it's managed</th><th>Permission required</th><th>Reversibility</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Personal</strong></td><td>User settings → Notifications</td><td><strong>None</strong> — any project member</td><td>n/a (self-managed)</td></tr>
+    <tr><td><strong>Team</strong></td><td>Project Settings → Notifications</td><td><strong>Team Administrator</strong> of that team</td><td>Remove the role; delete the sub</td></tr>
+    <tr><td><strong>Project</strong></td><td>Project Settings → Notifications</td><td><strong>Project Administrators</strong> group (or "Edit project-level information")</td><td>Remove from group; delete the sub</td></tr>
+  </tbody>
+</table>
+
+<h2>Do it — Path A: personal subscription (portal, self-serve, recommended)</h2>
+<p>This is the path that unblocks the filer <strong>today, with no ticket to anyone</strong>.</p>
+<ol>
+  <li>In Azure DevOps, click the <strong>gear / User settings</strong> icon (top-right) → <strong>Notifications</strong> (a.k.a. <em>Notification settings</em>).</li>
+  <li>Click <strong>New subscription</strong>.</li>
+  <li>Category <strong>Build</strong> → template <strong>A build completes</strong>.</li>
+  <li>In the dialog, set the <strong>scope to the project</strong> <code>Myriad - VPP</code>, then add a filter on the <strong>Build pipeline / Definition name</strong> field and select <strong>your pipeline (8951)</strong>. (Optional: narrow to <em>failed</em> builds only.)</li>
+  <li>Confirm the delivery email is your preferred address. <strong>Save / Finish.</strong></li>
+</ol>
+<p>Done. Emails now arrive in your inbox when pipeline 8951 completes. No admin involved.</p>
+
+<h2>Do it — Path B: team / project subscription (portal, admin)</h2>
+<p>Use this only when many people need it via one shared address.</p>
+<ol>
+  <li><strong>Project Settings → Notifications</strong> (requires Team Administrator for a team sub, or Project Administrators for a project sub).</li>
+  <li><strong>New subscription</strong> → Build → <strong>A build completes</strong>.</li>
+  <li>Scope to <code>Myriad - VPP</code>; filter on <strong>Build pipeline = 8951</strong>.</li>
+  <li>Set <strong>Deliver to</strong> = a <strong>specific email address</strong> (a team distribution list), not an individual. <strong>Save.</strong></li>
+</ol>
+
+<h2>Do it — Path C: az CLI / REST (scriptable, repeatable)</h2>
+<p>Azure DevOps has <strong>no</strong> native <code>az devops notification</code> command, so we call the REST API. The reliable, fully-documented way is <code>az rest</code> with the Azure DevOps token audience GUID <code>499b84ac-1321-427f-aa17-267ca6975798</code>.</p>
+
+<p><strong>Prerequisites</strong></p>
+<pre><code># Sign in as a REAL USER identity that owns the target subscriber.
+# (A service principal / account with no mailbox creates the sub but never receives email — see Verify.)
+az login
+ORG="https://dev.azure.com/enecomanagedcloud"
+
+# Resolve the project id (scope.id). This form uses your `az login` token directly —
+# NO azure-devops extension / PAT needed (avoids the "run the login command" prompt):
+PROJECT_ID=$(az rest --method get \
+  --uri "$ORG/_apis/projects/Myriad%20-%20VPP?api-version=7.1" \
+  --resource 499b84ac-1321-427f-aa17-267ca6975798 --query id -o tsv)
+[ -n "$PROJECT_ID" ] || echo "project id not resolved — check az login and the org/project name"
+echo "$PROJECT_ID"
+# (Extension alternative, only if you have run `az devops login` with a PAT:
+#  PROJECT_ID=$(az devops project show --project "Myriad - VPP" --org "$ORG" --query id -o tsv) )</code></pre>
+<blockquote><strong>Version fallback:</strong> if <em>any</em> <code>az rest</code> call below returns a version error, retry that call with <code>api-version=7.1-preview.1</code>.</blockquote>
+
+<p><strong>Create a personal "build completes" subscription</strong> (scope = project; subscriber defaults to the caller; delivered to your preferred email):</p>
+<pre><code>cat &gt; body.json &lt;&lt;JSON
+{
+  "description": "Build completes — Myriad - VPP",
+  "filter": {
+    "eventType": "ms.vss-build.build-completed-event",
+    "criteria": { "clauses": [], "groups": [], "maxGroupLevel": 0 },
+    "type": "Expression"
+  },
+  "channel": { "type": "EmailHtml" },
+  "scope": { "id": "$PROJECT_ID" }
+}
+JSON
+
+az rest --method post \
+  --uri "$ORG/_apis/notification/subscriptions?api-version=7.1" \
+  --resource 499b84ac-1321-427f-aa17-267ca6975798 \
+  --headers "Content-Type=application/json" \
+  --body @body.json</code></pre>
+<p><strong>Team/shared variant</strong> — add a <code>subscriber</code> (the team's identity id) and a custom address:</p>
+<pre><code>{
+  "description": "Build completes — pipeline 8951 — team",
+  "filter": { "eventType": "ms.vss-build.build-completed-event",
+    "criteria": { "clauses": [], "groups": [], "maxGroupLevel": 0 }, "type": "Expression" },
+  "subscriber": { "id": "&lt;TEAM_OR_GROUP_IDENTITY_ID&gt;" },
+  "channel": { "type": "EmailHtml", "address": "your-dl@eneco.com", "useCustomAddress": true },
+  "scope": { "id": "&lt;PROJECT_ID&gt;" }
+}</code></pre>
+
+<p><strong>Restricting to pipeline 8951 in code — the honest part.</strong> The <code>criteria.clauses</code> above are <strong>empty</strong>, so the rule matches <em>every</em> build in the project. The exact clause that filters to one pipeline (the <code>fieldName</code> string and whether it matches the pipeline <strong>name</strong> or the <strong>id 8951</strong>) is <strong>not documented</strong> by Microsoft. Do <strong>not</strong> guess it. Instead, create the filtered subscription <strong>once in the portal</strong> (Path A/B, which surfaces the <em>Build pipeline</em> field by name), then read it back and copy the real clause:</p>
+<pre><code># List your subscriptions, find the one you just created, then:
+az rest --method get \
+  --uri "$ORG/_apis/notification/subscriptions/&lt;SUBSCRIPTION_ID&gt;?api-version=7.1" \
+  --resource 499b84ac-1321-427f-aa17-267ca6975798</code></pre>
+<p>The returned JSON shows the exact <code>filter.criteria.clauses</code> entry — paste that into your <code>body.json</code> for repeatable creation.</p>
+<blockquote>List the event types yourself (proves the id, no guessing):<br>
+<code>az rest --method get --uri "$ORG/_apis/notification/eventtypes?publisherId=ms.vss-build.build-event-publisher&amp;api-version=7.1" --resource 499b84ac-1321-427f-aa17-267ca6975798</code></blockquote>
+
+<h2>Verify it actually fires (close on the effect, not the exit code)</h2>
+<p>A <code>201 Created</code> (or a green portal save) means the <strong>rule exists</strong>, not that an <strong>email will arrive</strong>. Confirm the real effect:</p>
+<pre class="ascii">Created the subscription?
+        │ yes
+        ▼
+Run / re-run pipeline 8951 (or wait for the next completion)
+        │
+        ▼
+Email arrives in the target inbox within a few minutes? ──no──► check:
+        │ yes                                                   • right scope/project?
+        ▼                                                       • filter too narrow (only "failed")?
+DONE — close on this observed email,                           • channel address correct & not junk-filtered?
+not on the HTTP 201.                                            • subscriber = intended recipient?</pre>
+<p>The discipline: an Azure DevOps "operation succeeded" is necessary but not sufficient — you have proven the subscription was <em>stored</em>, not that the <em>delivery path</em> works. Only the received email proves the end-to-end path.</p>
+
+<h2>Anti-patterns (and the mechanism that makes each fail)</h2>
+<table>
+  <thead><tr><th>Shortcut</th><th>Why it fails</th></tr></thead>
+  <tbody>
+    <tr><td><strong>"Grant me edit rights on Project Settings → Notifications"</strong> for a personal need</td><td>That grant is effectively <strong>Project Administrators</strong> membership — broad write access to the whole project's notifications — to solve a problem the <strong>personal</strong> page solves with zero rights. Over-privilege, and slower (waits on an admin).</td></tr>
+    <tr><td>Using a <code>…-legacy-event</code> build event type</td><td>Those event types have <code>customSubscriptionsAllowed: false</code>; a new custom subscription on them is rejected or silently ineffective. Use <code>ms.vss-build.build-completed-event</code>.</td></tr>
+    <tr><td>Guessing the REST <code>criteria.clauses</code> for "pipeline = 8951"</td><td>The field name/value is undocumented; a wrong clause yields a subscription that matches <strong>nothing</strong> (no emails) or <strong>everything</strong> (noise) while still returning <code>201</code>. Capture the clause from a portal-created sub instead.</td></tr>
+    <tr><td><code>useCustomAddress</code> omitted but expecting a distribution-list to receive</td><td>Default is <code>false</code> → delivery goes to the <strong>subscriber's preferred</strong> address, not your <code>address</code>. For a DL you must set <code>"useCustomAddress": true</code>.</td></tr>
+    <tr><td>Creating the personal sub while signed in as a service principal / mailbox-less account</td><td>A personal sub delivers to the <strong>caller's preferred ADO email</strong>; an identity with no mailbox returns <code>201</code> and delivers <strong>nothing, ever</strong>. Use a real user identity, or set <code>channel.address</code> + <code>useCustomAddress: true</code>.</td></tr>
+    <tr><td>Closing on the HTTP <code>201</code></td><td>The rule can exist with a filter that never matches; only a received email proves the path.</td></tr>
+  </tbody>
+</table>
+
+<h2>Evidence ledger</h2>
+<table>
+  <thead><tr><th>#</th><th>Claim</th><th>Status</th><th>Source</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Personal subscriptions live in <em>User settings → Notifications</em>; role required = "User" / project member</td><td>FACT</td><td>learn.microsoft.com/azure/devops/organizations/notifications/manage-your-personal-notifications · /about-notifications#notification-types</td></tr>
+    <tr><td>2</td><td>"A build completes" template is available for self/team/group; "Definition name" is a filterable field</td><td>FACT</td><td>/notifications/oob-built-in-notifications#supported-subscriptions · /oob-supported-event-types</td></tr>
+    <tr><td>3</td><td>Project-level subscriptions require Project Administrators (no narrow toggle; maps to "Edit project-level information")</td><td>FACT</td><td>/notifications/about-notifications#notification-types · #subscriptions</td></tr>
+    <tr><td>4</td><td>Team-level subscriptions are manageable by a Team Administrator without full Project Admin</td><td>FACT</td><td>/notifications/about-notifications#notification-types · /manage-team-group-global-organization-notifications</td></tr>
+    <tr><td>5</td><td>REST create endpoint + body schema (filter/channel/scope/subscriber) at api-version 7.1</td><td>FACT</td><td>learn.microsoft.com/rest/api/azure/devops/notification/subscriptions/create?view=azure-devops-rest-7.1</td></tr>
+    <tr><td>6</td><td>Event type id <code>ms.vss-build.build-completed-event</code>; legacy variants disallow custom subs</td><td>FACT</td><td>rest/api/azure/devops/notification/event-types/list?view=azure-devops-rest-7.1</td></tr>
+    <tr><td>7</td><td><code>az rest</code> audience GUID <code>499b84ac-1321-427f-aa17-267ca6975798</code> for dev.azure.com</td><td>FACT</td><td>learn.microsoft.com/azure/devops/cli/entra-tokens · /extend/publish/command-line</td></tr>
+    <tr><td>8</td><td>Email channel <code>EmailHtml</code> with <code>address</code> + <code>useCustomAddress</code></td><td>FACT</td><td>rest …/subscriptions/create · javascript/api/azure-devops-extension-api/emailhtmlsubscriptionchannel</td></tr>
+    <tr><td>9</td><td>Exact REST <code>criteria.clauses</code> to filter by pipeline id 8951</td><td>UNVERIFIED — undocumented; capture by reading back a portal-created subscription</td><td>(gap; resolving probe = <code>GET …/subscriptions/{id}</code>)</td></tr>
+    <tr><td>10</td><td>Literal <code>az devops invoke --area notification --resource subscriptions</code> names</td><td>UNVERIFIED — not in docs; <code>az rest</code> path is the confirmed substitute</td><td>(gap; resolving probe = <code>az devops invoke … GET eventtypes</code>)</td></tr>
+  </tbody>
+</table>
+
+<h2>Challenge defense</h2>
+<ul>
+  <li><strong>"Why not just grant me the edit rights I asked for?"</strong> Because for a personal need the edit-rights grant is broad Project Administrators membership solving what the personal page solves with none — and it's slower. The grant is only warranted when the recipient is a shared address the whole team/project owns.</li>
+  <li><strong>"How do you know personal needs no permission?"</strong> Microsoft's permission reference lists "Set personal notifications" for Readers, Contributors, and Team admins alike — i.e. every project member.</li>
+  <li><strong>"What would disprove the recommendation?"</strong> If the filer's true requirement is <em>project-wide</em> delivery to people who can't self-serve, then Path A is insufficient and a shared (Path B) sub — with its admin cost — is correct. The audience is the falsifier.</li>
+  <li><strong>"Where does this leak?"</strong> The pipeline-id filter clause in REST is undocumented; the doc routes around it via the portal + read-back rather than guessing.</li>
+</ul>
+
+<h2>Self-test (rebuild the reasoning, don't recall trivia)</h2>
+<ol>
+  <li>Draw the four parts of a subscription and say which one decided you "lacked edit rights." <em>(Answer: subscriber → it picks whose settings store the rule.)</em></li>
+  <li>A teammate asks for the <em>same</em> emails. Does your personal subscription cover them? Why not, and what's the cheapest fix? <em>(Answer: no — personal = your inbox only; cheapest shared fix = a <strong>team</strong> sub via a Team Administrator, not Project Admin.)</em></li>
+  <li>Your <code>az rest</code> returns <code>201</code> but no email arrives after a build. Name two causes before you blame ADO. <em>(Answer: filter matches nothing / wrong scope; or <code>useCustomAddress</code> default sent it to the preferred address; or junk-filtered.)</em></li>
+  <li><strong>Transfer:</strong> you now want an email when a <strong>release/deployment</strong> completes instead of a build. What changes in the model, and how do you find the right event id? <em>(Answer: only the <strong>event type</strong> changes; list it with <code>GET _apis/notification/eventtypes</code> and filter by the release publisher — the rest of the rule shape is identical.)</em></li>
+</ol>
+<p>Success condition: you can reconstruct the event → subscription(filter, scope, channel, subscriber) → email chain unaided, and explain the permission cost of each scope.</p>
+
+<h2>Durable principles</h2>
+<ol>
+  <li><strong>Pick the audience first; the permission is a consequence.</strong> Personal = free, team = Team Admin, project = Project Admin.</li>
+  <li><strong>The subscriber field is the access-control pivot.</strong> Whose settings hold the rule decides who edits it.</li>
+  <li><strong>Don't request the rightmost door for a leftmost need.</strong> Over-privilege is slower <em>and</em> riskier.</li>
+  <li><strong>Close on the email, not the <code>201</code>.</strong> A stored rule with a dead filter is invisible failure.</li>
+  <li><strong>Never guess an undocumented filter clause — capture it from a working example.</strong></li>
+</ol>
+
+<hr>
+<p class="meta">Generated 2026-06-22 · task 2026-06-22-011 · Eneco Trade Platform on-call. Facts verified against Microsoft Learn (Azure DevOps notifications + REST 7.1). Diagrams render via Mermaid.</p>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+</script>
+</main>
+</body>
+</html>

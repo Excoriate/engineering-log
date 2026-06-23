@@ -1,0 +1,14 @@
+# Edge HTTP probes — 2026-06-22T13:32:02Z UTC — from non-AVD laptop (public internet)
+
+/telemetryfunctiontestsfn/healthz             -> HTTP 404
+/telemetryfunctiontestsfn/                    -> HTTP 404
+/api/siteregistry                             -> HTTP 200
+/deliveryreportfn/healthz                     -> HTTP 404
+
+## Headers on failing URL:
+HTTP/1.1 404 Not Found
+Content-Length: 0
+
+## Bare-prefix redirect (plaintext downgrade check):
+HTTP/1.1 301 Moved Permanently
+Location: http://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/

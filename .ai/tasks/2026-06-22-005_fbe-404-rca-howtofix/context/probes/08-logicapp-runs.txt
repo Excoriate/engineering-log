@@ -1,0 +1,4 @@
+ERROR: 'run' is misspelled or not recognized by the system.
+
+https://aka.ms/cli_ref
+Read more about the command in reference docs

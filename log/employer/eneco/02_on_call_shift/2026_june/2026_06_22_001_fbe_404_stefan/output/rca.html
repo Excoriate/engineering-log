@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>FBE 404 — operations slot · Holistic RCA</title>
+  <style>
+
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">:root{--fg:#1b1f24;--muted:#5b6570;--bg:#ffffff;--accent:#0b6bcb;--line:#e2e6ea;--code-bg:#f5f7f9;--warn:#b54708}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{color:var(--fg);background:var(--bg);font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:920px;margin:0 auto;padding:2.4rem 1.5rem 6rem}
+h1,h2,h3,h4{line-height:1.25;font-weight:650;margin:2.1em 0 .6em}
+h1{font-size:1.95rem;margin-top:0;border-bottom:2px solid var(--line);padding-bottom:.35em}
+h2{font-size:1.4rem;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:1.13rem}
+h4{font-size:1rem;color:var(--muted)}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+p,li{margin:.5em 0}
+code{background:var(--code-bg);padding:.12em .38em;border-radius:4px;font:.86em/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;padding:1rem 1.1rem;overflow:auto;font:.84rem/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:1.1em 0;font-size:.92rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg);font-weight:650}
+tr:nth-child(even) td{background:#fafbfc}
+blockquote{margin:1em 0;padding:.4em 1.1em;border-left:4px solid var(--accent);background:#f3f8fe;color:#27313b;border-radius:0 6px 6px 0}
+figure.diagram{margin:1.4em 0;padding:1.1em;border:1px solid var(--line);border-radius:8px;background:#fcfdfe;text-align:center;overflow-x:auto}
+figure.diagram svg{max-width:100%;height:auto}
+hr{border:0;border-top:1px solid var(--line);margin:2.2em 0}
+.subtitle{color:var(--muted);font-size:.9rem;margin-top:-.3em}
+@media print{body{max-width:none}pre,table,figure{page-break-inside:avoid}a{color:var(--fg)}}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">FBE 404 — operations slot · Holistic RCA</h1>
+</header>
+<blockquote>
+<p><strong>Status rule</strong>: <code>status: complete</code> requires
+<code>output_package: standard</code>,
+<code>adversarial_review: external</code>, and a Mutation log entry
+citing the external review artifact. This RCA is delivered
+<code>status: review</code> / <code>adversarial_review: pending</code> —
+the coordinator runs the mandatory adversarial gate after this
+draft.</p>
+</blockquote>
+<h1 id="rca--fbe-operations-slot-404-argocd-finalizer-wedged-app-of-apps">RCA
+— FBE operations slot 404 (ArgoCD finalizer-wedged app-of-apps)</h1>
+<blockquote>
+<p><strong>Reader</strong>: the next-shift on-call engineer who has
+never seen the Feature Branch Environment (FBE) platform and does not
+know ArgoCD internals.</p>
+<p><strong>Mastery transferred</strong>: after this RCA you can (1)
+<strong>replicate</strong> the diagnosis — prove an FBE slot is wedged
+mid-deletion rather than mis-built; (2) <strong>explain</strong> why a
+green pipeline and a 404 coexist; (3) <strong>defend</strong> the fix
+against the tempting-but-wrong reflexes (re-run the create pipeline, run
+the destroy pipeline).</p>
+<p><strong>Adversarial gate</strong>: two external typed adversarial
+reviews ran and their findings were absorbed — epistemic (<a href="../../../../../../../.ai/tasks/2026-06-22-005_fbe-404-rca-howtofix/reviews/rca-epistemic-socrates.md"><code>reviews/rca-epistemic-socrates.md</code></a>)
+and technical (<a href="../../../../../../../.ai/tasks/2026-06-22-005_fbe-404-rca-howtofix/reviews/rca-technical-demoledor.md"><code>reviews/rca-technical-demoledor.md</code></a>).
+Status held at <code>review</code> pending the coordinator&#39;s final clean
+validator run before promotion to <code>complete</code>.</p>
+<p><strong>Output package</strong>: this RCA (<code>rca.md</code>) plus
+the sibling repair spec <a href="./how-to-fix.md"><code>how-to-fix.md</code></a>. Raw probe
+evidence and pre-fix snapshots live in the task workspace at
+<code>.ai/tasks/2026-06-22-005_fbe-404-rca-howtofix/context/probes/</code>.</p>
+</blockquote>
+<blockquote>
+<p><strong>How evidence is marked.</strong> This document is written in
+plain words. Every claim says, in prose, whether it was directly
+observed, inferred, or still unverified (&quot;the live cluster showed…&quot;,
+&quot;this is inferred because…&quot;, &quot;unverified because az was not logged
+in…&quot;). The audit codes appear <strong>only</strong> in the Evidence
+Ledger and the evidence columns of tables, never in the narrative.</p>
+</blockquote>
+<h2 id="executive-summary">Executive summary</h2>
+<p>A &quot;Feature Branch Environment&quot; — FBE for short — is a disposable copy
+of the VPP platform that engineers spin up on a fixed Sandbox slot so
+they can test a branch against a real cluster and a real public URL. One
+such slot, named <code>operations</code>, served nothing: its public
+address <code>https://operations.dev.vpp.eneco.com/</code> returned a
+flat <strong>404 Not Found</strong> even though the create pipeline had
+reported a green build. The slot looked deployed on paper and was empty
+in reality.</p>
+<p>The cause was not a bad build. Inside the cluster, the ArgoCD object
+that is supposed to deploy the whole slot — the
+<code>operations-app-of-apps</code> Application — had been asked to
+delete itself back on 1 June and then got stuck halfway. A deletion
+guard (a Kubernetes finalizer) never finished, so for twenty-one days
+the object sat frozen, carrying a deletion mark. While an object is
+being torn down, ArgoCD will not reconcile it to the desired live state,
+so it never (re)created the slot&#39;s web frontend or its gateways. The
+only live child app left in the namespace was <code>assetmonitor</code>
+— itself wedged the same way — alongside terminal Job residue (completed
+<code>seed-assets-*</code> and cleanup pods) from earlier tenancies; the
+web <code>frontend</code> and gateways were simply absent. The URL 404&#39;d
+because there was no backend behind it: the edge proxy had no frontend
+Service or Pod to route to. We confirmed this with a <code>curl</code>
+that came back 404 from nginx with <strong>no</strong>
+<code>x-correlation-id</code> header — the signature of &quot;no backend
+deployed&quot;, not &quot;backend deployed at the wrong path&quot;.</p>
+<p>The reason every recreate failed is the heart of the story. The slot
+was terminated and recreated several times across 17–19 June, the last
+by Stefan Klopf on 19 June. Each recreate was a no-op, because the
+wedged Application still occupied the
+<code>operations-app-of-apps</code> name; Kubernetes cannot create a
+fresh object over a name held by one that is mid-deletion. &quot;Build
+succeeded&quot; only ever proved the pipeline reached ArgoCD, never that the
+cluster materialised the slot.</p>
+<p>The fix is small and exactly matched to the mechanism: remove the
+stuck finalizer from both wedged Applications so the
+twenty-one-day-pending deletion completes. The slot&#39;s managed workloads
+were already gone, so clearing the guard is safe. The moment the wedged
+object disappeared, the healthy ApplicationSet that owns the slot —
+<code>vpp-feature-branch-environments</code> — regenerated a fresh
+<code>operations-app-of-apps</code>, which then synced the full child
+set. The public URL went from 404 to 200 within about a minute and the
+slot converged to 21 of 21 child apps Synced. No pipeline re-run was
+needed.</p>
+<p>What a future engineer should remember: a 404 with a green build on
+an FBE slot is usually a control-plane wedge, not a build failure — and
+the single highest-value signal is a deletion mark on the app-of-apps.
+Do <strong>not</strong> reach for the destroy pipeline to &quot;reset&quot; such a
+slot; it is not a rollback and it wipes 260+ resources. One thing
+remains unverified: <em>what</em> triggered the original 1 June
+deletion. The timing (12:50 local) does not match the 14:30
+auto-eviction schedule, so a manual destroy is the leading suspicion,
+but az was not logged in during the incident so the Logic-App run
+history could not be read.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#executive-summary">Executive summary</a></li>
+<li><a href="#context-ledger">Context ledger</a></li>
+<li><a href="#knowledge-domain-map">Knowledge domain map</a></li>
+<li><a href="#how-to-read-this-rca">How to read this RCA</a></li>
+<li><a href="#mental-model-map">Mental model map</a></li>
+<li><a href="#rca-knowledge-contract">RCA Knowledge Contract</a></li>
+<li><a href="#backward-derivation-from-the-contract">Backward derivation
+from the contract</a></li>
+<li><a href="#l1--business--functional">L1 — Business /
+Functional</a></li>
+<li><a href="#l2--repo-system">L2 — Repo system</a></li>
+<li><a href="#l3--runtime-architecture">L3 — Runtime
+architecture</a></li>
+<li><a href="#l4--application--control-flow">L4 — Application / control
+flow</a></li>
+<li><a href="#l5--iac--declarative-contract">L5 — IaC / declarative
+contract</a></li>
+<li><a href="#l6--pipeline--delivery">L6 — Pipeline / delivery</a></li>
+<li><a href="#l7--timeline-utc">L7 — Timeline (UTC)</a></li>
+<li><a href="#l8--fix">L8 — Fix</a></li>
+<li><a href="#l9--verification">L9 — Verification</a></li>
+<li><a href="#l10--lessons">L10 — Lessons</a></li>
+<li><a href="#l11--end-to-end-command-playbook">L11 — End-to-end command
+playbook</a></li>
+<li><a href="#l12--one-page-on-call-playbook">L12 — One-page on-call
+playbook</a></li>
+<li><a href="#evidence-ledger">Evidence Ledger</a></li>
+<li><a href="#residual--unverified-items">Residual / unverified
+items</a></li>
+</ul>
+<h2 id="context-ledger">Context ledger</h2>
+<p>A zero-context reader should understand the rest of this RCA after
+this table, without knowing ArgoCD, FBE, or the VPP platform. Evidence
+codes appear here and in table columns only; the prose uses words.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Plain-language meaning</th>
+<th>Source</th>
+<th>Confidence</th>
+<th>Why it matters here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FBE (Feature Branch Environment)</td>
+<td>A disposable, fixed Sandbox slot with its own namespace and public
+URL where an engineer tests one branch against a real cluster</td>
+<td>sre-intake §3</td>
+<td>A1</td>
+<td>The thing that broke is one FBE slot</td>
+</tr>
+<tr>
+<td>slot</td>
+<td>A named FBE tenancy (here <code>operations</code>) — a namespace
+plus a public hostname that gets reused across many feature branches
+over time</td>
+<td>sre-intake §2</td>
+<td>A1</td>
+<td>Slot reuse is why an old wedged object collided with a new
+recreate</td>
+</tr>
+<tr>
+<td>app-of-apps</td>
+<td>One ArgoCD Application whose only job is to create and manage all
+the <em>other</em> Applications (children) that make up a slot</td>
+<td>probe <code>03-app-of-apps.json</code></td>
+<td>A1</td>
+<td>The wedged object; when it cannot reconcile, the whole slot is
+starved</td>
+</tr>
+<tr>
+<td>ApplicationSet</td>
+<td>A higher-level ArgoCD controller that generates one app-of-apps per
+FBE slot from a template; here
+<code>vpp-feature-branch-environments</code></td>
+<td>probe <code>04-applicationset.json</code>, <code>03</code>
+ownerRef</td>
+<td>A1</td>
+<td>It owns the app-of-apps and regenerated it once the wedge cleared
+(the self-heal)</td>
+</tr>
+<tr>
+<td>child Application</td>
+<td>One of the ~21 ArgoCD Applications the app-of-apps manages:
+<code>frontend</code>, <code>gateway-nl</code>,
+<code>clientgateway</code>, <code>assetmonitor</code>, etc.</td>
+<td>probe <code>03</code> <code>.status.resources</code></td>
+<td>A1</td>
+<td><code>frontend</code> serves <code>/</code>; its absence is the
+literal 404</td>
+</tr>
+<tr>
+<td>frontend / gateway</td>
+<td>The child apps that deploy the web SPA (<code>frontend</code>,
+serves <code>/</code>) and the API gateways (<code>gateway-nl</code>,
+<code>clientgateway</code>)</td>
+<td>probe <code>03</code>, <code>02-all-applications.txt</code></td>
+<td>A1</td>
+<td>Never (re)deployed → nothing behind the URL</td>
+</tr>
+<tr>
+<td>finalizer</td>
+<td>A named guard Kubernetes attaches to an object so it is not fully
+deleted until some cleanup completes; deletion blocks until the guard is
+removed</td>
+<td>probe <code>03</code>, <code>prefix-snapshot/</code></td>
+<td>A1</td>
+<td>The wedged guard is the root mechanism</td>
+</tr>
+<tr>
+<td><code>resources-finalizer.argocd.argoproj.io</code></td>
+<td>ArgoCD&#39;s specific finalizer: &quot;delete the managed child resources
+before letting this Application disappear&quot;</td>
+<td>probe <code>03</code> <code>.metadata.finalizers</code></td>
+<td>A1</td>
+<td>This exact guard never completed for 21 days</td>
+</tr>
+<tr>
+<td>deletionTimestamp</td>
+<td>The mark Kubernetes stamps on an object the instant a delete is
+requested; while present, the object is &quot;being torn down&quot; and is not
+reconciled to desired state</td>
+<td>probe <code>03</code> <code>.metadata.deletionTimestamp</code></td>
+<td>A1</td>
+<td>Present since 2026-06-01 → 21-day wedge</td>
+</tr>
+<tr>
+<td>Sandbox</td>
+<td>The non-MC Azure subscription (<code>7b1ba02e-…</code>) and AKS
+cluster <code>vpp-aks01-d</code> that hosts all FBE slots; reachable
+directly by <code>kubectl</code>, no AVD</td>
+<td>sre-intake §2</td>
+<td>A1</td>
+<td>Where every probe and the fix ran</td>
+</tr>
+<tr>
+<td>pipeline 2412</td>
+<td>The ADO <strong>create</strong> pipeline that builds + requests
+deployment of an FBE slot (<code>build 1685434</code> was its 19 June
+run)</td>
+<td>sre-intake §2</td>
+<td>A1</td>
+<td>Its &quot;green&quot; runs were no-ops against the wedged slot</td>
+</tr>
+<tr>
+<td>pipeline 2629</td>
+<td>The ADO <strong>destroy</strong> pipeline that tears a slot down
+(260+ resources)</td>
+<td>vault-fbe-knowledge §safety</td>
+<td>A1</td>
+<td>The forbidden reflex — it is NOT a rollback</td>
+</tr>
+<tr>
+<td>auto-evict Logic App (<code>vpp-fbe-autodelete-trigger</code>)</td>
+<td>A Sandbox Logic App that, Mon–Fri 14:30 W.Europe, POSTs the destroy
+pipeline for slots idle &gt;4 days</td>
+<td>vault-fbe-knowledge §auto-evict</td>
+<td>A1</td>
+<td>The leading-but-unconfirmed suspect for what triggered the 1 June
+deletion</td>
+</tr>
+<tr>
+<td>x-correlation-id</td>
+<td>A response header that a real VPP backend pod stamps; a 404
+<em>without</em> it came from the edge proxy with no backend</td>
+<td>probe <code>06-curl.txt</code>, routing note</td>
+<td>A1</td>
+<td>Its absence proves &quot;nothing deployed&quot;, ruling out a
+path-misalignment 404</td>
+</tr>
+</tbody>
+</table>
+<h2 id="knowledge-domain-map">Knowledge domain map</h2>
+<p>This is the reader&#39;s zero-context syllabus, not a glossary.</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>What the reader must learn</th>
+<th>Why it is needed here</th>
+<th>Main proof surface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business / functional</td>
+<td>What an FBE slot is for and who is blocked when one is dead</td>
+<td>Establishes that the impact is one developer on a Sandbox slot, not
+production</td>
+<td>sre-intake §3</td>
+</tr>
+<tr>
+<td>Repo / artifact system</td>
+<td>The three delivery paths (app code, GitOps config, infra) and which
+one failed</td>
+<td>The failure is in the GitOps control path, not the app build</td>
+<td>sre-intake §2; probe <code>03</code></td>
+</tr>
+<tr>
+<td>Runtime topology</td>
+<td>ApplicationSet → app-of-apps → child apps on AKS, and the edge URL
+path</td>
+<td>Where the 404 surfaces and where the wedge sits</td>
+<td>probes <code>03</code>, <code>04</code>, <code>05</code>,
+<code>06</code></td>
+</tr>
+<tr>
+<td>Control-flow mechanism</td>
+<td>What a finalizer + deletionTimestamp do to reconciliation</td>
+<td>The exact mechanism that starved the slot</td>
+<td>probe <code>03</code>, <code>prefix-snapshot/</code></td>
+</tr>
+<tr>
+<td>Declarative / GitOps</td>
+<td>An app-of-apps is desired-state config the ApplicationSet
+regenerates</td>
+<td>Why removing the wedge self-heals with no pipeline</td>
+<td>probe <code>03</code> ownerRef; <code>04</code></td>
+</tr>
+<tr>
+<td>Pipeline / delivery</td>
+<td>Why a green create build did not deploy the slot</td>
+<td>Separates &quot;build ran&quot; from &quot;cluster materialised&quot;</td>
+<td>sre-intake §2; Slack bot card</td>
+</tr>
+<tr>
+<td>Timeline</td>
+<td>The 27 May create → 1 June wedge → failed recreates → 22 June fix
+arc</td>
+<td>Shows the 21-day latency and the collision mechanism</td>
+<td>Slack permalinks; probe timestamps</td>
+</tr>
+<tr>
+<td>Fix mechanism</td>
+<td>Removing the finalizer completes deletion → ApplicationSet
+regenerates</td>
+<td>Why this specific repair closes the mechanism</td>
+<td><code>fix-apply.log</code>; verification probes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to-read-this-rca">How to read this RCA</h2>
+<p>The document climbs from &quot;what is this system?&quot; to &quot;how do I prove
+the fix?&quot;. Read the anchor sentence and prose of each level first; the
+tables and diagrams are supporting maps. The spine is: business → repos
+→ topology → mechanism → declarative contract → pipeline → timeline →
+fix → verification → lessons → playbook.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Mental-model question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1. Business</td>
+<td>Why does an FBE slot exist and who is blocked when it 404s?</td>
+</tr>
+<tr>
+<td>L2. Repo system</td>
+<td>Which delivery path (app / GitOps / infra) actually failed?</td>
+</tr>
+<tr>
+<td>L3. Runtime</td>
+<td>What is deployed, and where does the 404 surface?</td>
+</tr>
+<tr>
+<td>L4. Control flow</td>
+<td>What does a deletionTimestamp do to ArgoCD reconciliation?</td>
+</tr>
+<tr>
+<td>L5. IaC</td>
+<td>What declares the slot, and who regenerates it?</td>
+</tr>
+<tr>
+<td>L6. Pipeline</td>
+<td>Why did a green create build deploy nothing?</td>
+</tr>
+<tr>
+<td>L7. Timeline</td>
+<td>What happened, and where did the 21-day gap open?</td>
+</tr>
+<tr>
+<td>L8. Fix</td>
+<td>What changes, and what does it deliberately not change?</td>
+</tr>
+<tr>
+<td>L9. Verification</td>
+<td>How do we know 404 became 200?</td>
+</tr>
+<tr>
+<td>L10. Lessons</td>
+<td>What durable pattern do we keep?</td>
+</tr>
+<tr>
+<td>L11. Playbook</td>
+<td>Every probe to recreate this diagnosis from cold</td>
+</tr>
+<tr>
+<td>L12. One-pager</td>
+<td>The 5-minute triage card for the next shift</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mental-model-map">Mental model map</h2>
+<p>This turns each layer into a reusable pattern the reader can carry to
+the next incident, independent of this slot&#39;s names.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Reader takeaway</th>
+<th>General pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1</td>
+<td>An FBE slot is a disposable full-platform sandbox; a dead one blocks
+a developer, not a customer</td>
+<td>Ephemeral environments fail in ways production does not, because
+they are reused</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>The break was in the GitOps control path, not in any repo&#39;s
+content</td>
+<td>&quot;Build green&quot; tests the artifact, not the controller that
+materialises it</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>A 404 is a downstream shadow of a control-plane object that cannot
+reconcile</td>
+<td>Read the surface that <em>carries the state</em>, not the symptom
+layer</td>
+</tr>
+<tr>
+<td>L4</td>
+<td>A deletionTimestamp freezes reconciliation; a held name blocks
+recreation</td>
+<td>An object mid-deletion is neither alive nor gone — it occupies its
+identity</td>
+</tr>
+<tr>
+<td>L5</td>
+<td>A declarative owner regenerates its children once their names are
+free</td>
+<td>Forward-recovery beats manual rebuild when a controller owns the
+desired state</td>
+</tr>
+<tr>
+<td>L8</td>
+<td>The fix removes a <em>stuck guard on a dying object</em>, not the
+guard concept</td>
+<td>Distinguish &quot;this instance is wedged&quot; from &quot;this mechanism is
+wrong&quot;</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rca-knowledge-contract">RCA Knowledge Contract</h2>
+<p>After reading this package a zero-context reader will be able to:</p>
+<ol type="1">
+<li><strong>Draw</strong> the FBE control path (ApplicationSet →
+app-of-apps → child apps → edge URL) without team-specific
+acronyms.</li>
+<li><strong>Trace</strong> the mechanism from &quot;delete requested 1 June&quot;
+to &quot;URL 404s&quot; to &quot;every recreate is a no-op&quot;.</li>
+<li><strong>Recreate</strong> this diagnosis from cold using the L11
+command playbook.</li>
+<li><strong>Reject</strong> the false explanations — PAT expiry, per-app
+credential gap, and path/ingress misalignment — using the evidence
+ledger.</li>
+<li><strong>Repair or stop safely</strong> using <a href="./how-to-fix.md"><code>how-to-fix.md</code></a>, including the
+destroy-pipeline and auto-evict safety gates.</li>
+</ol>
+<p>Rejection condition: this package does not certify the trigger of the
+1 June deletion, which remains unverified; its resolving probe is named
+in the residual section.</p>
+<h2 id="backward-derivation-from-the-contract">Backward derivation from
+the contract</h2>
+<p>Each contract item is satisfied by a knowledge domain, a visual/proof
+surface, a probe, and a section. If a row could not be filled, the
+contract would not be met.</p>
+<table>
+<thead>
+<tr>
+<th>Contract item</th>
+<th>Knowledge domain</th>
+<th>Primitive or invariant</th>
+<th>Visual / table (cognitive job)</th>
+<th>Probe / evidence surface</th>
+<th>Challenge the reader can answer</th>
+<th>Section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Draw the FBE control path</td>
+<td>Runtime topology + declarative GitOps</td>
+<td>A slot is materialised only via ApplicationSet → app-of-apps →
+children</td>
+<td>L3 topology diagram (where the backend went missing)</td>
+<td>probes <code>03</code>, <code>04</code>, <code>05</code>,
+<code>06</code></td>
+<td>Which boundary is easy to confuse: namespace vs Application CR?</td>
+<td>L1–L3, L5</td>
+</tr>
+<tr>
+<td>Trace the mechanism (delete → 404 → no-op recreate)</td>
+<td>Control-flow + pipeline delivery</td>
+<td>An object with a deletionTimestamp is not reconciled; its name is
+occupied</td>
+<td>L4 step-flow + L6 pipeline diagram (why green build ≠ deployed)</td>
+<td>probes <code>03</code>, <code>06</code>; Slack bot card</td>
+<td>Why is this cause, not correlation? (deletionTimestamp +
+name-collision)</td>
+<td>L4, L6, L7</td>
+</tr>
+<tr>
+<td>Recreate the diagnosis from cold</td>
+<td>Probe authority + evidence labels</td>
+<td>Each probe output promotes/weakens/falsifies exactly one claim</td>
+<td>L11 decision ladder (what output flips the route)</td>
+<td>probes <code>01</code>–<code>09</code></td>
+<td>What output would reject the finalizer-wedge hypothesis?</td>
+<td>L11</td>
+</tr>
+<tr>
+<td>Reject PAT-expiry / cred-gap / path-misalignment</td>
+<td>Declarative GitOps + routing</td>
+<td>A 404 without <code>x-correlation-id</code> means no backend, not a
+wrong path</td>
+<td>L9/Evidence Ledger discriminators</td>
+<td>probes <code>04</code>, <code>04b</code>, <code>06</code></td>
+<td>Which single header proves &quot;no backend&quot; vs &quot;wrong path&quot;?</td>
+<td>L9, L11, Evidence Ledger</td>
+</tr>
+<tr>
+<td>Repair or stop safely</td>
+<td>Fix + verification + rollback boundary</td>
+<td>Removing a stuck finalizer completes deletion; recovery is forward,
+not undo</td>
+<td>L8 coherence matrix + <code>how-to-fix.md</code></td>
+<td><code>fix-apply.log</code>,
+<code>post-fix-verification.txt</code></td>
+<td>What does this fix deliberately NOT change?</td>
+<td>L8, <a href="./how-to-fix.md"><code>how-to-fix.md</code></a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="l1--business--functional">L1 — Business / Functional</h2>
+<p><strong>Anchor</strong>: an FBE slot is a throwaway full-platform
+sandbox so one engineer can test one branch against a real cluster and a
+real URL; when a slot 404s, that engineer is blocked but no customer
+is.</p>
+<p>A Feature Branch Environment is the VPP platform&#39;s mechanism for
+pre-merge integration testing. Rather than mock the cluster, an engineer
+claims one of a fixed set of named Sandbox slots —
+<code>operations</code> is one — and the platform deploys their branch
+into a dedicated namespace fronted by a public hostname (<a href="https://operations.dev.vpp.eneco.com/"><code>operations.dev.vpp.eneco.com</code></a>).
+The engineer then exercises the real web frontend, gateways, and
+services end-to-end. The slot is disposable and reused: many different
+feature branches occupy <code>operations</code> over its lifetime, which
+is exactly why a stale object from a previous tenancy can collide with a
+new one.</p>
+<p>The user-visible role here is narrow. The filer, Stefan Klopf,
+recreated the <code>operations</code> slot on 19 June and found the URL
+serving 404 with services apparently undeployed; his request was simply
+&quot;restore the FBE to a live state&quot;. Impact is one developer blocked on a
+Sandbox slot — low severity — but the recreate churn (three people
+recreating across three days) and the latent 21-day-old wedge are the
+interesting parts. The deployment event is recorded as a fact in the
+<code>#myriad-env-fbe</code> bot card (<a href="https://grid-eneco.enterprise.slack.com/archives/C066CGC5VCY/p1781863670573499">terminate</a>
+→ <a href="https://grid-eneco.enterprise.slack.com/archives/C066CGC5VCY/p1781868522055889">recreate,
+build 1685434</a>); the verbatim Slack-Lists filing text could not be
+read through the available tools and is treated as unverified.</p>
+<hr />
+<h2 id="l2--repo-system">L2 — Repo system</h2>
+<p><strong>Anchor</strong>: three delivery paths feed an FBE slot — app
+code, GitOps config, and infrastructure — and this incident failed
+entirely inside the GitOps control path; no repo content was wrong.</p>
+<h3 id="the-story-in-plain-english">The story in plain English</h3>
+<p>An FBE slot is assembled from three flows. The <strong>app
+path</strong> builds container images from the branch under test. The
+<strong>GitOps path</strong> is the one that matters here: ArgoCD reads
+desired-state config (Helm values + an app-of-apps definition) and
+reconciles the cluster to it. The <strong>infra path</strong> provisions
+the slot&#39;s Azure resources. In this incident the build succeeded and the
+images were fine — the break was that the GitOps controller could not
+act, because the desired-state object for the slot was frozen
+mid-deletion. Nothing in any repo needed to change to fix it.</p>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>System role</th>
+<th>Technology / artifact</th>
+<th>Source surface</th>
+<th>Deployment handoff</th>
+<th>Incident relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP">Myriad -
+VPP</a></td>
+<td>App code + the <code>Helm/vpp-core-app-of-apps</code> chart that
+defines the slot&#39;s child apps</td>
+<td>.NET services + Helm charts</td>
+<td><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_build/results?buildId=1685434">build
+1685434</a> (pipeline 2412)</td>
+<td>Container images + chart consumed by ArgoCD</td>
+<td>Source healthy; the app-of-apps chart was never the problem</td>
+</tr>
+<tr>
+<td><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration">VPP-Configuration</a></td>
+<td>GitOps values consumed by the child Applications</td>
+<td>Helm values YAML</td>
+<td>branch <code>fbe-*</code> values files</td>
+<td>ArgoCD repo-server renders manifests</td>
+<td>Healthy; ApplicationSet read it without error</td>
+</tr>
+<tr>
+<td>MC-VPP / Sandbox infra</td>
+<td>The AKS cluster and the slot&#39;s Azure resources</td>
+<td>Terraform / AKS</td>
+<td>(out of incident scope)</td>
+<td>Hosts ns <code>argocd</code> + ns <code>operations</code></td>
+<td>Cluster healthy; only the two ArgoCD CRs were wedged</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-the-paths-interact-under-the-hood">How the paths interact
+under the hood</h3>
+<p>The three paths converge at ArgoCD, and that convergence is where
+this incident lived. The app path produces images and the
+<code>vpp-core-app-of-apps</code> chart; the GitOps path is what turns
+that chart into running objects — the ApplicationSet reads the chart,
+generates the <code>operations-app-of-apps</code> Application, and that
+Application generates ~21 child Applications, each of which pulls its
+own values from VPP-Configuration and renders Services, Pods, and
+ingresses into namespace <code>operations</code>. The infra path merely
+provides the cluster those objects land on. The drift point was precise:
+the <code>operations-app-of-apps</code> object carried a
+deletionTimestamp, so ArgoCD treated it as tearing down and stopped
+reconciling it — the chart was fine, the values were fine, the cluster
+was fine, but the one control-plane object that should have fanned the
+chart out into live workloads was frozen. No artifact moved through the
+GitOps edge, so the slot rendered nothing.</p>
+<h3 id="why-this-matters-for-the-fix">Why this matters for the fix</h3>
+<p>Because the failure is a control-plane wedge and not a content error,
+the fix touches <strong>no repo and no pipeline</strong> — it removes a
+stuck guard from a live object and lets the GitOps controller resume.
+The app-of-apps is the platform mechanism to understand: it is one
+Application that fans out into ~21 children, so when it cannot
+reconcile, the entire slot — frontend, gateways, services — is starved
+at once. Old/oddly-named reports mislead here: the create build was
+green and the slot&#39;s <em>namespace</em> was <code>Active</code>, both of
+which hide the wedge. Only the Application CR reveals it.</p>
+<hr />
+<h2 id="l3--runtime-architecture">L3 — Runtime architecture</h2>
+<p><strong>Anchor</strong>: the slot is materialised by a chain —
+ApplicationSet → app-of-apps → ~21 child apps → edge URL — and the chain
+broke at the app-of-apps, which carried a deletion mark and therefore
+never (re)created the frontend that serves <code>/</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Runtime question</th>
+<th>Answer</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Which environment failed?</td>
+<td>FBE Sandbox slot <code>operations</code> on AKS
+<code>vpp-aks01-d</code> (<code>rg-vpp-app-sb-401</code>)</td>
+<td>A1 — probes ran against this context</td>
+</tr>
+<tr>
+<td>Is the slot independent?</td>
+<td>Namespace <code>operations</code> is slot-specific; the
+ApplicationSet and ArgoCD are shared</td>
+<td>A1 — probe <code>01</code>, <code>04</code></td>
+</tr>
+<tr>
+<td>How does the slot bind to runtime?</td>
+<td>The shared ApplicationSet generates one
+<code>operations-app-of-apps</code>, which generates the child apps into
+ns <code>operations</code></td>
+<td>A1 — probe <code>03</code> ownerRef</td>
+</tr>
+<tr>
+<td>Which layers are involved?</td>
+<td>ArgoCD control plane (ns <code>argocd</code>), slot namespace
+(<code>operations</code>), nginx ingress edge, Azure Application
+Gateway</td>
+<td>A1 — probes <code>03</code>, <code>05</code>, <code>06</code></td>
+</tr>
+</tbody>
+</table>
+<p>The diagram below is the path the slot&#39;s traffic <em>should</em>
+take, with the break marked. The one question it answers: where, in the
+chain from URL to pod, did the backend go missing?</p>
+<figure class="diagram"><svg id="my-svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1564.94px; background-color: transparent;" viewBox="0 0 1564.9375 256" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#my-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#my-svg .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#my-svg .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#my-svg .error-icon{fill:#552222;}#my-svg .error-text{fill:#552222;stroke:#552222;}#my-svg .edge-thickness-normal{stroke-width:1px;}#my-svg .edge-thickness-thick{stroke-width:3.5px;}#my-svg .edge-pattern-solid{stroke-dasharray:0;}#my-svg .edge-thickness-invisible{stroke-width:0;fill:none;}#my-svg .edge-pattern-dashed{stroke-dasharray:3;}#my-svg .edge-pattern-dotted{stroke-dasharray:2;}#my-svg .marker{fill:#333333;stroke:#333333;}#my-svg .marker.cross{stroke:#333333;}#my-svg svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#my-svg p{margin:0;}#my-svg .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#my-svg .cluster-label text{fill:#333;}#my-svg .cluster-label span{color:#333;}#my-svg .cluster-label span p{background-color:transparent;}#my-svg .label text,#my-svg span{fill:#333;color:#333;}#my-svg .node rect,#my-svg .node circle,#my-svg .node ellipse,#my-svg .node polygon,#my-svg .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#my-svg .rough-node .label text,#my-svg .node .label text,#my-svg .image-shape .label,#my-svg .icon-shape .label{text-anchor:middle;}#my-svg .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#my-svg .rough-node .label,#my-svg .node .label,#my-svg .image-shape .label,#my-svg .icon-shape .label{text-align:center;}#my-svg .node.clickable{cursor:pointer;}#my-svg .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#my-svg .arrowheadPath{fill:#333333;}#my-svg .edgePath .path{stroke:#333333;stroke-width:1px;}#my-svg .flowchart-link{stroke:#333333;fill:none;}#my-svg .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#my-svg .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#my-svg .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#my-svg .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#my-svg .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#my-svg .cluster text{fill:#333;}#my-svg .cluster span{color:#333;}#my-svg div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#my-svg .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#my-svg rect.text{fill:none;stroke-width:0;}#my-svg .icon-shape,#my-svg .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#my-svg .icon-shape p,#my-svg .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#my-svg .icon-shape .label rect,#my-svg .image-shape .label rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#my-svg .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#my-svg .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#my-svg .node .neo-node{stroke:#9370DB;}#my-svg [data-look="neo"].node rect,#my-svg [data-look="neo"].cluster rect,#my-svg [data-look="neo"].node polygon{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node path{stroke:#9370DB;stroke-width:1px;}#my-svg [data-look="neo"].node .outer-path{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node .neo-line path{stroke:#9370DB;filter:none;}#my-svg [data-look="neo"].node circle{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node circle .state-start{fill:#000000;}#my-svg [data-look="neo"].icon-shape .icon{fill:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].icon-shape .icon-neo path{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;" /></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;" /></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M288.547,47L292.714,47C296.88,47,305.214,47,312.88,47C320.547,47,327.547,47,331.047,47L334.547,47" id="my-svg-L_URL_AGW_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_URL_AGW_0" data-points="W3sieCI6Mjg4LjU0Njg3NSwieSI6NDd9LHsieCI6MzEzLjU0Njg3NSwieSI6NDd9LHsieCI6MzM4LjU0Njg3NSwieSI6NDd9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M598.547,47L619.38,47C640.214,47,681.88,47,723.704,47C765.529,47,807.51,47,828.501,47L849.492,47" id="my-svg-L_AGW_NGINX_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_AGW_NGINX_0" data-points="W3sieCI6NTk4LjU0Njg3NSwieSI6NDd9LHsieCI6NzIzLjU0Njg3NSwieSI6NDd9LHsieCI6ODUzLjQ5MjE4NzUsInkiOjQ3fV0=" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M1103.602,47L1120.125,47C1136.648,47,1169.695,47,1201.254,48.475C1232.814,49.951,1262.885,52.902,1277.921,54.377L1292.957,55.853" id="my-svg-L_NGINX_FE_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_NGINX_FE_0" data-points="W3sieCI6MTEwMy42MDE1NjI1LCJ5Ijo0N30seyJ4IjoxMjAyLjc0MjE4NzUsInkiOjQ3fSx7IngiOjEyOTYuOTM3NSwieSI6NTYuMjQzMjY1ODQ2NjA0MTc0fV0=" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M1108.547,163.369L1124.246,159.307C1139.945,155.246,1171.344,147.123,1202.954,138.093C1234.565,129.064,1266.388,119.128,1282.299,114.16L1298.21,109.192" id="my-svg-L_AOA_FE_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_AOA_FE_0" data-points="W3sieCI6MTEwOC41NDY4NzUsInkiOjE2My4zNjg2MDk5NTkyMjkyfSx7IngiOjEyMDIuNzQyMTg3NSwieSI6MTM5fSx7IngiOjEzMDIuMDI4NjgzMDM1NzE0MywieSI6MTA4fV0=" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M1108.547,209.757L1124.246,211.297C1139.945,212.838,1171.344,215.919,1207.122,217.459C1242.901,219,1283.06,219,1303.139,219L1323.219,219" id="my-svg-L_AOA_GW_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_AOA_GW_0" data-points="W3sieCI6MTEwOC41NDY4NzUsInkiOjIwOS43NTY3MzQxNTMzOTU4M30seyJ4IjoxMjAyLjc0MjE4NzUsInkiOjIxOX0seyJ4IjoxMzI3LjIxODc1LCJ5IjoyMTl9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M598.547,197L619.38,197C640.214,197,681.88,197,722.88,197C763.88,197,804.214,197,824.38,197L844.547,197" id="my-svg-L_ASET_AOA_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_ASET_AOA_0" data-points="W3sieCI6NTk4LjU0Njg3NSwieSI6MTk3fSx7IngiOjcyMy41NDY4NzUsInkiOjE5N30seyJ4Ijo4NDguNTQ2ODc1LCJ5IjoxOTd9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_URL_AGW_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_AGW_NGINX_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(1202.7421875, 47)"><g class="label" data-id="L_NGINX_FE_0" transform="translate(-69.1953125, -12)"><foreignObject width="138.390625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>no frontend ingress</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(1202.7421875, 139)"><g class="label" data-id="L_AOA_FE_0" transform="translate(-59.84375, -12)"><foreignObject width="119.6875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>cannot reconcile</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(1202.7421875, 219)"><g class="label" data-id="L_AOA_GW_0" transform="translate(-59.84375, -12)"><foreignObject width="119.6875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>cannot reconcile</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(723.546875, 197)"><g class="label" data-id="L_ASET_AOA_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>cannot replace while name held</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-URL-0" data-look="classic" transform="translate(148.2734375, 47)"><rect class="basic label-container" style x="-140.2734375" y="-27" width="280.546875" height="54" /><g class="label" style transform="translate(-110.2734375, -12)"><rect /><foreignObject width="220.546875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>operations.dev.vpp.eneco.com</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-AGW-1" data-look="classic" transform="translate(468.546875, 47)"><rect class="basic label-container" style x="-130" y="-39" width="260" height="78" /><g class="label" style transform="translate(-100, -24)"><rect /><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>Azure App Gateway 20.76.210.221</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-NGINX-3" data-look="classic" transform="translate(978.546875, 47)"><rect class="basic label-container" style x="-125.0546875" y="-27" width="250.109375" height="54" /><g class="label" style transform="translate(-95.0546875, -12)"><rect /><foreignObject width="190.109375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>nginx ingress 50.85.91.121</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-FE-5" data-look="classic" transform="translate(1426.9375, 69)"><rect class="basic label-container" style x="-130" y="-39" width="260" height="78" /><g class="label" style transform="translate(-100, -24)"><rect /><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>frontend Service/Pod (MISSING)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-AOA-6" data-look="classic" transform="translate(978.546875, 197)"><rect class="basic label-container" style x="-130" y="-39" width="260" height="78" /><g class="label" style transform="translate(-100, -24)"><rect /><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>operations-app-of-apps (WEDGED, deleting)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-GW-9" data-look="classic" transform="translate(1426.9375, 219)"><rect class="basic label-container" style x="-99.71875" y="-27" width="199.4375" height="54" /><g class="label" style transform="translate(-69.71875, -12)"><rect /><foreignObject width="139.4375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>gateways (MISSING)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-ASET-10" data-look="classic" transform="translate(468.546875, 197)"><rect class="basic label-container" style x="-130" y="-51" width="260" height="102" /><g class="label" style transform="translate(-100, -36)"><rect /><foreignObject width="200" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>ApplicationSet vpp-feature-branch-environments (healthy)</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs></svg></figure>
+
+<p>Reading the picture, lead with the failure path. Traffic arrives at
+the public URL, passes the Azure Application Gateway and the nginx
+ingress, and then has nowhere to go: the only ingress in namespace
+<code>operations</code> is <code>assetmonitor</code>&#39;s, not
+<code>frontend</code>&#39;s, so a request for <code>/</code> matches no
+backend and nginx returns its own 404. One level up, the
+<code>operations-app-of-apps</code> is the component that is supposed to
+create the <code>frontend</code> Service, Pod, and ingress — but it
+carries a deletion mark, so ArgoCD treats it as being torn down and
+never reconciles it to desired state. The ApplicationSet above it is
+perfectly healthy; it simply could not replace the app-of-apps while a
+wedged copy still held the name. The mental model to keep: <strong>the
+404 is a downstream shadow of a control-plane object that is stuck
+deleting, not of a routing or build error.</strong></p>
+<p>The live cluster confirmed every element of this. The app-of-apps
+listed 21 child Applications, all OutOfSync, including
+<code>frontend</code>, <code>gateway-nl</code>,
+<code>clientgateway</code>, <code>marketinteraction</code>,
+<code>monitor</code>, and <code>telemetry</code>. Of those, the only
+live child <em>Application</em> in namespace <code>operations</code> was
+<code>assetmonitor</code>; no <code>frontend</code> or gateway
+Application — and no <code>frontend</code> Service, Pod, or ingress —
+existed. The running <code>assetmonitor</code> replicas were themselves
+stuck at <code>0/1</code> (<code>ContainerStatusUnknown</code> /
+<code>ContainerCreating</code>) because <code>assetmonitor</code> was
+mid-deletion too. The namespace also held ~10 <em>terminal</em> Job pods
+(completed <code>seed-assets-*-postsync</code> and
+<code>*-database-cleanup</code> from prior tenancies, plus
+<code>docker-pull-secret</code> jobs) — residue, not live workloads, and
+not part of the undeployed slot.</p>
+<table>
+<thead>
+<tr>
+<th>Runtime claim</th>
+<th>Observed value</th>
+<th>Decision if value changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>app-of-apps deletionTimestamp</td>
+<td><code>2026-06-01T10:50:12Z</code> (present)</td>
+<td>empty → reject finalizer-wedge, pivot to credential gap</td>
+</tr>
+<tr>
+<td>app-of-apps finalizers</td>
+<td><code>[resources-finalizer.argocd.argoproj.io]</code></td>
+<td>absent → deletion would have completed; different cause</td>
+</tr>
+<tr>
+<td>children that exist in ns <code>operations</code></td>
+<td>only <code>assetmonitor</code> (no
+<code>frontend</code>/gateways)</td>
+<td>frontend present → routing/path 404, not undeployed</td>
+</tr>
+<tr>
+<td>404 response headers</td>
+<td>nginx 404, no <code>x-correlation-id</code></td>
+<td>header present → backend exists, path misaligned</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="l4--application--control-flow">L4 — Application / control
+flow</h2>
+<p><strong>Anchor</strong>: a Kubernetes object carrying a
+deletionTimestamp is &quot;being torn down&quot;, and ArgoCD will not reconcile a
+tearing-down Application to its desired state — so the wedged
+app-of-apps could neither finish dying nor start living.</p>
+<p>The failing path, step by step:</p>
+<ol type="1">
+<li>The ApplicationSet generates <code>operations-app-of-apps</code> as
+desired state. <strong>(OK)</strong></li>
+<li>On 1 June a cascading delete was requested; Kubernetes stamped a
+<code>deletionTimestamp</code> on the app-of-apps and on its child
+<code>assetmonitor</code> within one second of each other. <strong>(OK —
+delete accepted)</strong></li>
+<li>The <code>resources-finalizer.argocd.argoproj.io</code> guard must
+delete the managed child resources, then clear itself, before the object
+can vanish. Most children deleted. <strong>(OK)</strong></li>
+<li><strong>The guard never cleared on the app-of-apps and on
+<code>assetmonitor</code>.</strong> ← <em>the wedge.</em> The two
+objects sat with deletionTimestamp + finalizer for 21 days.</li>
+<li>Because those objects are mid-deletion, ArgoCD does not reconcile
+them to desired state, so the app-of-apps never (re)creates
+<code>frontend</code>/gateways.</li>
+<li>Every later create-pipeline run tries to produce a fresh
+<code>operations-app-of-apps</code> but cannot: the name is held by the
+wedged CR. The run reports green (the request reached ArgoCD) and
+changes nothing. <strong>← the no-op recreate.</strong></li>
+</ol>
+<p>There is no application exception to quote — the failure is in the
+Kubernetes / ArgoCD control plane, not in service code. The observable
+signatures are the deletionTimestamp, the lingering finalizer, and the
+absent child objects, all of which the live cluster showed directly.</p>
+<hr />
+<h2 id="l5--iac--declarative-contract">L5 — IaC / declarative
+contract</h2>
+<p><strong>Anchor</strong>: the app-of-apps is declarative desired state
+owned and regenerated by the ApplicationSet, which is why the correct
+repair is to let the wedged copy delete and trust the controller to
+recreate it — no apply, no pipeline.</p>
+<p>The slot&#39;s existence is declared, not imperatively built. The live
+app-of-apps CR carried an <code>ownerReference</code> with
+<code>controller: true</code> pointing at the ApplicationSet
+<code>vpp-feature-branch-environments</code> (uid
+<code>1b27efe3-…</code>). That ownership is the whole basis of the
+self-heal: the ApplicationSet&#39;s generator was healthy
+(<code>ErrorOccurred=False</code>,
+<code>ParametersGenerated=True</code>,
+<code>ResourcesUpToDate=True</code> on the live cluster), and it still
+lists <code>operations</code> as a target. The regeneration claim — that
+once the wedged copy is gone the ApplicationSet recreates the
+app-of-apps from its template — is classified in the table below; the
+witnessing evidence is the ownership link and the post-fix capture.</p>
+<table>
+<thead>
+<tr>
+<th>Declarative claim</th>
+<th>Produced resource</th>
+<th>Relevance</th>
+<th>Confidence</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ApplicationSet owns the slot and regenerates a fresh app-of-apps
+once its name is free</td>
+<td>one <code>operations-app-of-apps</code> Application per slot</td>
+<td>The generator that regenerates the slot</td>
+<td>A1</td>
+<td>ownerReference <code>controller:true</code> (probe <code>03</code>);
+regeneration witnessed in <code>post-fix-verification.txt</code>; see
+Evidence Ledger #3, #14a</td>
+</tr>
+<tr>
+<td>app-of-apps fans out into the slot&#39;s children</td>
+<td>~21 child Applications (<code>frontend</code>, gateways, …)</td>
+<td>The fan-out that the wedge froze</td>
+<td>A1</td>
+<td>21 children in <code>.status.resources</code> (probe
+<code>03</code>); Evidence Ledger #4</td>
+</tr>
+</tbody>
+</table>
+<p>The diagram below renders that declarative loop as a picture; the one
+question it answers is <em>where</em> the loop jams when a wedged copy
+holds the slot&#39;s name.</p>
+<figure class="diagram"><svg id="my-svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1268.12px; background-color: transparent;" viewBox="0 0 1268.125 222" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#my-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#my-svg .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#my-svg .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#my-svg .error-icon{fill:#552222;}#my-svg .error-text{fill:#552222;stroke:#552222;}#my-svg .edge-thickness-normal{stroke-width:1px;}#my-svg .edge-thickness-thick{stroke-width:3.5px;}#my-svg .edge-pattern-solid{stroke-dasharray:0;}#my-svg .edge-thickness-invisible{stroke-width:0;fill:none;}#my-svg .edge-pattern-dashed{stroke-dasharray:3;}#my-svg .edge-pattern-dotted{stroke-dasharray:2;}#my-svg .marker{fill:#333333;stroke:#333333;}#my-svg .marker.cross{stroke:#333333;}#my-svg svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#my-svg p{margin:0;}#my-svg .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#my-svg .cluster-label text{fill:#333;}#my-svg .cluster-label span{color:#333;}#my-svg .cluster-label span p{background-color:transparent;}#my-svg .label text,#my-svg span{fill:#333;color:#333;}#my-svg .node rect,#my-svg .node circle,#my-svg .node ellipse,#my-svg .node polygon,#my-svg .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#my-svg .rough-node .label text,#my-svg .node .label text,#my-svg .image-shape .label,#my-svg .icon-shape .label{text-anchor:middle;}#my-svg .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#my-svg .rough-node .label,#my-svg .node .label,#my-svg .image-shape .label,#my-svg .icon-shape .label{text-align:center;}#my-svg .node.clickable{cursor:pointer;}#my-svg .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#my-svg .arrowheadPath{fill:#333333;}#my-svg .edgePath .path{stroke:#333333;stroke-width:1px;}#my-svg .flowchart-link{stroke:#333333;fill:none;}#my-svg .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#my-svg .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#my-svg .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#my-svg .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#my-svg .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#my-svg .cluster text{fill:#333;}#my-svg .cluster span{color:#333;}#my-svg div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#my-svg .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#my-svg rect.text{fill:none;stroke-width:0;}#my-svg .icon-shape,#my-svg .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#my-svg .icon-shape p,#my-svg .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#my-svg .icon-shape .label rect,#my-svg .image-shape .label rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#my-svg .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#my-svg .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#my-svg .node .neo-node{stroke:#9370DB;}#my-svg [data-look="neo"].node rect,#my-svg [data-look="neo"].cluster rect,#my-svg [data-look="neo"].node polygon{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node path{stroke:#9370DB;stroke-width:1px;}#my-svg [data-look="neo"].node .outer-path{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node .neo-line path{stroke:#9370DB;filter:none;}#my-svg [data-look="neo"].node circle{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node circle .state-start{fill:#000000;}#my-svg [data-look="neo"].icon-shape .icon{fill:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].icon-shape .icon-neo path{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;" /></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;" /></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M268,47L283.962,47C299.924,47,331.849,47,366.711,52.966C401.572,58.932,439.371,70.864,458.27,76.83L477.169,82.796" id="my-svg-L_TMPL_GEN_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_TMPL_GEN_0" data-points="W3sieCI6MjY4LCJ5Ijo0N30seyJ4IjozNjMuNzczNDM3NSwieSI6NDd9LHsieCI6NDgwLjk4Mzc2NDY0ODQzNzUsInkiOjg0fV0=" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M673.484,111L677.651,111C681.818,111,690.151,111,697.818,111C705.484,111,712.484,111,715.984,111L719.484,111" id="my-svg-L_GEN_AOA_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_GEN_AOA_0" data-points="W3sieCI6NjczLjQ4NDM3NSwieSI6MTExfSx7IngiOjY5OC40ODQzNzUsInkiOjExMX0seyJ4Ijo3MjMuNDg0Mzc1LCJ5IjoxMTF9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M950.125,111L954.292,111C958.458,111,966.792,111,974.458,111C982.125,111,989.125,111,992.625,111L996.125,111" id="my-svg-L_AOA_CH_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_AOA_CH_0" data-points="W3sieCI6OTUwLjEyNSwieSI6MTExfSx7IngiOjk3NS4xMjUsInkiOjExMX0seyJ4IjoxMDAwLjEyNSwieSI6MTExfV0=" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M268,175L283.962,175C299.924,175,331.849,175,366.711,169.034C401.572,163.068,439.371,151.136,458.27,145.17L477.169,139.204" id="my-svg-L_WEDGE_GEN_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_WEDGE_GEN_0" data-points="W3sieCI6MjY4LCJ5IjoxNzV9LHsieCI6MzYzLjc3MzQzNzUsInkiOjE3NX0seyJ4Ijo0ODAuOTgzNzY0NjQ4NDM3NSwieSI6MTM4fV0=" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_TMPL_GEN_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_GEN_AOA_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_AOA_CH_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(363.7734375, 175)"><g class="label" data-id="L_WEDGE_GEN_0" transform="translate(-70.7734375, -12)"><foreignObject width="141.546875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>blocks regeneration</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-TMPL-0" data-look="classic" transform="translate(138, 47)"><rect class="basic label-container" style x="-130" y="-39" width="260" height="78" /><g class="label" style transform="translate(-100, -24)"><rect /><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>ApplicationSet template (operations target)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-GEN-1" data-look="classic" transform="translate(566.515625, 111)"><rect class="basic label-container" style x="-106.96875" y="-27" width="213.9375" height="54" /><g class="label" style transform="translate(-76.96875, -12)"><rect /><foreignObject width="153.9375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>generate app-of-apps</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-AOA-3" data-look="classic" transform="translate(836.8046875, 111)"><rect class="basic label-container" style x="-113.3203125" y="-27" width="226.640625" height="54" /><g class="label" style transform="translate(-83.3203125, -12)"><rect /><foreignObject width="166.640625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>operations-app-of-apps</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-CH-5" data-look="classic" transform="translate(1130.125, 111)"><rect class="basic label-container" style x="-130" y="-39" width="260" height="78" /><g class="label" style transform="translate(-100, -24)"><rect /><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>21 child Applications: frontend, gateway-nl, ...</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-WEDGE-6" data-look="classic" transform="translate(138, 175)"><rect class="basic label-container" style x="-130" y="-39" width="260" height="78" /><g class="label" style transform="translate(-100, -24)"><rect /><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>wedged copy holds the name</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs></svg></figure>
+
+<p>The diagram shows the single declarative loop and the single point it
+jammed: while a wedged copy holds the
+<code>operations-app-of-apps</code> name, the generator cannot place a
+fresh one. Clear the wedge and the loop runs to completion on its
+own.</p>
+<hr />
+<h2 id="l6--pipeline--delivery">L6 — Pipeline / delivery</h2>
+<p><strong>Anchor</strong>: the create pipeline (2412, build 1685434)
+reports success when the deploy <em>request</em> reaches ArgoCD — not
+when the cluster materialises the slot — so a green build over a wedged
+slot is a guaranteed no-op.</p>
+<h3 id="before-this-fix">Before this fix</h3>
+<p>The create pipeline 2412 (build 1685434, the 19 June run) reported
+<strong>succeeded</strong>, but its Infra Tests were <strong>2 of
+4</strong> (Total 4 / Success 2 / Failures 2) per the
+<code>#myriad-env-fbe</code> bot card. Even a fully green build would
+not have helped: the deployment step submits desired state to ArgoCD and
+returns, and ArgoCD then silently cannot act on a name held by a wedged
+object. The pipeline has no end-to-end check that the URL actually
+serves.</p>
+<h3 id="after-this-fix">After this fix</h3>
+<p>No pipeline change. The corrective action is entirely in the cluster
+control plane (L8); the pipeline is left as-is. The lesson for the
+pipeline — a post-deploy URL probe — is captured in the toil discussion,
+not applied here.</p>
+<figure class="diagram"><svg id="my-svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1336.12px; background-color: transparent;" viewBox="0 0 1336.125 174" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#my-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#my-svg .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#my-svg .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#my-svg .error-icon{fill:#552222;}#my-svg .error-text{fill:#552222;stroke:#552222;}#my-svg .edge-thickness-normal{stroke-width:1px;}#my-svg .edge-thickness-thick{stroke-width:3.5px;}#my-svg .edge-pattern-solid{stroke-dasharray:0;}#my-svg .edge-thickness-invisible{stroke-width:0;fill:none;}#my-svg .edge-pattern-dashed{stroke-dasharray:3;}#my-svg .edge-pattern-dotted{stroke-dasharray:2;}#my-svg .marker{fill:#333333;stroke:#333333;}#my-svg .marker.cross{stroke:#333333;}#my-svg svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#my-svg p{margin:0;}#my-svg .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#my-svg .cluster-label text{fill:#333;}#my-svg .cluster-label span{color:#333;}#my-svg .cluster-label span p{background-color:transparent;}#my-svg .label text,#my-svg span{fill:#333;color:#333;}#my-svg .node rect,#my-svg .node circle,#my-svg .node ellipse,#my-svg .node polygon,#my-svg .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#my-svg .rough-node .label text,#my-svg .node .label text,#my-svg .image-shape .label,#my-svg .icon-shape .label{text-anchor:middle;}#my-svg .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#my-svg .rough-node .label,#my-svg .node .label,#my-svg .image-shape .label,#my-svg .icon-shape .label{text-align:center;}#my-svg .node.clickable{cursor:pointer;}#my-svg .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#my-svg .arrowheadPath{fill:#333333;}#my-svg .edgePath .path{stroke:#333333;stroke-width:1px;}#my-svg .flowchart-link{stroke:#333333;fill:none;}#my-svg .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#my-svg .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#my-svg .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#my-svg .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#my-svg .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#my-svg .cluster text{fill:#333;}#my-svg .cluster span{color:#333;}#my-svg div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#my-svg .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#my-svg rect.text{fill:none;stroke-width:0;}#my-svg .icon-shape,#my-svg .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#my-svg .icon-shape p,#my-svg .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#my-svg .icon-shape .label rect,#my-svg .image-shape .label rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#my-svg .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#my-svg .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#my-svg .node .neo-node{stroke:#9370DB;}#my-svg [data-look="neo"].node rect,#my-svg [data-look="neo"].cluster rect,#my-svg [data-look="neo"].node polygon{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node path{stroke:#9370DB;stroke-width:1px;}#my-svg [data-look="neo"].node .outer-path{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node .neo-line path{stroke:#9370DB;filter:none;}#my-svg [data-look="neo"].node circle{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node circle .state-start{fill:#000000;}#my-svg [data-look="neo"].icon-shape .icon{fill:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].icon-shape .icon-neo path{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;" /></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;" /></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M268,87L272.167,87C276.333,87,284.667,87,292.333,87C300,87,307,87,310.5,87L314,87" id="my-svg-L_TRG_REQ_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_TRG_REQ_0" data-points="W3sieCI6MjY4LCJ5Ijo4N30seyJ4IjoyOTMsInkiOjg3fSx7IngiOjMxOCwieSI6ODd9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M578,59.434L597.204,55.361C616.409,51.289,654.818,43.145,692.56,39.072C730.302,35,767.378,35,785.915,35L804.453,35" id="my-svg-L_REQ_GREEN_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_REQ_GREEN_0" data-points="W3sieCI6NTc4LCJ5Ijo1OS40MzM2NTUxMDIxMDU4M30seyJ4Ijo2OTMuMjI2NTYyNSwieSI6MzV9LHsieCI6ODA4LjQ1MzEyNSwieSI6MzV9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M578,114.566L597.204,118.639C616.409,122.711,654.818,130.855,694.742,134.928C734.667,139,776.107,139,796.827,139L817.547,139" id="my-svg-L_REQ_NOOP_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_REQ_NOOP_0" data-points="W3sieCI6NTc4LCJ5IjoxMTQuNTY2MzQ0ODk3ODk0MTd9LHsieCI6NjkzLjIyNjU2MjUsInkiOjEzOX0seyJ4Ijo4MjEuNTQ2ODc1LCJ5IjoxMzl9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M1049.422,139L1055.771,139C1062.12,139,1074.818,139,1084.667,139C1094.516,139,1101.516,139,1105.016,139L1108.516,139" id="my-svg-L_NOOP_F404_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_NOOP_F404_0" data-points="W3sieCI6MTA0OS40MjE4NzUsInkiOjEzOX0seyJ4IjoxMDg3LjUxNTYyNSwieSI6MTM5fSx7IngiOjExMTIuNTE1NjI1LCJ5IjoxMzl9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_TRG_REQ_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_REQ_GREEN_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(693.2265625, 139)"><g class="label" data-id="L_REQ_NOOP_0" transform="translate(-90.2265625, -12)"><foreignObject width="180.453125" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>name held by wedged CR</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_NOOP_F404_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-TRG-0" data-look="classic" transform="translate(138, 87)"><rect class="basic label-container" style x="-130" y="-39" width="260" height="78" /><g class="label" style transform="translate(-100, -24)"><rect /><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>create pipeline 2412 (build 1685434)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-REQ-1" data-look="classic" transform="translate(448, 87)"><rect class="basic label-container" style x="-130" y="-39" width="260" height="78" /><g class="label" style transform="translate(-100, -24)"><rect /><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>submit desired state to ArgoCD</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-GREEN-3" data-look="classic" transform="translate(935.484375, 35)"><rect class="basic label-container" style x="-127.03125" y="-27" width="254.0625" height="54" /><g class="label" style transform="translate(-97.03125, -12)"><rect /><foreignObject width="194.0625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>pipeline reports succeeded</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-NOOP-5" data-look="classic" transform="translate(935.484375, 139)"><rect class="basic label-container" style x="-113.9375" y="-27" width="227.875" height="54" /><g class="label" style transform="translate(-83.9375, -12)"><rect /><foreignObject width="167.875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>ArgoCD creates nothing</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-F404-7" data-look="classic" transform="translate(1220.3203125, 139)"><rect class="basic label-container" style x="-107.8046875" y="-27" width="215.609375" height="54" /><g class="label" style transform="translate(-77.8046875, -12)"><rect /><foreignObject width="155.609375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>URL 404 (no backend)</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs></svg></figure>
+
+<p>Reading the pipeline path: the green badge is produced at the
+&quot;request submitted&quot; edge, two hops before anything is actually deployed.
+The branch that 404s is the one where ArgoCD cannot act — and the
+pipeline never observes it. This is why &quot;build succeeded&quot; and &quot;URL 404s&quot;
+are not a contradiction.</p>
+<hr />
+<h2 id="l7--timeline-utc">L7 — Timeline (UTC)</h2>
+<table>
+<thead>
+<tr>
+<th>Time (UTC)</th>
+<th>Event</th>
+<th>Evidence</th>
+<th>Consequence / latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-05-27 07:38</td>
+<td><code>operations-app-of-apps</code> created on the slot</td>
+<td>probe <code>03</code> <code>.metadata.creationTimestamp</code></td>
+<td>Slot healthy at this point</td>
+</tr>
+<tr>
+<td>2026-06-01 10:50:12</td>
+<td>Delete requested on the app-of-apps (deletionTimestamp stamped)</td>
+<td>probe <code>03</code> <code>.metadata.deletionTimestamp</code></td>
+<td>Reconciliation stops; slot starts to die</td>
+</tr>
+<tr>
+<td>2026-06-01 10:50:13</td>
+<td>Delete requested on child <code>assetmonitor</code> (1 s later)</td>
+<td><code>prefix-snapshot/assetmonitor.yaml</code></td>
+<td>Cascading delete; child wedges too</td>
+</tr>
+<tr>
+<td>2026-06-01 → 06-22</td>
+<td>Finalizer never clears; objects frozen mid-deletion</td>
+<td>probe <code>03</code>; controller pod <code>09</code></td>
+<td><strong>21-day wedge</strong> — the latency gap</td>
+</tr>
+<tr>
+<td>2026-06-16 (≈)</td>
+<td><code>argocd-application-controller-0</code> pod
+replaced/re-scheduled (age 5d22h, RESTARTS 0 at probe time)</td>
+<td>probe <code>09-controller.txt</code></td>
+<td>A controller cycle already happened after 06-01 and did
+<strong>not</strong> clear the wedge</td>
+</tr>
+<tr>
+<td>2026-06-17</td>
+<td>Duncan Teegelaar recreates <code>operations</code> (build
+1681985)</td>
+<td>Slack bot card</td>
+<td>No-op — name held by wedged CR</td>
+</tr>
+<tr>
+<td>2026-06-18</td>
+<td>Stefan Klopf recreates <code>operations</code> (build 1683302)</td>
+<td>Slack bot card</td>
+<td>No-op</td>
+</tr>
+<tr>
+<td>2026-06-19 10:07</td>
+<td>Stefan Klopf terminates <code>operations</code></td>
+<td><a href="https://grid-eneco.enterprise.slack.com/archives/C066CGC5VCY/p1781863670573499">permalink</a></td>
+<td>No-op — wedge unaffected</td>
+</tr>
+<tr>
+<td>2026-06-19 11:28</td>
+<td>Stefan Klopf recreates <code>operations</code> (build 1685434, Infra
+2/4)</td>
+<td><a href="https://grid-eneco.enterprise.slack.com/archives/C066CGC5VCY/p1781868522055889">permalink</a>
+· <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_build/results?buildId=1685434">build</a></td>
+<td>Green build, still 404 → the filing</td>
+</tr>
+<tr>
+<td>2026-06-22 11:19–11:22</td>
+<td>Read-only diagnosis probes run; root cause confirmed</td>
+<td>probes <code>01</code>–<code>09</code></td>
+<td>Wedge proven, fix authorised</td>
+</tr>
+<tr>
+<td>2026-06-22 ~11:31</td>
+<td>Finalizers cleared on both wedged CRs</td>
+<td><code>fix-apply.log</code></td>
+<td>Deletion completes; name freed</td>
+</tr>
+<tr>
+<td>2026-06-22 11:32:48</td>
+<td>ApplicationSet regenerates a fresh
+<code>operations-app-of-apps</code></td>
+<td><code>post-fix-verification.txt</code>
+(<code>creationTimestamp</code>)</td>
+<td>Slot begins syncing</td>
+</tr>
+<tr>
+<td>2026-06-22 ~11:33–11:36</td>
+<td>URL 200 throughout; child health climbs Synced 21, Healthy
+7→14→19</td>
+<td><code>convergence-poll.txt</code> (t+1m/t+2m/t+3m)</td>
+<td>URL served within ~1 min; health still settling</td>
+</tr>
+<tr>
+<td>2026-06-22 11:49:46</td>
+<td>Full convergence: 21/21 Synced <strong>and</strong> Healthy, no CR
+mid-deletion, URL 200</td>
+<td><code>post-fix-verification.txt</code></td>
+<td>Slot fully restored</td>
+</tr>
+</tbody>
+</table>
+<p>(Slack permalink times are local CEST in their source; this table
+normalises to UTC — 06-19 12:07 CEST = 10:07 UTC, 13:28 CEST = 11:28
+UTC.)</p>
+<hr />
+<h2 id="l8--fix">L8 — Fix</h2>
+<h3 id="what-changes">What changes</h3>
+<p>Clear the wedged finalizer on both Applications so the 21-day-pending
+deletion completes. Two <code>kubectl patch</code> commands, run against
+the Sandbox context, both returning
+<code>application.argoproj.io/&lt;name&gt; patched</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> argocd <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  patch application operations-app-of-apps <span class="at">--type</span><span class="op">=</span>merge <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> <span class="st">&#39;{&quot;metadata&quot;:{&quot;finalizers&quot;:[]}}&#39;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> operations <span class="dt">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  patch application assetmonitor <span class="at">--type</span><span class="op">=</span>merge <span class="dt">\</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> <span class="st">&#39;{&quot;metadata&quot;:{&quot;finalizers&quot;:[]}}&#39;</span></span></code></pre></div>
+<h3 id="why-each-part">Why each part</h3>
+<p>Removing <code>resources-finalizer.argocd.argoproj.io</code> releases
+the only thing blocking the deletion. Once the wedged objects vanish,
+the <code>operations-app-of-apps</code> name is free. The ApplicationSet
+— which owns the slot (ownerReference <code>controller:true</code>) and
+still generates <code>operations</code> as a target — immediately
+regenerates a fresh app-of-apps, which then reconciles the full child
+set into the namespace. This closes the control plane: a desired-state
+object that could finally be created and synced. The positive signal
+that the plane converged is the fresh app-of-apps appearing
+<code>Synced / Healthy</code> with no deletionTimestamp, followed by the
+URL serving 200.</p>
+<p>Note on what was — and was not — wrong: the fresh, healthy
+app-of-apps <strong>also</strong> carries
+<code>resources-finalizer.argocd.argoproj.io</code> (confirmed in
+<code>post-fix-verification.txt</code>). The finalizer&#39;s mere presence
+is normal — it is the cascade-delete guard every ArgoCD Application
+carries. The bug was never the finalizer; it was a finalizer paired with
+a <code>deletionTimestamp</code> whose cleanup never completed. The fix
+removes the <em>stuck</em> guard on the <em>dying</em> object, not the
+guard concept.</p>
+<h3 id="what-this-fix-does-not-change">What this fix does NOT
+change</h3>
+<ul>
+<li>The deletion trigger: the fix restores the slot but does not explain
+— or prevent — whatever requested the original 1 June delete.
+Unverified.</li>
+<li>The pipeline signal: a future wedge will again look like a
+successful build; this repair does not add an end-to-end check. Out of
+scope.</li>
+<li>The eviction timer: if the slot&#39;s limiter row is &gt;4 days old, the
+auto-eviction Logic App can re-delete the slot on the next 14:30 run;
+the fix does not disarm it.</li>
+</ul>
+<h3 id="coherence-with-verified-diagnosis">Coherence with verified
+diagnosis</h3>
+<table>
+<thead>
+<tr>
+<th>Verified-diagnosis claim</th>
+<th>Fix step</th>
+<th>Control plane</th>
+<th>Why this closes the mechanism</th>
+<th>Positive-signal proof</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>app-of-apps wedged with finalizer + deletionTimestamp</td>
+<td>clear finalizer on app-of-apps</td>
+<td>ArgoCD / Kubernetes</td>
+<td>Lets the deletion complete, freeing the name</td>
+<td>Fresh app-of-apps <code>Synced/Healthy</code>, no
+deletionTimestamp</td>
+</tr>
+<tr>
+<td><code>assetmonitor</code> wedged the same way</td>
+<td>clear finalizer on assetmonitor</td>
+<td>ArgoCD / Kubernetes</td>
+<td>Removes the orphan child blocking the namespace</td>
+<td>No CR with deletionTimestamp remains</td>
+</tr>
+<tr>
+<td>frontend/gateways never deployed → 404</td>
+<td>(none — self-heal)</td>
+<td>ArgoCD reconcile</td>
+<td>ApplicationSet regenerates → children sync</td>
+<td><code>frontend</code>/<code>gateway-nl</code>/<code>clientgateway</code>
+<code>Synced/Healthy</code>, URL 200</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="l9--verification">L9 — Verification</h2>
+<p>Verification was captured in two durable artifacts:
+<code>convergence-poll.txt</code> (the 404→200 timeline at
+t+1m/t+2m/t+3m) and <code>post-fix-verification.txt</code> (the final
+fully-converged state at 11:49:46Z). The honest two-stage story: the
+<strong>URL served 200 within about a minute</strong> and stayed 200
+throughout; <strong>full 21/21 child health</strong> took a few more
+minutes to settle.</p>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Status</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Both wedged CRs deleted (no deletionTimestamp anywhere)</td>
+<td>DONE</td>
+<td><code>apps_with_deletionTimestamp=0</code>
+(<code>post-fix-verification.txt</code>)</td>
+</tr>
+<tr>
+<td>Fresh <code>operations-app-of-apps</code> regenerated</td>
+<td>DONE</td>
+<td><code>creationTimestamp 2026-06-22T11:32:48Z</code>,
+<code>Synced / Healthy</code>, <code>deletionTimestamp: NONE</code>
+(<code>post-fix-verification.txt</code>)</td>
+</tr>
+<tr>
+<td>Public URL serves</td>
+<td>DONE</td>
+<td><code>http_code: 200</code> from t+1m through t+3m
+(<code>convergence-poll.txt</code>) and at 11:49:46Z
+(<code>post-fix-verification.txt</code>); was 404</td>
+</tr>
+<tr>
+<td>Frontend + gateways live</td>
+<td>DONE</td>
+<td><code>frontend</code> / <code>gateway-nl</code> /
+<code>clientgateway</code> all <code>Synced / Healthy</code>
+(<code>post-fix-verification.txt</code>); during settling, gateways
+briefly <code>Progressing</code>
+(<code>convergence-poll.txt</code>)</td>
+</tr>
+<tr>
+<td>Child set converged (transient)</td>
+<td>DONE</td>
+<td>Synced 21 throughout; Healthy climbed 7 → 14 → 19 across the poll
+(<code>convergence-poll.txt</code>)</td>
+</tr>
+<tr>
+<td>Child set fully converged</td>
+<td>DONE</td>
+<td>total 21, <strong>Synced 21, Healthy 21</strong>, Missing 0,
+Progressing 0 at 11:49:46Z (<code>post-fix-verification.txt</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="confidence">Confidence</h3>
+<table>
+<thead>
+<tr>
+<th>Evidence state</th>
+<th style="text-align: right;">Count</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1 confirmed</td>
+<td style="text-align: right;">high</td>
+<td>Root cause, fix, and the 404→200→full-health convergence all
+directly observed and captured in raw probe files</td>
+</tr>
+<tr>
+<td>A2 infer</td>
+<td style="text-align: right;">low</td>
+<td>Only the mechanism narrative linking the A1 facts, and the
+controller-pod-replaced inference</td>
+</tr>
+<tr>
+<td>A3 blocked</td>
+<td style="text-align: right;">2</td>
+<td>Trigger of the 1 June deletion; per-test breakdown of build
+1685434</td>
+</tr>
+<tr>
+<td>Open contradictions</td>
+<td style="text-align: right;">0</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>The two still-blocked items do not affect the root cause or the fix
+path: the slot is restored and the URL serves regardless of <em>why</em>
+the 1 June delete fired. Status is held at <code>review</code> pending
+the final clean validator run, not because of an open root-cause
+gap.</p>
+<hr />
+<h2 id="l10--lessons">L10 — Lessons</h2>
+<ol type="1">
+<li><strong>A green build with a 404 on an FBE slot is a control-plane
+wedge until proven otherwise.</strong> The pipeline&#39;s success only
+proves the request reached ArgoCD. <em>Probe:</em> read the app-of-apps
+for a <code>deletionTimestamp</code> — that single field discriminates
+&quot;wedged&quot; from &quot;mis-built&quot; in one command. <em>Defense:</em> a
+post-deploy URL probe in the create pipeline would have caught the empty
+slot immediately.</li>
+<li><strong>Recreating a slot does not clear a wedged Application of the
+same name.</strong> The name is held by the mid-deletion CR, so every
+recreate is a silent no-op — which is why three people recreated
+<code>operations</code> over three days with no effect. <em>Probe:</em>
+if a recreate &quot;succeeds&quot; but the URL is unchanged, check for a
+deletionTimestamp before recreating again. <em>Defense:</em> treat
+repeated no-op recreates as a wedge signal, not a flaky build.</li>
+<li><strong>A namespace staying <code>Active</code> does not mean the
+slot is healthy.</strong> The <code>operations</code> namespace was
+<code>Active</code> throughout because a sibling child was still syncing
+into it; the wedge lived on the Application CR, not the namespace.
+<em>Probe:</em> never conclude from <code>get ns</code>; read the
+Application CR. <em>Defense:</em> diagnosis runbooks must point at the
+app-of-apps CR, not the namespace phase.</li>
+</ol>
+<hr />
+<h2 id="l11--end-to-end-command-playbook">L11 — End-to-end command
+playbook</h2>
+<p>The reader walks Step 0 → Step 9. These are the exact read-only
+probes run on 2026-06-22, then the two-command fix, then verification.
+Each step builds only on prior outputs.</p>
+<h3 id="step-0--confirm-the-cluster-context">Step 0 — Confirm the
+cluster context</h3>
+<p><strong>Question</strong>: am I pointed at the right cluster before I
+read or change anything?</p>
+<p><strong>Why this command</strong>: every later probe and the fix are
+scoped by <code>--context</code>; a wrong context silently reads/writes
+the wrong cluster. The FBE Sandbox is direct <code>kubectl</code> access
+(no AVD), context <code>vpp-aks01-d</code>.</p>
+<p><strong>Fields selected</strong>: the context name only.</p>
+<p><strong>Expected output</strong>: the line <code>vpp-aks01-d</code>
+appears in the context list.</p>
+<p><strong>Decision rule</strong>: present → proceed; absent → fix
+kubeconfig first, do not guess.</p>
+<p><strong>Principle</strong>: bind identity (which cluster) before
+state (what is on it).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> config get-contexts <span class="kw">|</span> <span class="fu">grep</span> vpp-aks01-d</span></code></pre></div>
+<h3 id="step-1--is-the-slots-namespace-the-cause">Step 1 — Is the slot&#39;s
+namespace the cause?</h3>
+<p><strong>Question</strong>: does the namespace itself reveal the
+wedge?</p>
+<p><strong>Why this command</strong>: rules out (or in) namespace-level
+termination as the story before trusting the Application CR.</p>
+<p><strong>Fields selected</strong>: <code>.status.phase</code>,
+<code>.metadata.deletionTimestamp</code>.</p>
+<p><strong>Expected output</strong>: <code>phase: Active</code> with
+<strong>no</strong> namespace deletionTimestamp.</p>
+<p><strong>Decision rule</strong>: <code>Active</code> + no
+deletionTimestamp → the namespace does <strong>not</strong> reveal the
+wedge (this is the trap); go to Step 2. A <code>Terminating</code> phase
+would add a compounding namespace-residue problem but is not required
+for the wedge.</p>
+<p><strong>Principle</strong>: the absence of a signal at one layer does
+not clear the hypothesis; probe the layer that actually carries the
+state.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d get ns operations <span class="at">-o</span> json</span></code></pre></div>
+<p>The probe returned <code>phase: Active</code> with finalizer
+<code>kubernetes</code> only — i.e. a normal live namespace. The wedge
+is not here.</p>
+<h3 id="step-2--the-decisive-probe-is-the-app-of-apps-wedged-mid-deletion">Step
+2 — The decisive probe: is the app-of-apps wedged mid-deletion?</h3>
+<p><strong>Question</strong>: does the slot&#39;s controlling Application
+carry a deletion mark and a lingering finalizer?</p>
+<p><strong>Why this command</strong>: the app-of-apps CR is the single
+authoritative surface for a finalizer wedge; the UI &quot;Deleting&quot; badge is
+a rendering of exactly these fields.</p>
+<p><strong>Fields selected</strong>:
+<code>.metadata.deletionTimestamp</code>,
+<code>.metadata.finalizers</code>,
+<code>.metadata.creationTimestamp</code>,
+<code>.metadata.ownerReferences</code>, and the child list under
+<code>.status.resources</code>.</p>
+<p><strong>Expected output</strong>: a non-empty
+<code>deletionTimestamp</code> and finalizer
+<code>[resources-finalizer.argocd.argoproj.io]</code> (the probe
+returned deletionTimestamp <code>2026-06-01T10:50:12Z</code>, created
+<code>2026-05-27</code>, owner = ApplicationSet
+<code>controller:true</code>, 21 children all OutOfSync).</p>
+<p><strong>Decision rule</strong>: non-empty deletionTimestamp +
+finalizer → <strong>confirms the wedge</strong>, proceed. Empty
+deletionTimestamp → reject the wedge, pivot to the credential-gap
+hypothesis (Step 4b).</p>
+<p><strong>Principle</strong>: pick the one field that splits the
+hypotheses and read it directly.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> argocd <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  get application operations-app-of-apps <span class="at">-o</span> json <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">jq</span> <span class="st">&#39;{deletionTimestamp:.metadata.deletionTimestamp,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">       finalizers:.metadata.finalizers,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">       created:.metadata.creationTimestamp,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">       owner:.metadata.ownerReferences,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">       children:(.status.resources|length)}&#39;</span></span></code></pre></div>
+<h3 id="step-3--which-children-actually-exist-for-the-slot">Step 3 —
+Which children actually exist for the slot?</h3>
+<p><strong>Question</strong>: are the frontend and gateways really
+missing, or just OutOfSync?</p>
+<p><strong>Why this command</strong>: OutOfSync in the parent&#39;s child
+list is desired-state; this proves which child <em>objects</em> exist in
+the namespace.</p>
+<p><strong>Fields selected</strong>: Application names in ns
+<code>operations</code>.</p>
+<p><strong>Expected output</strong>: only <code>assetmonitor</code>
+present; no <code>frontend</code> / <code>clientgateway</code> /
+<code>gateway-nl</code> Application objects.</p>
+<p><strong>Decision rule</strong>: frontend/gateways absent → the slot
+is <strong>undeployed</strong> (matches the wedge). A live serving
+<code>frontend</code> present → the 404 would be a routing problem, not
+undeployment.</p>
+<p><strong>Principle</strong>: distinguish &quot;declared but absent&quot; from
+&quot;present but unhealthy&quot;.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> operations get applications</span></code></pre></div>
+<h3 id="step-4--rule-out-the-applicationset-pat-expiry-hypothesis">Step
+4 — Rule out the ApplicationSet PAT-expiry hypothesis</h3>
+<p><strong>Question</strong>: is the generator itself broken (which
+would predict <em>no</em> app-of-apps at all)?</p>
+<p><strong>Why this command</strong>: a dead generator is a different
+root cause with a different fix (rotate PAT); it must be excluded.</p>
+<p><strong>Fields selected</strong>: the <code>ErrorOccurred</code>,
+<code>ParametersGenerated</code>, <code>ResourcesUpToDate</code>
+conditions.</p>
+<p><strong>Expected output</strong>: <code>ErrorOccurred=False</code>,
+<code>ParametersGenerated=True</code>,
+<code>ResourcesUpToDate=True</code> (what the probe returned).</p>
+<p><strong>Decision rule</strong>: all three healthy → generator
+healthy, <strong>PAT-expiry ruled out</strong>, proceed.
+<code>ErrorOccurred=True</code> + <code>authentication required</code> →
+pivot to PAT rotation.</p>
+<p><strong>Principle</strong>: exclude the upstream generator before
+trusting the downstream object.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> argocd <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  get applicationset vpp-feature-branch-environments <span class="at">-o</span> json <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">jq</span> <span class="at">-r</span> <span class="st">&#39;.status.conditions[]? | &quot;\(.type)=\(.status)&quot;&#39;</span></span></code></pre></div>
+<h3 id="step-4b--rule-out-the-per-application-credential-gap">Step 4b —
+Rule out the per-Application credential gap</h3>
+<p><strong>Question</strong>: does any <code>operations</code> child
+carry a <code>source N of M … authentication required</code> comparison
+error (a known prior failure mode for this slot)?</p>
+<p><strong>Why this command</strong>: the credential gap can co-fire and
+re-404 the slot even after the wedge clears; it must be checked, not
+assumed.</p>
+<p><strong>Fields selected</strong>: each Application&#39;s sync status,
+health, and condition errors.</p>
+<p><strong>Expected output</strong>: no operations app shows
+<code>authentication required</code> (the scan showed
+<code>assetmonitor</code> <code>Synced/Progressing</code>; the only
+auth-shaped error was on the unrelated <code>loki</code> app — a
+helm-values manifest error, not an operations-slot auth gap).</p>
+<p><strong>Decision rule</strong>: no
+<code>authentication required</code> → <strong>credential gap ruled
+out</strong> for this slot, proceed. An
+<code>authentication required</code> here → register the missing
+repo-creds template before declaring done.</p>
+<p><strong>Principle</strong>: a confounder that survives the primary
+fix must be cleared explicitly.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> operations get applications <span class="at">-o</span> json <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">jq</span> <span class="at">-r</span> <span class="st">&#39;.items[] | &quot;\(.metadata.name) sync=\(.status.sync.status) health=\(.status.health.status)&quot;&#39;</span></span></code></pre></div>
+<h3 id="step-5--confirm-the-404-has-no-backend">Step 5 — Confirm the 404
+has no backend</h3>
+<p><strong>Question</strong>: is the 404 &quot;nothing deployed&quot; or &quot;deployed
+at the wrong path&quot;?</p>
+<p><strong>Why this command</strong>: a real VPP backend pod stamps an
+<code>x-correlation-id</code> header; a 404 <em>without</em> it came
+from the edge with no backend.</p>
+<p><strong>Fields selected</strong>: the HTTP status line and response
+headers.</p>
+<p><strong>Expected output</strong>: <code>HTTP/1.1 404 Not Found</code>
+from <code>nginx</code>, with <strong>no</strong>
+<code>x-correlation-id</code> header (what the probe returned).</p>
+<p><strong>Decision rule</strong>: 404 without
+<code>x-correlation-id</code> → undeployed backend (matches the wedge),
+proceed. A 404 <em>with</em> <code>x-correlation-id</code> → objects
+exist, path is misaligned → this RCA is the wrong authority, stop.</p>
+<p><strong>Principle</strong>: read the headers, not just the status
+code — they say <em>where</em> the 404 was generated.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-svk</span> <span class="st">&quot;https://operations.dev.vpp.eneco.com/&quot;</span> <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">grep</span> <span class="at">-iE</span> <span class="st">&quot;HTTP/|x-correlation-id|Request-Context|Content-Type|server&quot;</span></span></code></pre></div>
+<h3 id="step-6--confirm-a-controller-cycle-already-happened-without-self-healing">Step
+6 — Confirm a controller cycle already happened without
+self-healing</h3>
+<p><strong>Question</strong>: would restarting the controller alone have
+cleared the wedge?</p>
+<p><strong>Why this command</strong>: if the controller pod already
+cycled after the wedge and the wedge persists, restarting it again is
+not the fix — finalizer removal is.</p>
+<p><strong>Fields selected</strong>: pod age and in-place restart
+count.</p>
+<p><strong>Expected output</strong>:
+<code>argocd-application-controller-0 Running 1/1</code> age ~5d22h with
+<code>RESTARTS 0</code> — i.e. the pod was replaced/re-scheduled ~06-16
+(after the 06-01 delete), not restarted in place.</p>
+<p><strong>Decision rule</strong>: controller already cycled after 06-01
+yet the wedge persists → a controller cycle alone is not the fix;
+proceed to finalizer removal.</p>
+<p><strong>Principle</strong>: do not propose a remedy the system has
+already tried and that demonstrably did not work.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> argocd <span class="dt">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  get pod argocd-application-controller-0 <span class="at">-o</span> wide</span></code></pre></div>
+<h3 id="step-7--snapshot-before-mutating-one-way-door">Step 7 — Snapshot
+before mutating (one-way door)</h3>
+<p><strong>Question</strong>: can I restore forensic state if the fix
+behaves unexpectedly?</p>
+<p><strong>Why this command</strong>: finalizer removal completes a
+deletion and is irreversible; a snapshot preserves the pre-fix object
+for the record.</p>
+<p><strong>Fields selected</strong>: full object YAML for both wedged
+CRs.</p>
+<p><strong>Expected output</strong>: two YAML snapshot files written to
+disk.</p>
+<p><strong>Decision rule</strong>: both files written → proceed. Write
+failure → stop; do not mutate without a snapshot.</p>
+<p><strong>Principle</strong>: before a one-way door, capture the state
+you cannot get back.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> argocd get application operations-app-of-apps <span class="at">-o</span> yaml <span class="dt">\</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">&gt;</span> prefix-snapshot/operations-app-of-apps.yaml</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> operations get application assetmonitor <span class="at">-o</span> yaml <span class="dt">\</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">&gt;</span> prefix-snapshot/assetmonitor.yaml</span></code></pre></div>
+<h3 id="step-8--clear-the-wedged-finalizers-the-fix">Step 8 — Clear the
+wedged finalizers (the fix)</h3>
+<p><strong>Question</strong>: how do I let the 21-day-pending deletion
+complete?</p>
+<p><strong>Why this command</strong>: a merge patch that sets
+<code>finalizers: []</code> removes the only guard blocking deletion;
+nothing else is changed on the objects.</p>
+<p><strong>Fields selected</strong>: <code>.metadata.finalizers</code>
+set to empty.</p>
+<p><strong>Expected output</strong>: both commands return
+<code>application.argoproj.io/&lt;name&gt; patched</code>.</p>
+<p><strong>Decision rule</strong>: both patched → deletion proceeds,
+continue to verify. An error → stop and re-probe.</p>
+<p><strong>Principle</strong>: make the smallest mutation that removes
+exactly the blocker.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> argocd <span class="dt">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  patch application operations-app-of-apps <span class="at">--type</span><span class="op">=</span>merge <span class="at">-p</span> <span class="st">&#39;{&quot;metadata&quot;:{&quot;finalizers&quot;:[]}}&#39;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> operations <span class="dt">\</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  patch application assetmonitor <span class="at">--type</span><span class="op">=</span>merge <span class="at">-p</span> <span class="st">&#39;{&quot;metadata&quot;:{&quot;finalizers&quot;:[]}}&#39;</span></span></code></pre></div>
+<h3 id="step-9--verify-self-heal-and-the-url">Step 9 — Verify self-heal
+and the URL</h3>
+<p><strong>Question</strong>: did the ApplicationSet regenerate the slot
+and does the URL serve?</p>
+<p><strong>Why this command</strong>: confirms the control plane
+converged end-to-end (fresh object + children + 200), not just that the
+patch returned.</p>
+<p><strong>Fields selected</strong>: deletionTimestamp scan, fresh
+app-of-apps health, child counts, and the HTTP status.</p>
+<p><strong>Expected output</strong>: no deletionTimestamp remains
+anywhere; a fresh <code>operations-app-of-apps</code>
+<code>Synced/Healthy</code>; children converge (21 Synced);
+<code>curl</code> returns <code>200</code>.</p>
+<p><strong>Decision rule</strong>: all four hold → fix verified, done.
+Any one failing → re-probe before declaring done.</p>
+<p><strong>Principle</strong>: verify the user-observable outcome (200),
+not just the intermediate control-plane events.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d get applications <span class="at">-A</span> <span class="at">-o</span> json <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">jq</span> <span class="at">-r</span> <span class="st">&#39;.items[] | select(.metadata.deletionTimestamp) | .metadata.name&#39;</span>   <span class="co"># expect: empty</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> argocd get application operations-app-of-apps <span class="dt">\</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-o</span> jsonpath=<span class="st">&#39;{.metadata.creationTimestamp} {.status.sync.status}/{.status.health.status}{&quot;\n&quot;}&#39;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sk</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;%{http_code}\n&#39;</span> https://operations.dev.vpp.eneco.com/   <span class="co"># expect: 200</span></span></code></pre></div>
+<hr />
+<h2 id="l12--one-page-on-call-playbook">L12 — One-page on-call
+playbook</h2>
+<p><strong>Symptom</strong>: an FBE slot URL returns 404 although the
+create build is green.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Probe</th>
+<th>Branch outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>kubectl -n argocd get application &lt;slot&gt;-app-of-apps -o json | jq .metadata.deletionTimestamp</code></td>
+<td><strong>non-empty</strong> → wedged finalizer (this incident, go to
+step 4) · empty → not a wedge, check credentials</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>kubectl -n &lt;slot&gt; get applications</code></td>
+<td>only stragglers, no <code>frontend</code> → undeployed slot</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>curl -svk https://&lt;slot&gt;.dev.vpp.eneco.com/ 2&gt;&amp;1 | grep -i x-correlation-id</code></td>
+<td><strong>absent</strong> → no backend (undeployed) · present →
+routing 404, different runbook</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>kubectl get applicationset vpp-feature-branch-environments -n argocd -o json | jq &#39;.status.conditions&#39;</code></td>
+<td><code>ErrorOccurred=False</code> → generator healthy, safe to clear
+the wedge</td>
+</tr>
+<tr>
+<td>5</td>
+<td>snapshot, then
+<code>kubectl patch application … -p &#39;{&quot;metadata&quot;:{&quot;finalizers&quot;:[]}}&#39;</code>
+on the wedged CR(s)</td>
+<td>deletion completes → ApplicationSet regenerates → URL 200 in ~1
+min</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hard stops</strong> (see <a href="./how-to-fix.md"><code>how-to-fix.md</code></a>): never run
+destroy pipeline 2629 to &quot;reset&quot; the slot (not a rollback, wipes 260+
+resources); be aware the auto-evict Logic App can re-delete the slot at
+14:30; confirm you are on <code>vpp-aks01-d</code> before patching.
+Recall L10: a recreate does <strong>not</strong> clear a wedged
+Application of the same name.</p>
+<hr />
+<h2 id="evidence-ledger">Evidence Ledger</h2>
+<p>This is the only place evidence codes live. A1 = directly observed
+this session (command output / file:line / primary URL); A2 = inferred
+from A1 by a named chain; A3 = could not be probed, resolving probe
+named.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Claim</th>
+<th>Code</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>app-of-apps <code>deletionTimestamp=2026-06-01T10:50:12Z</code>,
+finalizer <code>resources-finalizer.argocd.argoproj.io</code>, created
+2026-05-27</td>
+<td>A1</td>
+<td>probe <code>03-app-of-apps.json</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>assetmonitor</code>
+<code>deletionTimestamp=2026-06-01T10:50:13Z</code>, same finalizer</td>
+<td>A1</td>
+<td><code>prefix-snapshot/assetmonitor.yaml</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>app-of-apps owned by ApplicationSet
+<code>vpp-feature-branch-environments</code>
+(<code>controller:true</code>, uid <code>1b27efe3-…</code>)</td>
+<td>A1</td>
+<td>probe <code>03</code> <code>.metadata.ownerReferences</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>app-of-apps lists 21 children, all OutOfSync, incl.
+<code>frontend</code>, <code>gateway-nl</code>,
+<code>clientgateway</code></td>
+<td>A1</td>
+<td>probe <code>03</code> <code>.status.resources</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>The only live child <em>Application</em> in ns
+<code>operations</code> is <code>assetmonitor</code>; no
+<code>frontend</code>/gateway Application exists. The namespace also
+holds ~10 <em>terminal</em> Job pods (completed
+<code>seed-assets-*</code>, <code>*-database-cleanup</code>,
+<code>docker-pull-secret</code>) — residue, not live workloads</td>
+<td>A1</td>
+<td>probes <code>02</code>, <code>05-pods.txt</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>ns <code>operations</code> is <code>Active</code>, no
+deletionTimestamp</td>
+<td>A1</td>
+<td>probe <code>01-ns-operations.json</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>ApplicationSet healthy: <code>ErrorOccurred=False</code>,
+<code>ParametersGenerated=True</code>,
+<code>ResourcesUpToDate=True</code></td>
+<td>A1</td>
+<td>probe <code>04-applicationset.json</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>No operations child shows
+<code>source N of M … authentication required</code> (loki error is
+unrelated helm-values)</td>
+<td>A1</td>
+<td>probe <code>04b-credgap-scan.txt</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>curl /</code> → <code>HTTP/1.1 404 Not Found</code> from
+nginx, no <code>x-correlation-id</code></td>
+<td>A1</td>
+<td>probe <code>06-curl.txt</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>argocd-application-controller-0</code> Running 1/1, age 5d22h,
+RESTARTS 0</td>
+<td>A1</td>
+<td>probe <code>09-controller.txt</code></td>
+</tr>
+<tr>
+<td>10a</td>
+<td>The controller pod was replaced/re-scheduled ~06-16 (after the 06-01
+delete) yet the wedge persisted → a controller cycle alone did not clear
+it</td>
+<td>A2</td>
+<td>inferred from #10 (pod age 5d22h, in-place RESTARTS 0 ⇒ the pod is a
+~06-16 replacement, not a restart-in-place)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Build 1685434 / pipeline 2412 succeeded with Infra Tests 2/4;
+terminate 12:07 → recreate 13:28 CEST 06-19 by Stefan Klopf</td>
+<td>A1</td>
+<td>Slack bot card permalinks</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Recreate is a no-op because the wedged CR holds the
+<code>operations-app-of-apps</code> name</td>
+<td>A2</td>
+<td>inferred from #1, #4, #5 and Kubernetes delete semantics</td>
+</tr>
+<tr>
+<td>13</td>
+<td>The 404 is caused by the undeployed frontend, itself caused by the
+wedged app-of-apps</td>
+<td>A2</td>
+<td>inferred from #1, #4, #5, #9</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Both <code>kubectl patch … finalizers:[]</code> returned
+<code>application.argoproj.io/&lt;name&gt; patched</code></td>
+<td>A1</td>
+<td><code>fix-apply.log</code></td>
+</tr>
+<tr>
+<td>14a</td>
+<td>ApplicationSet regenerated a fresh app-of-apps
+<code>creationTimestamp 2026-06-22T11:32:48Z</code>,
+<code>Synced/Healthy</code>, <code>deletionTimestamp: NONE</code>;
+<code>apps_with_deletionTimestamp=0</code>; at 11:49:46Z children total
+21 / Synced 21 / Healthy 21; URL <code>http_code: 200</code></td>
+<td>A1</td>
+<td><code>post-fix-verification.txt</code> (captured
+2026-06-22T11:49:46Z)</td>
+</tr>
+<tr>
+<td>14b</td>
+<td>URL served 200 from t+1m through t+3m while child health climbed
+Synced 21, Healthy 7 → 14 → 19</td>
+<td>A1</td>
+<td><code>convergence-poll.txt</code></td>
+</tr>
+<tr>
+<td>14c</td>
+<td>The fresh healthy app-of-apps still carries
+<code>resources-finalizer.argocd.argoproj.io</code> — the finalizer&#39;s
+presence is normal; the bug was finalizer + a wedged
+deletionTimestamp</td>
+<td>A1</td>
+<td><code>post-fix-verification.txt</code>
+(<code>.finalizers</code>)</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Trigger of the 2026-06-01 deletion</td>
+<td>A3</td>
+<td><code>az</code> not logged in (<code>07-az-account.json</code>);
+resolve via <code>az login</code> → Logic App
+<code>vpp-fbe-autodelete-trigger</code> run history + ADO pipeline 2629
+runs near 06-01</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Per-test breakdown of build 1685434&#39;s 2/4 infra failures</td>
+<td>A3</td>
+<td><code>az</code> blocked; resolve via
+<code>az pipelines build show --id 1685434</code> + Timeline</td>
+</tr>
+</tbody>
+</table>
+<h2 id="residual--unverified-items">Residual / unverified items</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Classification</th>
+<th>Resolving probe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What triggered the 1 June 12:50 CEST deletion</td>
+<td>A3 UNVERIFIED[blocked: az not logged in]</td>
+<td><code>az login</code> →
+<code>az logic workflow run list -n vpp-fbe-autodelete-trigger -g rg-vpp-app-sb-401</code>;
+the 12:50 timing does <strong>not</strong> match the 14:30 auto-evict
+schedule, so a manual destroy / pipeline 2629 run on 06-01 is the
+leading suspicion — unconfirmed</td>
+</tr>
+<tr>
+<td>Which 2 of 4 infra tests failed on build 1685434</td>
+<td>A3 UNVERIFIED[blocked: az not logged in]</td>
+<td><code>az pipelines build show --id 1685434 --org https://dev.azure.com/enecomanagedcloud -p &quot;Myriad - VPP&quot;</code>
++ Timeline — does not affect root cause or fix</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mutation-log-for-the-audit-trail">Mutation log (for the audit
+trail)</h2>
+<ul>
+<li>2026-06-22 — external epistemic adversarial review (<a href="../../../../../../../.ai/tasks/2026-06-22-005_fbe-404-rca-howtofix/reviews/rca-epistemic-socrates.md"><code>.ai/tasks/2026-06-22-005_fbe-404-rca-howtofix/reviews/rca-epistemic-socrates.md</code></a>),
+Socrates. Finding (BLOCKING): the post-fix verification was labeled A1
+with no backing raw-probe artifact. Patch: durable evidence
+<code>convergence-poll.txt</code> +
+<code>post-fix-verification.txt</code> (captured 11:49:46Z) now back the
+A1 labels; L7 timeline, L9 verification table, and Evidence Ledger
+#14/#14a–#14c rewritten to cite them and to state the honest two-stage
+convergence (200 within ~1 min; full 21/21 health at 11:49:46Z).
+Secondary: controller &quot;restart&quot; regraded to A2 (RESTARTS 0 ⇒ pod
+replaced ~06-16) in the timeline, L11 Step 6, and Ledger #10/#10a.
+Verify: re-read each cited file against the listed numbers.</li>
+<li>2026-06-22 — external technical adversarial review (<a href="../../../../../../../.ai/tasks/2026-06-22-005_fbe-404-rca-howtofix/reviews/rca-technical-demoledor.md"><code>.ai/tasks/2026-06-22-005_fbe-404-rca-howtofix/reviews/rca-technical-demoledor.md</code></a>),
+El-Demoledor (0 BLOCKING). F1 (HIGH): &quot;only assetmonitor exists&quot;
+overstated — corrected in the executive summary, L3 prose, and Ledger #5
+to &quot;only live child <em>Application</em>; plus terminal Job residue&quot;. F4
+(LOW): L3 mermaid now encodes the name-collision
+(<code>ASET -. &quot;cannot replace while name held&quot; .-&gt; AOA</code>).
+F2/F3 (how-to-fix preconditions + <code>--context</code> on verification
+probes) applied in <code>how-to-fix.md</code>. Verify: re-run the four
+validators + the heading check.</li>
+</ul>
+</body>
+</html>

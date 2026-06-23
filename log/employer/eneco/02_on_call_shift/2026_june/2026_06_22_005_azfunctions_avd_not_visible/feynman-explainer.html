@@ -1,0 +1,260 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Feynman — why one URL 404s and its sibling 200s</title>
+<style>
+:root{--fg:#1f2328;--muted:#656d76;--bg:#fff;--line:#d0d7de;--accent:#0969da;
+--code-bg:#f6f8fa;--ok:#1a7f37;--bad:#cf222e;--warn:#9a6700;--warnbg:#fff8c5;}
+*{box-sizing:border-box}
+body{margin:0;background:#f6f8fa;color:var(--fg);
+font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+.wrap{max-width:960px;margin:0 auto;background:var(--bg);padding:48px 56px;
+box-shadow:0 0 0 1px var(--line);min-height:100vh;}
+h1,h2,h3,h4{line-height:1.25;font-weight:600;margin-top:1.6em;margin-bottom:.5em;}
+h1{font-size:2em;border-bottom:2px solid var(--line);padding-bottom:.3em;margin-top:0}
+h2{font-size:1.5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:1.2em} h4{font-size:1.02em;color:var(--muted)}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+p,li{margin:.5em 0}
+code{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+font-size:.88em;background:var(--code-bg);padding:.15em .4em;border-radius:6px;}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;
+padding:14px 16px;overflow:auto;font-size:.85em;line-height:1.5;}
+pre code{background:none;padding:0;font-size:1em}
+pre.mermaid{background:#fbfdff;text-align:center;border-color:#cfe3ff}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--code-bg);font-weight:600}
+tr:nth-child(2n) td{background:#fbfcfd}
+blockquote{margin:1em 0;padding:.4em 1em;color:var(--fg);
+border-left:4px solid var(--warn);background:var(--warnbg);border-radius:0 6px 6px 0;}
+blockquote p{margin:.35em 0}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+.meta{color:var(--muted);font-size:.85em;margin-top:6px}
+strong{font-weight:600}
+ul,ol{padding-left:1.6em}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){
+  if(window.mermaid){mermaid.initialize({startOnLoad:true,theme:"default",securityLevel:"loose",flowchart:{useMaxWidth:true,htmlLabels:true}});}
+});</script>
+</head><body><div class="wrap">
+<h1 id="why-one-url-404s-and-its-sibling-200s-on-the-very-same-host">Why one URL 404s and its sibling 200s on the very same host</h1>
+<p><strong>Audience:</strong> an engineer who has never seen this stack and wants to <em>master</em> this failure class — not just copy the fix. <strong>Scope:</strong> HTTP path routing through a three-layer edge (Azure Application Gateway → AKS nginx ingress → Azure Functions pod), and the single missing annotation that splits a healthy host into "works" and "404." <strong>Primary archetype:</strong> RCA teaching (diagnose cause, reject false causes, verify repair), built on an engineering-concept spine (reverse-proxy path rewriting from first principles).</p>
+<hr />
+<h2 id="knowledge-contract--what-you-will-be-able-to-do-after-reading">Knowledge Contract — what you will be able to do after reading</h2>
+<ol type="1">
+<li><strong>Draw</strong> the path a request takes from a browser to the backend pod, and name what each of the three layers does.</li>
+<li><strong>Explain</strong> from first principles why a reverse proxy can mount a backend under a URL prefix the backend has never heard of — and why that needs a <em>rewrite</em>.</li>
+<li><strong>Trace</strong> why <code>…/telemetryfunctiontestsfn/healthz</code> returns <code>404</code> while <code>…/api/siteregistry</code> returns <code>200</code> on the <em>same</em> hostname, when both backends are healthy.</li>
+<li><strong>Predict</strong>, for any service on this edge, whether it will hit this bug — from one fact about how it is mounted.</li>
+<li><strong>Reject</strong> the instinctive "it's a network / AVD / firewall problem" explanation, and say exactly what evidence kills it.</li>
+<li><strong>Defend</strong> the diagnosis under expert challenge, and <strong>choose</strong> the correct fix (ingress rewrite) over the wrong ones (whitelist, new image, <code>kubectl edit</code>).</li>
+<li><strong>Adapt</strong> the reasoning to a nearby case (a different proxy, a different prefix) — a transfer test at the end.</li>
+</ol>
+<p>This document will <strong>not</strong> make you able to invoke the test functions over HTTP — they are not HTTP endpoints. That boundary is part of the lesson.</p>
+<hr />
+<h2 id="tldr-picture">TL;DR picture</h2>
+<p>Before the details, hold this one image: the same front door, two corridors. One corridor (root-mounted) leads straight to a room that answers. The other (prefix-mounted) leads to a room that was never told its own door has a prefix on it — so it shrugs and says "404, no such room."</p>
+<pre class="mermaid">flowchart LR
+  U[&quot;Browser / AVD&quot;] --&gt;|&quot;https://agg.dev/...&quot;| E[&quot;3-layer edge&quot;]
+  E --&gt;|&quot;/api/siteregistry&lt;br/&gt;(root-mounted)&quot;| OK[&quot;siteregistry pod&lt;br/&gt;200 OK&quot;]
+  E --&gt;|&quot;/telemetryfunctiontestsfn/healthz&lt;br/&gt;(prefix-mounted, no rewrite)&quot;| BAD[&quot;telemetry pod&lt;br/&gt;only knows /healthz&lt;br/&gt;404&quot;]
+</pre>
+<p>What you are looking at: one client, one hostname, one edge, two backends — and two different outcomes. The branch that decides the outcome is <strong>how each backend is mounted at the edge</strong>. <code>siteregistry</code> is mounted at the root <code>/</code>, so the path the client types is the path the backend expects. <code>telemetryfunctiontestsfn</code> is mounted under a <em>prefix</em>, and the edge forwards that prefix to a backend that only serves at root — so the backend rejects it. The takeaway to carry into the rest of the doc: <strong>this is a routing-shape problem, not a health problem and not a network problem.</strong> Every later diagram refines this one picture.</p>
+<hr />
+<h2 id="first-principles-ladder">First-principles ladder</h2>
+<p>Climb these in order; each rung is the smallest true statement the next one needs.</p>
+<ul>
+<li><strong>Term — reverse proxy.</strong> A server that accepts a client request and forwards it to a backend on the client's behalf. The client only ever talks to the proxy.</li>
+<li><strong>Primitive — a backend has its own idea of its routes.</strong> An HTTP app answers a fixed set of paths (here: <code>/</code>, <code>/healthz</code>). It knows nothing about how the outside world addresses it.</li>
+<li><strong>Primitive — "mounting" is the proxy's job, not the backend's.</strong> The proxy decides <em>which external path</em> maps to <em>which backend</em>. Two common mounts: at the <strong>root</strong> (<code>/</code> → backend) or under a <strong>prefix</strong> (<code>/telemetryfunctiontestsfn/</code> → backend).</li>
+<li><strong>Invariant — the backend must receive a path it recognizes.</strong> If the backend serves <code>/healthz</code> and receives <code>/healthz</code>, it answers. If it receives <code>/telemetryfunctiontestsfn/healthz</code>, it does not — that route does not exist.</li>
+<li><strong>Mechanism — prefix mounts require a rewrite.</strong> When you mount a backend under a prefix, the proxy must <strong>strip the prefix</strong> before forwarding, or the backend sees a path it never defined. Root mounts need no rewrite because there is no prefix to strip.</li>
+<li><strong>Consequence — same host, different outcomes.</strong> A root-mounted backend works without any rewrite; a prefix-mounted backend without a rewrite 404s every one of its own healthy routes.</li>
+<li><strong>Failure — the rewrite was dropped.</strong> When this edge migrated proxies, the old proxy's prefix-strip setting was removed and the new proxy's equivalent (<code>rewrite-target</code>) was never added. The invariant broke silently.</li>
+<li><strong>Defense — prove it by composition.</strong> Show the backend answers <code>/healthz</code> directly (it does), show the proxy forwards the unstripped prefix (it does), and show that adding the rewrite makes the edge answer <code>200</code> (it does, proven live).</li>
+</ul>
+<p>The single sentence that holds the whole ladder: <strong>a prefix mount is a promise to strip the prefix; break that promise and the backend 404s its own healthy routes.</strong></p>
+<hr />
+<h2 id="the-system-built-up-one-layer-at-a-time">The system, built up one layer at a time</h2>
+<p>Now we replace the "3-layer edge" box with what is actually inside it, and see the symptom <em>emerge</em> from the layers.</p>
+<pre class="mermaid">flowchart LR
+  C[&quot;Client&lt;br/&gt;laptop / AVD&quot;] --&gt;|&quot;HTTPS 443&quot;| AGW[&quot;Layer 1: App Gateway&lt;br/&gt;terminates TLS, runs WAF&lt;br/&gt;NO path routing (urlPathMaps empty)&quot;]
+  AGW --&gt;|&quot;HTTP 80, forwards everything&quot;| NGX[&quot;Layer 2: nginx ingress&lt;br/&gt;HOST + PATH routing&lt;br/&gt;this is where mounts live&quot;]
+  NGX --&gt;|&quot;path / -&gt; root mount&quot;| SR[&quot;Layer 3a: siteregistry pod&lt;br/&gt;serves /api/siteregistry&lt;br/&gt;200&quot;]
+  NGX --&gt;|&quot;path /telemetryfunctiontestsfn/&lt;br/&gt;prefix mount, NO rewrite&quot;| TF[&quot;Layer 3b: telemetry pod&lt;br/&gt;Azure Functions, serves /healthz at root&lt;br/&gt;404 on the prefixed path&quot;]
+</pre>
+<p>Read it layer by layer. <strong>Layer 1, the Application Gateway</strong>, only terminates TLS and runs a web-application firewall; it has no URL path map, so it forwards every path to the next layer unchanged. That is why it cannot be the culprit — it does not even look at the path to make routing decisions, and a firewall block would be a <code>403</code>, not a <code>404</code>. <strong>Layer 2, the nginx ingress</strong>, is where the real routing decisions live: it matches the hostname and the path and picks a backend. This is the only layer that knows about "mounts." <strong>Layer 3</strong> is the two backends. The siteregistry pod is mounted at <code>/</code>, so the path arrives intact and it answers. The telemetry pod is mounted under a prefix with no rewrite, so nginx forwards the whole prefixed path and the pod 404s.</p>
+<p>The pressure point is the <strong>Layer 2 → Layer 3b arrow</strong>: a prefix mount with no rewrite. Change that one arrow (add the rewrite) and the <code>404</code> becomes a <code>200</code>. The mental model to keep: <strong>only the middle layer routes; the front layer just carries bytes; the back layer only knows its own routes.</strong> Next we add <em>time</em> — the exact order of who-sees-what — because the ordering is what makes the cause testable rather than a guess.</p>
+<hr />
+<h2 id="mechanism-over-time--where-exactly-the-404-is-born">Mechanism over time — where exactly the 404 is born</h2>
+<p>A static picture can hide <em>which</em> component produced the status code. A sequence diagram fixes the order so the cause is unambiguous.</p>
+<pre class="mermaid">sequenceDiagram
+  participant Cl as Client
+  participant Ag as App Gateway
+  participant Ng as nginx ingress
+  participant Pod as telemetry pod
+  Cl-&gt;&gt;Ag: GET /telemetryfunctiontestsfn/healthz
+  Ag-&gt;&gt;Ng: GET /telemetryfunctiontestsfn/healthz  (path unchanged)
+  Ng-&gt;&gt;Pod: GET /telemetryfunctiontestsfn/healthz  (prefix NOT stripped)
+  Pod--&gt;&gt;Ng: 404  (pod has no such route)
+  Ng--&gt;&gt;Cl: 404
+  Note over Cl,Pod: With a rewrite, nginx would send GET /healthz -&gt; Pod 200
+</pre>
+<p>Follow the arrows. The client asks for the prefixed path. The App Gateway passes it along untouched. nginx — because there is no rewrite — also passes the <em>full, prefixed</em> path to the pod. The pod looks up <code>/telemetryfunctiontestsfn/healthz</code> in its route table, finds nothing, and returns <code>404</code>. nginx faithfully relays that <code>404</code> back. The note shows the counterfactual: with a rewrite, the third arrow would carry <code>/healthz</code>, and the pod would answer <code>200</code>.</p>
+<p>This ordering is the proof that the <code>404</code> is <em>born at the pod</em>, not invented by the proxy. Two independent observations confirm it: the nginx access log shows the request routed to the telemetry pod's IP and the pod returning <code>404</code>; and port-forwarding directly to the pod (bypassing nginx entirely) reproduces the exact <code>404</code> on the prefixed path while <code>/healthz</code> returns <code>200</code>. The takeaway: <strong>time ordering turns "something is broken somewhere" into "the pod 404s the prefixed path, and the proxy never stripped the prefix."</strong> That is a falsifiable claim, and the next ASCII model is the one you can redraw from memory under pressure.</p>
+<hr />
+<h2 id="the-local-mental-model-redraw-this-from-memory">The local mental model (redraw this from memory)</h2>
+<p>Keep this tiny diagram in your head; it is the whole bug in five lines.</p>
+<pre class="text"><code>   CLIENT TYPES                 NGINX FORWARDS              POD KNOWS        RESULT
+   ------------                 --------------              ---------        ------
+   /api/siteregistry      --&gt;   /api/siteregistry     --&gt;   yes (root)   --&gt;  200
+   /telemetryfn.../healthz --&gt;  /telemetryfn.../healthz --&gt;  NO           --&gt;  404   &lt;-- no rewrite
+   (with rewrite)         --&gt;   /healthz               --&gt;   yes          --&gt;  200   &lt;-- fix</code></pre>
+<p>What this captures: the middle column is the only thing that changes between "broken" and "fixed." Root-mounted services have an identical left and middle column, so they always work. Prefix-mounted services have a <em>longer</em> middle column than the pod expects — unless a rewrite shortens it back. The fix does not touch the client, the pod, or the network; it edits the middle column. If you can redraw these three rows, you can explain the entire incident at a whiteboard.</p>
+<hr />
+<h2 id="decision--evidence-surface--triage-this-class-in-five-steps">Decision / evidence surface — triage this class in five steps</h2>
+<p>This is the ladder to run when someone says "X is not accessible from AVD." It is ordered so each rung eliminates a whole family of causes.</p>
+<pre class="text"><code>[1] curl the URL -&gt; what status?
+      timeout / connection refused  --&gt; network/DNS/firewall problem (STOP, different playbook)
+      403                           --&gt; WAF/auth problem (STOP, different playbook)
+      404 over a healthy TLS connect --&gt; path-routing problem -&gt; go to [2]
+[2] does a SIBLING path on the same host return 200?
+      no   --&gt; the whole edge/cluster may be down -&gt; widen scope
+      yes  --&gt; edge + cluster are fine; it&#39;s ONE service&#39;s mount -&gt; go to [3]
+[3] kubectl get ingress &lt;svc&gt; -&gt; is it a PREFIX path with NO rewrite-target?
+      yes  --&gt; root cause found -&gt; go to [4]
+[4] port-forward to the pod: does /healthz = 200 at the ROOT?
+      yes  --&gt; app healthy; only the ingress prefix is wrong -&gt; go to [5]
+[5] FIX: add use-regex + rewrite-target:/$2 to the chart values, merge, deploy, re-curl -&gt; 200</code></pre>
+<p>Reading the ladder: the first rung is the highest-value one, because the <em>shape</em> of the failure (timeout vs 403 vs 404) instantly routes you to the right family of causes. Most wasted on-call time on this class comes from skipping rung 1 and assuming "not accessible" means "network." A clean <code>404</code> over a completed TLS handshake is the system telling you the connection is fine and the path is wrong. Rungs 2–4 then narrow from "the edge" to "one service's mount" to "the app is healthy, only routing is wrong," so by rung 5 the fix is obvious and surgical. The takeaway: <strong>let the status code pick your playbook before you touch anything.</strong></p>
+<hr />
+<h2 id="examples-and-counterexamples">Examples and counterexamples</h2>
+<ul>
+<li><strong>Example (this incident):</strong> <code>/telemetryfunctiontestsfn/healthz</code> → <code>404</code>. Prefix mount, no rewrite, pod serves at root. Textbook.</li>
+<li><strong>Counterexample that works (<code>siteregistry</code>):</strong> <code>/api/siteregistry</code> → <code>200</code>. Root mount, so the typed path equals the expected path; no rewrite needed. It works <em>by luck of its mount point</em>, which is exactly why the bug is easy to miss in review — the service everyone tests happens to be the one that cannot show the bug.</li>
+<li><strong>Sibling that fails identically (<code>deliveryreportfn</code>):</strong> <code>/deliveryreportfn/healthz</code> → <code>404</code>. Same prefix-mount-without-rewrite shape. This is the control that proves it is a <em>class</em> bug, not a one-off with the telemetry function.</li>
+<li><strong>The fix, proven (test ingress):</strong> a throwaway ingress with <code>use-regex</code> + <code>rewrite-target:/$2</code> on a unique prefix made the edge return <code>200</code> for <code>/tf-rewrite-proof/healthz</code>. Same backend, only the mount's rewrite differed.</li>
+</ul>
+<hr />
+<h2 id="failure-modes-and-anti-patterns-with-the-mechanism-that-makes-each-fail">Failure modes and anti-patterns (with the mechanism that makes each fail)</h2>
+<table>
+<thead>
+<tr>
+<th>Tempting action</th>
+<th>Why it FAILS (mechanism)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add the AVD IP to the whitelist / open the firewall</td>
+<td>The host is <strong>public</strong> and the connection already completes (you get a <code>404</code>, not a timeout). Whitelisting changes <em>reachability</em>; the bug is <em>path routing</em>. Nothing improves.</td>
+</tr>
+<tr>
+<td>Redeploy a newer image</td>
+<td>The image is the app binary; the bug is in the <strong>ingress</strong> in front of it. The image was already rebuilt and it stayed <code>404</code>.</td>
+</tr>
+<tr>
+<td><code>kubectl edit</code> the live ingress to add the rewrite</td>
+<td>Works for minutes, then the <strong>next Helm deploy re-renders the ingress from the chart</strong> and wipes your edit. This is literally how the bug survived ~15 redeploys. The fix must live in the chart values.</td>
+</tr>
+<tr>
+<td>Treat the 2026-06-02 RCA as "the fix is done"</td>
+<td>A diagnosis in a document does not change runtime. Only a <strong>merged + deployed</strong> chart change does. The fix existed on paper for 20 days while the endpoint stayed broken.</td>
+</tr>
+<tr>
+<td>Point everyone at <code>agg.dev-mc</code> (which has the correct rewrite)</td>
+<td><code>agg.dev-mc</code> is <strong>internal-only</strong> (resolves to nothing on public DNS). Without an AVD whitelist it is unreachable, so it is not a same-day unblock.</td>
+</tr>
+</tbody>
+</table>
+<p>Each row shares one root error: acting on a <em>guess about the layer</em> instead of the evidence about <em>which layer produced the status code</em>.</p>
+<hr />
+<h2 id="evidence-ledger-the-audit-trail--codes-live-here-not-in-the-prose-above">Evidence ledger (the audit trail — codes live here, not in the prose above)</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Status</th>
+<th>Witness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Edge: telemetry 404, deliveryreport 404, siteregistry 200</td>
+<td>FACT (A1)</td>
+<td><code>evidence/01-edge-http-probes.txt</code></td>
+</tr>
+<tr>
+<td>Live ingress: prefix path, no rewrite-target anywhere</td>
+<td>FACT (A1)</td>
+<td><code>evidence/02-ingress-objects.txt</code></td>
+</tr>
+<tr>
+<td>Backend healthy; <code>/healthz</code>=200 at root, prefixed=404, <code>/api/*</code>=404, <code>/admin/*</code>=401</td>
+<td>FACT (A1)</td>
+<td><code>evidence/03</code>, <code>evidence/06</code></td>
+</tr>
+<tr>
+<td>Deployed Helm release v230, chart 0.1.28, annotations <code>{}</code></td>
+<td>FACT (A1)</td>
+<td><code>evidence/05-helm-release.txt</code></td>
+</tr>
+<tr>
+<td>App Gateway pass-through (<code>urlPathMaps: []</code>, WAF_v2)</td>
+<td>FACT (A1)</td>
+<td><code>evidence/07-azure-appgw.txt</code></td>
+</tr>
+<tr>
+<td>Rewrite annotation → public 200 (live test ingress, then deleted)</td>
+<td>FACT (A1)</td>
+<td><code>evidence/08-live-rewrite-proof.txt</code></td>
+</tr>
+<tr>
+<td>The 2026-06-02 fix was never merged</td>
+<td>FACT (A1)</td>
+<td>canonical chart on the ADO default branch still has no rewrite, <code>evidence/11</code></td>
+</tr>
+<tr>
+<td><code>pathType: Prefix</code> + regex is rejected by nginx admission → <code>ImplementationSpecific</code> required</td>
+<td>FACT (A1)</td>
+<td><code>evidence/09</code></td>
+</tr>
+<tr>
+<td>WHO should own the chart merge</td>
+<td>UNVERIFIED (A3)</td>
+<td>org-attribution; not assignable from CLI tooling</td>
+</tr>
+</tbody>
+</table>
+<p>The diagnosis and the fix rest entirely on directly-observed facts, including a live <code>200</code> and a direct read of the canonical chart at the source. The only soft item left is <em>who</em> should own the merge — process, not mechanism.</p>
+<hr />
+<h2 id="challenge-defense-survive-an-experts-questions">Challenge-defense (survive an expert's questions)</h2>
+<ul>
+<li><strong>"How do you know it is the proxy and not the app?"</strong> Port-forwarding straight to the pod (no proxy in the path) reproduces the <code>404</code> on the prefixed path while <code>/healthz</code> returns <code>200</code>. The app is healthy; it simply has no route for the prefixed path.</li>
+<li><strong>"What else could explain a 404 — could it be the App Gateway or WAF?"</strong> The App Gateway has no URL path map at all, so it cannot single out one path; and a WAF block returns <code>403</code>, not <code>404</code>. Hitting nginx directly reproduces the same split, so the front layer is innocent.</li>
+<li><strong>"What would falsify your explanation?"</strong> An edge <code>200</code> on the prefixed path with no rewrite present, or a backend that returns <code>200</code> for the prefixed path when port-forwarded. Neither occurs — I re-checked the edge at the end and it was still <code>404</code>.</li>
+<li><strong>"Why is adding a rewrite guaranteed to work and not just plausible?"</strong> Because the backend already returns <code>200</code> for <code>/healthz</code>, and a live test ingress with the rewrite produced a public <code>200</code> for the same backend. The effect was observed, not predicted.</li>
+<li><strong>"Where does this abstraction leak?"</strong> The rewrite restores <code>/healthz</code>, but it does <strong>not</strong> create HTTP function endpoints — this host exposes none among the paths probed (<code>/api/*</code>=404, <code>/admin/*</code>=401). The <code>*fn</code> functions run on timers/Kafka, not HTTP, so <code>/healthz</code> reachability is the whole achievable goal. (A wrinkle the deploy must respect: nginx rejects a regex path under <code>pathType: Prefix</code>, so the chart's template must set <code>pathType: ImplementationSpecific</code> — proven live.)</li>
+</ul>
+<hr />
+<h2 id="self-test-rebuild-the-reasoning-dont-recall-trivia">Self-test (rebuild the reasoning, don't recall trivia)</h2>
+<p>Answer these from the mental model, then check yourself.</p>
+<ol type="1">
+<li>On the same hostname, <code>/a/foo</code> returns <code>200</code> and <code>/b/foo</code> returns <code>404</code>, both backends healthy. In one sentence, what is the most likely cause and the one ingress fact you would check first? <em>Answer:</em> <code>/b</code> is probably prefix-mounted without a <code>rewrite-target</code> while <code>/a</code> is root-mounted; check the <code>/b</code> ingress for a prefix path and a missing <code>nginx.ingress.kubernetes.io/rewrite-target</code>.</li>
+<li>A teammate "fixes" it with <code>kubectl edit ingress</code> and it works. Why will it break again, and when? <em>Answer:</em> the ingress is Helm-managed; the next deploy re-renders it from the chart and drops the manual edit. It breaks on the next <code>HelmDeploy</code>.</li>
+<li>The endpoint is still <code>404</code> even though the curl connects instantly and TLS succeeds. Which family of causes can you immediately rule out, and why? <em>Answer:</em> network/DNS/firewall/whitelist — those produce timeouts or refused connections, not a clean <code>404</code> over a healthy TLS handshake.</li>
+<li><strong>Transfer (near case):</strong> the same app sits behind an OpenShift <code>Route</code> instead of an nginx <code>Ingress</code>, also prefix-mounted, also <code>404</code>. What is the equivalent fix? <em>Answer:</em> add the HAProxy/OpenShift equivalent rewrite — <code>haproxy.router.openshift.io/rewrite-target: /</code> on the Route. Same invariant (strip the prefix), different proxy annotation. (This is exactly what the canonical <code>agg.dev-mc</code> deployment already does.)</li>
+</ol>
+<p><strong>Success condition:</strong> you can reconstruct, unaided, the chain <em>prefix mount → no rewrite → backend sees unknown path → 404 → add rewrite → 200</em>, and you can name the proxy-specific rewrite for at least two proxies.</p>
+<hr />
+<h2 id="durable-principles-carry-these-to-the-next-incident">Durable principles (carry these to the next incident)</h2>
+<ol type="1">
+<li><strong>The status code picks the playbook.</strong> Timeout ≠ 403 ≠ 404. A clean <code>404</code> over a healthy connection is a path problem; stop reaching for the network.</li>
+<li><strong>A prefix mount is a promise to strip the prefix.</strong> Any reverse proxy mounting a backend under a prefix must rewrite the path, or the backend 404s its own healthy routes.</li>
+<li><strong>A working sibling is a gift.</strong> If one path on a host returns <code>200</code>, the edge and cluster are fine and you have narrowed the bug to one service's mount in a single curl.</li>
+<li><strong>Verify against the deployed render, not the repo clone.</strong> Decode the live release; a stale clone will lie about what is actually running.</li>
+<li><strong>A fix is the merged, deployed chart change — not the RCA that describes it.</strong> The most expensive failure here was organizational: a correct fix that nobody landed.</li>
+</ol>
+
+</div></body></html>

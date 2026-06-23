@@ -1,0 +1,482 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  creationTimestamp: "2026-05-27T07:38:19Z"
+  deletionGracePeriodSeconds: 0
+  deletionTimestamp: "2026-06-01T10:50:12Z"
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  generation: 12022
+  name: operations-app-of-apps
+  namespace: argocd
+  ownerReferences:
+  - apiVersion: argoproj.io/v1alpha1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ApplicationSet
+    name: vpp-feature-branch-environments
+    uid: 1b27efe3-e9f5-4af8-b9c2-9c47e031f638
+  resourceVersion: "3099147385"
+  uid: 52266998-8694-4428-b7ae-60d049e8aa1b
+spec:
+  destination:
+    namespace: operations
+    server: https://kubernetes.default.svc
+  project: vpp-core
+  sources:
+  - helm:
+      valueFiles:
+      - values.yaml
+      - values.vppcore.sandbox.yaml
+      valuesObject:
+        global:
+          argocd:
+            namespace: operations
+          featureBranchEnvironment:
+            branch: feature/fbe-851436-new-tso-adx-changes
+            enabled: true
+            keyVaultName: vpp-fbe-operations-rwe
+            name: operations
+          namespace: operations
+    path: Helm/vpp-core-app-of-apps
+    repoURL: https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration
+    targetRevision: feature/fbe-851436-new-tso-adx-changes
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - PruneLast=true
+status:
+  controllerNamespace: argocd
+  health:
+    lastTransitionTime: "2026-06-01T10:50:14Z"
+    status: Progressing
+  history:
+  - deployStartedAt: "2026-05-27T07:38:20Z"
+    deployedAt: "2026-05-27T07:38:23Z"
+    id: 0
+    initiatedBy:
+      automated: true
+    revisions:
+    - e83f067c24fdfb6ff06db850810c2b0b0a6eb924
+    source:
+      repoURL: ""
+    sources:
+    - helm:
+        valueFiles:
+        - values.yaml
+        - values.vppcore.sandbox.yaml
+        valuesObject:
+          global:
+            argocd:
+              namespace: operations
+            featureBranchEnvironment:
+              branch: feature/fbe-806738-mfrr-reference-signal
+              enabled: true
+              keyVaultName: vpp-fbe-operations-oma
+              name: operations
+            namespace: operations
+      path: Helm/vpp-core-app-of-apps
+      repoURL: https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration
+      targetRevision: feature/fbe-806738-mfrr-reference-signal
+  operationState:
+    finishedAt: "2026-05-27T07:38:23Z"
+    message: successfully synced (all tasks run)
+    operation:
+      initiatedBy:
+        automated: true
+      retry:
+        limit: 5
+      sync:
+        prune: true
+        revisions:
+        - e83f067c24fdfb6ff06db850810c2b0b0a6eb924
+        syncOptions:
+        - PruneLast=true
+    phase: Succeeded
+    startedAt: "2026-05-27T07:38:20Z"
+    syncResult:
+      resources:
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/alarmpreprocessing created
+        name: alarmpreprocessing
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/dataprep created
+        name: dataprep
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/marketinteraction created
+        name: marketinteraction
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/secretprovider created
+        name: secretprovider
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/dispatchermfrr created
+        name: dispatchermfrr
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/dispatcherafrr created
+        name: dispatcherafrr
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/clientgateway created
+        name: clientgateway
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/alarmengine created
+        name: alarmengine
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/secretprovider-dispatcher created
+        name: secretprovider-dispatcher
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/gateway-nl created
+        name: gateway-nl
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/dispatcherscheduled created
+        name: dispatcherscheduled
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/assetplanning created
+        name: assetplanning
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/dispatchermanual created
+        name: dispatchermanual
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/integration-tests created
+        name: integration-tests
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/assetmonitor created
+        name: assetmonitor
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/dispatchersimulator created
+        name: dispatchersimulator
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/frontend created
+        name: frontend
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/asset created
+        name: asset
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/telemetry created
+        name: telemetry
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/activationmfrr created
+        name: activationmfrr
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/monitor created
+        name: monitor
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      - group: argoproj.io
+        hookPhase: Running
+        kind: Application
+        message: application.argoproj.io/opstools created
+        name: opstools
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1alpha1
+      revision: ""
+      revisions:
+      - e83f067c24fdfb6ff06db850810c2b0b0a6eb924
+      source:
+        repoURL: ""
+      sources:
+      - helm:
+          valueFiles:
+          - values.yaml
+          - values.vppcore.sandbox.yaml
+          valuesObject:
+            global:
+              argocd:
+                namespace: operations
+              featureBranchEnvironment:
+                branch: feature/fbe-806738-mfrr-reference-signal
+                enabled: true
+                keyVaultName: vpp-fbe-operations-oma
+                name: operations
+              namespace: operations
+        path: Helm/vpp-core-app-of-apps
+        repoURL: https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration
+        targetRevision: feature/fbe-806738-mfrr-reference-signal
+  reconciledAt: "2026-06-22T11:29:11Z"
+  resourceHealthSource: appTree
+  resources:
+  - group: argoproj.io
+    kind: Application
+    name: activationmfrr
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: alarmengine
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: alarmpreprocessing
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: asset
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: assetmonitor
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: assetplanning
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: clientgateway
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: dataprep
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: dispatcherafrr
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: dispatchermanual
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: dispatchermfrr
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: dispatcherscheduled
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: dispatchersimulator
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: frontend
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: gateway-nl
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: integration-tests
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: marketinteraction
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: monitor
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: secretprovider
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: secretprovider-dispatcher
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  - group: argoproj.io
+    kind: Application
+    name: telemetry
+    namespace: operations
+    status: OutOfSync
+    version: v1alpha1
+  sourceHydrator: {}
+  sourceTypes:
+  - Helm
+  summary: {}
+  sync:
+    comparedTo:
+      destination:
+        namespace: operations
+        server: https://kubernetes.default.svc
+      source:
+        repoURL: ""
+      sources:
+      - helm:
+          valueFiles:
+          - values.yaml
+          - values.vppcore.sandbox.yaml
+          valuesObject:
+            global:
+              argocd:
+                namespace: operations
+              featureBranchEnvironment:
+                branch: feature/fbe-851436-new-tso-adx-changes
+                enabled: true
+                keyVaultName: vpp-fbe-operations-rwe
+                name: operations
+              namespace: operations
+        path: Helm/vpp-core-app-of-apps
+        repoURL: https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration
+        targetRevision: feature/fbe-851436-new-tso-adx-changes
+    revisions:
+    - f64bcd476d25fdffc841e5cfad7d46d3761238fa
+    status: OutOfSync

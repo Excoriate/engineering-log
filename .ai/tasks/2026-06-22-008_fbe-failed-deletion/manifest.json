@@ -1,0 +1,26 @@
+{
+  "task_id": "2026-06-22-008",
+  "slug": "fbe-failed-deletion",
+  "task_root": ".ai/tasks/2026-06-22-008_fbe-failed-deletion",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_004_tiago_thor_fbe_failed_deletion"
+  ],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_004_tiago_thor_fbe_failed_deletion/quick-fix.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_004_tiago_thor_fbe_failed_deletion/rca.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_004_tiago_thor_fbe_failed_deletion/how-to-feynman.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [
+    "az live probes (read-only): cert+secret gone, no managed secrets, KV present, no thor AppConfig store, terraform.thor=313KB full, thor.appconfig.tfstate=184B empty"
+  ],
+  "gate_witnesses": [
+    "F1 mechanism: raw-requirements.md:21 (403 SecretManagedByKeyVault) + IaC key-vault.tf:26-32/locals.tf:64-118/data.tf:42-51",
+    "F1 cleared: az keyvault certificate list=[] / secret [?managed]=[] (403 class cannot recur)",
+    "F2 mechanism: ADO build 1683370 timeline+log29 (az appconfig feature list -n empty) + template sandbox.template.yml:118-124 + pipeline :99/:103",
+    "V1 blocker resolved: thor.appconfig.tfstate=184B empty (already destroyed run1 07:12) -> skip strands nothing",
+    "adversarial: sre-maniac + socrates-contrarian + el-demoledor receipts in adversarial/ (all PROCEED-WITH-CHANGES, absorbed)",
+    "RCA validators: validate-rca-completeness=PASS, check-mermaid-syntax=PASS, check-command-rationale=PASS, claim-classification=PASS; Feynman validate-feynman-doc=PASS"
+  ]
+}

@@ -1,0 +1,21 @@
+# F1/F2 EMPIRICAL PROOF — exact SHIPPED shape: pathType:Prefix + regex + use-regex — 2026-06-22T13:51:55Z UTC
+# Authorized reversible test on a UNIQUE path; managed ingress untouched.
+
+## 1. Apply with pathType: Prefix (does the API even accept a regex path under Prefix?):
+Warning: path /tf-prefix-proof(/|$)(.*) cannot be used with pathType Prefix
+Error from server (BadRequest): error when creating "STDIN": admission webhook "validate.nginx.ingress.kubernetes.io" denied the request: ingress contains invalid paths: path /tf-prefix-proof(/|$)(.*) cannot be used with pathType Prefix
+
+## 2. Probe rewritten path through the PUBLIC edge (Prefix+regex shape):
+   attempt 1: /tf-prefix-proof/healthz -> HTTP 404
+   attempt 2: /tf-prefix-proof/healthz -> HTTP 404
+   attempt 3: /tf-prefix-proof/healthz -> HTTP 404
+   attempt 4: /tf-prefix-proof/healthz -> HTTP 404
+   attempt 5: /tf-prefix-proof/healthz -> HTTP 404
+   attempt 6: /tf-prefix-proof/healthz -> HTTP 404
+   attempt 7: /tf-prefix-proof/healthz -> HTTP 404
+   attempt 8: /tf-prefix-proof/healthz -> HTTP 404
+   body => 
+
+## 3. F2 regression guard WHILE the use-regex ingress is live (siteregistry must stay 200):
+   api/siteregistry             -> 200
+   telemetryfunctiontestsfn/healthz (managed, still 404) -> 404

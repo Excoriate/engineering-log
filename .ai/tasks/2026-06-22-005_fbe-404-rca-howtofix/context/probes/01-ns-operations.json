@@ -1,0 +1,25 @@
+{
+    "apiVersion": "v1",
+    "kind": "Namespace",
+    "metadata": {
+        "annotations": {
+            "argocd.argoproj.io/tracking-id": "product-vpp-core:/Namespace:argocd/operations",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{\"argocd.argoproj.io/tracking-id\":\"product-vpp-core:/Namespace:argocd/operations\"},\"name\":\"operations\"},\"spec\":null}\n"
+        },
+        "creationTimestamp": "2025-12-12T13:01:21Z",
+        "labels": {
+            "kubernetes.io/metadata.name": "operations"
+        },
+        "name": "operations",
+        "resourceVersion": "3099121325",
+        "uid": "c90c5ca6-c7a7-46d9-a93e-b447a9507a32"
+    },
+    "spec": {
+        "finalizers": [
+            "kubernetes"
+        ]
+    },
+    "status": {
+        "phase": "Active"
+    }
+}

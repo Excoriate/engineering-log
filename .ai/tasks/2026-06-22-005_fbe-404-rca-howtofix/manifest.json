@@ -1,0 +1,22 @@
+{
+  "task_id": "2026-06-22-005",
+  "slug": "fbe-404-rca-howtofix",
+  "task_root": ".ai/tasks/2026-06-22-005_fbe-404-rca-howtofix",
+  "allowed_external_paths": ["log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan"],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/output/rca.md", "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/output/rca.html",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/output/how-to-fix.md", "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/output/how-to-fix.html",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/output/stefan-slack-explanation.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/output/how-to-recreate-this-rca.md", "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/output/sre-toil-removal-proposal.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/antecedents/", "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/proofs/"
+  ],
+  "git_mutations": [],
+  "cluster_mutations": ["kubectl patch finalizers []: operations-app-of-apps (argocd), assetmonitor (operations) — user-authorized, verified 404->200"],
+  "pending_adversarial_dispatches": [],
+  "gate_witnesses": [
+    "reviews/rca-epistemic-socrates.md (PROCEED-WITH-CHANGES, blocking absorbed)",
+    "reviews/rca-technical-demoledor.md (PROCEED-WITH-CHANGES 0 blocking)",
+    "context/probes/post-fix-verification.txt + convergence-poll.txt (404->200, 21/21)",
+    "proofs/outputs/ (11 raw probe artifacts)"
+  ]
+}

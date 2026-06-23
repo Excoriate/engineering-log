@@ -1,0 +1,9 @@
+{
+  "task_id": "2026-06-22-007",
+  "slug": "render-fbe-duncan-html",
+  "task_root": ".ai/tasks/2026-06-22-007_render-fbe-duncan-html",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_003_feature_flags_fbe_duncan/rca.html",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_003_feature_flags_fbe_duncan/how-to-fix.html"
+  ]
+}

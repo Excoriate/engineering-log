@@ -1,0 +1,75 @@
+{
+  "task_id": "2026-06-22-001",
+  "slug": "rootly-argocd-sync-alerts",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-06-22-001_rootly-argocd-sync-alerts",
+  "allowed_external_paths": [],
+  "created": "2026-06-22T07:23:33Z",
+  "modified": "2026-06-22T07:36:00Z",
+  "external_writes": [
+    {
+      "system": "Rootly",
+      "operation": "resolve alerts",
+      "count": 30,
+      "ids": [
+        "GaT1ty",
+        "QyelVh",
+        "nt9JOX",
+        "hcQEOi",
+        "ZFi8Io",
+        "dfk93w",
+        "LEet6E",
+        "ZntYO3",
+        "ZC8HCp",
+        "KLCIIK",
+        "pDoo0t",
+        "zeKCl3",
+        "iJEMJh",
+        "PGgxEY",
+        "MHkht6",
+        "q4hGPM",
+        "Oa8Qpr",
+        "fvfiFL",
+        "CxOSKZ",
+        "Jqq4ku",
+        "MsQtRW",
+        "Dyq2NY",
+        "IKzxtx",
+        "tkdBPa",
+        "MECCjA",
+        "Jsz6w9",
+        "DCrAvw",
+        "Xirq7m",
+        "ovnxHt",
+        "0UJr94"
+      ]
+    }
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [
+    {
+      "claim": "June 19 onward candidate list is complete",
+      "attack": "Rootly reported two pages for the query, so page 2 was required before synthesis",
+      "result": "both pages queried"
+    },
+    {
+      "claim": "last two days means the same as screenshot-visible alerts",
+      "attack": "strict rolling 48-hour query produces a different set",
+      "result": "final output separates the two boundaries"
+    }
+  ],
+  "gate_witnesses": [
+    {
+      "gate": "Rootly pagination",
+      "claim": "all acknowledged June 19 onward ArgoCDSyncAlert candidates were listed",
+      "witness_type": "external-runtime-output",
+      "witness_path": ".ai/tasks/2026-06-22-001_rootly-argocd-sync-alerts/verification/results.md"
+    },
+    {
+      "gate": "Rootly status verification",
+      "claim": "all 30 selected ArgoCDSyncAlert alerts are resolved",
+      "witness_type": "external-runtime-output",
+      "witness_path": ".ai/tasks/2026-06-22-001_rootly-argocd-sync-alerts/outcome/resolution-results.md"
+    }
+  ]
+}

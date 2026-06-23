@@ -1,0 +1,42 @@
+# Live nginx Ingress objects (ns vpp-agg) — 2026-06-22T13:32:02Z UTC
+
+## telemetryfunctiontestsfn-ingress (the failing one):
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    meta.helm.sh/release-name: telemetryfunctiontestsfn
+    meta.helm.sh/release-namespace: vpp-agg
+  creationTimestamp: "2025-01-20T11:58:27Z"
+  generation: 4
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    k8slens-edit-resource-version: v1
+  name: telemetryfunctiontestsfn-ingress
+  namespace: vpp-agg
+  resourceVersion: "2427956399"
+  uid: 64704fa3-d373-4165-a7da-97c454d535a0
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: agg.dev.vpp.eneco.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: telemetryfunctiontestsfn
+            port:
+              number: 8080
+        path: /telemetryfunctiontestsfn/
+        pathType: Prefix
+status:
+  loadBalancer:
+    ingress:
+    - ip: 50.85.91.121
+
+## siteregistry-ingress (the 200 control):
+{"meta.helm.sh/release-name":"siteregistry","meta.helm.sh/release-namespace":"vpp-agg"}
+PATH=/
+
+## rewrite-target grep across all vpp-agg ingresses (0 hits = root cause persists):
+NO rewrite-target / use-regex / backend-path-prefix ANYWHERE

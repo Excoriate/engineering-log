@@ -1,0 +1,31 @@
+# Deployed Helm release for telemetryfunctiontestsfn — 2026-06-22T13:32:42Z UTC
+
+Latest release secret: secret/sh.helm.release.v1.telemetryfunctiontestsfn.v230
+
+{
+  "chart_version": "0.1.28",
+  "chart_name": "telemetryfunctiontestsfn",
+  "app_version": "latest",
+  "release_status": "deployed",
+  "ingress_chart_default": {
+    "annotations": {},
+    "className": "nginx",
+    "enabled": true,
+    "hostname": "agg.dev.vpp.eneco.com",
+    "hosts": [],
+    "httpPort": 8080,
+    "path": "/telemetryfunctiontestsfn/",
+    "secret": "",
+    "tls": []
+  },
+  "deployed_overrides": {
+    "image": {
+      "name": "eneco-vpp-agg/telemetryfunctiontestsfn",
+      "repository": "eneco-vpp-agg/telemetryfunctiontestsfn",
+      "tag": "adhoc-0.0.1.1479"
+    },
+    "ingress": {
+      "hostname": "agg.dev.vpp.eneco.com"
+    }
+  }
+}

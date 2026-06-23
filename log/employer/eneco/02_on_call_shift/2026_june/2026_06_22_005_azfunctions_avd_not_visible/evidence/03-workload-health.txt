@@ -1,0 +1,19 @@
+# Workload health (ns vpp-agg) — 2026-06-22T13:32:03Z UTC
+
+NAME                                                                READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/telemetryfunctiontestsfn-telemetryfunctiontestsfn   1/1     1            1           518d
+
+NAME                               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/telemetryfunctiontestsfn   ClusterIP   10.2.155.205   <none>        8080/TCP   518d
+
+NAME                                 ENDPOINTS        AGE
+endpoints/telemetryfunctiontestsfn   10.0.2.43:8080   518d
+
+NAME                                                                  READY   STATUS    RESTARTS      AGE
+pod/telemetryfunctiontestsfn-telemetryfunctiontestsfn-dcbf8c6dvvdjq   1/1     Running   1 (19m ago)   141m
+
+## (fallback if label differs) all telemetry* objects:
+deployment.apps/telemetryfunctiontestsfn-telemetryfunctiontestsfn       1/1     1            1           518d
+service/telemetryfunctiontestsfn   ClusterIP   10.2.155.205   <none>        8080/TCP   518d
+endpoints/telemetryfunctiontestsfn   10.0.2.43:8080    518d
+pod/telemetryfunctiontestsfn-telemetryfunctiontestsfn-dcbf8c6dvvdjq   1/1     Running     1 (19m ago)   141m

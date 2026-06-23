@@ -1,0 +1,19 @@
+Slack item
+https://grid-eneco.enterprise.slack.com/lists/T039G7V20/F0ACUPDV7HU?record_id=Rec0BC1FTLV35
+
+It's similar to my earlier one from Thursday about feature flags and FBEs. Now I have Jupiter FBE and I am looking at it though AVD, but the calls for app configuration are failing. So the FFs cannot be set properly as I am getting 401's.  I can see the FFs set properly in the app config. Am I missing something?
+
+User Duncan Teegelaar
+he says it's similar to this one: https://grid-eneco.enterprise.slack.com/lists/T039G7V20/F0ACUPDV7HU?record_id=Rec0BBGJ9DMFU
+Here's the text
+---
+
+
+Preface: I have not worked on VPP in a bit so I don't remember exactly how it used to be.
+
+Has something changed regarding feature flags? I do not know how long this has been, but I feel like before I could fetch the feature flags on dev-mc with just my VPN. Now it does not work (anymore) but it does work on AVD.
+
+I also noticed with FBEs that feature flags are inconsistent on VPN; sometimes they work, sometimes they don’t. I am recreating an FBE that did not succeed in fetching the FFs yesterday, so let's see.
+
+I also feel like before I could've seen the FFs while on VPN, but again not sure. https://portal.azure.com/#@Eneco.onmicrosoft.com/resource/subscriptions/839af51e-c8dd-4bd2-944b-a7799eb2e1e4/resourceGroups/mcdta-rg-vpp-d-res/providers/Microsoft.AppConfiguration/configurationStores/vpp-applicationconfig-d/ff
+---

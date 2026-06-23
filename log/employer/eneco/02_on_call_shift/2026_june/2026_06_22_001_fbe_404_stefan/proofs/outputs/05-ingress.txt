@@ -1,0 +1,2 @@
+NAME           CLASS   HOSTS                          ADDRESS        PORTS   AGE
+assetmonitor   nginx   operations.dev.vpp.eneco.com   50.85.91.121   80      26d

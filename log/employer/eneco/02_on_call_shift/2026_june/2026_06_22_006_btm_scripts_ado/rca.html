@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Holistic RCA — BTM PR auto-tagging</title>
+<style>
+  :root { --ink:#1a1a2e; --mut:#5a5a72; --line:#e2e2ee; --accent:#7c3aed; --code:#0f172a; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+         line-height:1.62; color:var(--ink); max-width:980px; margin:0 auto; padding:2.5rem 1.4rem; }
+  h1,h2,h3 { line-height:1.25; margin-top:2rem; }
+  h1 { border-bottom:3px solid var(--accent); padding-bottom:.4rem; }
+  h2 { border-bottom:1px solid var(--line); padding-bottom:.3rem; color:#26204d; }
+  code { background:#f3f3fb; padding:.12em .35em; border-radius:4px; font-size:.88em; }
+  pre { background:var(--code); color:#e2e8f0; padding:1rem; border-radius:8px; overflow:auto; font-size:.84rem; }
+  pre code { background:none; color:inherit; padding:0; }
+  table { border-collapse:collapse; width:100%; margin:1rem 0; font-size:.92rem; }
+  th,td { border:1px solid var(--line); padding:.5rem .65rem; text-align:left; vertical-align:top; }
+  th { background:#f7f7fc; }
+  blockquote { border-left:4px solid var(--accent); margin:1rem 0; padding:.4rem 1rem; background:#faf8ff; color:var(--mut); }
+  .diagram, .mermaid { margin:1.2rem 0; padding:1rem; background:#fafaff; border:1px solid var(--line); border-radius:8px; text-align:center; overflow:auto; }
+  .diagram svg { max-width:100%; height:auto; }
+  a { color:var(--accent); }
+</style></head>
+<body>
+<h1
+id="holistic-rca--why-the-btm-deploy-pipeline-never-tags-its-work-items">Holistic
+RCA — Why the BTM deploy pipeline never tags its work items</h1>
+<blockquote>
+<p>Teaching companion (first-principles, replicable): <a
+href="./how-to-fix.md"><code>how-to-fix.md</code></a>. Raw evidence +
+live probe transcripts:
+<code>.ai/tasks/2026-06-22-010_btm-scripts-ado-rca-verify/</code>. This
+package <strong>supersedes</strong> <a
+href="./old_attempt_to_fix_it/"><code>old_attempt_to_fix_it/</code></a>
+— that earlier analysis was rigorous but diagnosed the wrong layer (see
+"Correction to the prior RCA").</p>
+</blockquote>
+<h2 id="what-is-proven-vs-what-is-not-yet-proven-read-this-first">What
+is proven vs what is not yet proven (read this first)</h2>
+<p>You asked for 100% verification with no unverified claims. Here is
+the honest split, because the distinction is itself load-bearing:</p>
+<ul>
+<li><strong>PROVEN LIVE (directly observed this session, re-confirmed
+under adversarial attack):</strong> the pipeline's
+<code>az boards</code> calls authenticate as the <strong>deployment
+service principal</strong> (<code>mcc-btm-deployment-dta-sp</code>), not
+the Build Service identity; that SP <strong>cannot read</strong> the
+Team BtM board (its query returns an empty set in the actual pipeline);
+the <strong>Build Service identity can</strong> read and write that
+board; the SP was added to Azure DevOps on 2026-04-22;
+<code>az login</code> precedence over <code>AZURE_DEVOPS_EXT_PAT</code>
+is the mechanism. All of this is first-party evidence in the Evidence
+Ledger.</li>
+<li><strong>NOT YET PROVEN (structurally requires running the pipeline,
+which I did not do):</strong> that the <em>fixed</em> pipeline produces
+a <em>realized tag end-to-end</em>. The fix is proven correct at the
+permission/identity layer (the Build Service has the rights), but the
+final "did the tag actually land" check is the <strong>acceptance test
+the contributor runs after the PR merges</strong> — see L9. This is the
+one residual, and it cannot be closed from a laptop.</li>
+<li><strong>BLOCKED (needs a Project/Collection Administrator), does NOT
+change the diagnosis or fix:</strong> the exact Azure DevOps audit-log
+entry for the 2026-04-22 change, and the content of one build log that
+has aged out of retention.</li>
+</ul>
+<h2 id="executive-summary">Executive summary</h2>
+<p>The "Behind The Meter" (BTM) team has a deployment pipeline that,
+after each environment deploy, stamps a
+<code>DEV</code>/<code>ACC</code>/<code>PRD</code> tag onto the Azure
+DevOps <strong>work item</strong> linked to the change — a board-hygiene
+signal showing "how far has this story shipped." That tagging silently
+stopped working. The pipeline goes green; the tag never appears.</p>
+<p>The visible error is
+<code>TF401019: The Git repository ... eneco.vpp.behindthemeter does not exist or you do not have permissions ... 404</code>.
+The previous investigation concluded the cause was a Git-repository
+auto-detection call (<code>/vsts/info</code>) being denied, with the fix
+being to add <code>--detect false</code> to the <code>az boards</code>
+call. That is <strong>correct but incomplete</strong>: when the BTM
+engineer applied that workaround, the error disappeared but the query
+came back <strong>empty</strong> — so the tags still never applied. That
+second symptom is the real blocker, and it is the one this RCA
+explains.</p>
+<p>The actual mechanism is an <strong>identity</strong> problem, not a
+flag problem. The deploy job logs in to Azure with a service principal
+(<code>mcc-btm-deployment-dta-sp</code> for dev/acc,
+<code>mcc-btm-deployment-prd-sp</code> for prod) so Terraform can
+deploy. The tag step then sets
+<code>AZURE_DEVOPS_EXT_PAT=$(System.AccessToken)</code> intending to
+talk to the board as the pipeline's own Build Service identity. But the
+Azure DevOps CLI, when an <code>az login</code> session already exists
+on the agent, <strong>uses that login session in preference to the PAT
+environment variable</strong>. So <code>az boards</code> actually runs
+as the <strong>deployment service principal</strong> — and that service
+principal, added to the org on 2026-04-22, has <strong>no permission to
+view work items in the Team BtM area</strong>. Two consequences fall out
+of the same root: the SP also lacks the repo read that the
+auto-detection call needs (that is the <code>TF401019</code>), and once
+you remove that call, the SP's board query simply returns nothing.</p>
+<p>The impact is operational-visibility only: deployments succeed, the
+board's environment tags go stale. No customer-facing or trading impact.
+But because the step swallows its own errors (no <code>set -e</code>,
+the query runs inside a process substitution), it reports success while
+doing nothing — so the failure was invisible until someone noticed the
+missing tags.</p>
+<p>Why the alert/symptom is what it is: <code>TF401019</code> is Azure
+DevOps' documented "404 that really means 403" — the SP is denied a
+repository-context read and the API hides the 403 as a 404. The empty
+result is a clean <code>HTTP 200</code> with zero rows — the query ran,
+the identity just couldn't see anything.</p>
+<p>The fix that actually works restores the <strong>author's original
+intent</strong>: make the tag step run as the Build Service identity,
+which <em>does</em> have board read/write. The cleanest way — and the
+one the sibling Aggregation team already merged for their copy of this
+pipeline — is to run the tag step in its <strong>own job that does not
+perform the service-principal login</strong>, so the
+<code>System.AccessToken</code> PAT is the only credential present and
+is therefore used. This needs <strong>no second/paid runner</strong> (it
+can stay on the same Microsoft-hosted pool), directly answering the BTM
+team's cost concern. Combine that with the script hardening that kills
+the <code>TF401019</code> and surfaces failures
+loudly-but-non-blockingly.</p>
+<p>What a future engineer should remember: <strong>a green pipeline step
+is not a realized effect</strong>, and <strong>the identity a CLI uses
+is not always the one you set in an env var</strong> — an earlier
+<code>az login</code> can quietly win. Verify the <em>tag</em>, not the
+exit code; verify the <em>identity</em>, not the YAML's intent.</p>
+<h2 id="context-ledger-zero-context-reader">Context Ledger (zero-context
+reader)</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+<th>Relevance to this incident</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BTM / Team BtM</strong></td>
+<td>"Behind-The-Meter" — energy assets behind the customer meter. Names
+the team, the repo <code>Eneco.Vpp.BehindTheMeter</code>, and the board
+<strong>area</strong> <code>Myriad - VPP\Team BtM</code> (AreaId
+<strong>6393</strong>, node GUID <code>dfb04683-…</code>).</td>
+<td>Owns the pipeline and the work items being tagged.</td>
+</tr>
+<tr>
+<td><strong>VPP / Myriad</strong></td>
+<td>Virtual Power Plant — Eneco's energy-trading platform. Azure DevOps
+project <code>Myriad - VPP</code>, org
+<code>enecomanagedcloud</code>.</td>
+<td>The project that hosts the repo, pipeline, and board.</td>
+</tr>
+<tr>
+<td><strong>PR auto-tagging</strong></td>
+<td>A pipeline step
+(<code>azure-pipelines/steps/azure-boards-add-tag.sh</code>) that stamps
+<code>DEV</code>/<code>ACC</code>/<code>PRD</code> on the work item
+linked to a deployed change.</td>
+<td>The thing that "broke".</td>
+</tr>
+<tr>
+<td><strong><code>az boards</code></strong></td>
+<td>The Azure DevOps CLI (the <code>azure-devops</code> az extension)
+for board / work-item operations.</td>
+<td>The command that fails.</td>
+</tr>
+<tr>
+<td><strong>Work item / WIQL</strong></td>
+<td>A board item (story/bug); WIQL is the query language
+<code>az boards query</code> runs.</td>
+<td>The query that returns empty for the SP.</td>
+</tr>
+<tr>
+<td><strong><code>System.AccessToken</code></strong></td>
+<td>The pipeline job's built-in OAuth token = the project <strong>Build
+Service</strong> identity
+(<code>Myriad - VPP Build Service (enecomanagedcloud)</code>).
+Independent of the agent pool.</td>
+<td>The identity the script's author <em>intended</em>
+<code>az boards</code> to use.</td>
+</tr>
+<tr>
+<td><strong>Build Service identity</strong></td>
+<td>The project's automation identity behind
+<code>System.AccessToken</code>. A member of the project Contributors
+(and here Project Administrators), with board read/write.</td>
+<td>The identity that <em>can</em> tag the board — the target of the
+fix.</td>
+</tr>
+<tr>
+<td><strong><code>mcc-btm-deployment-dta-sp</code> /
+<code>-prd-sp</code></strong></td>
+<td>Azure AD service principals used by <code>azure-login.yml</code> to
+log the agent into Azure so Terraform can deploy (dta = dev/test/acc,
+prd = prod).</td>
+<td>The identity <code>az boards</code> <em>actually</em> uses — and
+which lacks board permission.</td>
+</tr>
+<tr>
+<td><strong><code>AZURE_DEVOPS_EXT_PAT</code></strong></td>
+<td>Env var the <code>az</code> devops extension reads as a Personal
+Access Token credential.</td>
+<td>Set to <code>System.AccessToken</code> in the tag step — but ignored
+when an <code>az login</code> session exists.</td>
+</tr>
+<tr>
+<td><strong><code>az login</code> precedence</strong></td>
+<td>When the agent already has an <code>az login</code> session, the
+devops CLI uses it in preference to
+<code>AZURE_DEVOPS_EXT_PAT</code>.</td>
+<td>The crux: the SP login (for Terraform) hijacks the board call.</td>
+</tr>
+<tr>
+<td><strong><code>enforceJobAuthScope</code></strong></td>
+<td>Project setting "limit job authorization scope to current project"
+(true here).</td>
+<td>Project-scopes the Build Service token; not the cause here, but it
+bounds the token.</td>
+</tr>
+<tr>
+<td><strong><code>TF401019</code></strong></td>
+<td>Azure DevOps error "repo does not exist OR you lack permission …
+404" — a documented <strong>404-masks-403</strong>.</td>
+<td>The loud symptom; here it is the SP being denied a repo-context
+read.</td>
+</tr>
+<tr>
+<td><strong><code>/vsts/info</code></strong></td>
+<td>The repo-context auto-detection call <code>az boards</code> makes
+when <code>--organization/--project</code> are omitted and its
+per-remote cache is cold.</td>
+<td>The specific call that is denied → <code>TF401019</code>.</td>
+</tr>
+<tr>
+<td><strong>Area-path permission</strong></td>
+<td>"View work items in this node" / "Edit work items in this node" —
+the per-area ACL governing board read/write.</td>
+<td>The exact permission the SP lacks and the Build Service has on
+AreaId 6393.</td>
+</tr>
+<tr>
+<td><strong>PR 178802</strong></td>
+<td>The Aggregation (<code>.B2B</code>) team's already-merged fix for
+the same pattern: tagging moved to a separate job on a different
+pool.</td>
+<td>The precedent for the recommended fix — and proof the identity
+change is what worked.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rca-knowledge-contract">RCA Knowledge Contract</h2>
+<p>After reading this package, a zero-context reader can:</p>
+<ol type="1">
+<li><strong>draw</strong> the BTM deploy pipeline's boundary and name
+which identity each step runs as;</li>
+<li><strong>trace</strong> the mechanism from "green build" to "tag
+never applied", through both the <code>TF401019</code> and the
+empty-result symptoms, to the failed invariant (the board-calling
+identity lacks board permission);</li>
+<li><strong>reproduce</strong> the key probes from cold (the
+identity-precedence demo, the SP-vs-Alex query contrast, the area-path
+ACL read);</li>
+<li><strong>reject</strong> the two false explanations the prior package
+and the sibling team believed ("the fix is <code>--detect false</code>"
+and "switching the runner pool fixes it");</li>
+<li><strong>repair</strong> safely by moving tagging to the Build
+Service identity, and <strong>prove</strong> it with the realized-tag
+acceptance check;</li>
+<li><strong>decide</strong> what to remove from the hot path (the
+silent-failure pattern, the identity coupling) versus what to keep
+manual.</li>
+</ol>
+<h2 id="l1--business--why-btm-pr-auto-tagging-exists">L1 — Business —
+why BTM PR auto-tagging exists</h2>
+<p>The BTM team tracks each user story's delivery progress on its Azure
+Board. When a change deploys to an environment, the pipeline stamps
+<code>DEV</code>/<code>ACC</code>/<code>PRD</code> on the linked work
+item so the board shows "how far has this shipped" without anyone
+tagging by hand. It is <strong>cosmetic but operationally
+useful</strong> board hygiene: a failure does not break a deployment,
+only the team's release-visibility signal and any reporting that filters
+by environment tag. Priority in the intake was low ("I can wait a couple
+of days"). <strong>Who is blocked:</strong> the BTM team's board
+accuracy.</p>
+<p>The mental handle: this is a <em>post-deploy side effect</em>, not
+part of the deploy. That is why it can fail silently for weeks — nothing
+that gates a release depends on it.</p>
+<h2 id="l2--repo-system">L2 — Repo system</h2>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Role</th>
+<th>Key artifacts</th>
+<th>Incident relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a
+href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Eneco.Vpp.BehindTheMeter"><code>Eneco.Vpp.BehindTheMeter</code></a>
+(id <code>718866fa-…</code>)</td>
+<td>The BTM service + its deploy pipeline</td>
+<td><code>azure-pipelines/deploy-terraform.pipeline.yml</code>,
+<code>azure-pipelines/steps/azure-login.yml</code>,
+<code>azure-pipelines/steps/azure-boards-add-tag.sh</code></td>
+<td>Holds the pipeline, the SP-login step, and the tag script — all
+three are in play</td>
+</tr>
+<tr>
+<td><a
+href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Eneco.Vpp.BehindTheMeter.B2B"><code>Eneco.Vpp.BehindTheMeter.B2B</code></a>
+(id <code>5bb311ec-…</code>)</td>
+<td>The sibling Aggregation-team service, same tagging pattern</td>
+<td>same pipeline shape; <a
+href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Eneco.Vpp.BehindTheMeter.B2B/pullrequest/178802">PR
+178802</a></td>
+<td>The team that already "fixed" this — and how they fixed it is the
+key to the real mechanism</td>
+</tr>
+</tbody>
+</table>
+<p>Both repos live in the <strong>same</strong> Azure DevOps project
+(<code>Myriad - VPP</code>). That single fact, established in L2,
+becomes load-bearing in L8: because they share a project, both
+pipelines' <code>System.AccessToken</code> resolve to the
+<strong>same</strong> Build Service identity — so whatever permission
+that identity has applies to both teams' boards.</p>
+<h2 id="l3--runtime-architecture">L3 — Runtime architecture</h2>
+<p>The pipeline is <a
+href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Eneco.Vpp.BehindTheMeter?path=/azure-pipelines/deploy-terraform.pipeline.yml"><code>deploy-terraform.pipeline.yml</code></a>
+(definition <strong>4667</strong>), default pool
+<code>vmImage: ubuntu-24.04</code> (Microsoft-hosted,
+<strong>ephemeral</strong>). It runs
+<code>Build → Development → Acceptance → Production</code>. Each
+environment stage is a <code>deployment</code> job whose
+<code>runOnce.deploy.steps</code> are, in order:
+<code>checkout: self</code> → <code>azure-login.yml</code> →
+<code>terraform.yml apply</code> → <strong>the tag step</strong>. The
+tag step is the last step <em>inside the same job</em> as the SP
+login.</p>
+<blockquote>
+<p>The diagram below shows the one fact that the prior RCA missed: the
+tag step shares a job — and therefore a logged-in <code>az</code>
+session — with the service-principal login. Watch where the identity
+comes from.</p>
+</blockquote>
+<div class="diagram"><svg id="my-svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 608px; background-color: transparent;" viewBox="-131 0 608 1303.171875" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#my-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#my-svg .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#my-svg .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#my-svg .error-icon{fill:#552222;}#my-svg .error-text{fill:#552222;stroke:#552222;}#my-svg .edge-thickness-normal{stroke-width:1px;}#my-svg .edge-thickness-thick{stroke-width:3.5px;}#my-svg .edge-pattern-solid{stroke-dasharray:0;}#my-svg .edge-thickness-invisible{stroke-width:0;fill:none;}#my-svg .edge-pattern-dashed{stroke-dasharray:3;}#my-svg .edge-pattern-dotted{stroke-dasharray:2;}#my-svg .marker{fill:#333333;stroke:#333333;}#my-svg .marker.cross{stroke:#333333;}#my-svg svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#my-svg p{margin:0;}#my-svg .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#my-svg .cluster-label text{fill:#333;}#my-svg .cluster-label span{color:#333;}#my-svg .cluster-label span p{background-color:transparent;}#my-svg .label text,#my-svg span{fill:#333;color:#333;}#my-svg .node rect,#my-svg .node circle,#my-svg .node ellipse,#my-svg .node polygon,#my-svg .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#my-svg .rough-node .label text,#my-svg .node .label text,#my-svg .image-shape .label,#my-svg .icon-shape .label{text-anchor:middle;}#my-svg .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#my-svg .rough-node .label,#my-svg .node .label,#my-svg .image-shape .label,#my-svg .icon-shape .label{text-align:center;}#my-svg .node.clickable{cursor:pointer;}#my-svg .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#my-svg .arrowheadPath{fill:#333333;}#my-svg .edgePath .path{stroke:#333333;stroke-width:1px;}#my-svg .flowchart-link{stroke:#333333;fill:none;}#my-svg .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#my-svg .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#my-svg .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#my-svg .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#my-svg .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#my-svg .cluster text{fill:#333;}#my-svg .cluster span{color:#333;}#my-svg div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#my-svg .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#my-svg rect.text{fill:none;stroke-width:0;}#my-svg .icon-shape,#my-svg .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#my-svg .icon-shape p,#my-svg .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#my-svg .icon-shape .label rect,#my-svg .image-shape .label rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#my-svg .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#my-svg .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#my-svg .node .neo-node{stroke:#9370DB;}#my-svg [data-look="neo"].node rect,#my-svg [data-look="neo"].cluster rect,#my-svg [data-look="neo"].node polygon{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node path{stroke:#9370DB;stroke-width:1px;}#my-svg [data-look="neo"].node .outer-path{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node .neo-line path{stroke:#9370DB;filter:none;}#my-svg [data-look="neo"].node circle{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node circle .state-start{fill:#000000;}#my-svg [data-look="neo"].icon-shape .icon{fill:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].icon-shape .icon-neo path{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"/></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"><g class="cluster" id="my-svg-Job" data-look="classic"><rect style="" x="-123" y="8" width="592" height="632"/><g class="cluster-label" transform="translate(-119, 8)"><foreignObject width="584" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5;"><span class="nodeLabel"><p>deployment job 'Apply Development' (one ubuntu-24.04 agent, shared az session)</p></span></div></foreignObject></g></g></g><g class="edgePaths"><path d="M173,87L173,91.167C173,95.333,173,103.667,173,111.333C173,119,173,126,173,129.5L173,133" id="my-svg-L_CO_LOGIN_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_CO_LOGIN_0" data-points="W3sieCI6MTczLCJ5Ijo4N30seyJ4IjoxNzMsInkiOjExMn0seyJ4IjoxNzMsInkiOjEzN31d" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)"/><path d="M173,263L173,267.167C173,271.333,173,279.667,173,287.333C173,295,173,302,173,305.5L173,309" id="my-svg-L_LOGIN_TF_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_LOGIN_TF_0" data-points="W3sieCI6MTczLCJ5IjoyNjN9LHsieCI6MTczLCJ5IjoyODh9LHsieCI6MTczLCJ5IjozMTN9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)"/><path d="M173,391L173,395.167C173,399.333,173,407.667,173,415.333C173,423,173,430,173,433.5L173,437" id="my-svg-L_TF_TAG_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_TF_TAG_0" data-points="W3sieCI6MTczLCJ5IjozOTF9LHsieCI6MTczLCJ5Ijo0MTZ9LHsieCI6MTczLCJ5Ijo0NDF9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)"/><path d="M173,615L173,619.167C173,623.333,173,631.667,173,644C173,656.333,173,672.667,173,688.333C173,704,173,719,173,726.5L173,734" id="my-svg-L_TAG_Q_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_TAG_Q_0" data-points="W3sieCI6MTczLCJ5Ijo2MTV9LHsieCI6MTczLCJ5Ijo2NDB9LHsieCI6MTczLCJ5Ijo2ODl9LHsieCI6MTczLCJ5Ijo3Mzh9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)"/><path d="M173,967.172L173,973.339C173,979.505,173,991.839,173,1003.505C173,1015.172,173,1026.172,173,1031.672L173,1037.172" id="my-svg-L_Q_SP_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_Q_SP_0" data-points="W3sieCI6MTczLCJ5Ijo5NjcuMTcxODc1fSx7IngiOjE3MywieSI6MTAwNC4xNzE4NzV9LHsieCI6MTczLCJ5IjoxMDQxLjE3MTg3NX1d" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)"/><path d="M173,1119.172L173,1123.339C173,1127.505,173,1135.839,173,1143.505C173,1151.172,173,1158.172,173,1161.672L173,1165.172" id="my-svg-L_SP_FAIL_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_SP_FAIL_0" data-points="W3sieCI6MTczLCJ5IjoxMTE5LjE3MTg3NX0seyJ4IjoxNzMsInkiOjExNDQuMTcxODc1fSx7IngiOjE3MywieSI6MTE2OS4xNzE4NzV9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)"/></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="L_CO_LOGIN_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_LOGIN_TF_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_TF_TAG_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(173, 689)"><g class="label" data-id="L_TAG_Q_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>az boards: which credential?</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(173, 1004.171875)"><g class="label" data-id="L_Q_SP_0" transform="translate(-67.6328125, -12)"><foreignObject width="135.265625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>YES → use az login</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_SP_FAIL_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-CO-0" data-look="classic" transform="translate(173, 60)"><rect class="basic label-container" style="" x="-80.796875" y="-27" width="161.59375" height="54"/><g class="label" style="" transform="translate(-50.796875, -12)"><rect/><foreignObject width="101.59375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>checkout: self</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-LOGIN-1" data-look="classic" transform="translate(173, 200)"><rect class="basic label-container" style="" x="-130" y="-63" width="260" height="126"/><g class="label" style="" transform="translate(-100, -48)"><rect/><foreignObject width="200" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>azure-login.yml<br />az login --service-principal<br />= mcc-btm-deployment-dta-sp</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-TF-3" data-look="classic" transform="translate(173, 352)"><rect class="basic label-container" style="" x="-102.671875" y="-39" width="205.34375" height="78"/><g class="label" style="" transform="translate(-72.671875, -24)"><rect/><foreignObject width="145.34375" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>terraform.yml apply<br />(needs the SP)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-TAG-5" data-look="classic" transform="translate(173, 528)"><rect class="basic label-container" style="" x="-130" y="-87" width="260" height="174"/><g class="label" style="" transform="translate(-100, -72)"><rect/><foreignObject width="200" height="144"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>azure-boards-add-tag.sh<br />env: AZURE_DEVOPS_EXT_PAT = System.AccessToken<br />(author INTENDS Build Service)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-Q-7" data-look="classic" transform="translate(173, 852.5859375)"><polygon points="114.5859375,0 229.171875,-114.5859375 114.5859375,-229.171875 0,-114.5859375" class="label-container" transform="translate(-114.0859375, 114.5859375)"/><g class="label" style="" transform="translate(-87.5859375, -12)"><rect/><foreignObject width="175.171875" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>az login session present?</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-SP-9" data-look="classic" transform="translate(173, 1080.171875)"><rect class="basic label-container" style="" x="-99.53125" y="-39" width="199.0625" height="78"/><g class="label" style="" transform="translate(-69.53125, -24)"><rect/><foreignObject width="139.0625" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>runs as dta-sp<br />(NOT Build Service)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-FAIL-11" data-look="classic" transform="translate(173, 1232.171875)"><rect class="basic label-container" style="" x="-130" y="-63" width="260" height="126"/><g class="label" style="" transform="translate(-100, -48)"><rect/><foreignObject width="200" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>repo read denied → TF401019<br />board read denied → workItems:[]</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"/></filter></defs></svg></div>
+<p>Reading the picture: the deploy job logs in as the SP because
+Terraform needs it. That login leaves a session on the agent. When the
+tag step runs <code>az boards</code>, the CLI sees the existing
+<code>az login</code> session and uses it — <em>ignoring</em> the
+<code>AZURE_DEVOPS_EXT_PAT</code> the author set. So the box labelled
+"author intends Build Service" does not get its wish: the call exits the
+job as the <strong>deployment SP</strong>. Everything downstream (the
+<code>TF401019</code>, the empty result) follows from that single wrong
+identity. If the tag step ran in a job <em>without</em> the SP login,
+the only credential present would be the PAT, and the picture would end
+at "runs as Build Service → succeeds."</p>
+<p>Mental model to keep: <strong>identity is a property of the agent's
+auth state at call time, not of the env var you set.</strong> The SP
+login earlier in the job decides who <code>az boards</code> is.</p>
+<h2 id="l4--application-code-flow">L4 — Application code flow</h2>
+<p>The tag script (<a
+href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Eneco.Vpp.BehindTheMeter?path=/azure-pipelines/steps/azure-boards-add-tag.sh"><code>azure-boards-add-tag.sh</code></a>,
+byte-identical on <code>main</code> and the test branch
+<code>fix/tagging</code>):</p>
+<ol type="1">
+<li><code>work_items = git log … | grep 'Related work items:' | grep -Po '\d+'</code>
+— local, no auth.</li>
+<li>Build a WIQL:
+<code>SELECT System.Id, System.Tags FROM workitems WHERE System.AreaId = 6393 AND System.Tags NOT CONTAINS '$TAG' AND System.Id IN ($work_items)</code>.</li>
+<li><code>done &lt; &lt;(az boards query --wiql "$query" --output table | tail -n +3)</code>
+— <strong>the first network call</strong>; it omits
+<code>--organization/--project</code>, so the CLI tries to auto-detect
+the repo via <code>/vsts/info</code>.</li>
+<li>Per row:
+<code>az boards work-item update --field "System.Tags=$tags; $TAG"</code>.</li>
+</ol>
+<p>Two structural defects compound the identity bug:</p>
+<ul>
+<li><strong>The query auto-detects the repo.</strong> Omitting
+<code>--org/--project</code> on an ephemeral (cold-cache) agent forces
+the <code>/vsts/info</code> repo read every run. As the SP (which lacks
+repo read), that is the <code>TF401019</code>.</li>
+<li><strong>Errors are swallowed.</strong> No <code>set -e</code>, and
+the query runs inside <code>done &lt; &lt;( … )</code> (a process
+substitution), so a non-zero exit never propagates. The step exits 0 →
+green build, zero tags.</li>
+</ul>
+<p>So even before the identity question, the script is built to fail
+silently. The identity is <em>why</em> it fails; the swallowing is
+<em>why nobody saw it</em>.</p>
+<h2 id="l5--the-declarative-contract-what-should-be-true">L5 — The
+declarative contract (what should be true)</h2>
+<p>There is no Terraform for the tagging itself. The load-bearing
+"truths" are Azure DevOps settings and ACLs:</p>
+<table>
+<thead>
+<tr>
+<th>Truth</th>
+<th>Value</th>
+<th>How known</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Project job-auth scope</td>
+<td><code>enforceJobAuthScope = true</code>,
+<code>enforceReferencedRepoScopedToken = false</code></td>
+<td>project <code>generalSettings</code> API</td>
+</tr>
+<tr>
+<td>Area 6393 identity</td>
+<td><code>Myriad - VPP\Team BtM</code>, intact, ~913 work items</td>
+<td><code>az boards area project list</code> + live query</td>
+</tr>
+<tr>
+<td>Build Service board ACL on area 6393</td>
+<td>explicit grant: View + Edit work items = <strong>Allow</strong></td>
+<td>area-path access-control-list (effective-allow bitmask)</td>
+</tr>
+<tr>
+<td>deployment SP board ACL on area 6393</td>
+<td>View + Edit work items = <strong>not granted</strong> (only group =
+<code>Pool Creator</code>, which carries no work-item ACE)</td>
+<td>area-path access-control-list + group membership</td>
+</tr>
+</tbody>
+</table>
+<p>The divergence: the script's author wrote the YAML as if the tag step
+would run as the Build Service (which <em>does</em> satisfy the board
+ACL). The runtime identity is the SP (which does <em>not</em>). The
+declared intent and the actual identity disagree — and the ACL only
+blesses the declared one.</p>
+<h2 id="l6--how-the-pipeline-actually-runs-the-identity-hand-off">L6 —
+How the pipeline actually runs (the identity hand-off)</h2>
+<p>The sequence diagram makes the timing explicit: the error appears
+<em>before</em> any tagging, and as the <em>wrong</em> identity.</p>
+<div class="diagram"><svg id="my-svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="max-width: 1752.5px; background-color: transparent;" viewBox="-50 -10 1752.5 582" role="graphics-document document" aria-roledescription="sequence"><g><rect x="1502.5" y="496" fill="#eaeaea" stroke="#666" width="150" height="65" name="ADO" rx="3" ry="3" class="actor actor-bottom"/><text x="1577.5" y="528.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="1577.5" dy="0">Azure DevOps API</tspan></text></g><g><rect x="941.5" y="496" fill="#eaeaea" stroke="#666" width="150" height="65" name="CLI" rx="3" ry="3" class="actor actor-bottom"/><text x="1016.5" y="528.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="1016.5" dy="0">az boards</tspan></text></g><g><rect x="573.5" y="496" fill="#eaeaea" stroke="#666" width="174" height="65" name="Sh" rx="3" ry="3" class="actor actor-bottom"/><text x="660.5" y="528.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="660.5" dy="0">azure-boards-add-tag.sh</tspan></text></g><g><rect x="340" y="496" fill="#eaeaea" stroke="#666" width="150" height="65" name="Login" rx="3" ry="3" class="actor actor-bottom"/><text x="415" y="528.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="415" dy="0">azure-login.yml</tspan></text></g><g><rect x="0" y="496" fill="#eaeaea" stroke="#666" width="236" height="65" name="Job" rx="3" ry="3" class="actor actor-bottom"/><text x="118" y="528.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="118" dy="0">Deploy job (Apply Development)</tspan></text></g><g><line id="actor4" x1="1577.5" y1="65" x2="1577.5" y2="496" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="ADO" data-et="life-line" data-id="ADO"/><g id="root-4" data-et="participant" data-type="participant" data-id="ADO"><rect x="1502.5" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="ADO" rx="3" ry="3" class="actor actor-top"/><text x="1577.5" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="1577.5" dy="0">Azure DevOps API</tspan></text></g></g><g><line id="actor3" x1="1016.5" y1="65" x2="1016.5" y2="496" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="CLI" data-et="life-line" data-id="CLI"/><g id="root-3" data-et="participant" data-type="participant" data-id="CLI"><rect x="941.5" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="CLI" rx="3" ry="3" class="actor actor-top"/><text x="1016.5" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="1016.5" dy="0">az boards</tspan></text></g></g><g><line id="actor2" x1="660.5" y1="65" x2="660.5" y2="496" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="Sh" data-et="life-line" data-id="Sh"/><g id="root-2" data-et="participant" data-type="participant" data-id="Sh"><rect x="573.5" y="0" fill="#eaeaea" stroke="#666" width="174" height="65" name="Sh" rx="3" ry="3" class="actor actor-top"/><text x="660.5" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="660.5" dy="0">azure-boards-add-tag.sh</tspan></text></g></g><g><line id="actor1" x1="415" y1="65" x2="415" y2="496" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="Login" data-et="life-line" data-id="Login"/><g id="root-1" data-et="participant" data-type="participant" data-id="Login"><rect x="340" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="Login" rx="3" ry="3" class="actor actor-top"/><text x="415" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="415" dy="0">azure-login.yml</tspan></text></g></g><g><line id="actor0" x1="118" y1="65" x2="118" y2="496" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="Job" data-et="life-line" data-id="Job"/><g id="root-0" data-et="participant" data-type="participant" data-id="Job"><rect x="0" y="0" fill="#eaeaea" stroke="#666" width="236" height="65" name="Job" rx="3" ry="3" class="actor actor-top"/><text x="118" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="118" dy="0">Deploy job (Apply Development)</tspan></text></g></g><style>#my-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#my-svg .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#my-svg .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#my-svg .error-icon{fill:#552222;}#my-svg .error-text{fill:#552222;stroke:#552222;}#my-svg .edge-thickness-normal{stroke-width:1px;}#my-svg .edge-thickness-thick{stroke-width:3.5px;}#my-svg .edge-pattern-solid{stroke-dasharray:0;}#my-svg .edge-thickness-invisible{stroke-width:0;fill:none;}#my-svg .edge-pattern-dashed{stroke-dasharray:3;}#my-svg .edge-pattern-dotted{stroke-dasharray:2;}#my-svg .marker{fill:#333333;stroke:#333333;}#my-svg .marker.cross{stroke:#333333;}#my-svg svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#my-svg p{margin:0;}#my-svg .actor{stroke:#9370DB;fill:#ECECFF;stroke-width:1;}#my-svg rect.actor.outer-path[data-look="neo"]{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg rect.note[data-look="neo"]{stroke:#aaaa33;fill:#fff5ad;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg text.actor&gt;tspan{fill:black;stroke:none;}#my-svg .actor-line{stroke:#9370DB;}#my-svg .innerArc{stroke-width:1.5;stroke-dasharray:none;}#my-svg .messageLine0{stroke-width:1.5;stroke-dasharray:none;stroke:#333;}#my-svg .messageLine1{stroke-width:1.5;stroke-dasharray:2,2;stroke:#333;}#my-svg [id$="-arrowhead"] path{fill:#333;stroke:#333;}#my-svg .sequenceNumber{fill:white;}#my-svg [id$="-sequencenumber"]{fill:#333;}#my-svg [id$="-crosshead"] path{fill:#333;stroke:#333;}#my-svg .messageText{fill:#333;stroke:none;}#my-svg .labelBox{stroke:#9370DB;fill:#ECECFF;filter:none;}#my-svg .labelText,#my-svg .labelText&gt;tspan{fill:black;stroke:none;}#my-svg .loopText,#my-svg .loopText&gt;tspan{fill:black;stroke:none;}#my-svg .sectionTitle,#my-svg .sectionTitle&gt;tspan{fill:black;stroke:none;}#my-svg .loopLine{stroke-width:2px;stroke-dasharray:2,2;stroke:#9370DB;fill:#9370DB;}#my-svg .note{stroke:#aaaa33;fill:#fff5ad;}#my-svg .noteText,#my-svg .noteText&gt;tspan{fill:black;stroke:none;font-weight:normal;}#my-svg .activation0{fill:#f4f4f4;stroke:#666;}#my-svg .activation1{fill:#f4f4f4;stroke:#666;}#my-svg .activation2{fill:#f4f4f4;stroke:#666;}#my-svg .actorPopupMenu{position:absolute;}#my-svg .actorPopupMenuPanel{position:absolute;fill:#ECECFF;box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2);filter:drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}#my-svg .actor-man circle,#my-svg line{fill:#ECECFF;stroke-width:2px;}#my-svg g rect.rect{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));stroke:#9370DB;}#my-svg .node .neo-node{stroke:#9370DB;}#my-svg [data-look="neo"].node rect,#my-svg [data-look="neo"].cluster rect,#my-svg [data-look="neo"].node polygon{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node path{stroke:#9370DB;stroke-width:1px;}#my-svg [data-look="neo"].node .outer-path{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node .neo-line path{stroke:#9370DB;filter:none;}#my-svg [data-look="neo"].node circle{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node circle .state-start{fill:#000000;}#my-svg [data-look="neo"].icon-shape .icon{fill:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].icon-shape .icon-neo path{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g/><defs><symbol id="my-svg-computer" width="24" height="24"><path transform="scale(.5)" d="M2 2v13h20v-13h-20zm18 11h-16v-9h16v9zm-10.228 6l.466-1h3.524l.467 1h-4.457zm14.228 3h-24l2-6h2.104l-1.33 4h18.45l-1.297-4h2.073l2 6zm-5-10h-14v-7h14v7z"/></symbol></defs><defs><symbol id="my-svg-database" fill-rule="evenodd" clip-rule="evenodd"><path transform="scale(.5)" d="M12.258.001l.256.004.255.005.253.008.251.01.249.012.247.015.246.016.242.019.241.02.239.023.236.024.233.027.231.028.229.031.225.032.223.034.22.036.217.038.214.04.211.041.208.043.205.045.201.046.198.048.194.05.191.051.187.053.183.054.18.056.175.057.172.059.168.06.163.061.16.063.155.064.15.066.074.033.073.033.071.034.07.034.069.035.068.035.067.035.066.035.064.036.064.036.062.036.06.036.06.037.058.037.058.037.055.038.055.038.053.038.052.038.051.039.05.039.048.039.047.039.045.04.044.04.043.04.041.04.04.041.039.041.037.041.036.041.034.041.033.042.032.042.03.042.029.042.027.042.026.043.024.043.023.043.021.043.02.043.018.044.017.043.015.044.013.044.012.044.011.045.009.044.007.045.006.045.004.045.002.045.001.045v17l-.001.045-.002.045-.004.045-.006.045-.007.045-.009.044-.011.045-.012.044-.013.044-.015.044-.017.043-.018.044-.02.043-.021.043-.023.043-.024.043-.026.043-.027.042-.029.042-.03.042-.032.042-.033.042-.034.041-.036.041-.037.041-.039.041-.04.041-.041.04-.043.04-.044.04-.045.04-.047.039-.048.039-.05.039-.051.039-.052.038-.053.038-.055.038-.055.038-.058.037-.058.037-.06.037-.06.036-.062.036-.064.036-.064.036-.066.035-.067.035-.068.035-.069.035-.07.034-.071.034-.073.033-.074.033-.15.066-.155.064-.16.063-.163.061-.168.06-.172.059-.175.057-.18.056-.183.054-.187.053-.191.051-.194.05-.198.048-.201.046-.205.045-.208.043-.211.041-.214.04-.217.038-.22.036-.223.034-.225.032-.229.031-.231.028-.233.027-.236.024-.239.023-.241.02-.242.019-.246.016-.247.015-.249.012-.251.01-.253.008-.255.005-.256.004-.258.001-.258-.001-.256-.004-.255-.005-.253-.008-.251-.01-.249-.012-.247-.015-.245-.016-.243-.019-.241-.02-.238-.023-.236-.024-.234-.027-.231-.028-.228-.031-.226-.032-.223-.034-.22-.036-.217-.038-.214-.04-.211-.041-.208-.043-.204-.045-.201-.046-.198-.048-.195-.05-.19-.051-.187-.053-.184-.054-.179-.056-.176-.057-.172-.059-.167-.06-.164-.061-.159-.063-.155-.064-.151-.066-.074-.033-.072-.033-.072-.034-.07-.034-.069-.035-.068-.035-.067-.035-.066-.035-.064-.036-.063-.036-.062-.036-.061-.036-.06-.037-.058-.037-.057-.037-.056-.038-.055-.038-.053-.038-.052-.038-.051-.039-.049-.039-.049-.039-.046-.039-.046-.04-.044-.04-.043-.04-.041-.04-.04-.041-.039-.041-.037-.041-.036-.041-.034-.041-.033-.042-.032-.042-.03-.042-.029-.042-.027-.042-.026-.043-.024-.043-.023-.043-.021-.043-.02-.043-.018-.044-.017-.043-.015-.044-.013-.044-.012-.044-.011-.045-.009-.044-.007-.045-.006-.045-.004-.045-.002-.045-.001-.045v-17l.001-.045.002-.045.004-.045.006-.045.007-.045.009-.044.011-.045.012-.044.013-.044.015-.044.017-.043.018-.044.02-.043.021-.043.023-.043.024-.043.026-.043.027-.042.029-.042.03-.042.032-.042.033-.042.034-.041.036-.041.037-.041.039-.041.04-.041.041-.04.043-.04.044-.04.046-.04.046-.039.049-.039.049-.039.051-.039.052-.038.053-.038.055-.038.056-.038.057-.037.058-.037.06-.037.061-.036.062-.036.063-.036.064-.036.066-.035.067-.035.068-.035.069-.035.07-.034.072-.034.072-.033.074-.033.151-.066.155-.064.159-.063.164-.061.167-.06.172-.059.176-.057.179-.056.184-.054.187-.053.19-.051.195-.05.198-.048.201-.046.204-.045.208-.043.211-.041.214-.04.217-.038.22-.036.223-.034.226-.032.228-.031.231-.028.234-.027.236-.024.238-.023.241-.02.243-.019.245-.016.247-.015.249-.012.251-.01.253-.008.255-.005.256-.004.258-.001.258.001zm-9.258 20.499v.01l.001.021.003.021.004.022.005.021.006.022.007.022.009.023.01.022.011.023.012.023.013.023.015.023.016.024.017.023.018.024.019.024.021.024.022.025.023.024.024.025.052.049.056.05.061.051.066.051.07.051.075.051.079.052.084.052.088.052.092.052.097.052.102.051.105.052.11.052.114.051.119.051.123.051.127.05.131.05.135.05.139.048.144.049.147.047.152.047.155.047.16.045.163.045.167.043.171.043.176.041.178.041.183.039.187.039.19.037.194.035.197.035.202.033.204.031.209.03.212.029.216.027.219.025.222.024.226.021.23.02.233.018.236.016.24.015.243.012.246.01.249.008.253.005.256.004.259.001.26-.001.257-.004.254-.005.25-.008.247-.011.244-.012.241-.014.237-.016.233-.018.231-.021.226-.021.224-.024.22-.026.216-.027.212-.028.21-.031.205-.031.202-.034.198-.034.194-.036.191-.037.187-.039.183-.04.179-.04.175-.042.172-.043.168-.044.163-.045.16-.046.155-.046.152-.047.148-.048.143-.049.139-.049.136-.05.131-.05.126-.05.123-.051.118-.052.114-.051.11-.052.106-.052.101-.052.096-.052.092-.052.088-.053.083-.051.079-.052.074-.052.07-.051.065-.051.06-.051.056-.05.051-.05.023-.024.023-.025.021-.024.02-.024.019-.024.018-.024.017-.024.015-.023.014-.024.013-.023.012-.023.01-.023.01-.022.008-.022.006-.022.006-.022.004-.022.004-.021.001-.021.001-.021v-4.127l-.077.055-.08.053-.083.054-.085.053-.087.052-.09.052-.093.051-.095.05-.097.05-.1.049-.102.049-.105.048-.106.047-.109.047-.111.046-.114.045-.115.045-.118.044-.12.043-.122.042-.124.042-.126.041-.128.04-.13.04-.132.038-.134.038-.135.037-.138.037-.139.035-.142.035-.143.034-.144.033-.147.032-.148.031-.15.03-.151.03-.153.029-.154.027-.156.027-.158.026-.159.025-.161.024-.162.023-.163.022-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.011-.178.01-.179.008-.179.008-.181.006-.182.005-.182.004-.184.003-.184.002h-.37l-.184-.002-.184-.003-.182-.004-.182-.005-.181-.006-.179-.008-.179-.008-.178-.01-.176-.011-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.022-.162-.023-.161-.024-.159-.025-.157-.026-.156-.027-.155-.027-.153-.029-.151-.03-.15-.03-.148-.031-.146-.032-.145-.033-.143-.034-.141-.035-.14-.035-.137-.037-.136-.037-.134-.038-.132-.038-.13-.04-.128-.04-.126-.041-.124-.042-.122-.042-.12-.044-.117-.043-.116-.045-.113-.045-.112-.046-.109-.047-.106-.047-.105-.048-.102-.049-.1-.049-.097-.05-.095-.05-.093-.052-.09-.051-.087-.052-.085-.053-.083-.054-.08-.054-.077-.054v4.127zm0-5.654v.011l.001.021.003.021.004.021.005.022.006.022.007.022.009.022.01.022.011.023.012.023.013.023.015.024.016.023.017.024.018.024.019.024.021.024.022.024.023.025.024.024.052.05.056.05.061.05.066.051.07.051.075.052.079.051.084.052.088.052.092.052.097.052.102.052.105.052.11.051.114.051.119.052.123.05.127.051.131.05.135.049.139.049.144.048.147.048.152.047.155.046.16.045.163.045.167.044.171.042.176.042.178.04.183.04.187.038.19.037.194.036.197.034.202.033.204.032.209.03.212.028.216.027.219.025.222.024.226.022.23.02.233.018.236.016.24.014.243.012.246.01.249.008.253.006.256.003.259.001.26-.001.257-.003.254-.006.25-.008.247-.01.244-.012.241-.015.237-.016.233-.018.231-.02.226-.022.224-.024.22-.025.216-.027.212-.029.21-.03.205-.032.202-.033.198-.035.194-.036.191-.037.187-.039.183-.039.179-.041.175-.042.172-.043.168-.044.163-.045.16-.045.155-.047.152-.047.148-.048.143-.048.139-.05.136-.049.131-.05.126-.051.123-.051.118-.051.114-.052.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.051.07-.052.065-.051.06-.05.056-.051.051-.049.023-.025.023-.024.021-.025.02-.024.019-.024.018-.024.017-.024.015-.023.014-.023.013-.024.012-.022.01-.023.01-.023.008-.022.006-.022.006-.022.004-.021.004-.022.001-.021.001-.021v-4.139l-.077.054-.08.054-.083.054-.085.052-.087.053-.09.051-.093.051-.095.051-.097.05-.1.049-.102.049-.105.048-.106.047-.109.047-.111.046-.114.045-.115.044-.118.044-.12.044-.122.042-.124.042-.126.041-.128.04-.13.039-.132.039-.134.038-.135.037-.138.036-.139.036-.142.035-.143.033-.144.033-.147.033-.148.031-.15.03-.151.03-.153.028-.154.028-.156.027-.158.026-.159.025-.161.024-.162.023-.163.022-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.011-.178.009-.179.009-.179.007-.181.007-.182.005-.182.004-.184.003-.184.002h-.37l-.184-.002-.184-.003-.182-.004-.182-.005-.181-.007-.179-.007-.179-.009-.178-.009-.176-.011-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.022-.162-.023-.161-.024-.159-.025-.157-.026-.156-.027-.155-.028-.153-.028-.151-.03-.15-.03-.148-.031-.146-.033-.145-.033-.143-.033-.141-.035-.14-.036-.137-.036-.136-.037-.134-.038-.132-.039-.13-.039-.128-.04-.126-.041-.124-.042-.122-.043-.12-.043-.117-.044-.116-.044-.113-.046-.112-.046-.109-.046-.106-.047-.105-.048-.102-.049-.1-.049-.097-.05-.095-.051-.093-.051-.09-.051-.087-.053-.085-.052-.083-.054-.08-.054-.077-.054v4.139zm0-5.666v.011l.001.02.003.022.004.021.005.022.006.021.007.022.009.023.01.022.011.023.012.023.013.023.015.023.016.024.017.024.018.023.019.024.021.025.022.024.023.024.024.025.052.05.056.05.061.05.066.051.07.051.075.052.079.051.084.052.088.052.092.052.097.052.102.052.105.051.11.052.114.051.119.051.123.051.127.05.131.05.135.05.139.049.144.048.147.048.152.047.155.046.16.045.163.045.167.043.171.043.176.042.178.04.183.04.187.038.19.037.194.036.197.034.202.033.204.032.209.03.212.028.216.027.219.025.222.024.226.021.23.02.233.018.236.017.24.014.243.012.246.01.249.008.253.006.256.003.259.001.26-.001.257-.003.254-.006.25-.008.247-.01.244-.013.241-.014.237-.016.233-.018.231-.02.226-.022.224-.024.22-.025.216-.027.212-.029.21-.03.205-.032.202-.033.198-.035.194-.036.191-.037.187-.039.183-.039.179-.041.175-.042.172-.043.168-.044.163-.045.16-.045.155-.047.152-.047.148-.048.143-.049.139-.049.136-.049.131-.051.126-.05.123-.051.118-.052.114-.051.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.052.07-.051.065-.051.06-.051.056-.05.051-.049.023-.025.023-.025.021-.024.02-.024.019-.024.018-.024.017-.024.015-.023.014-.024.013-.023.012-.023.01-.022.01-.023.008-.022.006-.022.006-.022.004-.022.004-.021.001-.021.001-.021v-4.153l-.077.054-.08.054-.083.053-.085.053-.087.053-.09.051-.093.051-.095.051-.097.05-.1.049-.102.048-.105.048-.106.048-.109.046-.111.046-.114.046-.115.044-.118.044-.12.043-.122.043-.124.042-.126.041-.128.04-.13.039-.132.039-.134.038-.135.037-.138.036-.139.036-.142.034-.143.034-.144.033-.147.032-.148.032-.15.03-.151.03-.153.028-.154.028-.156.027-.158.026-.159.024-.161.024-.162.023-.163.023-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.01-.178.01-.179.009-.179.007-.181.006-.182.006-.182.004-.184.003-.184.001-.185.001-.185-.001-.184-.001-.184-.003-.182-.004-.182-.006-.181-.006-.179-.007-.179-.009-.178-.01-.176-.01-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.023-.162-.023-.161-.024-.159-.024-.157-.026-.156-.027-.155-.028-.153-.028-.151-.03-.15-.03-.148-.032-.146-.032-.145-.033-.143-.034-.141-.034-.14-.036-.137-.036-.136-.037-.134-.038-.132-.039-.13-.039-.128-.041-.126-.041-.124-.041-.122-.043-.12-.043-.117-.044-.116-.044-.113-.046-.112-.046-.109-.046-.106-.048-.105-.048-.102-.048-.1-.05-.097-.049-.095-.051-.093-.051-.09-.052-.087-.052-.085-.053-.083-.053-.08-.054-.077-.054v4.153zm8.74-8.179l-.257.004-.254.005-.25.008-.247.011-.244.012-.241.014-.237.016-.233.018-.231.021-.226.022-.224.023-.22.026-.216.027-.212.028-.21.031-.205.032-.202.033-.198.034-.194.036-.191.038-.187.038-.183.04-.179.041-.175.042-.172.043-.168.043-.163.045-.16.046-.155.046-.152.048-.148.048-.143.048-.139.049-.136.05-.131.05-.126.051-.123.051-.118.051-.114.052-.11.052-.106.052-.101.052-.096.052-.092.052-.088.052-.083.052-.079.052-.074.051-.07.052-.065.051-.06.05-.056.05-.051.05-.023.025-.023.024-.021.024-.02.025-.019.024-.018.024-.017.023-.015.024-.014.023-.013.023-.012.023-.01.023-.01.022-.008.022-.006.023-.006.021-.004.022-.004.021-.001.021-.001.021.001.021.001.021.004.021.004.022.006.021.006.023.008.022.01.022.01.023.012.023.013.023.014.023.015.024.017.023.018.024.019.024.02.025.021.024.023.024.023.025.051.05.056.05.06.05.065.051.07.052.074.051.079.052.083.052.088.052.092.052.096.052.101.052.106.052.11.052.114.052.118.051.123.051.126.051.131.05.136.05.139.049.143.048.148.048.152.048.155.046.16.046.163.045.168.043.172.043.175.042.179.041.183.04.187.038.191.038.194.036.198.034.202.033.205.032.21.031.212.028.216.027.22.026.224.023.226.022.231.021.233.018.237.016.241.014.244.012.247.011.25.008.254.005.257.004.26.001.26-.001.257-.004.254-.005.25-.008.247-.011.244-.012.241-.014.237-.016.233-.018.231-.021.226-.022.224-.023.22-.026.216-.027.212-.028.21-.031.205-.032.202-.033.198-.034.194-.036.191-.038.187-.038.183-.04.179-.041.175-.042.172-.043.168-.043.163-.045.16-.046.155-.046.152-.048.148-.048.143-.048.139-.049.136-.05.131-.05.126-.051.123-.051.118-.051.114-.052.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.051.07-.052.065-.051.06-.05.056-.05.051-.05.023-.025.023-.024.021-.024.02-.025.019-.024.018-.024.017-.023.015-.024.014-.023.013-.023.012-.023.01-.023.01-.022.008-.022.006-.023.006-.021.004-.022.004-.021.001-.021.001-.021-.001-.021-.001-.021-.004-.021-.004-.022-.006-.021-.006-.023-.008-.022-.01-.022-.01-.023-.012-.023-.013-.023-.014-.023-.015-.024-.017-.023-.018-.024-.019-.024-.02-.025-.021-.024-.023-.024-.023-.025-.051-.05-.056-.05-.06-.05-.065-.051-.07-.052-.074-.051-.079-.052-.083-.052-.088-.052-.092-.052-.096-.052-.101-.052-.106-.052-.11-.052-.114-.052-.118-.051-.123-.051-.126-.051-.131-.05-.136-.05-.139-.049-.143-.048-.148-.048-.152-.048-.155-.046-.16-.046-.163-.045-.168-.043-.172-.043-.175-.042-.179-.041-.183-.04-.187-.038-.191-.038-.194-.036-.198-.034-.202-.033-.205-.032-.21-.031-.212-.028-.216-.027-.22-.026-.224-.023-.226-.022-.231-.021-.233-.018-.237-.016-.241-.014-.244-.012-.247-.011-.25-.008-.254-.005-.257-.004-.26-.001-.26.001z"/></symbol></defs><defs><symbol id="my-svg-clock" width="24" height="24"><path transform="scale(.5)" d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.848 12.459c.202.038.202.333.001.372-1.907.361-6.045 1.111-6.547 1.111-.719 0-1.301-.582-1.301-1.301 0-.512.77-5.447 1.125-7.445.034-.192.312-.181.343.014l.985 6.238 5.394 1.011z"/></symbol></defs><defs><marker id="my-svg-arrowhead" refX="7.9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M -1 0 L 10 5 L 0 10 z"/></marker></defs><defs><marker id="my-svg-crosshead" markerWidth="15" markerHeight="8" orient="auto" refX="4" refY="4.5"><path fill="none" stroke="#000000" stroke-width="1pt" d="M 1,2 L 6,7 M 6,2 L 1,7" style="stroke-dasharray: 0, 0;"/></marker></defs><defs><marker id="my-svg-filled-head" refX="15.5" refY="7" markerWidth="20" markerHeight="28" orient="auto"><path d="M 18,7 L9,13 L14,7 L9,1 Z"/></marker></defs><defs><marker id="my-svg-sequencenumber" refX="15" refY="15" markerWidth="60" markerHeight="40" orient="auto"><circle cx="15" cy="15" r="6"/></marker></defs><defs><marker id="my-svg-solidTopArrowHead" refX="7.9" refY="7.25" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 10 8 L 0 8 z"/></marker></defs><defs><marker id="my-svg-solidBottomArrowHead" refX="7.9" refY="0.75" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 10 0 L 0 8 z"/></marker></defs><defs><marker id="my-svg-stickTopArrowHead" refX="7.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 7 7" stroke="black" stroke-width="1.5" fill="none"/></marker></defs><defs><marker id="my-svg-stickBottomArrowHead" refX="7.5" refY="0" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 7 L 7 0" stroke="black" stroke-width="1.5" fill="none"/></marker></defs><g data-et="note" data-id="i1"><rect x="272.5" y="119" fill="#EDF2AE" stroke="#666" width="285" height="39" class="note"/><text x="415" y="124" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-size: 16px; font-weight: 400;"><tspan x="415">leaves an az login SESSION on the agent</tspan></text></g><g data-et="note" data-id="i4"><rect x="785.5" y="256" fill="#EDF2AE" stroke="#666" width="462" height="39" class="note"/><text x="1017" y="261" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-size: 16px; font-weight: 400;"><tspan x="1017">az login session present → PAT env var IGNORED → auth as dta-sp</tspan></text></g><g data-et="note" data-id="i7"><rect x="465" y="393" fill="#EDF2AE" stroke="#666" width="391" height="39" class="note"/><text x="661" y="398" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-size: 16px; font-weight: 400;"><tspan x="661">no set -e, query inside done &lt; &lt;( ) → exit code swallowed</tspan></text></g><text x="265" y="80" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">az login --service-principal (dta-sp)</text><line x1="119" y1="109" x2="411" y2="109" class="messageLine0" data-et="message" data-id="i0" data-from="Job" data-to="Login" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="fill: none;"/><text x="388" y="173" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">run tag step (AZURE_DEVOPS_EXT_PAT = System.AccessToken)</text><line x1="119" y1="202" x2="656.5" y2="202" class="messageLine0" data-et="message" data-id="i2" data-from="Job" data-to="Sh" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="fill: none;"/><text x="837" y="217" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">az boards query --wiql ...  (no --org/--project)</text><line x1="661.5" y1="246" x2="1012.5" y2="246" class="messageLine0" data-et="message" data-id="i3" data-from="Sh" data-to="CLI" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="fill: none;"/><text x="1296" y="310" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">GET /_git/eneco.vpp.behindthemeter/vsts/info (cold cache, repo auto-detect)</text><line x1="1017.5" y1="339" x2="1573.5" y2="339" class="messageLine0" data-et="message" data-id="i5" data-from="CLI" data-to="ADO" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="fill: none;"/><text x="1299" y="354" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">404 TF401019 (dta-sp denied repo read)</text><line x1="1576.5" y1="383" x2="1020.5" y2="383" class="messageLine1" data-et="message" data-id="i6" data-from="ADO" data-to="CLI" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"/><text x="391" y="447" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">exit 0, step SUCCEEDED, tag never written</text><line x1="659.5" y1="476" x2="122" y2="476" class="messageLine1" data-et="message" data-id="i8" data-from="Sh" data-to="Job" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"/></svg></div>
+<p>If you instead suppress auto-detection (<code>--detect false</code>,
+what the BTM engineer tried), the <code>TF401019</code> disappears but
+the query still runs as the dta-sp and returns an empty set — because
+the SP cannot see Team BtM work items. That is exactly the "error gone
+but no output" the engineer reported.</p>
+<h2 id="l7--timeline">L7 — Timeline</h2>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Event</th>
+<th>How known</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2024-11-06</td>
+<td>Tag script introduced (PR 101101) — its only commit ever</td>
+<td>repo history</td>
+</tr>
+<tr>
+<td>2025-05-19</td>
+<td><code>deploy-terraform.pipeline.yml</code> last changed</td>
+<td>repo history</td>
+</tr>
+<tr>
+<td><strong>2026-04-22 07:27Z</strong></td>
+<td><code>mcc-btm-deployment-dta-sp</code> <strong>created as an Azure
+DevOps user</strong> (Basic, AAD)</td>
+<td><code>az devops user list</code></td>
+</tr>
+<tr>
+<td>2026-04-24</td>
+<td>Earliest surviving build (1621832) already shows
+<code>TF401019</code></td>
+<td>build log</td>
+</tr>
+<tr>
+<td>2026-05-26</td>
+<td>Sibling Aggregation fix merged (PR 178802) — same break, same
+window</td>
+<td>PR metadata</td>
+</tr>
+<tr>
+<td>2026-06-04</td>
+<td>BTM engineer's debug build (1668639, branch
+<code>fix/tagging</code>) — the SP's board query returns
+<code>workItems:[]</code></td>
+<td>build log#19</td>
+</tr>
+<tr>
+<td>2026-06-11</td>
+<td>Latest build (1676583) — still <code>TF401019</code></td>
+<td>build log</td>
+</tr>
+</tbody>
+</table>
+<p>No BTM code changed in the onset window. The <code>dta-sp</code>
+becoming an Azure DevOps user on 2026-04-22 sits inside the window when
+tagging broke. The exact cause-and-effect of that change (did adding it
+as an explicit user remove an implicit access it previously inherited?)
+is <strong>not yet verified</strong> — it needs the org audit log, which
+is administrator-only. The diagnosis does not depend on pinning that
+down: the present-state fact (the SP cannot read the board, the Build
+Service can) is what drives the fix.</p>
+<h2 id="l8--fix">L8 — Fix</h2>
+<p><strong>Root cause:</strong> the tag step runs as the deployment
+service principal (because an earlier <code>az login</code> session
+takes precedence over <code>AZURE_DEVOPS_EXT_PAT</code>), and that SP
+lacks "View/Edit work items in this node" on Team BtM (AreaId 6393). The
+repository auto-detection that produces the loud <code>TF401019</code>
+is the same SP being denied a repo read.</p>
+<p><strong>Primary fix (recommended — restores the author's intent, no
+new runner):</strong> run the tag step in its <strong>own pipeline
+<code>job</code> that does not include
+<code>azure-login.yml</code></strong>, keeping the same Microsoft-hosted
+<code>ubuntu-24.04</code> pool. With no SP login session present,
+<code>az boards</code> uses
+<code>AZURE_DEVOPS_EXT_PAT = $(System.AccessToken)</code> — the
+<strong>Build Service identity</strong>, which has board read/write.
+Pair it with the hardened script (explicit
+<code>--organization/--project/--detect false</code> to kill the
+<code>TF401019</code>, tag-union to avoid clobbering, empty-list guard,
+and <code>SucceededWithIssues</code> so a real failure is loud but never
+blocks the deploy). Full steps, the PR-ready diff, and the GO/NO-GO
+acceptance test are in <a
+href="./how-to-fix.md"><code>how-to-fix.md</code></a>.</p>
+<p><strong>This is exactly what the sibling team did</strong> (PR
+178802): they moved tagging into a separate <code>ApplyTag*</code> job.
+They believed the <em>pool</em> (<code>sre-managed-linux</code>) was the
+fix; in fact the operative change was that the separate job
+<strong>drops the <code>azure-login.yml</code> step</strong>, so the
+Build Service token is used. The pool was incidental. That is why BTM
+can get the same result on the <strong>same MS-hosted pool</strong> — no
+extra paid runner, directly addressing the cost concern.</p>
+<p><strong>What this fix does NOT change:</strong> the deployment SP's
+own permissions (untouched); the Terraform deploy path (untouched — the
+SP login it relies on stays in the deploy job); the <code>prd-sp</code>
+(which is not even an Azure DevOps user — see L9).</p>
+<p><strong>Alternative fixes (only if the acceptance test fails or the
+team prefers a smaller diff):</strong> (a) in the single job, run
+<code>az logout</code> at the top of the tag step so the PAT is used;
+(b) grant the relevant identity "View/Edit work items in this node" on
+Team BtM. Trade-offs in <a
+href="./how-to-fix.md"><code>how-to-fix.md</code></a>.</p>
+<h2 id="l9--verification">L9 — Verification</h2>
+<p>The diagnosis was verified live (read-only) and survived a dedicated
+adversarial demolition pass. The fix is verified at the
+<strong>permission layer</strong>: the Build Service identity has an
+explicit Allow for View+Edit work items on the area tree that Team BtM
+inherits. The <strong>end-to-end realized-tag</strong> is the one check
+that cannot be run from a laptop — it is the <strong>contributor's
+acceptance test after the PR merges</strong>:</p>
+<ol type="1">
+<li>Run the deploy pipeline on a PR whose commits reference a Team BtM
+work item.</li>
+<li>The <code>Add DEV tag in ADO</code> step log shows
+<code>Work item &lt;id&gt;: … -&gt; 'DEV'</code> and <strong>no
+<code>TF401019</code></strong>.</li>
+<li>Assert the realized state (not the exit code):
+<code>az boards work-item show --org https://dev.azure.com/enecomanagedcloud --detect false --id &lt;id&gt; --query "fields.\"System.Tags\""</code>
+contains <code>DEV</code> <strong>and</strong> any pre-existing
+tags.</li>
+</ol>
+<p><strong>Methodology warning for the next on-call (cost me, will cost
+you):</strong> two read-only Azure DevOps permission tools
+<strong>lie</strong> about a <em>subject's</em> effective
+permission:</p>
+<ul>
+<li><code>az devops security permission show</code> →
+<code>effectivePermission</code> reports <strong>"Not set"</strong> for
+service and group identities even when they <em>do</em> have the
+permission via inheritance. (It happens to read correctly for the SP
+here, but reported the Build Service as "Not set" — which, if trusted,
+would have falsified the fix.)</li>
+<li><code>POST _apis/security/permissionevaluationbatch</code>
+<strong>ignores the subject descriptor</strong> and evaluates the
+<em>caller</em> — a garbage descriptor returns <code>true</code>.</li>
+</ul>
+<p>The only trustworthy read-only resolver is
+<code>GET _apis/accesscontrollists/{namespace}?token=…&amp;includeExtendedInfo=true</code>
+→ <code>acesDictionary[descriptor].extendedInfo.effectiveAllow</code> (a
+bitmask; bit 16 = View work items, bit 32 = Edit). All board-ACL claims
+in this RCA are grounded on that bitmask.</p>
+<h2 id="l10--lessons">L10 — Lessons</h2>
+<ol type="1">
+<li><strong>A green step is not a realized effect.</strong> Scripts that
+swallow errors (no <code>set -e</code>; work inside
+<code>&lt; &lt;( )</code> or pipes) succeed while doing nothing. Verify
+the <em>tag</em>, not the status.</li>
+<li><strong>The identity a CLI uses is not the identity you
+set.</strong> When a job does <code>az login</code>, that session can
+take precedence over <code>AZURE_DEVOPS_EXT_PAT</code>. Setting the PAT
+env var does not guarantee the call runs as the Build Service. If you
+need a specific identity for <code>az boards</code>, make sure no other
+<code>az login</code> session is active (separate job, or
+<code>az logout</code>).</li>
+<li><strong>"Switch the runner" relocates, it does not fix, an auth
+problem</strong> — and conversely, a fix credited to a pool switch may
+actually be an identity change hiding inside a job restructure. Always
+ask <em>which identity</em> the working version runs as.</li>
+<li><strong><code>--detect false</code> was a real fix for a real
+symptom (<code>TF401019</code>) — but not the blocker.</strong> Removing
+a loud error can expose a silent one. Close on the end effect.</li>
+<li><strong>Do not trust <code>az devops security permission show</code>
+/ <code>permissionevaluationbatch</code> for a subject's effective
+permission</strong> — use the
+<code>accesscontrollists … includeExtendedInfo=true</code>
+effective-allow bitmask (L9).</li>
+</ol>
+<h2
+id="l11--end-to-end-command-playbook-reproduce-from-cold-read-only">L11
+— End-to-end command playbook (reproduce from cold, read-only)</h2>
+<p>Every probe below is read-only and runs as your own
+<code>az login</code> (no pipeline, no SP credential needed). Full prose
+rationale for each is in <a
+href="./how-to-fix.md"><code>how-to-fix.md</code></a> — the compact
+replay:</p>
+<pre class="bash"><code>ORG=&quot;https://dev.azure.com/enecomanagedcloud&quot;; PROJ=&quot;Myriad - VPP&quot;
+
+# 1. Confirm the area exists and is populated for a privileged human (contrast baseline).
+az boards query --org &quot;$ORG&quot; --project &quot;$PROJ&quot; --detect false \
+  --wiql &quot;SELECT [System.Id] FROM workitems WHERE [System.AreaId]=6393&quot; --query &quot;length(@)&quot; -o tsv
+#   -&gt; 913   (you, as Alex, can see the board)
+
+# 2. Prove az-login precedence: an INVALID PAT is ignored when an az login session exists.
+AZURE_DEVOPS_EXT_PAT=&quot;invalid_zzz&quot; az boards query --org &quot;$ORG&quot; --project &quot;$PROJ&quot; --detect false \
+  --wiql &quot;SELECT [System.Id] FROM workitems WHERE [System.AreaId]=6393&quot; --query &quot;length(@)&quot; -o tsv
+#   -&gt; 913   (PAT ignored; the az login session was used)
+
+# 3. Read the pipeline proof: the SP&#39;s own debug query returned empty in the real build.
+az devops invoke --area build --resource logs --route-parameters project=&quot;$PROJ&quot; \
+  buildId=1668639 logId=19 --api-version 7.1 --org &quot;$ORG&quot; -o json | grep -o &#39;&quot;workItems&quot;:\[\]&#39;
+#   -&gt; &quot;workItems&quot;:[]   (ServicePrincipalCredential auth, HTTP 200, zero rows)
+
+# 4. Confirm the identity asymmetry on the area-path ACL (authoritative bitmask; bit16=ViewWI).
+#    (Build Service effAllow=241 -&gt; ViewWI True;  dta-sp -&gt; no work-item ACE)
+az rest --method GET --resource 499b84ac-1321-427f-aa17-267ca6975798 \
+  --url &quot;$ORG/_apis/accesscontrollists/83e28ad4-2d72-4ceb-97b0-c7726d5502c3?token=vstfs:///Classification/Node/53090030-5179-48c8-904c-7cb607fee55c&amp;includeExtendedInfo=true&amp;api-version=7.1&quot;</code></pre>
+<h2 id="l12--one-page-on-call-playbook">L12 — One-page on-call
+playbook</h2>
+<pre class="text"><code>SYMPTOM: An ADO pipeline step using `az boards`/`az repos` prints
+  &quot;TF401019: The Git repository ... does not exist or you do not have permissions ... 404&quot;,
+  OR the step is GREEN but the board tag / work-item update never happened.
+
+5-MIN TRIAGE
+  1. Does the job run `az login` (a service connection / azure-login template) BEFORE the
+     az boards/az repos step?  -&gt; If yes, the CLI is probably using THAT identity, not
+     System.AccessToken, even if AZURE_DEVOPS_EXT_PAT is set. (az login beats the PAT.)
+  2. Which identity is it really?  Read the step&#39;s --debug log for
+     &quot;ServicePrincipalCredential.acquire_token&quot; (= the SP) vs a PAT/Basic header (= Build Service).
+  3. Can that identity SEE the board?  As yourself:
+     az boards query --org &lt;org&gt; --project &quot;&lt;proj&gt;&quot; --detect false --wiql &quot;... WHERE [System.AreaId]=&lt;id&gt;&quot;
+     returns rows for you; if the pipeline gets [], it&#39;s an identity-permission gap, not a query bug.
+  4. TF401019 specifically = the identity denied a repo read (often the cold-cache /vsts/info
+     auto-detect). It is a 403 masked as 404.
+
+FIX (cheapest first)
+  - Run the boards step in its OWN job WITHOUT the az login step  -&gt; uses System.AccessToken
+    (Build Service), same MS-hosted pool, no extra runner.   [primary]
+  - OR `az logout` before the boards call in the same job.    [smaller diff]
+  - Add --organization/--project/--detect false to az boards query (kills TF401019).
+  - Do NOT &quot;switch the runner&quot; expecting it to fix auth; it doesn&#39;t (it only changed identity
+    in PR 178802 because the new job dropped the login).
+
+VERIFY  (never trust green)
+  - Step log shows the tag line + no TF401019.
+  - az boards work-item show ... --query fields.System.Tags  -&gt; tag present AND prior tags kept.
+
+GOTCHA
+  - az devops security permission show &quot;effectivePermission&quot; LIES for svc/group subjects.
+    Use accesscontrollists?includeExtendedInfo=true -&gt; extendedInfo.effectiveAllow (bit16=ViewWI).</code></pre>
+<h2
+id="correction-to-the-prior-rca-and-to-the-answer-anton-was-given">Correction
+to the prior RCA and to the answer Anton was given</h2>
+<p>The previous package (<a
+href="./old_attempt_to_fix_it/"><code>old_attempt_to_fix_it/</code></a>)
+and the Slack answer given to Anton contained two claims that this
+investigation overturns. Per evidence discipline, they are quoted and
+corrected rather than silently replaced:</p>
+<ul>
+<li><p><strong>Prior claim:</strong> "your pipeline job runs under the
+Build Service Identity (System.AccessToken)" and "the fix is to pass
+<code>--organization/--project/--detect false</code>".
+<strong>Correction:</strong> the tag step runs under the
+<strong>deployment service principal</strong>, because the
+<code>az login</code> session from <code>azure-login.yml</code> takes
+precedence over the PAT env var. <code>--detect false</code> removes the
+<code>TF401019</code> but the query then returns empty (the SP can't
+read the board), so it is <strong>necessary but not sufficient</strong>.
+This matches exactly what Anton observed when he tried it.</p></li>
+<li><p><strong>Prior claim:</strong> "the runner switch is not the
+correct fix … the pool swap does not change what is denied … [the
+sibling works because of] a different az/extension version or a broad
+cached credential (INFER)." <strong>Correction:</strong> the sibling fix
+(PR 178802) works because its separate job <strong>omits
+<code>azure-login.yml</code></strong>, so <code>az boards</code> runs as
+the Build Service identity — an <strong>identity</strong> change, now
+directly evidenced, not a pool/version difference. This also
+<em>refines</em> the answer to Anton's cost question: he was right to
+resist a second runner — and he doesn't need one. A separate job
+<strong>without</strong> the SP login on the <strong>same</strong>
+Microsoft-hosted pool achieves the fix.</p></li>
+</ul>
+<h2 id="answer-to-the-btm-teams-two-questions">Answer to the BTM team's
+two questions</h2>
+<p><strong>Q1 — "Why was <code>mcc-btm-deployment-dta-sp</code> created
+in ADO? Configure it, or delete it?"</strong> It is the
+dev/test/acceptance <strong>deployment</strong> service principal —
+<code>azure-login.yml</code> logs in as it so Terraform can deploy to
+Azure. It became an explicit Azure DevOps <em>user</em> on
+<strong>2026-04-22</strong> (Basic, AAD); <em>why</em> it was added on
+that date is <strong>not yet verified</strong> (the resolving step is
+the org audit log, which is administrator-only: Organization Settings →
+Auditing, filter 2026-04-22, action on the user/permission).
+<strong>Recommendation: configure, do NOT delete.</strong> Deleting it
+would break the dev/acc Terraform deploys that depend on it. "Configure"
+here does <strong>not</strong> mean "grant the SP board access" (that
+would give the deployment identity board write — more privilege than it
+should hold); the better path is the primary fix (make tagging use the
+Build Service identity, which already has board access).
+<strong>Deleting an identity is destructive and requires explicit
+authorization — it is recommended against and was not
+performed.</strong></p>
+<p><strong>Q2 — "Why did this start, and can you fix it?"</strong> It
+started in the 2026-04-22…04-25 window (the SP became an explicit ADO
+user on 04-22; tagging was already failing by 04-24). The fix is the
+primary fix in L8 / <a
+href="./how-to-fix.md"><code>how-to-fix.md</code></a>, contributable as
+a PR to <code>Eneco.Vpp.BehindTheMeter</code> (B2C). The sibling
+<code>.B2B</code> repo is already fixed (PR 178802) — do not touch
+it.</p>
+<h2 id="ado-only-actions-cannot-be-done-from-a-laptop">ADO-only actions
+(cannot be done from a laptop)</h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Local?</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Run the read-only diagnosis probes (L11)</td>
+<td><strong>Local</strong></td>
+<td>Read-only, as your own <code>az login</code>. Safe.</td>
+</tr>
+<tr>
+<td>Open the fix PR on <code>Eneco.Vpp.BehindTheMeter</code></td>
+<td><strong>ADO</strong></td>
+<td>Requires repo write; this is the contribution.</td>
+</tr>
+<tr>
+<td>Re-run the pipeline + assert the realized tag (L9)</td>
+<td><strong>ADO</strong></td>
+<td>The acceptance test; requires a pipeline run.</td>
+</tr>
+<tr>
+<td>(optional) Grant board permission / read the 2026-04-22 audit
+log</td>
+<td><strong>ADO, admin</strong></td>
+<td>Project/Collection Administrator only; not required by the primary
+fix.</td>
+</tr>
+<tr>
+<td>Delete the <code>dta-sp</code> user</td>
+<td><strong>ADO, destructive</strong></td>
+<td><strong>Recommended against</strong> (breaks deploys); requires
+explicit authorization; not performed.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="evidence-ledger">Evidence Ledger</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Claim</th>
+<th>Label</th>
+<th>Evidence (re-runnable)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1</td>
+<td><code>azure-login.yml</code> <code>az login</code>s as
+<code>dta-sp</code> (dev/acc) / <code>prd-sp</code> (prd) before
+tagging</td>
+<td>A1 FACT</td>
+<td>file content @ main:
+<code>az login --service-principal -u '$(mcc-btm-deployment-dta-sp-applicationid)'</code></td>
+</tr>
+<tr>
+<td>E2</td>
+<td><code>az login</code> session takes precedence over
+<code>AZURE_DEVOPS_EXT_PAT</code></td>
+<td>A1 FACT</td>
+<td>invalid-PAT query returns 913 (PAT ignored); <code>--debug</code>
+shows <code>UserCredential.acquire_token</code>, not Basic/PAT</td>
+</tr>
+<tr>
+<td>E3</td>
+<td>The live pipeline <code>az boards</code> authenticates as the
+<strong>SP</strong></td>
+<td>A1 FACT</td>
+<td>build 1668639 log#19:
+<code>ServicePrincipalCredential.acquire_token … grant_type: client_credentials</code>
+(agent ext 1.0.4)</td>
+</tr>
+<tr>
+<td>E4</td>
+<td>The SP's board query returns <strong>empty</strong> in the
+pipeline</td>
+<td>A1 FACT</td>
+<td>build 1668639 log#19: <code>POST /_apis/wit/wiql</code> → HTTP 200,
+body <code>"workItems":[]</code></td>
+</tr>
+<tr>
+<td>E5</td>
+<td>The same query returns 913 for a privileged human</td>
+<td>A1 FACT</td>
+<td><code>az boards query … WHERE [System.AreaId]=6393</code> →
+<code>length(@)</code>=913</td>
+</tr>
+<tr>
+<td>E6</td>
+<td><code>dta-sp</code> lacks View/Edit work items on Team BtM</td>
+<td>A1 FACT</td>
+<td>area ACL bitmask: only group = <code>Pool Creator</code> (no
+work-item ACE); no direct ACE</td>
+</tr>
+<tr>
+<td>E7</td>
+<td>Build Service identity HAS View+Edit work items on area 6393</td>
+<td>A1 FACT</td>
+<td>area-root ACL bitmask: <code>Build:a7ef9a24…</code>
+effAllow=<strong>241</strong> (ViewWI+EditWI=True), inherited by Team
+BtM</td>
+</tr>
+<tr>
+<td>E8</td>
+<td><code>dta-sp</code> created in ADO 2026-04-22T07:27:25Z (Basic,
+AAD); <code>prd-sp</code> is not an ADO user</td>
+<td>A1 FACT</td>
+<td><code>az devops user list</code> (2455 scanned)</td>
+</tr>
+<tr>
+<td>E9</td>
+<td><code>TF401019</code> real + continuous 2026-04-24 → 06-11; script
+fix never committed</td>
+<td>A1 FACT</td>
+<td>build logs 1621832/1663945/1676583; script md5 identical main vs
+fix/tagging</td>
+</tr>
+<tr>
+<td>E10</td>
+<td>AreaId 6393 = <code>Myriad - VPP\Team BtM</code>, intact, ~913
+items</td>
+<td>A1 FACT</td>
+<td><code>az boards area project list</code>; node GUID
+<code>dfb04683-…</code></td>
+</tr>
+<tr>
+<td>E11</td>
+<td><code>enforceJobAuthScope=true</code>,
+<code>enforceReferencedRepoScopedToken=false</code></td>
+<td>A1 FACT</td>
+<td>project <code>generalSettings</code></td>
+</tr>
+<tr>
+<td>E12</td>
+<td>PR 178802 (B2B) = tag step moved to a separate <code>job</code>
+without <code>azure-login.yml</code></td>
+<td>A1 FACT</td>
+<td>PR diff (changed file:
+<code>deploy-terraform.pipeline.yml</code>)</td>
+</tr>
+<tr>
+<td>E13</td>
+<td><code>System.AccessToken</code> = project Build Service identity,
+pool-independent; area-path "View work items in this node" governs board
+read</td>
+<td>A1 FACT (docs)</td>
+<td>Microsoft Learn: access-tokens, permissions namespace-reference</td>
+</tr>
+<tr>
+<td>E14</td>
+<td>Fixed pipeline produces a realized tag end-to-end</td>
+<td>A3 UNVERIFIED[blocked: requires a pipeline run]</td>
+<td>resolving probe = L9 acceptance test after the PR merges</td>
+</tr>
+<tr>
+<td>E15</td>
+<td>Exact 2026-04-22 audit entry / the purged 2026-04-15 build
+content</td>
+<td>A3 UNVERIFIED[blocked: admin-only / aged out]</td>
+<td>Org Settings → Auditing; does not change the diagnosis</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Confidence:</strong> the diagnosis (E1–E13) is fully
+evidenced and survived adversarial demolition. The only open items (E14
+runtime tag, E15 audit detail) do not affect the root cause or the
+fix-path correctness; E14 is closed by the contributor's acceptance
+test, by design.</p>
+<h2 id="adversarial-review-mutation-log">Adversarial review (Mutation
+log)</h2>
+<ul>
+<li><code>socrates-contrarian</code> (goal-fidelity): 9 ask↔︎deliverable
+gaps; all accepted and folded in (proven-vs-unproven box, prior-RCA +
+prior-answer corrections, Q1 decision block, local-vs-ADO split,
+single-default fix + repo scope, in-document destructive gate, runnable
+precedence demo, named HTML producer). Artifact:
+<code>…/verification/adversarial-goalfidelity.md</code>.</li>
+<li><code>el-demoledor</code> (technical demolition, live ADO): attacked
+all four load-bearing claims and could falsify none; upgraded the fix
+keystone (Build Service has board read) from inference to FACT; surfaced
+the permission-tool methodology landmine now recorded in L9. Artifact:
+<code>…/verification/adversarial-technical.md</code>.</li>
+</ul>
+
+
+</body></html>

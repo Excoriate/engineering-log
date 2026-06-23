@@ -1,0 +1,35 @@
+{
+  "task_id": "2026-06-22-009",
+  "slug": "azfunctions-avd-not-visible-rca",
+  "task_root": ".ai/tasks/2026-06-22-009_azfunctions-avd-not-visible-rca",
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_005_azfunctions_avd_not_visible",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/eneco_agg_fn_ingress_rewrite_gap.md",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/MEMORY.md",
+    "/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/Eneco.Vpp.Aggregation/azure-pipeline/Helm/telemetryfunctiontestsfn/values.yaml",
+    "/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/Eneco.Vpp.Aggregation/azure-pipeline/Helm/telemetryfunctiontestsfn/templates/ingress.yaml",
+    "/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/Eneco.Vpp.Aggregation/azure-pipeline/Helm/telemetryfunctiontestsfn/Chart.yaml"
+  ],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_005_azfunctions_avd_not_visible/ (RCA package + evidence/)"
+  ],
+  "git_mutations": [
+    "NONE \u2014 files edited in working tree only; user owns commit/PR/deploy"
+  ],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [
+    "live read-only probe suite (curl/kubectl/az) \u2014 all diagnosis claims A1 this session",
+    "AUTHORIZED reversible cluster mutation: created+deleted throwaway ingress tf-rewrite-proof-ingress in ns vpp-agg to witness public 200; managed ingress untouched; cleanup verified (NotFound)"
+  ],
+  "gate_witnesses": [
+    "edge 404 vs 200: evidence/01-edge-http-probes.txt",
+    "no rewrite-target in live ingress: evidence/02-ingress-objects.txt",
+    "backend /healthz=200 root: evidence/06-backend-portforward.txt",
+    "live rewrite -> public 200 (ImplementationSpecific): evidence/08-live-rewrite-proof.txt",
+    "Prefix+regex REJECTED by admission webhook: evidence/09-prefix-regex-proof.txt",
+    "deliveryreportfn /healthz=404 at backend: evidence/10-deliveryreportfn-backend.txt",
+    "canonical ADO default-branch chart has no rewrite (fix never merged): evidence/11-ado-canonical-chart.txt",
+    "adversarial dual-gate disposed: .ai/tasks/2026-06-22-009_azfunctions-avd-not-visible-rca/subagent-outputs/adversarial-disposition.md"
+  ],
+  "adversarial_review": "external (el-demoledor + socrates-contrarian); all findings RESOLVED/REBUTTED; 1 org-attribution DEFER"
+}

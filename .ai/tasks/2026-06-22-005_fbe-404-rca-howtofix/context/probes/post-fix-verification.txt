@@ -1,0 +1,28 @@
+=== POST-FIX VERIFICATION (durable capture) — 2026-06-22T11:49:46Z ===
+
+### fresh operations-app-of-apps (created post-fix by ApplicationSet) ###
+{
+  "creationTimestamp": "2026-06-22T11:32:48Z",
+  "deletionTimestamp": "NONE",
+  "finalizers": [
+    "resources-finalizer.argocd.argoproj.io"
+  ],
+  "sync": "Synced",
+  "health": "Healthy"
+}
+
+### operations child apps tally ###
+total=21  Synced=21  Healthy=21  Missing=0  Progressing=0
+
+### frontend / gateway-nl / clientgateway ###
+frontend: sync=Synced health=Healthy
+gateway-nl: sync=Synced health=Healthy
+clientgateway: sync=Synced health=Healthy
+
+### any operations app still mid-deletion? (should be none) ###
+apps_with_deletionTimestamp=0
+
+### public URL — status + headers (x-correlation-id now present = app is serving) ###
+< HTTP/1.1 200 OK
+< Content-Type: text/html
+http_code: 200

@@ -1,0 +1,50 @@
+* Host operations.dev.vpp.eneco.com:443 was resolved.
+* IPv6: (none)
+* IPv4: 20.76.210.221
+*   Trying 20.76.210.221:443...
+* Connected to operations.dev.vpp.eneco.com (20.76.210.221) port 443
+* ALPN: curl offers h2,http/1.1
+* (304) (OUT), TLS handshake, Client hello (1):
+} [333 bytes data]
+* (304) (IN), TLS handshake, Server hello (2):
+{ [122 bytes data]
+* (304) (IN), TLS handshake, Unknown (8):
+{ [25 bytes data]
+* (304) (IN), TLS handshake, Certificate (11):
+{ [3828 bytes data]
+* (304) (IN), TLS handshake, CERT verify (15):
+{ [264 bytes data]
+* (304) (IN), TLS handshake, Finished (20):
+{ [52 bytes data]
+* (304) (OUT), TLS handshake, Finished (20):
+} [52 bytes data]
+* SSL connection using TLSv1.3 / AEAD-AES256-GCM-SHA384 / [blank] / UNDEF
+* ALPN: server accepted http/1.1
+* Server certificate:
+*  subject: CN=*.dev.vpp.eneco.com
+*  start date: Jan 12 00:00:00 2026 GMT
+*  expire date: Jan 19 23:59:59 2027 GMT
+*  issuer: C=NL; O=Trust Provider B.V.; OU=Domain Validated SSL; CN=Trust Provider B.V. TLS RSA CA G1
+*  SSL certificate verify ok.
+* using HTTP/1.x
+> GET / HTTP/1.1
+> Host: operations.dev.vpp.eneco.com
+> User-Agent: curl/8.7.1
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/1.1 404 Not Found
+< Date: Mon, 22 Jun 2026 11:21:46 GMT
+< Content-Type: text/html
+< Content-Length: 146
+< Connection: keep-alive
+< 
+{ [146 bytes data]
+* Connection #0 to host operations.dev.vpp.eneco.com left intact
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "task_id": "2026-06-22-006",
+  "slug": "fbe-duncan-rca-deliverables",
+  "task_root": ".ai/tasks/2026-06-22-006_fbe-duncan-rca-deliverables",
+  "allowed_external_paths": [],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_003_feature_flags_fbe_duncan/rca.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_003_feature_flags_fbe_duncan/rca.html",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_003_feature_flags_fbe_duncan/how-to-fix.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_003_feature_flags_fbe_duncan/how-to-fix.html",
+    ".ai/memory/lessons-learned.json"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    "validate-rca-completeness.sh rca.md -> all 28 gates PASS",
+    "validate-feynman-doc.py how-to-fix.md -> PASS",
+    "check-mermaid-syntax.sh -> 2+2 mermaid blocks render",
+    "embedded-MD vs on-disk-MD parity: rca.html=0 diff, how-to-fix.html=0 diff",
+    "adversarial receipts: reviews/{socrates-assumptions,eldemoledor-break,sre-fix-safety,goal-fidelity}.md",
+    "verification/phase-8-results.md"
+  ]
+}

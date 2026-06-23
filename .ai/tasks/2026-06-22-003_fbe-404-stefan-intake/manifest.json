@@ -1,0 +1,23 @@
+{
+  "task_id": "2026-06-22-003",
+  "slug": "fbe-404-stefan-intake",
+  "task_root": ".ai/tasks/2026-06-22-003_fbe-404-stefan-intake",
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/sre-intake.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/slack-answer.md"
+  ],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/sre-intake.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_001_fbe_404_stefan/slack-answer.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    "reviews/goal-fidelity-socrates.md (socrates-contrarian: NOT-READY 1 BLOCKING -> resolved) — witnesses ask-fidelity + no-fabrication + no-conflation",
+    "reviews/technical-surface-sre.md (sre-maniac: UNSOUND 1 BLOCKING -> resolved) — witnesses probe-discrimination + resolved-ids + safety gates",
+    "context/slack-harvest.md (A1 terminate/recreate permalinks, no-owner) — witnesses identity + resolution-status claims",
+    "context/vault-fbe-knowledge.md (ranked modes, F3/F2, recipe paths) — witnesses mechanism + safety-gate claims"
+  ]
+}

@@ -1,0 +1,7 @@
+=== FIX APPLY (live) ===
+
+STEP 1: clear wedged finalizer on operations-app-of-apps (ns argocd)
+application.argoproj.io/operations-app-of-apps patched
+
+STEP 2: clear wedged finalizer on assetmonitor (ns operations)
+application.argoproj.io/assetmonitor patched

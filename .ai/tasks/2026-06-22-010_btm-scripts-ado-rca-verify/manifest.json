@@ -1,0 +1,84 @@
+{
+  "task_id": "2026-06-22-010",
+  "slug": "btm-scripts-ado-rca-verify",
+  "task_root": ".ai/tasks/2026-06-22-010_btm-scripts-ado-rca-verify",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/MEMORY.md",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/feedback_oncall_ado_cli_identity_precedence.md"
+  ],
+  "external_writes": [
+    ".ai/memory/lessons-learned.json",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/MEMORY.md",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/feedback_oncall_ado_cli_identity_precedence.md",
+    "llm-wiki/learnings/gotchas/ado-cli-identity-and-permission-pitfalls.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_006_btm_scripts_ado/azure-boards-add-tag.fixed.sh",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_006_btm_scripts_ado/how-to-fix.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_006_btm_scripts_ado/rca.html",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_006_btm_scripts_ado/rca.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    {
+      "claim": "tag step authenticates as the deployment SP (not Build Service)",
+      "witness": "pipeline build 1668639 log#19: ServicePrincipalCredential.acquire_token client_credentials (ext 1.0.4)",
+      "type": "external-runtime-output"
+    },
+    {
+      "claim": "SP cannot see Team BtM work items",
+      "witness": "log#19 WIQL POST /_apis/wit/wiql -> HTTP 200 workItems:[] (vs Alex 913)",
+      "type": "external-runtime-output"
+    },
+    {
+      "claim": "Build Service CAN read+tag area 6393 (fix works)",
+      "witness": "accesscontrollists bitmask: Build:a7ef9a24 effAllow=241 ViewWI/EditWI=True (el-demoledor sidecar)",
+      "type": "external-agent-artifact"
+    },
+    {
+      "claim": "dta-sp added 2026-04-22 (onset), prd-sp not an ADO user",
+      "witness": "az devops user list (my PROBE)",
+      "type": "external-runtime-output"
+    },
+    {
+      "claim": "diagnosis survived adversarial demolition",
+      "witness": ".ai/tasks/2026-06-22-010_btm-scripts-ado-rca-verify/verification/adversarial-technical.md",
+      "type": "external-agent-artifact"
+    }
+  ],
+  "context_dispatches": [
+    {
+      "lane": "A",
+      "agent": "sherlock-holmes",
+      "artifact": ".ai/tasks/2026-06-22-010_btm-scripts-ado-rca-verify/context/threadB-live-diagnosis.md",
+      "question": "live Thread-B root cause: identity/permissions vs benign-empty"
+    },
+    {
+      "lane": "B",
+      "agent": "general-purpose",
+      "artifact": ".ai/tasks/2026-06-22-010_btm-scripts-ado-rca-verify/context/static-artifacts.md",
+      "question": "byte-exact script@main, script@fix/tagging, YAML, PR178802 diff"
+    },
+    {
+      "lane": "C",
+      "agent": "librarian",
+      "artifact": ".ai/tasks/2026-06-22-010_btm-scripts-ado-rca-verify/context/external-docs-authmodel.md",
+      "question": "MS Learn: System.AccessToken identity, enforceJobAuthScope, az boards auth precedence"
+    }
+  ],
+  "adversarial_resolved": [
+    {
+      "agent": "el-demoledor",
+      "verdict": "could not falsify; V14 upgraded A2/A3->A1",
+      "receipt": "all 4 claims SURVIVE; methodology landmine flagged",
+      "artifact": ".ai/tasks/2026-06-22-010_btm-scripts-ado-rca-verify/verification/adversarial-technical.md"
+    },
+    {
+      "agent": "socrates-contrarian",
+      "verdict": "9 goal-fidelity gaps, 2 GATE; all ACCEPTED",
+      "receipt": "in-document corrections folded into deliverables",
+      "artifact": ".ai/tasks/2026-06-22-010_btm-scripts-ado-rca-verify/verification/adversarial-goalfidelity.md"
+    }
+  ],
+  "status": "complete"
+}

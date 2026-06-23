@@ -1,0 +1,100 @@
+# ADO canonical-source check — default-branch chart values — 2026-06-22T13:54:51Z UTC
+
+default branch: refs/heads/development
+
+===== FILE: azure-pipeline/Helm/telemetryfunctiontestsfn/values.yaml (branch development) =====
+    WARNING: Not a json response, outputting to stdout. For binary data suggest use "--output-file" to write to a file
+    replicas: 1
+    
+    container:
+      fullname: telemetryfunctiontestsfn
+      name: telemetryfunctiontestsfn
+      httpPort: 8080
+    
+    route:
+      annotations: {}
+    
+    service:
+      type: ClusterIP
+      httpPort: 8080
+    
+    image:
+      registry: vppacra.azurecr.io
+      repository: eneco-vpp-agg/telemetryfunctiontestsfn
+      tag: ""
+      imagePullPolicy: IfNotPresent
+    
+    openshift:
+      enabled: false
+    
+    ingress:
+      enabled: true
+      className: nginx
+      hostname: agg.dev.vpp.eneco.com
+      httpPort: 8080
+      secret: ""
+      path: /telemetryfunctiontestsfn/
+      annotations: {}
+      hosts: []
+      tls: []
+    
+    env_variables:
+      ASPNETCORE_ENVIRONMENT: Sandbox
+      KafkaOptions__SslKeyLocation: /app/certs/ssl-key.pem
+      KafkaOptions__SchemaRegistryUrl: "https://schemas.dtaaz.esp.eneco.com"
+      KafkaOptions__SslCertificateLocation: /app/certs/client-cert.pem
+      KafkaOptions__SslCaLocation: /app/certs/ca-cert.pem
+      KafkaOptions__SslKeystoreLocation: /app/certs/ssl-key.pfx
+      KafkaOptions__SecurityProtocol: "Ssl"
+      KafkaOptions__BootstrapServers: broker1.dtaaz.esp.eneco.com:9094,broker2.dtaaz.esp.eneco.com:9094,broker3.dtaaz.esp.eneco.com:9094
+      KafkaOptions__TelemetryTopic: eneco-dta-dev-coo-asset-iot-der-telemetry-3
+      KafkaOptions__B2BTelemetryTopic: eneco-dta-dev-coo-asset-b2b-iot-der-telemetry-3
+      KafkaOptions__B2CTelemetryTopic: eneco-dta-dev-coo-asset-b2c-iot-der-telemetry-3
+      KafkaOptions__SetPointTopic: eneco-dta-dev-coo-eet-asset-power-setpoint-2
+      KafkaOptions__B2BSetPointTopic: eneco-dta-dev-coo-b2b-asset-power-setpoint-2
+      KafkaOptions__B2CSetPointTopic: eneco-dta-dev-coo-b2c-asset-power-setpoint-2
+      KafkaOptions__StrikePriceTopic: eneco-dta-dev-coo-eet-asset-strikeprices-1
+      KafkaOptions__B2BStrikePriceTopic: eneco-dta-dev-coo-b2b-asset-strikeprices-1
+      KafkaOptions__B2CStrikePriceTopic: eneco-dta-dev-coo-b2c-asset-strikeprices-1
+      KafkaOptions__FlexReservationTopic: eneco-dta-dev-coo-eet-asset-flex-reservation-1
+      KafkaOptions__B2BFlexReservationTopic: eneco-dta-dev-coo-b2b-asset-flex-reservation-1
+      KafkaOptions__B2CFlexReservationTopic: eneco-dta-dev-coo-b2c-asset-flex-reservation-1
+      KafkaOptions__FlexCapacityTopic: eneco-dta-dev-coo-eet-asset-flexcapacity-1
+      KafkaOptions__B2BFlexCapacityTopic: eneco-dta-dev-coo-b2b-asset-flexcapacity-1
+      KafkaOptions__B2CFlexCapacityTopic: eneco-dta-dev-coo-b2c-asset-flexcapacity-1
+      KafkaOptions__PortfolioRequestTopic: eneco-dta-dev-coo-eet-vpp-portfoliorequest-1
+
+===== FILE: azure-pipeline/Helm/telemetryfunctiontestsfn/templates/ingress.yaml (branch development) =====
+    WARNING: Not a json response, outputting to stdout. For binary data suggest use "--output-file" to write to a file
+    {{- if eq .Values.openshift.enabled false }}
+    kind: Ingress
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: {{ .Release.Name }}-ingress
+      {{- with .Values.ingress.annotations }}
+      annotations:
+          {{- toYaml . | nindent 4 }}
+      {{- end }}
+    spec:
+      ingressClassName: {{ .Values.ingress.className}}  
+      {{- if .Values.ingress.tls }}
+      tls:
+      - hosts:
+          - {{ .Values.ingress.hostname }}
+        secretName: {{ .Values.ingress.secret }}
+      {{- end }}  
+      rules:
+        - host: {{ .Values.ingress.hostname }}
+          http:
+            paths:
+              - path: {{ .Values.ingress.path }}
+                pathType: Prefix
+                backend:
+                  service:
+                    name: {{.Values.container.name}}
+                    port:
+                      number: {{ .Values.service.httpPort }}
+    {{- end }}
+
+===== rewrite-target present on default branch values? =====
+>>> NO rewrite-target/use-regex on default branch == fix never merged (canonical A1)

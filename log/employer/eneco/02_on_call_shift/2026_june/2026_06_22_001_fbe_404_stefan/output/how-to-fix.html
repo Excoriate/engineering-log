@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>How to fix — FBE app-of-apps stuck mid-deletion</title>
+  <style>
+
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">:root{--fg:#1b1f24;--muted:#5b6570;--bg:#ffffff;--accent:#0b6bcb;--line:#e2e6ea;--code-bg:#f5f7f9;--warn:#b54708}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{color:var(--fg);background:var(--bg);font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:920px;margin:0 auto;padding:2.4rem 1.5rem 6rem}
+h1,h2,h3,h4{line-height:1.25;font-weight:650;margin:2.1em 0 .6em}
+h1{font-size:1.95rem;margin-top:0;border-bottom:2px solid var(--line);padding-bottom:.35em}
+h2{font-size:1.4rem;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:1.13rem}
+h4{font-size:1rem;color:var(--muted)}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+p,li{margin:.5em 0}
+code{background:var(--code-bg);padding:.12em .38em;border-radius:4px;font:.86em/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;padding:1rem 1.1rem;overflow:auto;font:.84rem/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:1.1em 0;font-size:.92rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg);font-weight:650}
+tr:nth-child(even) td{background:#fafbfc}
+blockquote{margin:1em 0;padding:.4em 1.1em;border-left:4px solid var(--accent);background:#f3f8fe;color:#27313b;border-radius:0 6px 6px 0}
+figure.diagram{margin:1.4em 0;padding:1.1em;border:1px solid var(--line);border-radius:8px;background:#fcfdfe;text-align:center;overflow-x:auto}
+figure.diagram svg{max-width:100%;height:auto}
+hr{border:0;border-top:1px solid var(--line);margin:2.2em 0}
+.subtitle{color:var(--muted);font-size:.9rem;margin-top:-.3em}
+@media print{body{max-width:none}pre,table,figure{page-break-inside:avoid}a{color:var(--fg)}}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">How to fix — FBE app-of-apps stuck mid-deletion</h1>
+</header>
+<h1 id="fixing-an-fbe-slot-that-404s-because-its-app-of-apps-is-stuck-mid-deletion--mastery-grade-how-to">Fixing
+an FBE Slot That 404s Because Its App-of-Apps Is Stuck Mid-Deletion —
+Mastery-Grade How-To</h1>
+<blockquote>
+<p><strong>For</strong>: an on-call engineer or agent who finds a
+Feature Branch Environment (FBE) slot returning HTTP 404 on its public
+URL, has never seen this failure before, and must both fix it and be
+able to defend the fix.</p>
+<p><strong>Knowledge Contract</strong>: after reading this document, you
+will be able to:</p>
+<ol type="1">
+<li>draw the chain from ApplicationSet to app-of-apps to child apps to
+the public URL, and point to exactly where the failure sits;</li>
+<li>explain from first principles why a Kubernetes object carrying a
+deletion mark is never reconciled, and why that starves the slot;</li>
+<li>trace the causal path from &quot;a delete was started but never finished&quot;
+to &quot;the URL serves 404&quot;;</li>
+<li>diagnose this failure class with read-only probes and repair it by
+clearing the wedged guard so the ApplicationSet self-heals the
+slot;</li>
+<li>reject three look-alike causes — expired access token, per-app
+credential gap, and routing misalignment — and reject the dangerous
+&quot;just run the destroy pipeline&quot; shortcut;</li>
+<li>defend the fix against the challenge &quot;removing a finalizer is
+reckless&quot; by proving the workloads were already gone.</li>
+</ol>
+<p><strong>Rejection condition</strong>: this document does not make you
+able to identify <em>who or what triggered the original deletion</em> —
+that remains an open question in the incident it is built from, and the
+fix deliberately does not depend on knowing it.</p>
+<p><strong>Evidence base</strong>: the standalone repair spec
+<code>how-to-fix.md</code>, the live read-only diagnosis
+<code>probe-results.md</code>, and the applied-fix verification
+<code>fix-result.md</code>, all from the 2026-06-22
+<code>operations</code> FBE-404 incident on the Sandbox cluster
+<code>vpp-aks01-d</code>. Claims are separated into observed fact,
+inference, and unverified in the Evidence Ledger near the end.</p>
+</blockquote>
+<h2 id="tldr--the-one-picture">TL;DR — The One Picture</h2>
+<p>Before the diagram: this is the whole delivery chain for one FBE
+slot, top to bottom. The question it answers is &quot;what owns what, and
+where does the public URL get its content?&quot; Read it as ownership flowing
+downward and HTTP traffic arriving at the bottom.</p>
+<figure class="diagram"><svg id="my-svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1070.57px; background-color: transparent;" viewBox="0 0 1070.5703125 670" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#my-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#my-svg .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#my-svg .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#my-svg .error-icon{fill:#552222;}#my-svg .error-text{fill:#552222;stroke:#552222;}#my-svg .edge-thickness-normal{stroke-width:1px;}#my-svg .edge-thickness-thick{stroke-width:3.5px;}#my-svg .edge-pattern-solid{stroke-dasharray:0;}#my-svg .edge-thickness-invisible{stroke-width:0;fill:none;}#my-svg .edge-pattern-dashed{stroke-dasharray:3;}#my-svg .edge-pattern-dotted{stroke-dasharray:2;}#my-svg .marker{fill:#333333;stroke:#333333;}#my-svg .marker.cross{stroke:#333333;}#my-svg svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#my-svg p{margin:0;}#my-svg .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#my-svg .cluster-label text{fill:#333;}#my-svg .cluster-label span{color:#333;}#my-svg .cluster-label span p{background-color:transparent;}#my-svg .label text,#my-svg span{fill:#333;color:#333;}#my-svg .node rect,#my-svg .node circle,#my-svg .node ellipse,#my-svg .node polygon,#my-svg .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#my-svg .rough-node .label text,#my-svg .node .label text,#my-svg .image-shape .label,#my-svg .icon-shape .label{text-anchor:middle;}#my-svg .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#my-svg .rough-node .label,#my-svg .node .label,#my-svg .image-shape .label,#my-svg .icon-shape .label{text-align:center;}#my-svg .node.clickable{cursor:pointer;}#my-svg .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#my-svg .arrowheadPath{fill:#333333;}#my-svg .edgePath .path{stroke:#333333;stroke-width:1px;}#my-svg .flowchart-link{stroke:#333333;fill:none;}#my-svg .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#my-svg .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#my-svg .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#my-svg .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#my-svg .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#my-svg .cluster text{fill:#333;}#my-svg .cluster span{color:#333;}#my-svg div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#my-svg .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#my-svg rect.text{fill:none;stroke-width:0;}#my-svg .icon-shape,#my-svg .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#my-svg .icon-shape p,#my-svg .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#my-svg .icon-shape .label rect,#my-svg .image-shape .label rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#my-svg .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#my-svg .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#my-svg .node .neo-node{stroke:#9370DB;}#my-svg [data-look="neo"].node rect,#my-svg [data-look="neo"].cluster rect,#my-svg [data-look="neo"].node polygon{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node path{stroke:#9370DB;stroke-width:1px;}#my-svg [data-look="neo"].node .outer-path{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node .neo-line path{stroke:#9370DB;filter:none;}#my-svg [data-look="neo"].node circle{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node circle .state-start{fill:#000000;}#my-svg [data-look="neo"].icon-shape .icon{fill:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].icon-shape .icon-neo path{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="my-svg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="my-svg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="my-svg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;" /></marker><marker id="my-svg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;" /></marker><marker id="my-svg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;" /></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M541.949,134L541.949,140.167C541.949,146.333,541.949,158.667,541.949,170.333C541.949,182,541.949,193,541.949,198.5L541.949,204" id="my-svg-L_AS_AOA_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_AS_AOA_0" data-points="W3sieCI6NTQxLjk0OTIxODc1LCJ5IjoxMzR9LHsieCI6NTQxLjk0OTIxODc1LCJ5IjoxNzF9LHsieCI6NTQxLjk0OTIxODc1LCJ5IjoyMDh9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M411.949,307.137L373.66,317.781C335.37,328.425,258.79,349.712,220.501,365.856C182.211,382,182.211,393,182.211,398.5L182.211,404" id="my-svg-L_AOA_C1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_AOA_C1_0" data-points="W3sieCI6NDExLjk0OTIxODc1LCJ5IjozMDcuMTM3MzgyODYyOTc1NDd9LHsieCI6MTgyLjIxMDkzNzUsInkiOjM3MX0seyJ4IjoxODIuMjEwOTM3NSwieSI6NDA4fV0=" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M464.634,334L457.066,340.167C449.498,346.333,434.362,358.667,426.794,372.333C419.227,386,419.227,401,419.227,408.5L419.227,416" id="my-svg-L_AOA_C2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_AOA_C2_0" data-points="W3sieCI6NDY0LjYzMzk0NTMxMjUwMDAzLCJ5IjozMzR9LHsieCI6NDE5LjIyNjU2MjUsInkiOjM3MX0seyJ4Ijo0MTkuMjI2NTYyNSwieSI6NDIwfV0=" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M619.264,334L626.832,340.167C634.4,346.333,649.536,358.667,657.104,372.333C664.672,386,664.672,401,664.672,408.5L664.672,416" id="my-svg-L_AOA_C3_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_AOA_C3_0" data-points="W3sieCI6NjE5LjI2NDQ5MjE4NzUsInkiOjMzNH0seyJ4Ijo2NjQuNjcxODc1LCJ5IjozNzF9LHsieCI6NjY0LjY3MTg3NSwieSI6NDIwfV0=" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M671.949,304.094L715.753,315.245C759.557,326.396,847.165,348.698,890.969,367.349C934.773,386,934.773,401,934.773,408.5L934.773,416" id="my-svg-L_AOA_CN_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_AOA_CN_0" data-points="W3sieCI6NjcxLjk0OTIxODc1LCJ5IjozMDQuMDkzNjgyNTY3MTQ2OTd9LHsieCI6OTM0Ljc3MzQzNzUsInkiOjM3MX0seyJ4Ijo5MzQuNzczNDM3NSwieSI6NDIwfV0=" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /><path d="M182.211,486L182.211,494.167C182.211,502.333,182.211,518.667,182.211,534.333C182.211,550,182.211,565,182.211,572.5L182.211,580" id="my-svg-L_C1_URL_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_C1_URL_0" data-points="W3sieCI6MTgyLjIxMDkzNzUsInkiOjQ4Nn0seyJ4IjoxODIuMjEwOTM3NSwieSI6NTM1fSx7IngiOjE4Mi4yMTA5Mzc1LCJ5Ijo1ODR9XQ==" data-look="classic" marker-end="url(#my-svg_flowchart-v2-pointEnd)" /></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(541.94921875, 171)"><g class="label" data-id="L_AS_AOA_0" transform="translate(-62.0703125, -12)"><foreignObject width="124.140625" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>generates + owns</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(182.2109375, 371)"><g class="label" data-id="L_AOA_C1_0" transform="translate(-45.546875, -12)"><foreignObject width="91.09375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>fans out into</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(419.2265625, 371)"><g class="label" data-id="L_AOA_C2_0" transform="translate(-45.546875, -12)"><foreignObject width="91.09375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>fans out into</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(664.671875, 371)"><g class="label" data-id="L_AOA_C3_0" transform="translate(-45.546875, -12)"><foreignObject width="91.09375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>fans out into</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(934.7734375, 371)"><g class="label" data-id="L_AOA_CN_0" transform="translate(-45.546875, -12)"><foreignObject width="91.09375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"><p>fans out into</p></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(182.2109375, 535)"><g class="label" data-id="L_C1_URL_0" transform="translate(-100, -24)"><foreignObject width="200" height="48"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="edgeLabel"><p>deploys the backend behind</p></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="my-svg-flowchart-AS-0" data-look="classic" transform="translate(541.94921875, 71)"><rect class="basic label-container" style x="-130" y="-63" width="260" height="126" /><g class="label" style transform="translate(-100, -48)"><rect /><foreignObject width="200" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>ApplicationSet<br />vpp-feature-branch-environments<br />(generator, healthy)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-AOA-1" data-look="classic" transform="translate(541.94921875, 271)"><rect class="basic label-container" style x="-130" y="-63" width="260" height="126" /><g class="label" style transform="translate(-100, -48)"><rect /><foreignObject width="200" height="96"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>app-of-apps Application<br />operations-app-of-apps<br />(owned by the ApplicationSet)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-C1-2" data-look="classic" transform="translate(182.2109375, 447)"><rect class="basic label-container" style x="-83.875" y="-39" width="167.75" height="78" /><g class="label" style transform="translate(-53.875, -24)"><rect /><foreignObject width="107.75" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>child: frontend<br />(serves /)</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-C2-3" data-look="classic" transform="translate(419.2265625, 447)"><rect class="basic label-container" style x="-103.140625" y="-27" width="206.28125" height="54" /><g class="label" style transform="translate(-73.140625, -12)"><rect /><foreignObject width="146.28125" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>child: clientgateway</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-C3-4" data-look="classic" transform="translate(664.671875, 447)"><rect class="basic label-container" style x="-92.3046875" y="-27" width="184.609375" height="54" /><g class="label" style transform="translate(-62.3046875, -12)"><rect /><foreignObject width="124.609375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>child: gateway-nl</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-CN-5" data-look="classic" transform="translate(934.7734375, 447)"><rect class="basic label-container" style x="-127.796875" y="-27" width="255.59375" height="54" /><g class="label" style transform="translate(-97.796875, -12)"><rect /><foreignObject width="195.59375" height="24"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel"><p>~21 child Applications total</p></span></div></foreignObject></g></g><g class="node default" id="my-svg-flowchart-URL-6" data-look="classic" transform="translate(182.2109375, 623)"><rect class="basic label-container" style x="-174.2109375" y="-39" width="348.421875" height="78" /><g class="label" style transform="translate(-144.2109375, -24)"><rect /><foreignObject width="288.421875" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel"><p>https://operations.dev.vpp.eneco.com/<br />public URL</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="my-svg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="my-svg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs></svg></figure>
+
+<p>After the diagram: one ApplicationSet generates and <em>owns</em> a
+single parent Application called the <strong>app-of-apps</strong>. That
+parent does not run any workload itself; its only job is to fan out into
+roughly 21 child Applications — one of which, <code>frontend</code>,
+deploys the web backend that answers <code>/</code>. Traffic enters at
+the bottom. If the <code>frontend</code> child is never deployed, the
+edge proxy has nothing behind <code>/</code>, so the URL returns 404.
+The pressure point in this whole picture is the single box in the middle
+— <code>operations-app-of-apps</code>. Everything below it depends on
+that one object being healthy and reconcilable. Key takeaway:
+<strong>the URL is 404 because the middle of this chain is frozen, not
+because the edge or the routing is broken.</strong> The next picture
+explains what &quot;frozen&quot; physically means.</p>
+<h2 id="first-principles-ladder">First-Principles Ladder</h2>
+<p>This ASCII ladder is the memory model. If you can redraw these six
+rungs, you can reconstruct the entire failure and its fix without this
+document.</p>
+<pre class="text"><code>deletionTimestamp -&gt; &quot;not reconciled&quot; invariant -&gt; finalizer guard -&gt;
+   wedge -&gt; name still held -&gt; recreate is a no-op -&gt; 404</code></pre>
+<p>Walk it in words. <strong>A deletion mark</strong>
+(<code>deletionTimestamp</code>) is a field Kubernetes stamps on an
+object the moment a delete is requested; it means &quot;this object is being
+torn down.&quot; <strong>The invariant</strong> that follows is the
+load-bearing fact of this whole document: <em>an object carrying a
+deletion mark is never reconciled toward live desired state.</em> The
+controller&#39;s entire attention shifts to tearing it down, not to making
+it match what you want. <strong>A finalizer</strong> is a named guard
+(<code>resources-finalizer.argocd.argoproj.io</code>) that blocks the
+actual removal until ArgoCD has finished cascade-deleting the object&#39;s
+managed resources — only then does the controller clear the guard and
+let the object vanish. <strong>A wedge</strong> is when that cleanup
+never completes, so the guard is never cleared and the object sits in
+&quot;Deleting&quot; forever. <strong>Because it still exists, it still holds its
+name.</strong> Anything that tries to recreate
+<code>operations-app-of-apps</code> finds the name already taken by the
+dying object, so the create is a silent no-op. <strong>No fresh
+app-of-apps means no <code>frontend</code>, which means 404.</strong>
+The failure follows necessarily from the invariant the moment the
+deletion wedges.</p>
+<h2 id="vocabulary-that-matters">Vocabulary That Matters</h2>
+<p>These terms are defined by what they <em>do</em> in this mechanism,
+not by their dictionary meaning. Learn the mechanism role, not the
+label.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>First-principles meaning</th>
+<th>Why it matters here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application (ArgoCD)</td>
+<td>A custom resource telling ArgoCD to keep one set of cluster objects
+matching one Git source</td>
+<td>The app-of-apps and each child are Applications</td>
+</tr>
+<tr>
+<td>app-of-apps</td>
+<td>A parent Application whose managed resources are <em>other
+Applications</em></td>
+<td>The single frozen object that starves the slot</td>
+</tr>
+<tr>
+<td>ApplicationSet</td>
+<td>A generator that templates and owns many Applications from a set of
+inputs</td>
+<td>The healthy thing that self-heals the slot once unblocked</td>
+</tr>
+<tr>
+<td>deletionTimestamp</td>
+<td>The field marking an object as being torn down</td>
+<td>Its presence is the decisive proof of this failure class</td>
+</tr>
+<tr>
+<td>finalizer</td>
+<td>A guard blocking final removal until cleanup completes</td>
+<td>Its presence is normal; the wedge is the bug</td>
+</tr>
+<tr>
+<td>reconcile</td>
+<td>The controller loop driving live state toward desired state</td>
+<td>Suspended for any object carrying a deletion mark</td>
+</tr>
+<tr>
+<td>ownerReference (controller:true)</td>
+<td>The link making the ApplicationSet the owner that regenerates the
+app-of-apps</td>
+<td>Why no pipeline re-run is needed to recover</td>
+</tr>
+<tr>
+<td>FBE slot</td>
+<td>One feature-branch environment, deployed as one app-of-apps + its
+children</td>
+<td>The unit that is 404ing</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-system-model--who-owns-what">The System Model — Who Owns
+What</h2>
+<p>Three layers matter, and the source of truth lives at the top. The
+<strong>ApplicationSet</strong>
+<code>vpp-feature-branch-environments</code> is the generator and the
+<em>owner</em>: it templates each slot&#39;s app-of-apps and stamps an
+<code>ownerReference</code> with <code>controller:true</code> on it.
+This ownership is the reason recovery is automatic — the owner is
+contractually responsible for regenerating a child that disappears. The
+<strong>app-of-apps</strong> is purely structural plumbing: it holds the
+list of ~21 child Applications but runs nothing itself. The
+<strong>children</strong> are where real workloads live;
+<code>frontend</code> is the one that serves <code>/</code>, so it is
+the child whose absence the public URL exposes. The cluster is the
+Sandbox AKS context <code>vpp-aks01-d</code>, reached by direct
+<code>kubectl</code> (no jump host). Note one trap baked into the
+design: the namespace <code>operations</code> stays <code>Active</code>
+and unmarked even while the app-of-apps is frozen, because a sibling
+object keeps syncing into it. So <code>get ns</code> will <em>not</em>
+reveal the wedge — only reading the Application resource does.</p>
+<h2 id="mechanism-over-time--how-a-frozen-object-produces-a-404">Mechanism
+Over Time — How a Frozen Object Produces a 404</h2>
+<p>Before the diagram: the topology above shows <em>what exists</em>;
+this sequence shows <em>what happened in what order</em>, because the
+bug is invisible unless you see the timing. The question it answers is
+&quot;why did three separate &#39;recreate&#39; attempts all look successful yet
+deploy nothing?&quot;</p>
+<figure class="diagram"><svg id="my-svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="max-width: 1265px; background-color: transparent;" viewBox="-50 -10 1265 626" role="graphics-document document" aria-roledescription="sequence"><g><rect x="1015" y="540" fill="#eaeaea" stroke="#666" width="150" height="65" name="AS" rx="3" ry="3" class="actor actor-bottom" /><text x="1090" y="572.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="1090" dy="0">ApplicationSet</tspan></text></g><g><rect x="797" y="540" fill="#eaeaea" stroke="#666" width="168" height="65" name="AOA" rx="3" ry="3" class="actor actor-bottom" /><text x="881" y="572.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="881" dy="0">operations-app-of-apps</tspan></text></g><g><rect x="519" y="540" fill="#eaeaea" stroke="#666" width="150" height="65" name="Ctl" rx="3" ry="3" class="actor actor-bottom" /><text x="594" y="572.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="594" dy="0">ArgoCD controller</tspan></text></g><g><rect x="310" y="540" fill="#eaeaea" stroke="#666" width="150" height="65" name="K8s" rx="3" ry="3" class="actor actor-bottom" /><text x="385" y="572.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="385" dy="0">Kubernetes</tspan></text></g><g><rect x="0" y="540" fill="#eaeaea" stroke="#666" width="150" height="65" name="Op" rx="3" ry="3" class="actor actor-bottom" /><text x="75" y="572.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="75" dy="0">Operator / pipeline</tspan></text></g><g><line id="actor4" x1="1090" y1="65" x2="1090" y2="540" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="AS" data-et="life-line" data-id="AS"></line><g id="root-4" data-et="participant" data-type="participant" data-id="AS"><rect x="1015" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="AS" rx="3" ry="3" class="actor actor-top" /><text x="1090" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="1090" dy="0">ApplicationSet</tspan></text></g></g><g><line id="actor3" x1="881" y1="65" x2="881" y2="540" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="AOA" data-et="life-line" data-id="AOA"></line><g id="root-3" data-et="participant" data-type="participant" data-id="AOA"><rect x="797" y="0" fill="#eaeaea" stroke="#666" width="168" height="65" name="AOA" rx="3" ry="3" class="actor actor-top" /><text x="881" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="881" dy="0">operations-app-of-apps</tspan></text></g></g><g><line id="actor2" x1="594" y1="65" x2="594" y2="540" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="Ctl" data-et="life-line" data-id="Ctl"></line><g id="root-2" data-et="participant" data-type="participant" data-id="Ctl"><rect x="519" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="Ctl" rx="3" ry="3" class="actor actor-top" /><text x="594" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="594" dy="0">ArgoCD controller</tspan></text></g></g><g><line id="actor1" x1="385" y1="65" x2="385" y2="540" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="K8s" data-et="life-line" data-id="K8s"></line><g id="root-1" data-et="participant" data-type="participant" data-id="K8s"><rect x="310" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="K8s" rx="3" ry="3" class="actor actor-top" /><text x="385" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="385" dy="0">Kubernetes</tspan></text></g></g><g><line id="actor0" x1="75" y1="65" x2="75" y2="540" class="actor-line 200" stroke-width="0.5px" stroke="#999" name="Op" data-et="life-line" data-id="Op"></line><g id="root-0" data-et="participant" data-type="participant" data-id="Op"><rect x="0" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" name="Op" rx="3" ry="3" class="actor actor-top" /><text x="75" y="32.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" style="text-anchor: middle; font-size: 16px; font-weight: 400;"><tspan x="75" dy="0">Operator / pipeline</tspan></text></g></g><style>#my-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#my-svg .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#my-svg .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#my-svg .error-icon{fill:#552222;}#my-svg .error-text{fill:#552222;stroke:#552222;}#my-svg .edge-thickness-normal{stroke-width:1px;}#my-svg .edge-thickness-thick{stroke-width:3.5px;}#my-svg .edge-pattern-solid{stroke-dasharray:0;}#my-svg .edge-thickness-invisible{stroke-width:0;fill:none;}#my-svg .edge-pattern-dashed{stroke-dasharray:3;}#my-svg .edge-pattern-dotted{stroke-dasharray:2;}#my-svg .marker{fill:#333333;stroke:#333333;}#my-svg .marker.cross{stroke:#333333;}#my-svg svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#my-svg p{margin:0;}#my-svg .actor{stroke:#9370DB;fill:#ECECFF;stroke-width:1;}#my-svg rect.actor.outer-path[data-look="neo"]{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg rect.note[data-look="neo"]{stroke:#aaaa33;fill:#fff5ad;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg text.actor>tspan{fill:black;stroke:none;}#my-svg .actor-line{stroke:#9370DB;}#my-svg .innerArc{stroke-width:1.5;stroke-dasharray:none;}#my-svg .messageLine0{stroke-width:1.5;stroke-dasharray:none;stroke:#333;}#my-svg .messageLine1{stroke-width:1.5;stroke-dasharray:2,2;stroke:#333;}#my-svg [id$="-arrowhead"] path{fill:#333;stroke:#333;}#my-svg .sequenceNumber{fill:white;}#my-svg [id$="-sequencenumber"]{fill:#333;}#my-svg [id$="-crosshead"] path{fill:#333;stroke:#333;}#my-svg .messageText{fill:#333;stroke:none;}#my-svg .labelBox{stroke:#9370DB;fill:#ECECFF;filter:none;}#my-svg .labelText,#my-svg .labelText>tspan{fill:black;stroke:none;}#my-svg .loopText,#my-svg .loopText>tspan{fill:black;stroke:none;}#my-svg .sectionTitle,#my-svg .sectionTitle>tspan{fill:black;stroke:none;}#my-svg .loopLine{stroke-width:2px;stroke-dasharray:2,2;stroke:#9370DB;fill:#9370DB;}#my-svg .note{stroke:#aaaa33;fill:#fff5ad;}#my-svg .noteText,#my-svg .noteText>tspan{fill:black;stroke:none;font-weight:normal;}#my-svg .activation0{fill:#f4f4f4;stroke:#666;}#my-svg .activation1{fill:#f4f4f4;stroke:#666;}#my-svg .activation2{fill:#f4f4f4;stroke:#666;}#my-svg .actorPopupMenu{position:absolute;}#my-svg .actorPopupMenuPanel{position:absolute;fill:#ECECFF;box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2);filter:drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));}#my-svg .actor-man circle,#my-svg line{fill:#ECECFF;stroke-width:2px;}#my-svg g rect.rect{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));stroke:#9370DB;}#my-svg .node .neo-node{stroke:#9370DB;}#my-svg [data-look="neo"].node rect,#my-svg [data-look="neo"].cluster rect,#my-svg [data-look="neo"].node polygon{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node path{stroke:#9370DB;stroke-width:1px;}#my-svg [data-look="neo"].node .outer-path{filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node .neo-line path{stroke:#9370DB;filter:none;}#my-svg [data-look="neo"].node circle{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].node circle .state-start{fill:#000000;}#my-svg [data-look="neo"].icon-shape .icon{fill:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg [data-look="neo"].icon-shape .icon-neo path{stroke:#9370DB;filter:drop-shadow(1px 2px 2px rgba(185, 185, 185, 1));}#my-svg :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g></g><defs><symbol id="my-svg-computer" width="24" height="24"><path transform="scale(.5)" d="M2 2v13h20v-13h-20zm18 11h-16v-9h16v9zm-10.228 6l.466-1h3.524l.467 1h-4.457zm14.228 3h-24l2-6h2.104l-1.33 4h18.45l-1.297-4h2.073l2 6zm-5-10h-14v-7h14v7z" /></symbol></defs><defs><symbol id="my-svg-database" fill-rule="evenodd" clip-rule="evenodd"><path transform="scale(.5)" d="M12.258.001l.256.004.255.005.253.008.251.01.249.012.247.015.246.016.242.019.241.02.239.023.236.024.233.027.231.028.229.031.225.032.223.034.22.036.217.038.214.04.211.041.208.043.205.045.201.046.198.048.194.05.191.051.187.053.183.054.18.056.175.057.172.059.168.06.163.061.16.063.155.064.15.066.074.033.073.033.071.034.07.034.069.035.068.035.067.035.066.035.064.036.064.036.062.036.06.036.06.037.058.037.058.037.055.038.055.038.053.038.052.038.051.039.05.039.048.039.047.039.045.04.044.04.043.04.041.04.04.041.039.041.037.041.036.041.034.041.033.042.032.042.03.042.029.042.027.042.026.043.024.043.023.043.021.043.02.043.018.044.017.043.015.044.013.044.012.044.011.045.009.044.007.045.006.045.004.045.002.045.001.045v17l-.001.045-.002.045-.004.045-.006.045-.007.045-.009.044-.011.045-.012.044-.013.044-.015.044-.017.043-.018.044-.02.043-.021.043-.023.043-.024.043-.026.043-.027.042-.029.042-.03.042-.032.042-.033.042-.034.041-.036.041-.037.041-.039.041-.04.041-.041.04-.043.04-.044.04-.045.04-.047.039-.048.039-.05.039-.051.039-.052.038-.053.038-.055.038-.055.038-.058.037-.058.037-.06.037-.06.036-.062.036-.064.036-.064.036-.066.035-.067.035-.068.035-.069.035-.07.034-.071.034-.073.033-.074.033-.15.066-.155.064-.16.063-.163.061-.168.06-.172.059-.175.057-.18.056-.183.054-.187.053-.191.051-.194.05-.198.048-.201.046-.205.045-.208.043-.211.041-.214.04-.217.038-.22.036-.223.034-.225.032-.229.031-.231.028-.233.027-.236.024-.239.023-.241.02-.242.019-.246.016-.247.015-.249.012-.251.01-.253.008-.255.005-.256.004-.258.001-.258-.001-.256-.004-.255-.005-.253-.008-.251-.01-.249-.012-.247-.015-.245-.016-.243-.019-.241-.02-.238-.023-.236-.024-.234-.027-.231-.028-.228-.031-.226-.032-.223-.034-.22-.036-.217-.038-.214-.04-.211-.041-.208-.043-.204-.045-.201-.046-.198-.048-.195-.05-.19-.051-.187-.053-.184-.054-.179-.056-.176-.057-.172-.059-.167-.06-.164-.061-.159-.063-.155-.064-.151-.066-.074-.033-.072-.033-.072-.034-.07-.034-.069-.035-.068-.035-.067-.035-.066-.035-.064-.036-.063-.036-.062-.036-.061-.036-.06-.037-.058-.037-.057-.037-.056-.038-.055-.038-.053-.038-.052-.038-.051-.039-.049-.039-.049-.039-.046-.039-.046-.04-.044-.04-.043-.04-.041-.04-.04-.041-.039-.041-.037-.041-.036-.041-.034-.041-.033-.042-.032-.042-.03-.042-.029-.042-.027-.042-.026-.043-.024-.043-.023-.043-.021-.043-.02-.043-.018-.044-.017-.043-.015-.044-.013-.044-.012-.044-.011-.045-.009-.044-.007-.045-.006-.045-.004-.045-.002-.045-.001-.045v-17l.001-.045.002-.045.004-.045.006-.045.007-.045.009-.044.011-.045.012-.044.013-.044.015-.044.017-.043.018-.044.02-.043.021-.043.023-.043.024-.043.026-.043.027-.042.029-.042.03-.042.032-.042.033-.042.034-.041.036-.041.037-.041.039-.041.04-.041.041-.04.043-.04.044-.04.046-.04.046-.039.049-.039.049-.039.051-.039.052-.038.053-.038.055-.038.056-.038.057-.037.058-.037.06-.037.061-.036.062-.036.063-.036.064-.036.066-.035.067-.035.068-.035.069-.035.07-.034.072-.034.072-.033.074-.033.151-.066.155-.064.159-.063.164-.061.167-.06.172-.059.176-.057.179-.056.184-.054.187-.053.19-.051.195-.05.198-.048.201-.046.204-.045.208-.043.211-.041.214-.04.217-.038.22-.036.223-.034.226-.032.228-.031.231-.028.234-.027.236-.024.238-.023.241-.02.243-.019.245-.016.247-.015.249-.012.251-.01.253-.008.255-.005.256-.004.258-.001.258.001zm-9.258 20.499v.01l.001.021.003.021.004.022.005.021.006.022.007.022.009.023.01.022.011.023.012.023.013.023.015.023.016.024.017.023.018.024.019.024.021.024.022.025.023.024.024.025.052.049.056.05.061.051.066.051.07.051.075.051.079.052.084.052.088.052.092.052.097.052.102.051.105.052.11.052.114.051.119.051.123.051.127.05.131.05.135.05.139.048.144.049.147.047.152.047.155.047.16.045.163.045.167.043.171.043.176.041.178.041.183.039.187.039.19.037.194.035.197.035.202.033.204.031.209.03.212.029.216.027.219.025.222.024.226.021.23.02.233.018.236.016.24.015.243.012.246.01.249.008.253.005.256.004.259.001.26-.001.257-.004.254-.005.25-.008.247-.011.244-.012.241-.014.237-.016.233-.018.231-.021.226-.021.224-.024.22-.026.216-.027.212-.028.21-.031.205-.031.202-.034.198-.034.194-.036.191-.037.187-.039.183-.04.179-.04.175-.042.172-.043.168-.044.163-.045.16-.046.155-.046.152-.047.148-.048.143-.049.139-.049.136-.05.131-.05.126-.05.123-.051.118-.052.114-.051.11-.052.106-.052.101-.052.096-.052.092-.052.088-.053.083-.051.079-.052.074-.052.07-.051.065-.051.06-.051.056-.05.051-.05.023-.024.023-.025.021-.024.02-.024.019-.024.018-.024.017-.024.015-.023.014-.024.013-.023.012-.023.01-.023.01-.022.008-.022.006-.022.006-.022.004-.022.004-.021.001-.021.001-.021v-4.127l-.077.055-.08.053-.083.054-.085.053-.087.052-.09.052-.093.051-.095.05-.097.05-.1.049-.102.049-.105.048-.106.047-.109.047-.111.046-.114.045-.115.045-.118.044-.12.043-.122.042-.124.042-.126.041-.128.04-.13.04-.132.038-.134.038-.135.037-.138.037-.139.035-.142.035-.143.034-.144.033-.147.032-.148.031-.15.03-.151.03-.153.029-.154.027-.156.027-.158.026-.159.025-.161.024-.162.023-.163.022-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.011-.178.01-.179.008-.179.008-.181.006-.182.005-.182.004-.184.003-.184.002h-.37l-.184-.002-.184-.003-.182-.004-.182-.005-.181-.006-.179-.008-.179-.008-.178-.01-.176-.011-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.022-.162-.023-.161-.024-.159-.025-.157-.026-.156-.027-.155-.027-.153-.029-.151-.03-.15-.03-.148-.031-.146-.032-.145-.033-.143-.034-.141-.035-.14-.035-.137-.037-.136-.037-.134-.038-.132-.038-.13-.04-.128-.04-.126-.041-.124-.042-.122-.042-.12-.044-.117-.043-.116-.045-.113-.045-.112-.046-.109-.047-.106-.047-.105-.048-.102-.049-.1-.049-.097-.05-.095-.05-.093-.052-.09-.051-.087-.052-.085-.053-.083-.054-.08-.054-.077-.054v4.127zm0-5.654v.011l.001.021.003.021.004.021.005.022.006.022.007.022.009.022.01.022.011.023.012.023.013.023.015.024.016.023.017.024.018.024.019.024.021.024.022.024.023.025.024.024.052.05.056.05.061.05.066.051.07.051.075.052.079.051.084.052.088.052.092.052.097.052.102.052.105.052.11.051.114.051.119.052.123.05.127.051.131.05.135.049.139.049.144.048.147.048.152.047.155.046.16.045.163.045.167.044.171.042.176.042.178.04.183.04.187.038.19.037.194.036.197.034.202.033.204.032.209.03.212.028.216.027.219.025.222.024.226.022.23.02.233.018.236.016.24.014.243.012.246.01.249.008.253.006.256.003.259.001.26-.001.257-.003.254-.006.25-.008.247-.01.244-.012.241-.015.237-.016.233-.018.231-.02.226-.022.224-.024.22-.025.216-.027.212-.029.21-.03.205-.032.202-.033.198-.035.194-.036.191-.037.187-.039.183-.039.179-.041.175-.042.172-.043.168-.044.163-.045.16-.045.155-.047.152-.047.148-.048.143-.048.139-.05.136-.049.131-.05.126-.051.123-.051.118-.051.114-.052.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.051.07-.052.065-.051.06-.05.056-.051.051-.049.023-.025.023-.024.021-.025.02-.024.019-.024.018-.024.017-.024.015-.023.014-.023.013-.024.012-.022.01-.023.01-.023.008-.022.006-.022.006-.022.004-.021.004-.022.001-.021.001-.021v-4.139l-.077.054-.08.054-.083.054-.085.052-.087.053-.09.051-.093.051-.095.051-.097.05-.1.049-.102.049-.105.048-.106.047-.109.047-.111.046-.114.045-.115.044-.118.044-.12.044-.122.042-.124.042-.126.041-.128.04-.13.039-.132.039-.134.038-.135.037-.138.036-.139.036-.142.035-.143.033-.144.033-.147.033-.148.031-.15.03-.151.03-.153.028-.154.028-.156.027-.158.026-.159.025-.161.024-.162.023-.163.022-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.011-.178.009-.179.009-.179.007-.181.007-.182.005-.182.004-.184.003-.184.002h-.37l-.184-.002-.184-.003-.182-.004-.182-.005-.181-.007-.179-.007-.179-.009-.178-.009-.176-.011-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.022-.162-.023-.161-.024-.159-.025-.157-.026-.156-.027-.155-.028-.153-.028-.151-.03-.15-.03-.148-.031-.146-.033-.145-.033-.143-.033-.141-.035-.14-.036-.137-.036-.136-.037-.134-.038-.132-.039-.13-.039-.128-.04-.126-.041-.124-.042-.122-.043-.12-.043-.117-.044-.116-.044-.113-.046-.112-.046-.109-.046-.106-.047-.105-.048-.102-.049-.1-.049-.097-.05-.095-.051-.093-.051-.09-.051-.087-.053-.085-.052-.083-.054-.08-.054-.077-.054v4.139zm0-5.666v.011l.001.02.003.022.004.021.005.022.006.021.007.022.009.023.01.022.011.023.012.023.013.023.015.023.016.024.017.024.018.023.019.024.021.025.022.024.023.024.024.025.052.05.056.05.061.05.066.051.07.051.075.052.079.051.084.052.088.052.092.052.097.052.102.052.105.051.11.052.114.051.119.051.123.051.127.05.131.05.135.05.139.049.144.048.147.048.152.047.155.046.16.045.163.045.167.043.171.043.176.042.178.04.183.04.187.038.19.037.194.036.197.034.202.033.204.032.209.03.212.028.216.027.219.025.222.024.226.021.23.02.233.018.236.017.24.014.243.012.246.01.249.008.253.006.256.003.259.001.26-.001.257-.003.254-.006.25-.008.247-.01.244-.013.241-.014.237-.016.233-.018.231-.02.226-.022.224-.024.22-.025.216-.027.212-.029.21-.03.205-.032.202-.033.198-.035.194-.036.191-.037.187-.039.183-.039.179-.041.175-.042.172-.043.168-.044.163-.045.16-.045.155-.047.152-.047.148-.048.143-.049.139-.049.136-.049.131-.051.126-.05.123-.051.118-.052.114-.051.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.052.07-.051.065-.051.06-.051.056-.05.051-.049.023-.025.023-.025.021-.024.02-.024.019-.024.018-.024.017-.024.015-.023.014-.024.013-.023.012-.023.01-.022.01-.023.008-.022.006-.022.006-.022.004-.022.004-.021.001-.021.001-.021v-4.153l-.077.054-.08.054-.083.053-.085.053-.087.053-.09.051-.093.051-.095.051-.097.05-.1.049-.102.048-.105.048-.106.048-.109.046-.111.046-.114.046-.115.044-.118.044-.12.043-.122.043-.124.042-.126.041-.128.04-.13.039-.132.039-.134.038-.135.037-.138.036-.139.036-.142.034-.143.034-.144.033-.147.032-.148.032-.15.03-.151.03-.153.028-.154.028-.156.027-.158.026-.159.024-.161.024-.162.023-.163.023-.165.021-.166.02-.167.019-.169.018-.169.017-.171.016-.173.015-.173.014-.175.013-.175.012-.177.01-.178.01-.179.009-.179.007-.181.006-.182.006-.182.004-.184.003-.184.001-.185.001-.185-.001-.184-.001-.184-.003-.182-.004-.182-.006-.181-.006-.179-.007-.179-.009-.178-.01-.176-.01-.176-.012-.175-.013-.173-.014-.172-.015-.171-.016-.17-.017-.169-.018-.167-.019-.166-.02-.165-.021-.163-.023-.162-.023-.161-.024-.159-.024-.157-.026-.156-.027-.155-.028-.153-.028-.151-.03-.15-.03-.148-.032-.146-.032-.145-.033-.143-.034-.141-.034-.14-.036-.137-.036-.136-.037-.134-.038-.132-.039-.13-.039-.128-.041-.126-.041-.124-.041-.122-.043-.12-.043-.117-.044-.116-.044-.113-.046-.112-.046-.109-.046-.106-.048-.105-.048-.102-.048-.1-.05-.097-.049-.095-.051-.093-.051-.09-.052-.087-.052-.085-.053-.083-.053-.08-.054-.077-.054v4.153zm8.74-8.179l-.257.004-.254.005-.25.008-.247.011-.244.012-.241.014-.237.016-.233.018-.231.021-.226.022-.224.023-.22.026-.216.027-.212.028-.21.031-.205.032-.202.033-.198.034-.194.036-.191.038-.187.038-.183.04-.179.041-.175.042-.172.043-.168.043-.163.045-.16.046-.155.046-.152.048-.148.048-.143.048-.139.049-.136.05-.131.05-.126.051-.123.051-.118.051-.114.052-.11.052-.106.052-.101.052-.096.052-.092.052-.088.052-.083.052-.079.052-.074.051-.07.052-.065.051-.06.05-.056.05-.051.05-.023.025-.023.024-.021.024-.02.025-.019.024-.018.024-.017.023-.015.024-.014.023-.013.023-.012.023-.01.023-.01.022-.008.022-.006.023-.006.021-.004.022-.004.021-.001.021-.001.021.001.021.001.021.004.021.004.022.006.021.006.023.008.022.01.022.01.023.012.023.013.023.014.023.015.024.017.023.018.024.019.024.02.025.021.024.023.024.023.025.051.05.056.05.06.05.065.051.07.052.074.051.079.052.083.052.088.052.092.052.096.052.101.052.106.052.11.052.114.052.118.051.123.051.126.051.131.05.136.05.139.049.143.048.148.048.152.048.155.046.16.046.163.045.168.043.172.043.175.042.179.041.183.04.187.038.191.038.194.036.198.034.202.033.205.032.21.031.212.028.216.027.22.026.224.023.226.022.231.021.233.018.237.016.241.014.244.012.247.011.25.008.254.005.257.004.26.001.26-.001.257-.004.254-.005.25-.008.247-.011.244-.012.241-.014.237-.016.233-.018.231-.021.226-.022.224-.023.22-.026.216-.027.212-.028.21-.031.205-.032.202-.033.198-.034.194-.036.191-.038.187-.038.183-.04.179-.041.175-.042.172-.043.168-.043.163-.045.16-.046.155-.046.152-.048.148-.048.143-.048.139-.049.136-.05.131-.05.126-.051.123-.051.118-.051.114-.052.11-.052.106-.052.101-.052.096-.052.092-.052.088-.052.083-.052.079-.052.074-.051.07-.052.065-.051.06-.05.056-.05.051-.05.023-.025.023-.024.021-.024.02-.025.019-.024.018-.024.017-.023.015-.024.014-.023.013-.023.012-.023.01-.023.01-.022.008-.022.006-.023.006-.021.004-.022.004-.021.001-.021.001-.021-.001-.021-.001-.021-.004-.021-.004-.022-.006-.021-.006-.023-.008-.022-.01-.022-.01-.023-.012-.023-.013-.023-.014-.023-.015-.024-.017-.023-.018-.024-.019-.024-.02-.025-.021-.024-.023-.024-.023-.025-.051-.05-.056-.05-.06-.05-.065-.051-.07-.052-.074-.051-.079-.052-.083-.052-.088-.052-.092-.052-.096-.052-.101-.052-.106-.052-.11-.052-.114-.052-.118-.051-.123-.051-.126-.051-.131-.05-.136-.05-.139-.049-.143-.048-.148-.048-.152-.048-.155-.046-.16-.046-.163-.045-.168-.043-.172-.043-.175-.042-.179-.041-.183-.04-.187-.038-.191-.038-.194-.036-.198-.034-.202-.033-.205-.032-.21-.031-.212-.028-.216-.027-.22-.026-.224-.023-.226-.022-.231-.021-.233-.018-.237-.016-.241-.014-.244-.012-.247-.011-.25-.008-.254-.005-.257-.004-.26-.001-.26.001z" /></symbol></defs><defs><symbol id="my-svg-clock" width="24" height="24"><path transform="scale(.5)" d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.848 12.459c.202.038.202.333.001.372-1.907.361-6.045 1.111-6.547 1.111-.719 0-1.301-.582-1.301-1.301 0-.512.77-5.447 1.125-7.445.034-.192.312-.181.343.014l.985 6.238 5.394 1.011z" /></symbol></defs><defs><marker id="my-svg-arrowhead" refX="7.9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M -1 0 L 10 5 L 0 10 z" /></marker></defs><defs><marker id="my-svg-crosshead" markerWidth="15" markerHeight="8" orient="auto" refX="4" refY="4.5"><path fill="none" stroke="#000000" stroke-width="1pt" d="M 1,2 L 6,7 M 6,2 L 1,7" style="stroke-dasharray: 0, 0;" /></marker></defs><defs><marker id="my-svg-filled-head" refX="15.5" refY="7" markerWidth="20" markerHeight="28" orient="auto"><path d="M 18,7 L9,13 L14,7 L9,1 Z" /></marker></defs><defs><marker id="my-svg-sequencenumber" refX="15" refY="15" markerWidth="60" markerHeight="40" orient="auto"><circle cx="15" cy="15" r="6"></circle></marker></defs><defs><marker id="my-svg-solidTopArrowHead" refX="7.9" refY="7.25" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 10 8 L 0 8 z" /></marker></defs><defs><marker id="my-svg-solidBottomArrowHead" refX="7.9" refY="0.75" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 10 0 L 0 8 z" /></marker></defs><defs><marker id="my-svg-stickTopArrowHead" refX="7.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 0 L 7 7" stroke="black" stroke-width="1.5" fill="none" /></marker></defs><defs><marker id="my-svg-stickBottomArrowHead" refX="7.5" refY="0" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M 0 7 L 7 0" stroke="black" stroke-width="1.5" fill="none" /></marker></defs><g data-et="note" data-id="i3"><rect x="796" y="207" fill="#EDF2AE" stroke="#666" width="170" height="39" class="note" /><text x="881" y="212" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-size: 16px; font-weight: 400;"><tspan x="881">most children deleted...</tspan></text></g><g data-et="note" data-id="i4"><rect x="569" y="256" fill="#EDF2AE" stroke="#666" width="337" height="39" class="note" /><text x="738" y="261" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-size: 16px; font-weight: 400;"><tspan x="738">...but cleanup WEDGES — guard never clears</tspan></text></g><g data-et="note" data-id="i9"><rect x="749" y="481" fill="#EDF2AE" stroke="#666" width="264" height="39" class="note" /><text x="881" y="486" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="noteText" dy="1em" style="font-size: 16px; font-weight: 400;"><tspan x="881">frontend never deployed -&gt; URL 404s</tspan></text></g><text x="229" y="80" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">delete operations-app-of-apps (day 0)</text><line x1="76" y1="109" x2="381" y2="109" class="messageLine0" data-et="message" data-id="i0" data-from="Op" data-to="K8s" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="fill: none;"></line><text x="632" y="124" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">stamp deletionTimestamp + finalizer</text><line x1="386" y1="153" x2="877" y2="153" class="messageLine0" data-et="message" data-id="i1" data-from="K8s" data-to="AOA" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="fill: none;"></line><text x="736" y="168" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">begin cascade cleanup of children</text><line x1="595" y1="197" x2="877" y2="197" class="messageLine0" data-et="message" data-id="i2" data-from="Ctl" data-to="AOA" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="fill: none;"></line><text x="635" y="310" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">object stays &quot;Deleting&quot; for 21 days</text><line x1="880" y1="339" x2="389" y2="339" class="messageLine1" data-et="message" data-id="i5" data-from="AOA" data-to="K8s" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line><text x="581" y="354" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">recreate slot (3 attempts, days 17-19)</text><line x1="76" y1="383" x2="1086" y2="383" class="messageLine0" data-et="message" data-id="i6" data-from="Op" data-to="AS" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="fill: none;"></line><text x="739" y="398" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">create operations-app-of-apps</text><line x1="1089" y1="427" x2="389" y2="427" class="messageLine0" data-et="message" data-id="i7" data-from="AS" data-to="K8s" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="fill: none;"></line><text x="736" y="442" text-anchor="middle" dominant-baseline="middle" alignment-baseline="middle" class="messageText" dy="1em" style="font-size: 16px; font-weight: 400;">name already held by dying object -&gt; no-op</text><line x1="386" y1="471" x2="1086" y2="471" class="messageLine1" data-et="message" data-id="i8" data-from="K8s" data-to="AS" stroke-width="2" stroke="none" marker-end="url(#my-svg-arrowhead)" style="stroke-dasharray: 3, 3; fill: none;"></line></svg></figure>
+
+<p>After the diagram: the delete starts, Kubernetes stamps the deletion
+mark and the finalizer, and the controller begins tearing down children.
+Most go, but the parent&#39;s cleanup wedges and the guard is never cleared
+— so the object lingers in &quot;Deleting.&quot; Now the critical part: every
+later recreate attempt hits Kubernetes, which sees the name is still
+held by the dying object and quietly does nothing. The pipeline reports
+&quot;build succeeded&quot; because the pipeline <em>did</em> run — but running a
+pipeline only proves the pipeline ran, not that ArgoCD materialized the
+slot. Because <code>frontend</code> is never (re)deployed, the URL 404s.
+The edge from the first picture this animates is the
+<code>ApplicationSet --&gt; app-of-apps</code> generate edge: it is
+firing, but its output collides with a corpse and produces nothing.
+Takeaway to keep: <strong>a green build next to a 404 is the signature
+of this class</strong> — the control plane lied by omission.</p>
+<h2 id="the-decisive-distinction--finalizer-presence-is-not-the-bug">The
+Decisive Distinction — Finalizer Presence Is Not the Bug</h2>
+<p>This is the single most important thing to internalize, because
+getting it wrong leads you to rip finalizers off healthy objects and
+cause real damage. The finalizer
+<code>resources-finalizer.argocd.argoproj.io</code> is the
+<em>normal</em> cascade-delete guard that <strong>every</strong> ArgoCD
+Application carries — the fresh, healthy app-of-apps the ApplicationSet
+regenerates after the fix carries it too. The bug is never &quot;a finalizer
+exists.&quot; The bug is <em>a finalizer paired with a deletion mark whose
+cleanup never completes.</em> You are not removing finalizers from
+healthy objects; you are clearing one stuck guard on one object that is
+already dying. This ASCII decision surface is the rule to memorize
+before touching anything.</p>
+<pre class="text"><code>finalizer present?  ---no---&gt;  not this class; look elsewhere
+        | yes
+        v
+deletionTimestamp present?  ---no---&gt;  STOP. Healthy object.
+        |                              NEVER remove its finalizer.
+        | yes
+        v
+workloads already gone?  ---no---&gt;  STOP. Live workload behind a
+        |                           serving frontend = not this class.
+        | yes
+        v
+  SAFE to clear the wedged guard</code></pre>
+<p>After the ladder: the gate is two-key. The deletion mark proves the
+object is dying (so completing its death harms nothing it was keeping
+alive), and the absent workloads prove the finalizer&#39;s cleanup target is
+already gone (so clearing the guard destroys nothing live). Only when
+both keys turn do you proceed. If the object has a finalizer but
+<strong>no</strong> deletion mark, it is a perfectly healthy Application
+and removing its finalizer would be sabotage. That single branch is what
+separates a correct fix from an outage you caused.</p>
+<h2 id="telling-this-class-apart-from-its-look-alikes">Telling This
+Class Apart From Its Look-Alikes</h2>
+<p>Three other failures also make an FBE slot 404, and each has a
+different fix. The whole skill of this incident class is refusing to
+apply the finalizer fix to a problem it does not solve. Read this as a
+routing table: the probe in the middle column sends you to the right
+runbook.</p>
+<table>
+<thead>
+<tr>
+<th>Suspected cause</th>
+<th>Discriminating probe and what you see</th>
+<th>If it matches, the fix is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>App-of-apps wedged mid-deletion (this class)</td>
+<td>The app-of-apps Application shows a non-empty
+<code>deletionTimestamp</code> and the finalizer</td>
+<td>Clear the wedged finalizer (this document)</td>
+</tr>
+<tr>
+<td>Expired access token (PAT) on the generator</td>
+<td>The ApplicationSet shows <code>ErrorOccurred=True</code> with
+&quot;authentication required&quot;; here it showed
+<code>ErrorOccurred=False</code></td>
+<td>Rotate the PAT — do NOT touch finalizers</td>
+</tr>
+<tr>
+<td>Per-application credential gap</td>
+<td>A specific app reports
+<code>ComparisonError … source N of M … authentication required</code>;
+the operations apps showed none</td>
+<td>Fix that app&#39;s repo credential</td>
+</tr>
+<tr>
+<td>Routing / path misalignment</td>
+<td>The 404 response carries an <code>x-correlation-id</code> header (a
+real backend pod stamped it); here the 404 had no such header</td>
+<td>Fix the ingress path — objects exist, routing is wrong</td>
+</tr>
+</tbody>
+</table>
+<p>After the table: the cleanest single tell is the 404 itself. A real
+VPP backend pod stamps every response with
+<code>x-correlation-id</code>. A 404 <em>without</em> that header came
+from the edge proxy with nothing behind it — an undeployed backend,
+which is this class. A 404 <em>with</em> that header means the pods
+exist and the path is misaligned — a different runbook entirely. The
+deletion mark on the app-of-apps is the positive confirmation; the
+missing correlation header is the corroborating sign. The generator
+being healthy (<code>ErrorOccurred=False</code>) is what rules out the
+token-expiry look-alike and, critically, is what guarantees the
+self-heal will actually fire once you clear the wedge.</p>
+<h2 id="the-fix--clear-the-wedge-let-the-owner-self-heal">The Fix —
+Clear the Wedge, Let the Owner Self-Heal</h2>
+<p>The repair is two merge-patches that set <code>finalizers</code> to
+an empty list and change nothing else on the objects. Run them only
+after the read-only preconditions pass and with explicit authorization,
+because <strong>finalizer removal is a one-way door</strong>: it
+completes a deletion that cannot be undone. The first patch clears the
+wedged guard on the slot&#39;s app-of-apps; the second clears a child that
+was wedged the same way (<code>assetmonitor</code>, itself carrying a
+deletion mark).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Clear the wedged finalizer on the slot&#39;s app-of-apps (namespace argocd).</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> argocd <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  patch application operations-app-of-apps <span class="at">--type</span><span class="op">=</span>merge <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> <span class="st">&#39;{&quot;metadata&quot;:{&quot;finalizers&quot;:[]}}&#39;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Clear the wedged finalizer on the co-wedged child (namespace operations).</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">--context</span> vpp-aks01-d <span class="at">-n</span> operations <span class="dt">\</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  patch application assetmonitor <span class="at">--type</span><span class="op">=</span>merge <span class="dt">\</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> <span class="st">&#39;{&quot;metadata&quot;:{&quot;finalizers&quot;:[]}}&#39;</span></span></code></pre></div>
+<p>After the commands: clearing the guards lets the 21-day-pending
+deletions finally complete, and the moment the dying app-of-apps
+vanishes, its name is free. Now the ownership from the system model pays
+off: the ApplicationSet still owns the slot
+(<code>ownerReference controller:true</code>) and still lists
+<code>operations</code> as a target, so it immediately regenerates a
+fresh, reconcilable <code>operations-app-of-apps</code> with no pipeline
+run and no cloud login needed. The fresh parent fans out into the full
+child set, <code>frontend</code> deploys, and the URL transitions from
+404 to 200. The reason you do <em>not</em> run a recreate pipeline is
+that you never needed one — the owner does the recreation for free once
+the corpse is cleared. Always pass <code>--context vpp-aks01-d</code>:
+the FBE pattern reuses the <code>&lt;slot&gt;-app-of-apps</code> name
+across slots and clusters, so a context-less command is a silent
+wrong-cluster operation.</p>
+<h2 id="verifying-the-fix-worked">Verifying the Fix Worked</h2>
+<p>A fix you cannot prove is a hope. Four checks confirm convergence,
+and in the incident this document is built from they passed in this
+order: the URL served 200 within about a minute, while full child health
+settled a few minutes later.</p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Expected converged result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scan all Applications for a <code>deletionTimestamp</code></td>
+<td>None remain — both wedged objects are gone</td>
+</tr>
+<tr>
+<td>Read the new <code>operations-app-of-apps</code></td>
+<td>A <em>new</em> creationTimestamp, <code>Synced/Healthy</code>, no
+deletion mark</td>
+</tr>
+<tr>
+<td>List <code>frontend</code>, <code>gateway-nl</code>,
+<code>clientgateway</code></td>
+<td>All present, <code>Synced/Healthy</code> (briefly
+<code>Progressing</code> while settling)</td>
+</tr>
+<tr>
+<td><code>curl</code> the public URL</td>
+<td>HTTP 200 (was 404)</td>
+</tr>
+</tbody>
+</table>
+<p>After the table: the order matters for your nerves. The public URL
+flips to 200 quickly because <code>frontend</code> is one of the first
+children to land; the full set of 21 children reaching Healthy lags by a
+few minutes as they settle. So a 200 with a couple of children still
+<code>Progressing</code> is convergence in flight, not a failure. The
+decisive check is the first one: if any object still carries a deletion
+mark, the deletion has not completed — re-probe the generator&#39;s health
+rather than patching again blindly.</p>
+<h2 id="failure-modes-and-anti-patterns">Failure Modes And
+Anti-Patterns</h2>
+<p>Each of these looks plausible under pressure and fails for a concrete
+mechanical reason. Knowing the mechanism is what lets you refuse the
+shortcut at 2 a.m.</p>
+<table>
+<thead>
+<tr>
+<th>Anti-pattern</th>
+<th>Why it fails (mechanism)</th>
+<th>How to detect / avoid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Run the destroy pipeline to &quot;reset&quot; the slot</td>
+<td>It is not a rollback — it wipes 260+ resources and its own failures
+<em>create</em> these orphans; it also runs an older Terraform against
+newer state</td>
+<td>Never invoke it for recovery; recovery is forward via the
+ApplicationSet</td>
+</tr>
+<tr>
+<td>Remove a finalizer because one is &quot;stuck&quot;</td>
+<td>A finalizer with no deletion mark is on a <em>healthy</em> object;
+clearing it sabotages a live app</td>
+<td>Require a non-empty <code>deletionTimestamp</code> before
+clearing</td>
+</tr>
+<tr>
+<td>Re-run the create pipeline and trust &quot;build succeeded&quot;</td>
+<td>The wedged object holds the name, so create is a no-op; green proves
+the pipeline ran, not that ArgoCD deployed</td>
+<td>Resolve the wedge first; verify via ArgoCD state, not pipeline
+status</td>
+</tr>
+<tr>
+<td>Sync the slot while it carries a deletion mark</td>
+<td>A sync into a finalizer-wedged Application reports green and renders
+nothing</td>
+<td>Clear the deletion first, then let the owner reconcile</td>
+</tr>
+<tr>
+<td>Trust the default <code>kubectl</code> context</td>
+<td>The <code>&lt;slot&gt;-app-of-apps</code> name is reused across
+clusters; a wrong-context patch hits the wrong slot</td>
+<td>Always pass <code>--context vpp-aks01-d</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="evidence-ledger-and-uncertainty">Evidence Ledger And
+Uncertainty</h2>
+<p>This is the one place audit codes live. The narrative above carried
+the same status in plain words; the codes stay here for a reader who
+wants to verify.</p>
+<pre class="text"><code>FACT (A1, live read-only probes on vpp-aks01-d, 2026-06-22):
+  - operations-app-of-apps carried deletionTimestamp 2026-06-01T10:50:12Z plus
+    the resources-finalizer; it and assetmonitor were the only two Applications
+    cluster-wide with a deletion mark.
+  - The 404 response carried no x-correlation-id header -&gt; undeployed backend.
+  - The ApplicationSet showed ErrorOccurred=False, ParametersGenerated=True -&gt;
+    PAT-expiry ruled out; no operations app showed a source-N auth error -&gt;
+    credential-gap ruled out.
+  - After the two patches: no object retained a deletion mark; a fresh
+    operations-app-of-apps appeared (creationTimestamp 2026-06-22T11:32:48Z,
+    Synced/Healthy); the URL returned 200 within ~1 min and stayed 200.
+
+INFER (A2, reasoned from the facts above):
+  - The slot 404&#39;d because frontend was never deployed, because the wedged
+    object held the app-of-apps name so every recreate was a no-op.
+  - The fix is safe because the managed workloads were already gone, so clearing
+    the guard completed a death rather than destroying anything live.
+
+UNVERIFIED (A3, blocked — does NOT change the fix):
+  - WHAT triggered the original 2026-06-01 deletion is unknown. Azure CLI was not
+    logged in, so the Logic App and pipeline run histories could not be read. The
+    12:50 local timing did NOT match the 14:30 auto-evict schedule, so the
+    auto-evict is unlikely but unconfirmed. Resolving probe: az login, then read
+    the vpp-fbe-autodelete-trigger run history and the destroy-pipeline runs near
+    2026-06-01.
+  - WHY the finalizer wedged for 21 days (a controller restart ~06-16 did not
+    clear it) is not explained by this fix.</code></pre>
+<p>The discipline here is the point: the fix is fully proven, and the
+<em>cause of the original deletion is honestly marked unknown.</em> Do
+not let a plausible-sounding story (&quot;the auto-evict did it&quot;) harden into
+a claim the evidence does not support.</p>
+<h2 id="challenge-defense">Challenge Defense</h2>
+<p>A reviewer will push on the fix. Here is how each challenge is
+answered and what would have changed the answer.</p>
+<table>
+<thead>
+<tr>
+<th>Challenge</th>
+<th>Answer</th>
+<th>What would falsify it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;Removing a finalizer is reckless.&quot;</td>
+<td>The object was already dying (deletion mark present) and its managed
+workloads were already gone, so the patch completed a death, not a
+deletion of live state</td>
+<td>A <code>frontend</code> Service/Pod found Running and serving while
+the app-of-apps had no deletion mark</td>
+</tr>
+<tr>
+<td>&quot;How do you know it was undeployed, not mis-routed?&quot;</td>
+<td>The 404 carried no <code>x-correlation-id</code>; a real backend
+stamps that header, so nothing was behind <code>/</code></td>
+<td>A 404 that <em>did</em> carry <code>x-correlation-id</code></td>
+</tr>
+<tr>
+<td>&quot;Why not just rerun the pipeline?&quot;</td>
+<td>The wedged object holds the name, so create is a no-op; three prior
+recreates already proved this</td>
+<td>A recreate that produced a fresh, reconciling app-of-apps</td>
+</tr>
+<tr>
+<td>&quot;What if the self-heal doesn&#39;t fire?&quot;</td>
+<td>The generator was healthy (<code>ErrorOccurred=False</code>), which
+is the precondition for regeneration</td>
+<td>An ApplicationSet showing <code>ErrorOccurred=True</code></td>
+</tr>
+<tr>
+<td>&quot;Did the auto-evict cause this?&quot;</td>
+<td>Unverified — the timing did not match the schedule and the run
+history could not be read; it is left open</td>
+<td>Logic App run history showing a 06-01 trigger</td>
+</tr>
+</tbody>
+</table>
+<h2 id="durable-principles">Durable Principles</h2>
+<ol type="1">
+<li>An object carrying a deletion mark is never reconciled to desired
+state — so a stuck deletion silently starves everything that depends on
+that object.</li>
+<li>The <em>presence</em> of a guard (finalizer) is normal; the bug is a
+guard plus an uncompleted deletion. Always check both before
+acting.</li>
+<li>A green build next to a broken endpoint means the control plane did
+nothing — verify the target system&#39;s state, never the pipeline&#39;s exit
+code.</li>
+<li>When an owner (ApplicationSet) still targets a child, recovery is
+forward and automatic: remove the blocker and let the owner recreate.
+Destroying and rebuilding is a wider blast radius, not a rollback.</li>
+<li>Fix what you can prove; mark what you cannot. A restored slot and an
+unknown trigger can — and should — coexist honestly in the same
+report.</li>
+</ol>
+<h2 id="reusable-mental-model">Reusable Mental Model</h2>
+<p>Carry this to any GitOps slot that 404s: <strong>if a generated,
+owned object is frozen mid-deletion, its name is held hostage, so its
+owner&#39;s recreate is a silent no-op and everything downstream goes dark.
+Free the name by clearing the stuck guard — but only after proving the
+object is genuinely dying and its workloads are already gone — and the
+owner heals the rest for free.</strong></p>
+<h2 id="self-test">Self-Test</h2>
+<p>If you can answer these unaided, you can rebuild the reasoning, not
+just recall it.</p>
+<ol type="1">
+<li>Draw the chain from the ApplicationSet to the public URL and mark
+the single box whose freeze causes the 404.</li>
+<li>Explain <em>why</em> a recreate pipeline reports success yet deploys
+nothing while the app-of-apps carries a deletion mark.</li>
+<li>You find an ArgoCD Application with the
+<code>resources-finalizer</code> but no <code>deletionTimestamp</code>.
+Should you clear its finalizer? Why or why not?</li>
+<li>A different slot 404s and its 404 response carries an
+<code>x-correlation-id</code> header. Is this the finalizer-wedge class?
+What do you check next?</li>
+<li>A reviewer says &quot;you should have run the destroy pipeline to reset
+the slot.&quot; Give the mechanical reason that is wrong.</li>
+</ol>
+<h2 id="answers">Answers</h2>
+<ol type="1">
+<li>ApplicationSet → app-of-apps → ~21 children → <code>frontend</code>
+→ URL; the frozen box is <code>operations-app-of-apps</code> in the
+middle. Its freeze blocks every child below it, and the absent
+<code>frontend</code> is what the URL exposes as 404.</li>
+<li>Because the wedged object still holds the
+<code>operations-app-of-apps</code> name. The create finds the name
+taken by the dying object and quietly no-ops; the pipeline&#39;s &quot;success&quot;
+only proves it ran, not that ArgoCD materialized anything.</li>
+<li>No. A finalizer with no deletion mark is on a <em>healthy</em>
+object — every ArgoCD Application carries this guard normally. Clearing
+it would force-complete a deletion that was never requested. The two-key
+gate (deletion mark present AND workloads gone) is not satisfied.</li>
+<li>Probably not. The <code>x-correlation-id</code> header means a real
+backend pod answered, so objects exist and the path is misaligned — a
+routing problem, not an undeployed slot. Next, check the ingress path
+configuration, not the app-of-apps deletion mark.</li>
+<li>The destroy pipeline is not a rollback: it wipes the slot&#39;s 260+
+resources (widening the blast radius), runs an older Terraform against
+newer state, and its own failures are what create these orphaned wedges
+in the first place. Recovery is forward — clear the wedge and let the
+ApplicationSet recreate the slot.</li>
+</ol>
+</body>
+</html>

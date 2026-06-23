@@ -1,0 +1,213 @@
+{
+    "apiVersion": "argoproj.io/v1alpha1",
+    "kind": "ApplicationSet",
+    "metadata": {
+        "annotations": {
+            "argocd.argoproj.io/refresh": "hard",
+            "argocd.argoproj.io/tracking-id": "applicationsets:argoproj.io/ApplicationSet:argocd/vpp-feature-branch-environments",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"argoproj.io/v1alpha1\",\"kind\":\"ApplicationSet\",\"metadata\":{\"annotations\":{\"argocd.argoproj.io/tracking-id\":\"applicationsets:argoproj.io/ApplicationSet:argocd/vpp-feature-branch-environments\"},\"name\":\"vpp-feature-branch-environments\",\"namespace\":\"argocd\"},\"spec\":{\"generators\":[{\"git\":{\"files\":[{\"path\":\"feature-branch-environments/*.yaml\"}],\"repoURL\":\"https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP.GitOps\",\"revision\":\"HEAD\"}}],\"goTemplate\":true,\"goTemplateOptions\":[\"missingkey=error\"],\"template\":{\"metadata\":{\"finalizers\":[\"resources-finalizer.argocd.argoproj.io\"],\"name\":\"{{.environment}}-app-of-apps\"},\"spec\":{\"destination\":{\"namespace\":\"{{.environment}}\",\"server\":\"https://kubernetes.default.svc\"},\"project\":\"vpp-core\",\"sources\":[{\"helm\":{\"valueFiles\":[\"values.yaml\",\"values.vppcore.sandbox.yaml\"],\"valuesObject\":{\"global\":{\"argocd\":{\"namespace\":\"{{.environment}}\"},\"featureBranchEnvironment\":{\"branch\":\"{{.branch}}\",\"enabled\":true,\"keyVaultName\":\"{{.keyVaultName}}\",\"name\":\"{{.environment}}\"},\"namespace\":\"{{.environment}}\"}}},\"path\":\"Helm/vpp-core-app-of-apps\",\"repoURL\":\"https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration\",\"targetRevision\":\"{{.branch}}\"}],\"syncPolicy\":{\"automated\":{\"prune\":true,\"selfHeal\":true},\"syncOptions\":[\"PruneLast=true\"]}}}}}\n"
+        },
+        "creationTimestamp": "2026-02-09T13:50:39Z",
+        "generation": 4,
+        "name": "vpp-feature-branch-environments",
+        "namespace": "argocd",
+        "resourceVersion": "3098983802",
+        "uid": "1b27efe3-e9f5-4af8-b9c2-9c47e031f638"
+    },
+    "spec": {
+        "generators": [
+            {
+                "git": {
+                    "files": [
+                        {
+                            "path": "feature-branch-environments/*.yaml"
+                        }
+                    ],
+                    "repoURL": "https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP.GitOps",
+                    "revision": "HEAD"
+                }
+            }
+        ],
+        "goTemplate": true,
+        "goTemplateOptions": [
+            "missingkey=error"
+        ],
+        "template": {
+            "metadata": {
+                "finalizers": [
+                    "resources-finalizer.argocd.argoproj.io"
+                ],
+                "name": "{{.environment}}-app-of-apps"
+            },
+            "spec": {
+                "destination": {
+                    "namespace": "{{.environment}}",
+                    "server": "https://kubernetes.default.svc"
+                },
+                "project": "vpp-core",
+                "sources": [
+                    {
+                        "helm": {
+                            "valueFiles": [
+                                "values.yaml",
+                                "values.vppcore.sandbox.yaml"
+                            ],
+                            "valuesObject": {
+                                "global": {
+                                    "argocd": {
+                                        "namespace": "{{.environment}}"
+                                    },
+                                    "featureBranchEnvironment": {
+                                        "branch": "{{.branch}}",
+                                        "enabled": true,
+                                        "keyVaultName": "{{.keyVaultName}}",
+                                        "name": "{{.environment}}"
+                                    },
+                                    "namespace": "{{.environment}}"
+                                }
+                            }
+                        },
+                        "path": "Helm/vpp-core-app-of-apps",
+                        "repoURL": "https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration",
+                        "targetRevision": "{{.branch}}"
+                    }
+                ],
+                "syncPolicy": {
+                    "automated": {
+                        "prune": true,
+                        "selfHeal": true
+                    },
+                    "syncOptions": [
+                        "PruneLast=true"
+                    ]
+                }
+            }
+        }
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastTransitionTime": "2026-05-11T13:12:33Z",
+                "message": "Successfully generated parameters for all Applications",
+                "reason": "ApplicationSetUpToDate",
+                "status": "False",
+                "type": "ErrorOccurred"
+            },
+            {
+                "lastTransitionTime": "2026-05-11T13:12:33Z",
+                "message": "Successfully generated parameters for all Applications",
+                "reason": "ParametersGenerated",
+                "status": "True",
+                "type": "ParametersGenerated"
+            },
+            {
+                "lastTransitionTime": "2026-05-11T13:12:33Z",
+                "message": "ApplicationSet up to date",
+                "reason": "ApplicationSetUpToDate",
+                "status": "True",
+                "type": "ResourcesUpToDate"
+            }
+        ],
+        "resources": [
+            {
+                "group": "argoproj.io",
+                "health": {
+                    "status": "Healthy"
+                },
+                "kind": "Application",
+                "name": "afi-app-of-apps",
+                "namespace": "argocd",
+                "status": "Synced",
+                "version": "v1alpha1"
+            },
+            {
+                "group": "argoproj.io",
+                "health": {
+                    "status": "Healthy"
+                },
+                "kind": "Application",
+                "name": "boltz-app-of-apps",
+                "namespace": "argocd",
+                "status": "Synced",
+                "version": "v1alpha1"
+            },
+            {
+                "group": "argoproj.io",
+                "health": {
+                    "status": "Healthy"
+                },
+                "kind": "Application",
+                "name": "ionix-app-of-apps",
+                "namespace": "argocd",
+                "status": "Synced",
+                "version": "v1alpha1"
+            },
+            {
+                "group": "argoproj.io",
+                "health": {
+                    "status": "Healthy"
+                },
+                "kind": "Application",
+                "name": "ishtar-app-of-apps",
+                "namespace": "argocd",
+                "status": "Synced",
+                "version": "v1alpha1"
+            },
+            {
+                "group": "argoproj.io",
+                "health": {
+                    "status": "Healthy"
+                },
+                "kind": "Application",
+                "name": "jupiter-app-of-apps",
+                "namespace": "argocd",
+                "status": "Synced",
+                "version": "v1alpha1"
+            },
+            {
+                "group": "argoproj.io",
+                "health": {
+                    "status": "Healthy"
+                },
+                "kind": "Application",
+                "name": "kidu-app-of-apps",
+                "namespace": "argocd",
+                "status": "Synced",
+                "version": "v1alpha1"
+            },
+            {
+                "group": "argoproj.io",
+                "health": {
+                    "status": "Progressing"
+                },
+                "kind": "Application",
+                "name": "operations-app-of-apps",
+                "namespace": "argocd",
+                "status": "OutOfSync",
+                "version": "v1alpha1"
+            },
+            {
+                "group": "argoproj.io",
+                "health": {
+                    "status": "Healthy"
+                },
+                "kind": "Application",
+                "name": "veku-app-of-apps",
+                "namespace": "argocd",
+                "status": "Synced",
+                "version": "v1alpha1"
+            },
+            {
+                "group": "argoproj.io",
+                "health": {
+                    "status": "Healthy"
+                },
+                "kind": "Application",
+                "name": "voltex-app-of-apps",
+                "namespace": "argocd",
+                "status": "Synced",
+                "version": "v1alpha1"
+            }
+        ]
+    }
+}

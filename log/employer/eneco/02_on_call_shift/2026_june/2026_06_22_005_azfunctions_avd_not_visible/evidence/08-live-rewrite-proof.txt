@@ -1,0 +1,24 @@
+# LIVE REVERSIBLE REWRITE PROOF — 2026-06-22T13:36:33Z UTC
+# Authorized by user. Throwaway ingress on UNIQUE path; managed ingress untouched.
+
+## 0. Baseline (managed paths, before): 
+   telemetryfunctiontestsfn/healthz         -> 404
+   api/siteregistry                         -> 200
+
+## 1. Apply throwaway test ingress (use-regex + rewrite-target:/$2):
+ingress.networking.k8s.io/tf-rewrite-proof-ingress created
+
+## 2. Probe the rewritten path through the PUBLIC edge (retry until nginx reloads):
+   attempt 1: /tf-rewrite-proof/healthz -> HTTP 404
+   attempt 2: /tf-rewrite-proof/healthz -> HTTP 200
+
+## 3. Cross-checks on the test path:
+   /tf-rewrite-proof/                       -> 200   (rewrite -> backend / banner)
+   /tf-rewrite-proof/api/siteregistry       -> 404   (proves same backend: no HTTP fns)
+   body of /tf-rewrite-proof/healthz => Healthy
+
+## 4. VERDICT: rewrite proof = 200
+
+## 5. Regression guard (managed paths must be UNCHANGED by the test):
+   telemetryfunctiontestsfn/healthz         -> 404  (still 404, untouched)
+   api/siteregistry                         -> 200  (still 200)

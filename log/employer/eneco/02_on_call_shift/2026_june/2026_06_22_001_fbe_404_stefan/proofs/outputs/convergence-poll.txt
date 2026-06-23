@@ -1,0 +1,46 @@
+================ POLL round 1 (after ~1x wait) ================
+--- operations child apps: health tally ---
+total=21  Synced=21  Healthy=7  Missing=0  Progressing=14
+--- frontend + gateway-nl + clientgateway specifically (serve the URL) ---
+frontend: sync=Synced health=Healthy
+gateway-nl: sync=Synced health=Progressing
+clientgateway: sync=Synced health=Progressing
+--- pods (frontend/gateway) ---
+clientgateway-699789569-6h2kj                          0/1     Running                  0             80s
+frontend-67c4ddb7d6-554g2                              1/1     Running                  0             78s
+gateway-nl-7d48bd78c-jlglv                             0/1     Running                  0             74s
+seed-assets-clientgateway-postsync-1779108847-htb8b    0/1     Completed                0             34d
+--- HTTP status of the public URL ---
+  http_code=200
+
+================ POLL round 2 (after ~2x wait) ================
+--- operations child apps: health tally ---
+total=21  Synced=21  Healthy=14  Missing=0  Progressing=7
+--- frontend + gateway-nl + clientgateway specifically (serve the URL) ---
+frontend: sync=Synced health=Healthy
+gateway-nl: sync=Synced health=Progressing
+clientgateway: sync=Synced health=Progressing
+--- pods (frontend/gateway) ---
+clientgateway-699789569-6h2kj                          0/1     Running                  1 (25s ago)    2m21s
+frontend-67c4ddb7d6-554g2                              1/1     Running                  0              2m19s
+gateway-nl-7d48bd78c-jlglv                             0/1     Running                  1 (23s ago)    2m15s
+seed-assets-clientgateway-postsync-1779108847-htb8b    0/1     Completed                0              34d
+--- HTTP status of the public URL ---
+  http_code=200
+
+================ POLL round 3 (after ~3x wait) ================
+--- operations child apps: health tally ---
+total=21  Synced=21  Healthy=19  Missing=0  Progressing=2
+--- frontend + gateway-nl + clientgateway specifically (serve the URL) ---
+frontend: sync=Synced health=Healthy
+gateway-nl: sync=Synced health=Healthy
+clientgateway: sync=Synced health=Healthy
+--- pods (frontend/gateway) ---
+clientgateway-699789569-6h2kj                          1/1     Running                  1 (86s ago)     3m22s
+frontend-67c4ddb7d6-554g2                              1/1     Running                  0               3m20s
+gateway-nl-7d48bd78c-jlglv                             1/1     Running                  1 (84s ago)     3m16s
+seed-assets-clientgateway-postsync-1779108847-htb8b    0/1     Completed                0               34d
+seed-assets-clientgateway-postsync-1782127977-tpzqm    0/1     ContainerCreating        0               38s
+--- HTTP status of the public URL ---
+  http_code=200
+

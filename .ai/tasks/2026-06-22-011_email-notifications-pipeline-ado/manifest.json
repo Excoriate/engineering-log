@@ -1,0 +1,31 @@
+{
+  "task_id": "2026-06-22-011",
+  "slug": "email-notifications-pipeline-ado",
+  "task_root": ".ai/tasks/2026-06-22-011_email-notifications-pipeline-ado",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_007_email_notifications_pipeline_ado/how-to-enable-ado-build-email-notifications.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_007_email_notifications_pipeline_ado/how-to-enable-ado-build-email-notifications.html",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_007_email_notifications_pipeline_ado/runbook-ado-build-completion-notifications.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_007_email_notifications_pipeline_ado/slack-answer.md"
+  ],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_007_email_notifications_pipeline_ado/how-to-enable-ado-build-email-notifications.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_007_email_notifications_pipeline_ado/how-to-enable-ado-build-email-notifications.html",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_007_email_notifications_pipeline_ado/runbook-ado-build-completion-notifications.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_007_email_notifications_pipeline_ado/slack-answer.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "adversarial_receipts": [
+    "adversarial/el-demoledor-break-commands.md (technical: 0 BLOCKING; F1 HIGH + F2/F3 MED accepted+fixed; F4 folded; F5 deferred)",
+    "adversarial/socrates-goal-fidelity.md (goal: 0 BLOCKING; deliverables faithful; F1 conciseness surfaced to user; F7 slack-intake added; tone polished)",
+    "adversarial/receipt-synthesis.md"
+  ],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    "how-to .md: PASS scripts/validate-feynman-doc.py (exit 0, re-run post-fix)",
+    "how-to .html: well-formed (python html.parser, 0 errors, re-checked post-fix); both mermaid blocks render via mmdc to valid SVG",
+    "ADO facts: librarian receipt context/01-ado-notifications-verified.md, MS-Learn-cited A1",
+    "commands: el-demoledor live-probed az 2.87.0 — 0 BLOCKING syntax errors; F1 auth-gap fixed via az rest projects resolution"
+  ]
+}

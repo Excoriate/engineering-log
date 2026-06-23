@@ -1,0 +1,627 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RCA — telemetryfunctiontestsfn 404 on agg.dev.vpp.eneco.com</title>
+<style>
+:root{--fg:#1f2328;--muted:#656d76;--bg:#fff;--line:#d0d7de;--accent:#0969da;
+--code-bg:#f6f8fa;--ok:#1a7f37;--bad:#cf222e;--warn:#9a6700;--warnbg:#fff8c5;}
+*{box-sizing:border-box}
+body{margin:0;background:#f6f8fa;color:var(--fg);
+font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+.wrap{max-width:960px;margin:0 auto;background:var(--bg);padding:48px 56px;
+box-shadow:0 0 0 1px var(--line);min-height:100vh;}
+h1,h2,h3,h4{line-height:1.25;font-weight:600;margin-top:1.6em;margin-bottom:.5em;}
+h1{font-size:2em;border-bottom:2px solid var(--line);padding-bottom:.3em;margin-top:0}
+h2{font-size:1.5em;border-bottom:1px solid var(--line);padding-bottom:.25em}
+h3{font-size:1.2em} h4{font-size:1.02em;color:var(--muted)}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+p,li{margin:.5em 0}
+code{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+font-size:.88em;background:var(--code-bg);padding:.15em .4em;border-radius:6px;}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;
+padding:14px 16px;overflow:auto;font-size:.85em;line-height:1.5;}
+pre code{background:none;padding:0;font-size:1em}
+pre.mermaid{background:#fbfdff;text-align:center;border-color:#cfe3ff}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;vertical-align:top}
+th{background:var(--code-bg);font-weight:600}
+tr:nth-child(2n) td{background:#fbfcfd}
+blockquote{margin:1em 0;padding:.4em 1em;color:var(--fg);
+border-left:4px solid var(--warn);background:var(--warnbg);border-radius:0 6px 6px 0;}
+blockquote p{margin:.35em 0}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+.meta{color:var(--muted);font-size:.85em;margin-top:6px}
+strong{font-weight:600}
+ul,ol{padding-left:1.6em}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){
+  if(window.mermaid){mermaid.initialize({startOnLoad:true,theme:"default",securityLevel:"loose",flowchart:{useMaxWidth:true,htmlLabels:true}});}
+});</script>
+</head><body><div class="wrap">
+<h1 id="rca--telemetryfunctiontestsfnhealthz-404-on-aggdevvppenecocom-recurrence">RCA — <code>telemetryfunctiontestsfn/healthz</code> 404 on <code>agg.dev.vpp.eneco.com</code> (recurrence)</h1>
+<blockquote>
+<p><strong>Incident class:</strong> developer-tooling — aggregation test-function unreachable from AVD, blocking an e2e release gate. <strong>Severity:</strong> MEDIUM (it now blocks a release; the function itself is dev-only QA, no production/trade/customer impact). The recurring <em>class</em> is the real problem. <strong>Diagnosis status:</strong> Verified Root Cause (depth 3), confirmed live this session in seven independent ways — including a live, reversible proof that the fix produces a public <code>200</code>. <strong>Relationship to prior work:</strong> this is the <strong>same root cause</strong> as <a href="../2026_06_02_vpp_aggregation_az_functions_not_visible_avd/rca.md"><code>2026_06_02_vpp_aggregation_az_functions_not_visible_avd</code></a>. That RCA diagnosed it correctly and proposed the fix. The fix was never merged.</p>
+</blockquote>
+<hr />
+<h2 id="executive-summary">Executive summary</h2>
+<p>Two developers (Johnson Lobo, then Anasthasia) reported that <code>https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/healthz</code> is "not accessible from AVD," while a sibling URL on the <strong>same host</strong> — <code>https://agg.dev.vpp.eneco.com/api/siteregistry</code> — works fine. Anasthasia needs the health endpoint to run an end-to-end test that gates today's release, so a small routing bug has become a release blocker.</p>
+<p>The aggregation layer's dev edge is a three-layer pipe: an Azure <strong>Application Gateway</strong> terminates TLS and forwards everything to an <strong>AKS nginx ingress</strong>, which does the host-and-path routing to backend pods. The <code>telemetryfunctiontestsfn</code> backend is a stock <strong>Azure Functions</strong> container that serves its health check at the URL root — <code>/healthz</code>. Its nginx ingress mounts it under the path <strong>prefix</strong> <code>/telemetryfunctiontestsfn/</code>, but does <strong>not</strong> strip that prefix before forwarding. So nginx hands the backend the literal path <code>/telemetryfunctiontestsfn/healthz</code>, the Functions host has no such route, and it answers <strong>404</strong>. <code>siteregistry</code> escapes the bug only because it is mounted at <code>/</code> — there is no prefix to strip.</p>
+<p>The visible symptom is a clean <strong>404 over a healthy TCP/TLS connection</strong> — not a timeout, not a 403. That single fact rules out the whole family of "network/AVD/firewall/whitelist" causes people instinctively reach for: the host is public, the connection completes, the edge is up and routing. The problem is purely <em>which path</em> nginx forwards.</p>
+<p>This is not a new incident. On 2026-06-02 the same endpoint, same reporter, same mechanism was diagnosed to a depth-3 root cause and a fix was written: add the nginx <code>rewrite-target</code> annotation to the chart's ingress values. Twenty days later I re-probed everything live: the endpoint is still 404, and the live ingress still has <strong>no</strong> rewrite annotation — even though the service has been redeployed roughly fifteen times since (Helm release <code>v215</code>→<code>v230</code>, chart <code>0.1.27</code>→<code>0.1.28</code>, image rebuilt) in that window. I then read the canonical chart directly from Azure DevOps on its default branch (<code>development</code>): its <code>values.yaml</code> still carries <code>annotations: {}</code> and the template still hard-codes <code>pathType: Prefix</code> — so <strong>the documented fix was never merged into the chart</strong>, confirmed at the source, not merely inferred from the runtime. The most important corrective action is therefore organizational as much as technical — get the rewrite into the chart and deployed, and add a per-function health probe so this class can never silently regress again.</p>
+<p>I proved the fix end-to-end this session without touching the managed service: I created a throwaway test ingress on a unique path with the proposed <code>use-regex</code> + <code>rewrite-target: /$2</code> annotations pointing at the same backend, and <code>https://agg.dev.vpp.eneco.com/tf-rewrite-proof/healthz</code> returned <strong><code>200 Healthy</code></strong> through the public edge. Then I deleted the test ingress and confirmed the managed paths were unchanged (telemetry still 404, siteregistry still 200). The fix is not an inference; it is a witnessed result. One sharp detail the proof surfaced: the deployable form is a <strong>two-file</strong> chart change — add the rewrite annotations to <code>values.yaml</code> <strong>and</strong> switch the template's hard-coded <code>pathType: Prefix</code> to <code>ImplementationSpecific</code>, because the ingress admission webhook <em>rejects</em> a regex path under <code>pathType: Prefix</code> (I confirmed that rejection live too). A values-only change would be denied at deploy.</p>
+<p>What a future engineer should remember: <strong>"not visible from AVD" plus a clean 404 and a working sibling path is a path-routing bug, not a network bug</strong> — and a fix that lives only in an RCA document is not a fix until it is in the chart and deployed.</p>
+<hr />
+<h2 id="context-ledger-zero-context-reader-read-this-table-first">Context Ledger (zero-context reader: read this table first)</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>What it is</th>
+<th>Code / resource artifact</th>
+<th>Relevance to THIS incident</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>VPP</strong></td>
+<td>Virtual Power Plant — Eneco's platform aggregating distributed energy assets into market-actionable volume</td>
+<td>repos under <code>enecomanagedcloud/Myriad - VPP</code></td>
+<td>The aggregation layer is part of VPP</td>
+</tr>
+<tr>
+<td><strong>Aggregation Layer</strong></td>
+<td>VPP subsystem: ingests telemetry, computes merit order, produces delivery reports</td>
+<td>repo <code>Eneco.Vpp.Aggregation</code></td>
+<td>Hosts the function that 404s</td>
+</tr>
+<tr>
+<td><strong>AVD</strong></td>
+<td>Azure Virtual Desktop — developers' restricted jump host into the CMC/Azure network</td>
+<td>—</td>
+<td>The vantage point both reporters used; <strong>not</strong> the cause</td>
+</tr>
+<tr>
+<td><strong>CMC</strong></td>
+<td>(Customer) Managed Cloud — Eneco's managed Azure landing zone</td>
+<td>subs <code>*-sb</code> (Sandbox) / <code>-acc</code> / <code>-prd</code></td>
+<td><code>agg.dev</code> lives in the Sandbox sub used as dev</td>
+</tr>
+<tr>
+<td><strong><code>agg.dev.vpp.eneco.com</code></strong></td>
+<td>Public hostname for the dev aggregation edge</td>
+<td>DNS A → <code>20.76.210.221</code></td>
+<td>The host in the failing URL</td>
+</tr>
+<tr>
+<td><strong><code>telemetryfunctiontestsfn</code></strong></td>
+<td>A <strong>QA test-only</strong> Azure Function (publishes mock telemetry → Kafka, validates ← CosmosDB)</td>
+<td>k8s <code>svc/deploy telemetryfunctiontestsfn</code> in ns <code>vpp-agg</code></td>
+<td>The function the reporters cannot reach</td>
+</tr>
+<tr>
+<td><strong><code>deliveryreportfn</code></strong></td>
+<td>Another prefix-mounted <code>*fn</code> test function</td>
+<td>k8s objects in ns <code>vpp-agg</code></td>
+<td>Control: it 404s identically → proves a class bug</td>
+</tr>
+<tr>
+<td><strong><code>siteregistry</code></strong></td>
+<td>Aggregation API used as the "this works" example</td>
+<td>k8s objects in ns <code>vpp-agg</code></td>
+<td>The 200 control; works because mounted at <code>/</code></td>
+</tr>
+<tr>
+<td><strong>App Gateway (<code>vpp-agw-d</code>)</strong></td>
+<td>Azure Application Gateway, WAF_v2, terminates TLS for <code>*.dev.vpp.eneco.com</code></td>
+<td>RG <code>rg-vpp-app-sb-401</code>, PIP <code>vpp-awg-ip-d</code> <code>20.76.210.221</code></td>
+<td>The public front; pass-through, <strong>not</strong> the cause</td>
+</tr>
+<tr>
+<td><strong>nginx ingress</strong></td>
+<td>Kubernetes ingress controller doing host+path routing in AKS</td>
+<td>ns <code>ingress-nginx</code>, controller <code>v1.14.0</code>, LB <code>50.85.91.121</code></td>
+<td>Where the broken path routing lives</td>
+</tr>
+<tr>
+<td><strong><code>rewrite-target</code></strong></td>
+<td>nginx-ingress annotation that rewrites the path before forwarding to the backend</td>
+<td><code>nginx.ingress.kubernetes.io/rewrite-target</code></td>
+<td><strong>Missing</strong> here → root cause</td>
+</tr>
+<tr>
+<td><strong>AGIC</strong></td>
+<td>Azure Application Gateway Ingress Controller — a <em>different</em> controller reading <code>appgw.*</code> annotations</td>
+<td>annotation <code>appgw.ingress.kubernetes.io/backend-path-prefix</code></td>
+<td>The chart was written for AGIC; dev now runs nginx</td>
+</tr>
+<tr>
+<td><strong>PathBase</strong></td>
+<td>ASP.NET Core / Azure Functions host setting that makes an app serve under a URL prefix</td>
+<td>(app config)</td>
+<td>Not set → app serves at root, so the prefix must be stripped at the ingress</td>
+</tr>
+<tr>
+<td><strong>Helm release</strong></td>
+<td>The deployed, versioned render of a chart, stored as a cluster Secret</td>
+<td><code>sh.helm.release.v1.telemetryfunctiontestsfn.v230</code></td>
+<td>The source of truth for what is <em>actually</em> deployed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Zero-context reader test:</strong> a new engineer who reads only this table should understand every term used below.</p>
+<hr />
+<h2 id="evidence-ledger-where-the-codes-live--the-narrative-above-stays-in-plain-words">Evidence Ledger (where the codes live — the narrative above stays in plain words)</h2>
+<ul>
+<li><strong>A1 FACT</strong> — externally witnessed: command + captured output or a URL anyone can re-run.</li>
+<li><strong>A2 INFER</strong> — derived from A1s by named reasoning.</li>
+<li><strong>A3 UNVERIFIED[blocked: reason]</strong> — not probed; blocking reason + resolving path named.</li>
+</ul>
+<p>All A1 facts were captured <strong>2026-06-22 (this session)</strong> from Mr. Alex's laptop on the open internet plus a read-only <code>kubectl</code>/<code>az</code> session (<code>Alex.Torres@eneco.com</code>, Sandbox sub <code>7b1ba02e-…</code>, AKS <code>vpp-aks01-d</code>). Raw captures live next to this file under <a href="./evidence/"><code>evidence/</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Claim</th>
+<th>Label</th>
+<th>Witness (file = re-runnable capture)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1</td>
+<td>Edge: <code>/telemetryfunctiontestsfn/healthz</code>→404, <code>/deliveryreportfn/healthz</code>→404, <code>/api/siteregistry</code>→200</td>
+<td>A1</td>
+<td><a href="./evidence/01-edge-http-probes.txt"><code>evidence/01-edge-http-probes.txt</code></a></td>
+</tr>
+<tr>
+<td>E2</td>
+<td><code>/telemetryfunctiontestsfn</code> (no trailing slash) → <code>301</code>→<code>http://</code> (plaintext downgrade); <code>/telemetryfunctiontestsfn/</code> (trailing) → <code>404</code></td>
+<td>A1</td>
+<td><a href="./evidence/01-edge-http-probes.txt"><code>evidence/01-edge-http-probes.txt</code></a></td>
+</tr>
+<tr>
+<td>E3</td>
+<td>Live ingress: telemetry path <code>/telemetryfunctiontestsfn/</code> Prefix, className nginx, <strong>no rewrite-target / use-regex anywhere</strong></td>
+<td>A1</td>
+<td><a href="./evidence/02-ingress-objects.txt"><code>evidence/02-ingress-objects.txt</code></a></td>
+</tr>
+<tr>
+<td>E4</td>
+<td>Backend healthy: deploy 1/1, pod Running, svc <code>10.2.155.205:8080</code>, endpoint <code>10.0.2.43:8080</code></td>
+<td>A1</td>
+<td><a href="./evidence/03-workload-health.txt"><code>evidence/03-workload-health.txt</code></a></td>
+</tr>
+<tr>
+<td>E5</td>
+<td>nginx controller <code>v1.14.0</code>, LB <code>50.85.91.121</code></td>
+<td>A1</td>
+<td><a href="./evidence/04-nginx-controller.txt"><code>evidence/04-nginx-controller.txt</code></a></td>
+</tr>
+<tr>
+<td>E6</td>
+<td>Deployed Helm release <code>v230</code>, chart <code>0.1.28</code>, <code>ingress.annotations: {}</code>, image <code>adhoc-0.0.1.1479</code></td>
+<td>A1</td>
+<td><a href="./evidence/05-helm-release.txt"><code>evidence/05-helm-release.txt</code></a></td>
+</tr>
+<tr>
+<td>E7</td>
+<td>Backend (port-forward): <code>/</code>→200, <code>/healthz</code>→200 <code>Healthy</code>, <code>/telemetryfunctiontestsfn/healthz</code>→404, <code>/api/*</code>→404, <code>/admin/*</code>→401</td>
+<td>A1</td>
+<td><a href="./evidence/06-backend-portforward.txt"><code>evidence/06-backend-portforward.txt</code></a></td>
+</tr>
+<tr>
+<td>E8</td>
+<td>App Gateway <code>vpp-agw-d</code>: <code>urlPathMaps: []</code>, Basic rules, WAF_v2, backend → <code>50.85.91.121</code>; PIP <code>vpp-awg-ip-d</code></td>
+<td>A1</td>
+<td><a href="./evidence/07-azure-appgw.txt"><code>evidence/07-azure-appgw.txt</code></a>, <a href="./evidence/07b-resourcegraph-pip.txt"><code>evidence/07b-resourcegraph-pip.txt</code></a></td>
+</tr>
+<tr>
+<td>E9</td>
+<td><strong>Live fix proof:</strong> test ingress (<code>pathType: ImplementationSpecific</code>) with <code>use-regex</code>+<code>rewrite-target:/$2</code> → <code>/tf-rewrite-proof/healthz</code>→<strong>200</strong>; managed paths unchanged; test ingress deleted</td>
+<td>A1</td>
+<td><a href="./evidence/08-live-rewrite-proof.txt"><code>evidence/08-live-rewrite-proof.txt</code></a></td>
+</tr>
+<tr>
+<td>E10</td>
+<td>The 2026-06-02 fix was never merged — canonical chart on ADO default branch <code>development</code> still has <code>values.ingress.annotations: {}</code> and <code>templates/ingress.yaml</code> hard-codes <code>pathType: Prefix</code>; no rewrite anywhere</td>
+<td>A1</td>
+<td><a href="./evidence/11-ado-canonical-chart.txt"><code>evidence/11-ado-canonical-chart.txt</code></a></td>
+</tr>
+<tr>
+<td>E11</td>
+<td>No rewrite/prefix-routing PR exists; the only completed ingress/404-titled PRs (className-configurable ingress; an app-level 404) are unrelated</td>
+<td>A1</td>
+<td><a href="./evidence/11-ado-canonical-chart.txt"><code>evidence/11-ado-canonical-chart.txt</code></a></td>
+</tr>
+<tr>
+<td>E12</td>
+<td><code>pathType: Prefix</code> + a regex path is <strong>rejected</strong> by the nginx admission webhook (<code>cannot be used with pathType Prefix</code>) → <code>ImplementationSpecific</code> is required</td>
+<td>A1</td>
+<td><a href="./evidence/09-prefix-regex-proof.txt"><code>evidence/09-prefix-regex-proof.txt</code></a></td>
+</tr>
+<tr>
+<td>E13</td>
+<td><code>deliveryreportfn</code> backend serves <code>/</code>→200 but <code>/healthz</code>→<strong>404</strong> (no <code>/healthz</code> route) — its rewrite restores liveness via <code>/deliveryreportfn/</code>, not <code>/healthz</code></td>
+<td>A1</td>
+<td><a href="./evidence/10-deliveryreportfn-backend.txt"><code>evidence/10-deliveryreportfn-backend.txt</code></a></td>
+</tr>
+<tr>
+<td>E14</td>
+<td><em>Who</em> should own the chart merge</td>
+<td>A3</td>
+<td>org-attribution; not assignable from CLI tooling</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Confidence:</strong> the diagnosis, the fix, and "the fix was never merged" are now <strong>100% directly witnessed</strong> (E1–E13), including a live public <code>200</code>, the admission-webhook rejection of the wrong shape, and a direct read of the canonical chart on its default branch. The <em>only</em> item tooling cannot settle is <strong>E14 — who should own the merge</strong> — a one-row org-attribution question, not a mechanism gap. There is no open contradiction (I re-ran the edge probe last and it was still 404). What would lower confidence fastest: an edge <code>200</code> on the prefixed path somewhere I did not probe — there is none.</p>
+<hr />
+<h2 id="the-one-sentence-root-cause">The one-sentence root cause</h2>
+<p>The <code>telemetryfunctiontestsfn</code> Azure-Functions container serves <code>/healthz</code> at its <strong>root</strong>, but its <strong>nginx ingress mounts it under the path prefix <code>/telemetryfunctiontestsfn/</code> with no <code>rewrite-target</code></strong>, so nginx forwards the <em>unstripped</em> path <code>/telemetryfunctiontestsfn/healthz</code> to an app that only knows <code>/healthz</code> → <strong>404</strong>. The fix that closes this was written on 2026-06-02 and never merged.</p>
+<hr />
+<h2 id="l1--business--why-the-aggregation-layer-exists">L1 — Business — Why the aggregation layer exists</h2>
+<p><strong>Anchor question: why does this system exist, and who is blocked?</strong></p>
+<p>The VPP Aggregation Layer turns thousands of distributed energy assets into market-actionable aggregates: it ingests telemetry, computes merit order, prepares market input, and produces delivery reports. Developers and QA validate this pipeline in <strong>dev</strong> before acceptance and production. The <code>*fn</code> <strong>test functions</strong> (<code>telemetryfunctiontestsfn</code>, <code>deliveryreportfn</code>, …) exist only to drive and validate that pipeline in non-prod — they publish mock telemetry to Kafka and assert results in CosmosDB. They are explicitly <em>never deployed to production</em>.</p>
+<p>Who is blocked: first Johnson Lobo, now <strong>Anasthasia</strong>, doing e2e/QA work from AVD. Anasthasia's note makes the stakes concrete: <em>"This function should be accessible from AVD so that I can execute my e2e tests today which is needed to be able to release."</em> So the impact is <strong>developer productivity gating a release</strong> — higher urgency than the prior incident, but still <strong>no trade, market, or customer impact</strong> (the function is dev-only). The health endpoint is the e2e harness's liveness gate; without a <code>200</code> it will not proceed.</p>
+<hr />
+<h2 id="l2--repo-system">L2 — Repo system</h2>
+<p><strong>Anchor question: which code/config repos can change this outcome?</strong></p>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Role in this incident</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Eneco.Vpp.Aggregation</code></td>
+<td>App code <strong>and</strong> the legacy Helm charts (<code>azure-pipeline/Helm/&lt;svc&gt;/</code>) that render the live nginx ingress</td>
+<td><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Eneco.Vpp.Aggregation">ADO repo</a></td>
+</tr>
+<tr>
+<td><code>Eneco.Vpp.Aggregation.GitOps</code></td>
+<td>Canonical GitOps values for the <strong>OpenShift</strong> deployment (<code>agg.dev-mc</code>), where the Route rewrite is already correct</td>
+<td>ADO (<code>Myriad - VPP</code>)</td>
+</tr>
+<tr>
+<td><code>Eneco.Vpp.Aggregation.Infrastructure[.Mc]</code></td>
+<td>Terraform for the aggregation infra (cluster/DNS/App Gateway) — not the cause</td>
+<td>ADO (<code>Myriad - VPP</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>The fix in L8 changes exactly <strong>one file</strong> in the first repo: the ingress block of the <code>telemetryfunctiontestsfn</code> chart values (and the same change for the other prefix-mounted <code>*fn</code>). No app-code change is needed — the app is healthy and correct; the wiring around it is wrong.</p>
+<blockquote>
+<p><strong>Caveat on local clones:</strong> the aggregation repos are cloned at <code>…/eneco-src/enecomanagedcloud/myriad-vpp/</code>, but they are months stale and read-only here. Every current-state claim in this RCA comes from <strong>live cluster + Azure probes this session</strong>, not the clones — which is exactly the discipline the 2026-06-02 RCA established and which this RCA re-applies.</p>
+</blockquote>
+<hr />
+<h2 id="l3--runtime-architecture-the-requests-journey">L3 — Runtime architecture (the request's journey)</h2>
+<p><strong>Anchor question: which deployed pieces does the request touch, and where does the 404 originate?</strong></p>
+<p>Here is the path a request takes from the developer's browser to the backend pod. Watch the third hop — it is where the two URLs diverge.</p>
+<pre class="mermaid">flowchart LR
+  C[&quot;Client&lt;br/&gt;laptop / AVD&quot;] --&gt;|&quot;HTTPS 443&lt;br/&gt;agg.dev.vpp.eneco.com&quot;| AGW[&quot;App Gateway vpp-agw-d&lt;br/&gt;WAF_v2 - TLS terminate&lt;br/&gt;20.76.210.221&lt;br/&gt;Basic rule - urlPathMaps: []&quot;]
+  AGW --&gt;|&quot;HTTP 80 - pass-through&quot;| NGX[&quot;AKS nginx ingress v1.14.0&lt;br/&gt;50.85.91.121&lt;br/&gt;HOST + PATH routing&quot;]
+  NGX --&gt;|&quot;path / (catch-all)&quot;| SR[&quot;svc siteregistry:8080&lt;br/&gt;mounted at root&lt;br/&gt;200 OK&quot;]
+  NGX --&gt;|&quot;path /telemetryfunctiontestsfn/&lt;br/&gt;NO rewrite-target&quot;| TF[&quot;svc telemetryfunctiontestsfn:8080&lt;br/&gt;Azure Functions host&lt;br/&gt;serves /healthz at ROOT&lt;br/&gt;404 on the prefixed path&quot;]
+</pre>
+<p>Reading the diagram: the client speaks TLS to the <strong>App Gateway</strong>, which I confirmed does <em>no</em> path-based routing (<code>urlPathMaps: []</code>, Basic rules) — it just forwards everything to the nginx LoadBalancer. So the App Gateway and its WAF are pass-through and cannot be the cause; a WAF block would be a <code>403</code>, and we see a <code>404</code>. The decision that matters happens at <strong>nginx</strong>: for <code>siteregistry</code> the rule is the catch-all <code>/</code>, so the request reaches a backend mounted at root and succeeds. For <code>telemetryfunctiontestsfn</code> the rule is the <strong>prefix</strong> <code>/telemetryfunctiontestsfn/</code>, and because there is no rewrite, nginx forwards the <em>whole</em> path — prefix included — to a backend that only serves at root. That is the fork in the road that produces a <code>200</code> on one URL and a <code>404</code> on its sibling.</p>
+<p>I proved the App Gateway is innocent two ways: it has no path map at all (so it cannot be filtering one path and not another), and hitting the nginx LoadBalancer directly with the right <code>Host</code> header reproduces the exact same split (siteregistry 200, telemetry 404). The one mental model to keep: <strong>on this edge, the App Gateway moves bytes; nginx makes routing decisions.</strong> The next section drops one layer further — into the backend itself — to show <em>why</em> the prefixed path 404s even when you bypass nginx entirely.</p>
+<hr />
+<h2 id="l4--application-code-flow-why-the-backend-itself-404s-the-prefix">L4 — Application code flow (why the backend itself 404s the prefix)</h2>
+<p><strong>Anchor question: what does the failing backend actually serve, and why does the prefix 404 even without nginx?</strong></p>
+<p>The backend is a stock <strong>Azure Functions</strong> host in a container. To see what <em>it</em> believes its routes are — with nginx completely out of the picture — I port-forwarded straight to the pod and probed it directly:</p>
+<table>
+<thead>
+<tr>
+<th>Request to the backend (port-forward <code>svc:8080</code>)</th>
+<th>Result</th>
+<th>What it tells us</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /</code></td>
+<td><strong>200</strong> — "Your Azure Function App is up and running."</td>
+<td>the Functions default page; host is alive</td>
+</tr>
+<tr>
+<td><code>GET /healthz</code></td>
+<td><strong>200</strong> — <code>Healthy</code></td>
+<td>health is served at the <strong>root</strong></td>
+</tr>
+<tr>
+<td><code>GET /telemetryfunctiontestsfn/healthz</code></td>
+<td><strong>404</strong></td>
+<td>the app has no route for the prefixed path</td>
+</tr>
+<tr>
+<td><code>GET /api/siteregistry</code></td>
+<td><strong>404</strong></td>
+<td>no such function on this host</td>
+</tr>
+<tr>
+<td><code>GET /admin/host/status</code></td>
+<td><strong>401</strong></td>
+<td>admin API exists but is master-key protected</td>
+</tr>
+</tbody>
+</table>
+<p>This table is the heart of the diagnosis. The app serves health at <code>/healthz</code> and has <strong>no PathBase</strong> for the <code>/telemetryfunctiontestsfn</code> prefix — it 404s the prefixed path even when you reach it directly, with nginx removed from the equation. There is no app-side awareness of the mount point. Therefore, for any edge request under <code>/telemetryfunctiontestsfn/...</code> to succeed, <strong>something must strip the prefix before the app sees it</strong>, and right now nothing does. Contrast <code>siteregistry</code>, mounted at <code>/</code>: its root routes are directly reachable from the edge, so it works by luck of mount point.</p>
+<p>There is a second, important thing this table tells us, and it sharpens what "fixed" even means. The <code>/api/*</code> paths 404 and <code>/admin/*</code> returns 401: <strong>this host exposes no HTTP-invocable functions.</strong> That is consistent with the test functions being timer/Kafka-triggered, not HTTP endpoints. So <code>/healthz</code> is the <em>only</em> meaningful HTTP surface here, and the reporter's request is precisely a <strong>host-liveness check</strong> — which is the achievable, intended goal. The fix below restores <code>/healthz</code>; it does not (and need not) "enable function invocation," because invocation does not happen over HTTP on this host.</p>
+<p>The mental model to carry forward: <strong>a reverse proxy can mount a backend under a path the backend has never heard of; unless the proxy rewrites the path, the backend answers 404 to its own healthy routes.</strong> The next section shows that the live infrastructure, the deployed chart, and the running workload all agree on exactly this shape.</p>
+<hr />
+<h2 id="l5--iac--state--azure--the-three-truths">L5 — IaC / state / Azure — the three truths</h2>
+<p><strong>Anchor question: do the declared spec, the deployed release, and the running workload agree?</strong></p>
+<p>A reliable way to avoid chasing ghosts is to check three independent "truths" and see whether they line up.</p>
+<p><strong>Truth 1 — what the live Ingress object says</strong> (from <code>kubectl get ingress -n vpp-agg</code>, <a href="./evidence/02-ingress-objects.txt"><code>evidence/02</code></a>):</p>
+<table>
+<thead>
+<tr>
+<th>Ingress</th>
+<th>path</th>
+<th>pathType</th>
+<th>className</th>
+<th>annotations</th>
+<th>backend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>siteregistry-ingress</code></td>
+<td><code>/</code></td>
+<td>Prefix</td>
+<td>nginx</td>
+<td>only <code>meta.helm.sh/*</code></td>
+<td><code>siteregistry:8080</code></td>
+</tr>
+<tr>
+<td><code>telemetryfunctiontestsfn-ingress</code></td>
+<td><code>/telemetryfunctiontestsfn/</code></td>
+<td>Prefix</td>
+<td>nginx</td>
+<td>only <code>meta.helm.sh/*</code> (<strong>no rewrite-target</strong>)</td>
+<td><code>telemetryfunctiontestsfn:8080</code></td>
+</tr>
+<tr>
+<td><code>deliveryreportfn-ingress</code></td>
+<td><code>/deliveryreportfn/</code></td>
+<td>Prefix</td>
+<td>nginx</td>
+<td>only <code>meta.helm.sh/*</code></td>
+<td><code>deliveryreportfn:8080</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Truth 2 — what the deployed Helm release says</strong> (decoded live release Secret <code>…telemetryfunctiontestsfn.v230</code>, chart <code>0.1.28</code>, <a href="./evidence/05-helm-release.txt"><code>evidence/05</code></a>):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># chart default ingress (chart 0.1.28, as deployed):</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ingress</span><span class="kw">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">className</span><span class="kw">:</span><span class="at"> nginx</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">annotations</span><span class="kw">:</span><span class="at"> </span><span class="kw">{}</span><span class="co">                 # &lt;-- EMPTY. no appgw annotation, no rewrite-target</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /telemetryfunctiontestsfn/</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">hostname</span><span class="kw">:</span><span class="at"> agg.dev.vpp.eneco.com</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># deployed overrides: only image.tag=adhoc-0.0.1.1479 and ingress.hostname</span></span></code></pre></div>
+<p><strong>Truth 3 — what the workload is doing</strong> (from <code>kubectl get deploy,svc,endpoints,pod</code>, <a href="./evidence/03-workload-health.txt"><code>evidence/03</code></a>): deploy <code>1/1</code>, pod <code>Running</code>, service <code>10.2.155.205:8080</code>, endpoint <code>10.0.2.43:8080</code> — all healthy.</p>
+<p>The three truths <strong>agree</strong>: the ingress mounts a prefix; nothing strips it; the app serves at root; the app is healthy. That is a clean <strong>404 by path mismatch</strong>, not an outage. And it tells us where to look for <em>why this is still broken</em> — Truth 2 carries the timeline-relevant fingerprint: chart <code>0.1.28</code> (a bump from June's <code>0.1.27</code>) and image <code>1479</code> (a rebuild from June's <code>1457</code>), yet the ingress annotations are still <code>{}</code>. The service has been actively redeployed; the fix simply was never in those deploys.</p>
+<hr />
+<h2 id="l6--the-pipeline-and-how-it-actually-runs-how-this-got-mis-wired-and-why-it-stayed-broken">L6 — The pipeline and how it actually runs (how this got mis-wired, and why it stayed broken)</h2>
+<p><strong>Anchor question: how does source become runtime, and why did a known fix never reach it?</strong></p>
+<p>There are <strong>two parallel deployment eras</strong> for these workloads:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>LIVE &amp; broken</strong> (what the reporters hit)</th>
+<th><strong>Canonical / modern</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Host</td>
+<td><code>agg.dev.vpp.eneco.com</code> (<strong>public</strong>)</td>
+<td><code>agg.dev-mc.vpp.eneco.com</code> (<strong>internal-only</strong>, resolves NXDOMAIN publicly)</td>
+</tr>
+<tr>
+<td>Cluster</td>
+<td>AKS <code>vpp-aks01-d</code>, ns <code>vpp-agg</code></td>
+<td>OpenShift, ns <code>eneco-vpp-agg</code></td>
+</tr>
+<tr>
+<td>Routing</td>
+<td>nginx <code>Ingress</code>, prefix, <strong>no rewrite</strong></td>
+<td>OpenShift <code>Route</code> with <code>haproxy.router.openshift.io/rewrite-target: /</code> (<strong>correct</strong>)</td>
+</tr>
+<tr>
+<td>Deploy</td>
+<td>ADO <code>HelmDeploy@0 upgrade</code> direct to AKS</td>
+<td>CD pushes image tag → GitOps repo → ArgoCD sync</td>
+</tr>
+<tr>
+<td>Source</td>
+<td><code>Eneco.Vpp.Aggregation/azure-pipeline/Helm/&lt;svc&gt;/</code></td>
+<td><code>Eneco.Vpp.Aggregation.GitOps/Helm/&lt;svc&gt;/dev/values.yaml</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>How the bug was born:</strong> the legacy chart was originally written for the <strong>Azure Application Gateway Ingress Controller (AGIC)</strong>, whose prefix-strip mechanism is <code>appgw.ingress.kubernetes.io/backend-path-prefix</code>. When dev was migrated to a standalone <strong>nginx</strong> ingress, the chart was updated to <code>className: nginx</code> and the appgw annotation was dropped — but the nginx equivalent, <code>rewrite-target</code>, was never added. AGIC stripped the prefix; nginx does not. The prefix-strip silently fell on the floor during the migration. This is a <strong>migration gap</strong>, not a code regression in the function.</p>
+<p><strong>Why it is still broken twenty days later</strong> — this is the new finding of <em>this</em> incident. The 2026-06-02 RCA diagnosed exactly this and wrote the fix. Yet the live release is now <code>v230</code> (it was <code>v215</code> in June) and the chart is <code>0.1.28</code> (it was <code>0.1.27</code>), so the service has been redeployed on the order of fifteen times since — and the ingress annotations are still empty. I settled this at the source rather than leaving it an inference. <strong>Directly observed</strong> on the canonical chart's default branch (<code>development</code>) in Azure DevOps: the <code>values.yaml</code> still has <code>annotations: {}</code> and <code>templates/ingress.yaml</code> still hard-codes <code>pathType: Prefix</code> — no rewrite has ever been merged. The only completed PRs whose titles touch ingress or 404 are unrelated (one made the ingress class configurable; one changed an app-level 404 response). So — this is directly observed at the source, not inferred — the documented fix was <strong>never merged into the chart</strong>, and every subsequent deploy faithfully re-rendered the broken ingress. A correct diagnosis that lives only in an RCA file does not change runtime; only a merged chart change does. The one thing tooling cannot assign is <em>who</em> should own that merge — an organizational question, not a probe.</p>
+<p><code>agg.dev-mc</code> (OpenShift/GitOps) was built correctly with a Route rewrite, so it would not have this bug — but it resolves <strong>NXDOMAIN on public DNS</strong> (I confirmed this: <code>dig agg.dev-mc.vpp.eneco.com</code> returns nothing). It is internal-only and needs an AVD whitelist, which is why developers keep using the public <code>agg.dev</code> that carries the bug. So fixing <code>agg.dev</code> directly is the primary action; consolidating onto <code>agg.dev-mc</code> is a strategic follow-up, not a same-day unblock.</p>
+<hr />
+<h2 id="l7--timeline">L7 — Timeline</h2>
+<p><strong>Anchor question: what happened, when — and what does the time ordering prove?</strong></p>
+<pre class="mermaid">timeline
+  title telemetryfunctiontestsfn 404 — incident lineage
+  2023-12 : Chart gains AGIC prefix-strip (appgw backend-path-prefix)
+  2025-11 : Dev migrated to nginx ingress; appgw annotation dropped; rewrite-target NOT added
+  2026-04-13 : Johnson Lobo first reports AVD reachability; workaround = use /api/siteregistry
+  2026-06-02 : RCA diagnoses depth-3 root cause; fix (nginx rewrite) written
+  2026-06 (after) : ~15 redeploys (release v215 to v230, chart 0.1.27 to 0.1.28) — fix never merged
+  2026-06-22 : Johnson + Anasthasia re-report; 404 persists; now blocks a release
+  2026-06-22 : This RCA re-probes live; fix proven live (test ingress -&gt; public 200)
+</pre>
+<p>The time ordering carries the argument. The bug is older than any single report; the migration in late 2025 is the design-level origin. The crucial gap is between <strong>2026-06-02</strong> (fix written) and <strong>2026-06-22</strong> (still broken) — and the fact that ~15 deploys happened <em>inside</em> that gap without the fix is what turns "the fix is pending" into "the fix was never merged." Time here is not decoration; it is the evidence that distinguishes a slow rollout from a dropped action.</p>
+<hr />
+<h2 id="l8--fix">L8 — Fix</h2>
+<p><strong>Anchor question: what changes, what does not, and why?</strong></p>
+<p>The function is healthy; only the <strong>edge path routing</strong> is wrong. There are two horizons: an immediate unblock the reporter can do today, and the permanent chart change.</p>
+<h3 id="immediate-unblock-for-the-reporter-today-no-pr-no-infra-change">Immediate unblock for the reporter (today, no PR, no infra change)</h3>
+<p>There is currently no working edge path to the telemetry host. Until the chart PR lands, reach the backend directly with a port-forward (needs <code>kubectl</code> to AKS <code>vpp-aks01-d</code>, which AVD devs have):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> vpp-agg port-forward svc/telemetryfunctiontestsfn 8080:8080</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># then, in another shell or the browser:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:8080/healthz        <span class="co"># -&gt; 200 Healthy</span></span></code></pre></div>
+<p>This confirms the test-function host is alive — exactly what <code>/healthz</code> is for. If Anasthasia's e2e harness can target a configurable base URL, point it at <code>http://localhost:8080</code>; if it is hard-wired to the public <code>…/telemetryfunctiontestsfn/healthz</code>, only the permanent fix below will satisfy it.</p>
+<h3 id="permanent-fix-recommended--add-the-nginx-rewrite-a-two-file-chart-change">Permanent fix (RECOMMENDED) — add the nginx rewrite (a TWO-file chart change)</h3>
+<p>This is a <strong>two-file</strong> change. The template hard-codes <code>pathType: Prefix</code>, and nginx <strong>rejects a regex path under <code>pathType: Prefix</code></strong> at admission time — so the path type must change, and only the template sets it. A values-only edit would be denied at deploy.</p>
+<ul>
+<li><strong>Repo:</strong> <code>Eneco.Vpp.Aggregation</code></li>
+</ul>
+<p><strong>File 1 — <code>azure-pipeline/Helm/telemetryfunctiontestsfn/values.yaml</code>:</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a> ingress:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>   enabled: true</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>   className: nginx</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>   hostname: agg.dev.vpp.eneco.com</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">-  path: /telemetryfunctiontestsfn/</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="st">-  annotations: {}</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="va">+  path: /telemetryfunctiontestsfn(/|$)(.*)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">+  annotations:</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="va">+    nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="va">+    nginx.ingress.kubernetes.io/rewrite-target: /$2</span></span></code></pre></div>
+<p><strong>File 2 — <code>azure-pipeline/Helm/telemetryfunctiontestsfn/templates/ingress.yaml</code>:</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>               - path: {{ .Values.ingress.path }}</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">-                pathType: Prefix</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="va">+                pathType: ImplementationSpecific</span></span></code></pre></div>
+<p><strong>Why this works — witnessed, not inferred.</strong> nginx captures everything after the prefix into <code>$2</code> and forwards <code>/$2</code> to the backend, so <code>/telemetryfunctiontestsfn/healthz</code> → backend <code>/healthz</code> → <code>200</code>. I proved this live: a throwaway test ingress with these exact annotations and <code>pathType: ImplementationSpecific</code> returned <code>200 Healthy</code> through the public edge (<a href="./evidence/08-live-rewrite-proof.txt"><code>evidence/08</code></a>). I also proved the negative — the <code>pathType: Prefix</code> form is <strong>rejected</strong> by the nginx admission webhook (<code>cannot be used with pathType Prefix</code>, <a href="./evidence/09-prefix-regex-proof.txt"><code>evidence/09</code></a>) — which is why File 2 is required, not optional. The fix restores <code>/healthz</code> reachability and does not create function HTTP endpoints (the host exposes none among the paths probed).</p>
+<p><strong>For <code>deliveryreportfn</code> and other prefix-mounted <code>*fn</code>:</strong> apply the same two-file change, but note its backend serves <code>/</code>→200 but <code>/healthz</code>→404 (<a href="./evidence/10-deliveryreportfn-backend.txt"><code>evidence/10</code></a>) — so its post-fix liveness check is <code>…/deliveryreportfn/</code> (banner 200), not <code>/healthz</code>.</p>
+<p><strong>What this fix does NOT change / what to verify before merge:</strong></p>
+<ul>
+<li><code>pathType: ImplementationSpecific</code> is <strong>mandatory</strong> — <code>use-regex: "true"</code> does not rescue <code>pathType: Prefix</code>; the admission webhook rejects the regex path before nginx evaluates it (the live cluster returned the rejection — evidence/09).</li>
+<li>It does not shadow the <code>/</code> siteregistry catch-all — confirmed live: the <code>ImplementationSpecific</code>+<code>use-regex</code> ingress coexisted with the <code>/</code> catch-all and siteregistry stayed <code>200</code> (evidence/08). Keep the post-deploy regression guard as a hard gate.</li>
+<li>It does not touch network, whitelist, VNET, Private Endpoint, image, or app code — none of those are the problem.</li>
+<li>One incidental effect: for the rewritten service the bare-prefix <code>301</code>→<code>http://</code> (see L10 #6) becomes a <code>200</code> root banner — an improvement, but the latent-301 lesson no longer applies to this service after the fix.</li>
+<li>Render the manifest against nginx-ingress <strong>v1.14.0</strong> before apply.</li>
+</ul>
+<h3 id="do-not-apply-this-with-kubectl-edit">Do NOT apply this with <code>kubectl edit</code></h3>
+<p>This ingress is Helm/pipeline-managed. A manual <code>kubectl edit</code> would work for minutes and then be <strong>overwritten by the next deploy</strong> (<code>v231</code>) — that is precisely how this bug survived: the runtime is re-rendered from the chart on every deploy. The durable fix must be in the chart values, merged, and deployed through the normal ADO pipeline.</p>
+<h3 id="alternative-strategic-not-same-day--consolidate-onto-aggdev-mc">Alternative (strategic, not same-day) — consolidate onto <code>agg.dev-mc</code></h3>
+<p>The OpenShift/GitOps deployment on <code>agg.dev-mc.vpp.eneco.com</code> already has a correct Route rewrite. Pointing consumers there removes the two-era divergence, but <code>agg.dev-mc</code> is internal-only (NXDOMAIN publicly) so the AVD must be whitelisted (ServiceNow runbook, Eneco wiki page 44740). Treat this as a follow-up, not the release unblock.</p>
+<hr />
+<h2 id="l9--verification">L9 — Verification</h2>
+<p><strong>Anchor question: how do we know — before and after — that the fix is right?</strong></p>
+<p><strong>Before the fix (current, captured this session):</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;%{http_code}\n&#39;</span> https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/healthz   <span class="co"># 404</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;%{http_code}\n&#39;</span> https://agg.dev.vpp.eneco.com/api/siteregistry                    <span class="co"># 200</span></span></code></pre></div>
+<p><strong>Proof the fix is sound — backend already serves the target at root (captured this session):</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> vpp-agg port-forward svc/telemetryfunctiontestsfn 18080:8080 <span class="kw">&amp;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;%{http_code}\n&#39;</span> http://localhost:18080/healthz   <span class="co"># 200  -&gt; rewrite to /healthz yields 200</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> %1</span></code></pre></div>
+<p><strong>Proof the rewrite produces a public 200 — witnessed live this session, then cleaned up</strong> (<a href="./evidence/08-live-rewrite-proof.txt"><code>evidence/08</code></a>): a test ingress with <code>use-regex</code> + <code>rewrite-target: /$2</code> and <code>pathType: ImplementationSpecific</code> made <code>https://agg.dev.vpp.eneco.com/tf-rewrite-proof/healthz</code> return <code>200</code>, while the managed paths stayed unchanged. I also proved the negative: the same shape with <code>pathType: Prefix</code> is <strong>rejected</strong> by the nginx admission webhook (<a href="./evidence/09-prefix-regex-proof.txt"><code>evidence/09</code></a>) — which is why the fix is a two-file change (the template must set <code>ImplementationSpecific</code>). This is the strongest possible pre-merge evidence: the fix's effect was observed at the edge, not predicted.</p>
+<p><strong>After the chart PR is deployed (acceptance criterion the owner runs):</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;%{http_code}\n&#39;</span> https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/healthz   <span class="co"># expect 200</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;%{http_code}\n&#39;</span> https://agg.dev.vpp.eneco.com/api/siteregistry                    <span class="co"># still 200 (regression guard)</span></span></code></pre></div>
+<p><strong>Falsifier:</strong> if post-deploy the path still 404s, check (a) <code>use-regex</code> actually applied, (b) the rewrite captured group <code>/$2</code> matches the regex path, (c) the deployed release picked up the new values: <code>kubectl -n vpp-agg get secret -l owner=helm,name=telemetryfunctiontestsfn -o name | tail -1</code> then decode and confirm <code>ingress.annotations</code> is no longer <code>{}</code>.</p>
+<hr />
+<h2 id="l10--lessons">L10 — Lessons</h2>
+<p><strong>Anchor question: what durable knowledge does this incident produce?</strong></p>
+<ol type="1">
+<li><strong>"Not visible / not accessible from AVD" plus a clean 404 over a working TLS connection is a path-routing bug, not a network bug.</strong> Network blocks give timeouts or <code>403</code>s; a <code>404</code> with a healthy connection means the edge is up and routing — look at <em>path routing</em>, not VNET/whitelist/Private Endpoint. Durable triage heuristic.</li>
+<li><strong>A diagnosed fix is not a fix until it is merged and deployed.</strong> This is the central lesson of the <em>recurrence</em>: a perfect depth-3 RCA from 2026-06-02 did not change runtime because the chart PR was never landed, and ~15 deploys re-rendered the broken ingress. RCAs need an owner and a tracked PR, or they decay into shelf-ware while the incident reopens.</li>
+<li><strong>Ingress-controller migrations must translate path-rewrite annotations.</strong> <code>appgw.ingress.kubernetes.io/backend-path-prefix</code> (AGIC) and <code>nginx.ingress.kubernetes.io/rewrite-target</code> (nginx) are not interchangeable; dropping one without adding the other silently breaks every prefix-mounted service.</li>
+<li><strong>A service mounted at <code>/</code> hides this class of bug.</strong> <code>siteregistry</code> works by luck of mount point, so the bug only shows on prefix-mounted services — easy to miss in review. A per-function <code>/healthz</code> smoke probe in CI would have caught it the day the migration shipped (see the toil-removal note in L8/L12).</li>
+<li><strong>Verify against the running release, not stale clones.</strong> The decoded live release (chart <code>0.1.28</code>, <code>annotations: {}</code>) is the truth; the months-stale local clone is not. Decode <code>helm get values</code> / live objects for any deploy-state claim.</li>
+<li><strong>Latent (DEFER): the bare-prefix <code>301</code> redirects to <code>http://</code> on a TLS edge.</strong> On the legacy nginx ingress a trailing-slash redirect downgrades to plaintext. Not part of this incident, but worth fixing when hardening (<code>force-ssl-redirect</code> / honour <code>X-Forwarded-Proto</code> from the App Gateway).</li>
+</ol>
+<hr />
+<h2 id="l11--end-to-end-command-playbook-reproduce-this-rca-from-cold">L11 — End-to-end command playbook (reproduce this RCA from cold)</h2>
+<p><strong>Anchor question: can a fresh on-call rebuild every conclusion above from scratch?</strong></p>
+<p>Each step states the <strong>question</strong> it answers, <strong>why</strong> the command is authoritative, the <strong>expected output</strong>, and the <strong>decision rule</strong>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Step 0. Reproduce the symptom from anywhere (the host is public) ---</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Question: is it really broken, and is a sibling path fine?</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Why authoritative: this is the exact URL the reporter uses; curl shows the raw status.</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected: 404 then 200.  Decision: 404 + sibling 200 =&gt; path routing, not network.</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;telemetry=%{http_code}\n&#39;</span> https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn/healthz</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;siteregistry=%{http_code}\n&#39;</span> https://agg.dev.vpp.eneco.com/api/siteregistry</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Step 1. Is the routing layer nginx, and does the bare prefix misbehave? ---</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Question: which layer answers, and is there a redirect tell?</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Expected: a 301 with Location: http://...  Decision: confirms legacy nginx prefix handling.</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-sS</span> <span class="at">-D</span> <span class="at">-</span> <span class="at">-o</span> /dev/null https://agg.dev.vpp.eneco.com/telemetryfunctiontestsfn <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-iE</span> <span class="st">&#39;^HTTP|location&#39;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Step 2. Confirm cluster context, then inspect the ingress (read-only) ---</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Question: does the live ingress strip the prefix?</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Why authoritative: the live object is the runtime truth, not the stale clone.</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Freshness probe FIRST so we are not reading a wrong cluster:</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> config current-context                 <span class="co"># expect vpp-aks01-d</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> vpp-agg get ingress telemetryfunctiontestsfn-ingress <span class="at">-o</span> yaml <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-A3</span> <span class="at">-iE</span> <span class="st">&#39;annotations|rewrite|path:&#39;</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> vpp-agg get ingress <span class="at">-o</span> yaml <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-iE</span> <span class="st">&#39;rewrite-target|use-regex&#39;</span> <span class="kw">||</span> <span class="bu">echo</span> <span class="st">&#39;NO rewrite anywhere&#39;</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision: prefix path + no rewrite-target =&gt; root cause present.</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Step 3. Confirm the backend is healthy and serves /healthz at ROOT ---</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Question: is the app fine and only the edge wrong?</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Why authoritative: port-forward bypasses nginx, isolating the backend.</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> vpp-agg get deploy,pod,endpoints <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-i</span> telemetryfunctiontests</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> vpp-agg port-forward svc/telemetryfunctiontestsfn 18080:8080 <span class="kw">&amp;</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;root /healthz = %{http_code}\n&#39;</span> http://localhost:18080/healthz            <span class="co"># 200</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;prefixed     = %{http_code}\n&#39;</span> http://localhost:18080/telemetryfunctiontestsfn/healthz  <span class="co"># 404</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> %1</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision: 200 at root + 404 prefixed =&gt; the app needs the prefix stripped; nginx must do it.</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Step 4. Confirm what is actually deployed (chart + values), no helm CLI needed ---</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Question: is the broken ingress the deployed state, and how fresh is it?</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Why authoritative: the Helm release Secret is the deployed render.</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="va">SEC</span><span class="op">=</span><span class="va">$(</span><span class="ex">kubectl</span> <span class="at">-n</span> vpp-agg get secret <span class="at">-l</span> owner=helm,name=telemetryfunctiontestsfn <span class="at">--sort-by</span><span class="op">=</span>.metadata.name <span class="at">-o</span> name <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-1</span><span class="va">)</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> vpp-agg get <span class="st">&quot;</span><span class="va">$SEC</span><span class="st">&quot;</span> <span class="at">-o</span> jsonpath=<span class="st">&#39;{.data.release}&#39;</span> <span class="kw">|</span> <span class="fu">base64</span> <span class="at">-d</span> <span class="kw">|</span> <span class="fu">base64</span> <span class="at">-d</span> <span class="kw">|</span> <span class="fu">gunzip</span> <span class="dt">\</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="ex">jq</span> <span class="st">&#39;{chart: .chart.metadata.version, ingress: .chart.values.ingress, overrides: .config}&#39;</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision: chart bumped + image rebuilt but annotations:{} =&gt; fix never merged.</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Step 5. Confirm the public front (App Gateway) is pass-through ---</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Question: could the App Gateway / WAF be filtering one path?</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Why authoritative: az reads the control plane directly.</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> graph query <span class="at">-q</span> <span class="st">&quot;Resources | where type=~&#39;microsoft.network/publicipaddresses&#39; | where properties.ipAddress==&#39;20.76.210.221&#39; | project name,resourceGroup,subscriptionId&quot;</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> network application-gateway show <span class="at">-g</span> rg-vpp-app-sb-401 <span class="at">-n</span> vpp-agw-d <span class="at">--query</span> <span class="st">&quot;{urlPathMaps:urlPathMaps, rules:requestRoutingRules[].ruleType, sku:sku.name}&quot;</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision: urlPathMaps:[] + Basic rules =&gt; no path filtering =&gt; front is innocent.</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Step 6. (Optional, authorized) Prove the fix live without touching the managed ingress ---</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Question: does the rewrite annotation actually yield a public 200?</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Why authoritative: a real ingress + a real edge curl is the effect, not an inference.</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Reversible: a single delete restores state.</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> apply <span class="at">-f</span> <span class="at">-</span> <span class="op">&lt;&lt;&#39;YAML&#39;</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="st">apiVersion: networking.k8s.io/v1</span></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="st">kind: Ingress</span></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="st">metadata: {name: tf-rewrite-proof-ingress, namespace: vpp-agg,</span></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="st">  annotations: {nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;, nginx.ingress.kubernetes.io/rewrite-target: /$2}}</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a><span class="st">spec:</span></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="st">  ingressClassName: nginx</span></span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a><span class="st">  rules:</span></span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a><span class="st">  - host: agg.dev.vpp.eneco.com</span></span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a><span class="st">    http: {paths: [{path: /tf-rewrite-proof(/|$)(.*), pathType: ImplementationSpecific,</span></span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="st">      backend: {service: {name: telemetryfunctiontestsfn, port: {number: 8080}}}}]}</span></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a><span class="op">YAML</span></span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 8<span class="kw">;</span> <span class="ex">curl</span> <span class="at">-s</span> <span class="at">-o</span> /dev/null <span class="at">-w</span> <span class="st">&#39;proof=%{http_code}\n&#39;</span> https://agg.dev.vpp.eneco.com/tf-rewrite-proof/healthz  <span class="co"># expect 200</span></span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> <span class="at">-n</span> vpp-agg delete ingress tf-rewrite-proof-ingress   <span class="co"># ALWAYS clean up</span></span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision: 200 =&gt; the chart fix in L8 will produce the same result once deployed.</span></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Step 7. Was the fix ever merged? Read the canonical chart at the source (RESOLVED this session) ---</span></span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Question: does the chart on the default branch carry the rewrite?</span></span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Why authoritative: the default branch in ADO is the source of truth, not the months-stale local clone.</span></span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="va">DEF</span><span class="op">=</span><span class="va">$(</span><span class="ex">az</span> repos show <span class="at">--organization</span> https://dev.azure.com/enecomanagedcloud <span class="at">--project</span> <span class="st">&quot;Myriad - VPP&quot;</span> <span class="at">--repository</span> Eneco.Vpp.Aggregation <span class="at">--query</span> defaultBranch <span class="at">-o</span> tsv<span class="va">)</span>   <span class="co"># refs/heads/development</span></span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> rest <span class="at">--resource</span> 499b84ac-1321-427f-aa17-267ca6975798 <span class="at">--method</span> get <span class="dt">\</span></span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>  <span class="at">--url</span> <span class="st">&quot;https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_apis/git/repositories/Eneco.Vpp.Aggregation/items?path=/azure-pipeline/Helm/telemetryfunctiontestsfn/values.yaml&amp;versionDescriptor.version=development&amp;versionDescriptor.versionType=branch&amp;includeContent=true&amp;api-version=7.0&quot;</span> <span class="dt">\</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>  <span class="at">--query</span> content <span class="at">-o</span> tsv <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-iE</span> <span class="st">&#39;rewrite-target|annotations&#39;</span></span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Result this session: ingress.annotations: {} and the template hard-codes pathType: Prefix =&gt; fix NEVER merged (A1).</span></span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Decision: the only remaining unknown is WHO should own the merge (org attribution), not a technical probe.</span></span></code></pre></div>
+<hr />
+<h2 id="l12--one-page-on-call-playbook-5-minute-triage-for-the-next-shift">L12 — One-page on-call playbook (5-minute triage for the next shift)</h2>
+<p><strong>Symptom:</strong> "<code>agg.&lt;env&gt;.vpp.eneco.com/&lt;something&gt;fn/...</code> is not accessible / 404 from AVD."</p>
+<ol type="1">
+<li><code>curl -s -o /dev/null -w '%{http_code}' https://agg.dev.vpp.eneco.com/&lt;path&gt;</code> — <strong>404</strong> (not timeout/403)? → it is <strong>path routing</strong>, not network. Skip VNET/whitelist for the <strong>public</strong> <code>agg.dev</code>. (The internal <code>agg.dev-mc</code>/<code>agg.acc</code> on <code>10.7.x</code> DO need an AVD whitelist — a different axis.)</li>
+<li>Is a <strong>sibling</strong> path 200 (e.g. <code>/api/siteregistry</code>)? → edge + cluster are fine; it is one service's mount.</li>
+<li><code>kubectl -n vpp-agg get ingress &lt;svc&gt;-ingress -o yaml | grep -iE 'rewrite|path:'</code> — prefix path with <strong>no</strong> <code>nginx.ingress.kubernetes.io/rewrite-target</code>? → that is it.</li>
+<li>Confirm the backend: <code>kubectl -n vpp-agg port-forward svc/&lt;svc&gt; 18080:8080</code> then <code>curl localhost:18080/healthz</code> → 200 means the app is healthy; only the ingress prefix is wrong.</li>
+<li><strong>Fix:</strong> PR the chart <code>values.yaml</code> to add <code>use-regex:"true"</code> + <code>rewrite-target:/$2</code> and path <code>/&lt;svc&gt;(/|$)(.*)</code> (L8). <strong>Then confirm it was merged AND deployed</strong> — decode the Helm release and check <code>ingress.annotations</code> is no longer <code>{}</code>. Do <strong>not</strong> <code>kubectl edit</code> (it drifts) and do <strong>not</strong> chase whitelisting or a newer image (neither fixes a prefix-rewrite bug).</li>
+<li><strong>If this recurs again:</strong> the technical fix is known and proven — escalate the <em>process</em> gap (the chart PR ownership), not the diagnosis.</li>
+</ol>
+<hr />
+<h2 id="diagnosis-classification">Diagnosis classification</h2>
+<p><strong>Verified Root Cause</strong> (depth 3): proximate = the app 404s the prefixed path; enabling = the ingress mounts a prefix with no <code>rewrite-target</code> and the app has no <code>PathBase</code>; design = the AGIC→nginx migration dropped the prefix-strip and a documented fix was never merged. Confirmed this session by eight independent observations: (1) edge 404 + sibling 200; (2) <code>deliveryreportfn</code> control 404s identically; (3) direct-to-backend port-forward (<code>/healthz</code>=200 at root vs prefixed=404); (4) live ingress has no rewrite annotation; (5) decoded live Helm release <code>v230</code>/chart <code>0.1.28</code> still <code>annotations:{}</code>; (6) App Gateway <code>urlPathMaps:[]</code> (front innocent); (7) a live test ingress with the rewrite produced a public <code>200</code> (and the <code>Prefix</code> form was rejected by the admission webhook); (8) the canonical chart on the ADO default branch <code>development</code> still has no rewrite and hard-codes <code>pathType: Prefix</code>. These eight confirm the <strong>diagnosis</strong>; the <strong>fix</strong> is confirmed by (3)+(7). The single residual is org-attribution only — <em>who</em> should own the merge — which does not affect the diagnosis or the fix.</p>
+
+</div></body></html>

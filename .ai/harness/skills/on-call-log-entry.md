@@ -41,6 +41,9 @@ Rules list the structure but don't sequence the creation steps or prevent the mo
    - Never edit or summarize the intake
    - Done-when: file contains raw intake text
 
+2b. **Agent troubleshooting spec** → `intake.md` (when intake is vague or handoff to another agent)
+   - Use skill `eneco-oncall-troubleshooting-spec` when intake is vague or another agent will investigate — writes **`intake.md` only** (mandatory for vague handoff)
+
 3. **Build Context Ledger** → start `context.md`
    - Table: every acronym used in this incident → definition → code artifact → relevance
    - Zero-context reader test: would a new engineer understand after reading just this table?
@@ -102,6 +105,7 @@ HIGH — prevents the most common quality failure in on-call logs: unverifiable 
 ## Relevant Subagents
 
 - `/rca-holistic` — generates L1-L12 holistic RCA
+- `/eneco-oncall-troubleshooting-spec` — builds agent-ready troubleshooting spec from vague intake
 - `/eneco-oncall-intake-slack` — harvests and triages Slack intake
 - `/eneco-oncall-intake-rootly` — decodes Rootly alert payloads
 - `/eneco-oncall-intake-enrich` — deep investigation with probes

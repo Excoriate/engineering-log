@@ -1,0 +1,39 @@
+# Azure front — public IP 20.76.210.221 — 2026-06-22T13:32:42Z UTC
+
+## Resource Graph: which resource owns 20.76.210.221?
+Count    Total_records
+-------  ---------------
+1        1
+
+## App Gateway vpp-agw-d: SKU, listeners, urlPathMaps, backend pool
+App Gateway name: vpp-agw-d
+{
+  "backendPools": [
+    [
+      {
+        "ipAddress": "50.85.91.121"
+      }
+    ]
+  ],
+  "listeners": [
+    [
+      "*.dev.vpp.eneco.com"
+    ],
+    [
+      "dev.vpp.eneco.com"
+    ]
+  ],
+  "requestRoutingRules": [
+    {
+      "name": "aks-http",
+      "ruleType": "Basic"
+    },
+    {
+      "name": "aks-http-wildcard-subdomain",
+      "ruleType": "Basic"
+    }
+  ],
+  "sku": "WAF_v2",
+  "tier": "WAF_v2",
+  "urlPathMaps": []
+}

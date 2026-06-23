@@ -1,0 +1,272 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/tracking-id: operations-app-of-apps:argoproj.io/Application:operations/assetmonitor
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"argoproj.io/v1alpha1","kind":"Application","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"operations-app-of-apps:argoproj.io/Application:operations/assetmonitor"},"finalizers":["resources-finalizer.argocd.argoproj.io"],"name":"assetmonitor","namespace":"operations"},"spec":{"destination":{"namespace":"operations","server":"https://kubernetes.default.svc"},"project":"vpp-core","sources":[{"helm":{"valueFiles":["$values/Helm/assetmonitor/sandbox/values.yaml","$values/Helm/assetmonitor/sandbox/values-override.yaml","$values/Helm/assetmonitor/sandbox/values-prometheus-alert-rules.yaml"],"valuesObject":{"featureBranchEnvironment":{"azureResourceNameSuffix":"","branch":"feature/fbe-806738-mfrr-reference-signal","enabled":true,"keyVaultName":"vpp-fbe-operations-oma","name":"operations"},"ingress":{"hostnamePrefix":"operations"},"keyVault":{"name":"vpp-fbe-operations-oma"},"serviceAccount":{"create":false,"name":"sa-appreg-mcdta-vpp-assetmonitor-id-d-operations"},"workloadIdentity":{"enabled":true}}},"path":"azure-pipeline/Helm/assetmonitor","repoURL":"https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Myriad%20-%20VPP","targetRevision":"feature/fbe-806738-mfrr-reference-signal"},{"ref":"values","repoURL":"https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration","targetRevision":"feature/fbe-806738-mfrr-reference-signal"}],"syncPolicy":{"automated":{"prune":true,"selfHeal":true},"syncOptions":["PruneLast=true","Replace=false"]}}}
+  creationTimestamp: "2026-05-27T07:38:22Z"
+  deletionGracePeriodSeconds: 0
+  deletionTimestamp: "2026-06-01T10:50:13Z"
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  generation: 12466
+  name: assetmonitor
+  namespace: operations
+  resourceVersion: "3099148249"
+  uid: 88f83620-05b9-49e4-9311-bc24bd9f5ac4
+operation:
+  initiatedBy:
+    automated: true
+  retry:
+    limit: 5
+  sync:
+    prune: true
+    revisions:
+    - 530767dd490b9da69dee8adc95c1ee011e3354b0
+    - 001c048cf1caf6bb38714867ab73152c796aea72
+    syncOptions:
+    - PruneLast=true
+    - Replace=false
+spec:
+  destination:
+    namespace: operations
+    server: https://kubernetes.default.svc
+  project: vpp-core
+  sources:
+  - helm:
+      valueFiles:
+      - $values/Helm/assetmonitor/sandbox/values.yaml
+      - $values/Helm/assetmonitor/sandbox/values-override.yaml
+      - $values/Helm/assetmonitor/sandbox/values-prometheus-alert-rules.yaml
+      valuesObject:
+        featureBranchEnvironment:
+          azureResourceNameSuffix: ""
+          branch: feature/fbe-806738-mfrr-reference-signal
+          enabled: true
+          keyVaultName: vpp-fbe-operations-oma
+          name: operations
+        ingress:
+          hostnamePrefix: operations
+        keyVault:
+          name: vpp-fbe-operations-oma
+        serviceAccount:
+          create: false
+          name: sa-appreg-mcdta-vpp-assetmonitor-id-d-operations
+        workloadIdentity:
+          enabled: true
+    path: azure-pipeline/Helm/assetmonitor
+    repoURL: https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Myriad%20-%20VPP
+    targetRevision: feature/fbe-806738-mfrr-reference-signal
+  - ref: values
+    repoURL: https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration
+    targetRevision: feature/fbe-806738-mfrr-reference-signal
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - PruneLast=true
+    - Replace=false
+status:
+  controllerNamespace: argocd
+  health:
+    lastTransitionTime: "2026-05-27T11:06:55Z"
+    status: Progressing
+  operationState:
+    message: waiting for healthy state of apps/Deployment/assetmonitor
+    operation:
+      initiatedBy:
+        automated: true
+      retry:
+        limit: 5
+      sync:
+        prune: true
+        revisions:
+        - 530767dd490b9da69dee8adc95c1ee011e3354b0
+        - 001c048cf1caf6bb38714867ab73152c796aea72
+        syncOptions:
+        - PruneLast=true
+        - Replace=false
+    phase: Running
+    retryCount: 1
+    startedAt: "2026-05-27T11:06:54Z"
+    syncResult:
+      resources:
+      - group: rbac.authorization.k8s.io
+        hookPhase: Succeeded
+        kind: Role
+        message: role.rbac.authorization.k8s.io/assetmonitor reconciled. role.rbac.authorization.k8s.io/assetmonitor
+          unchanged
+        name: assetmonitor
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1
+      - group: rbac.authorization.k8s.io
+        hookPhase: Succeeded
+        kind: RoleBinding
+        message: rolebinding.rbac.authorization.k8s.io/assetmonitor reconciled. rolebinding.rbac.authorization.k8s.io/assetmonitor
+          unchanged
+        name: assetmonitor
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1
+      - group: ""
+        hookPhase: Succeeded
+        kind: Service
+        message: service/assetmonitor unchanged
+        name: assetmonitor
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1
+      - group: apps
+        hookPhase: Running
+        kind: Deployment
+        message: deployment.apps/assetmonitor configured
+        name: assetmonitor
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1
+      - group: batch
+        hookPhase: Succeeded
+        kind: CronJob
+        message: cronjob.batch/assetmonitor-database-cleanup unchanged
+        name: assetmonitor-database-cleanup
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1
+      - group: networking.k8s.io
+        hookPhase: Succeeded
+        kind: Ingress
+        message: ingress.networking.k8s.io/assetmonitor unchanged
+        name: assetmonitor
+        namespace: operations
+        status: Synced
+        syncPhase: Sync
+        version: v1
+      revision: ""
+      revisions:
+      - 530767dd490b9da69dee8adc95c1ee011e3354b0
+      - 001c048cf1caf6bb38714867ab73152c796aea72
+      source:
+        repoURL: ""
+      sources:
+      - helm:
+          valueFiles:
+          - $values/Helm/assetmonitor/sandbox/values.yaml
+          - $values/Helm/assetmonitor/sandbox/values-override.yaml
+          - $values/Helm/assetmonitor/sandbox/values-prometheus-alert-rules.yaml
+          valuesObject:
+            featureBranchEnvironment:
+              azureResourceNameSuffix: ""
+              branch: feature/fbe-806738-mfrr-reference-signal
+              enabled: true
+              keyVaultName: vpp-fbe-operations-oma
+              name: operations
+            ingress:
+              hostnamePrefix: operations
+            keyVault:
+              name: vpp-fbe-operations-oma
+            serviceAccount:
+              create: false
+              name: sa-appreg-mcdta-vpp-assetmonitor-id-d-operations
+            workloadIdentity:
+              enabled: true
+        path: azure-pipeline/Helm/assetmonitor
+        repoURL: https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Myriad%20-%20VPP
+        targetRevision: feature/fbe-806738-mfrr-reference-signal
+      - ref: values
+        repoURL: https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration
+        targetRevision: feature/fbe-806738-mfrr-reference-signal
+  reconciledAt: "2026-06-22T11:29:30Z"
+  resourceHealthSource: appTree
+  resources:
+  - kind: Service
+    name: assetmonitor
+    namespace: operations
+    status: Synced
+    version: v1
+  - group: apps
+    kind: Deployment
+    name: assetmonitor
+    namespace: operations
+    status: Synced
+    version: v1
+  - group: batch
+    kind: CronJob
+    name: assetmonitor-database-cleanup
+    namespace: operations
+    status: Synced
+    version: v1
+  - group: networking.k8s.io
+    kind: Ingress
+    name: assetmonitor
+    namespace: operations
+    status: Synced
+    version: v1
+  - group: rbac.authorization.k8s.io
+    kind: Role
+    name: assetmonitor
+    namespace: operations
+    status: Synced
+    version: v1
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+    name: assetmonitor
+    namespace: operations
+    status: Synced
+    version: v1
+  sourceHydrator: {}
+  sourceTypes:
+  - Helm
+  - ""
+  summary:
+    externalURLs:
+    - http://operations.dev.vpp.eneco.com/api/assetmonitor/
+    images:
+    - vppacra.azurecr.io/eneco-vpp/assetmonitor:0.152.feat.530767d
+    - vppacra.azurecr.io/opstools:v2.1
+  sync:
+    comparedTo:
+      destination:
+        namespace: operations
+        server: https://kubernetes.default.svc
+      source:
+        repoURL: ""
+      sources:
+      - helm:
+          valueFiles:
+          - $values/Helm/assetmonitor/sandbox/values.yaml
+          - $values/Helm/assetmonitor/sandbox/values-override.yaml
+          - $values/Helm/assetmonitor/sandbox/values-prometheus-alert-rules.yaml
+          valuesObject:
+            featureBranchEnvironment:
+              azureResourceNameSuffix: ""
+              branch: feature/fbe-806738-mfrr-reference-signal
+              enabled: true
+              keyVaultName: vpp-fbe-operations-oma
+              name: operations
+            ingress:
+              hostnamePrefix: operations
+            keyVault:
+              name: vpp-fbe-operations-oma
+            serviceAccount:
+              create: false
+              name: sa-appreg-mcdta-vpp-assetmonitor-id-d-operations
+            workloadIdentity:
+              enabled: true
+        path: azure-pipeline/Helm/assetmonitor
+        repoURL: https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Myriad%20-%20VPP
+        targetRevision: feature/fbe-806738-mfrr-reference-signal
+      - ref: values
+        repoURL: https://enecomanagedcloud@dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration
+        targetRevision: feature/fbe-806738-mfrr-reference-signal
+    revisions:
+    - 530767dd490b9da69dee8adc95c1ee011e3354b0
+    - 7066974b4fd58b304046e9cc9bf56897d6e6cf6a
+    status: Synced

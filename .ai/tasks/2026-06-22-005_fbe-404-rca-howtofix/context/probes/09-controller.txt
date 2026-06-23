@@ -1,0 +1,2 @@
+NAME                              READY   STATUS    RESTARTS   AGE     IP          NODE                                NOMINATED NODE   READINESS GATES
+argocd-application-controller-0   1/1     Running   0          5d22h   10.0.0.59   aks-agentpool-25996883-vmss0000ns   <none>           <none>

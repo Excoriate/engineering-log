@@ -402,7 +402,7 @@
     "category": "incident-methodology",
     "severity": "high",
     "confidence": "validated",
-    "summary": "Cosmos NormalizedRUConsumption is a per-partition-key-range MAX utilization GAUGE (0-100%, 1-min), NOT a client-impact metric. Confirm throttling with the HTTP-429 RATE = TotalRequests(StatusCode=429) / TotalRequests(all), per Microsoft's 1-5%-healthy / >5%-act framework. Do NOT use the gauge % or the Mongo error-16500 COUNT as the impact figure: 16500 is counted per protocol-op INCLUDING driver retries (up to ~9x), so it is inflated. STAKES-CLAIM: if on-call/RCA acts on the gauge or the 16500 count instead of the 429-rate, they over-provision RU or page on healthy-band noise (or, inversely, dismiss a real >5% throttle). 2026-06-15 gurobi-cosmos: 77.67% RU-avg + 16,555 16500-events implied 'severe ~34.5% throttle', but the true HTTP-429 rate was 586/20792 = 2.82% — INSIDE Microsoft's 1-5% healthy band. FALSIFIER: a window where 429-rate>5% was treated as noise, or where 16500-count equalled distinct-op failures (no retries) — either would break the rate-not-count rule. STAKES-CLASS: HIGH.",
+    "summary": "Cosmos NormalizedRUConsumption is a per-partition-key-range MAX utilization GAUGE (0-100%, 1-min), NOT a client-impact metric. Confirm throttling with the HTTP-429 RATE = TotalRequests(StatusCode=429) / TotalRequests(all), per Microsoft's 1-5%-healthy / >5%-act framework. Do NOT use the gauge % or the Mongo error-16500 COUNT as the impact figure: 16500 is counted per protocol-op INCLUDING driver retries (up to ~9x), so it is inflated. STAKES-CLAIM: if on-call/RCA acts on the gauge or the 16500 count instead of the 429-rate, they over-provision RU or page on healthy-band noise (or, inversely, dismiss a real >5% throttle). 2026-06-15 gurobi-cosmos: 77.67% RU-avg + 16,555 16500-events implied 'severe ~34.5% throttle', but the true HTTP-429 rate was 586/20792 = 2.82% \u2014 INSIDE Microsoft's 1-5% healthy band. FALSIFIER: a window where 429-rate>5% was treated as noise, or where 16500-count equalled distinct-op failures (no retries) \u2014 either would break the rate-not-count rule. STAKES-CLASS: HIGH.",
     "root_cause": "NormalizedRUConsumption = max over partition-key-ranges per minute; a PT15M Average of per-minute maxes can be brief sub-second spikes (confirm with TotalRequestUnits: the 2026-06-15 hot minutes served only ~3292 RU/min ~= 55 RU/s avg). Mongo 16500 counts every rejected protocol op incl. SDK retries, so its count >> distinct throttled ops and >> the backend HTTP-429 count (16,555 vs 586).",
     "fix": "Triage a NormalizedRU alert with: az monitor metrics list --metric TotalRequests --filter \"StatusCode eq '429'\" (numerator) over the same metric all-status (denominator) => rate. <=5% + self-resolved = healthy/ack; >5% or sustained = act/escalate. Size autoscale from TotalRequestUnits demand, not the gauge. For spiky workloads, page on 429-rate>5% and demote the RU% gauge to a Sev3 warning.",
     "references": [
@@ -421,7 +421,7 @@
     "confidence": "validated",
     "summary": "cosmosdb-gurobi-platform-a (rg-gurobi-platform-a, Mongo API, db grb_rsm) backs the Gurobi Cluster Manager. Its HOT collection is the unsharded GridFS fs.chunks at autoscale max 1000 RU/s; FleetOptimizer batch solves micro-burst it to 100% multiple times daily (chronic). The team (PR 176135, commit f956e9b) REMOVED the 429-count throttling alert and added a leading NormalizedRU>75%/PT15M/Sev2 gauge => there is now NO direct client-impact (429) page. STAKES-CLAIM: blind-ack misses a real >5% throttle; blind-page floods on-call on healthy-band micro-bursts. Triage routing: 429-RATE<=5% + self-resolved (autoMitigate) => ack + link the RCA; 429-rate>5% OR sustained across windows OR Gurobi solves failing => escalate to Nuno (fallback #team-platform). Throughput is NOT Terraform-managed (Cluster Manager app creates collections). FALSIFIER: prod -p live throughput differs from acc's 1000 RU/s (prod may be portal-bumped higher), or fs.chunks gets sharded / GridFS blobs moved to Blob Storage. STAKES-CLASS: HIGH.",
     "root_cause": "Single-partition GridFS large-object I/O (input models/solutions) at a 1000 RU/s ceiling saturates during bursty parallel solves; chronic, mildly under-provisioned. The alert is a conservative leading gauge not tuned for a spiky workload, with no companion client-impact signal.",
-    "fix": "(T2/primary) re-add a 429-RATE page (>5%, per-env backtested) + demote RU gauge to Sev3 + fix its stale 'for more than 5 minutes' description (window is PT15M). (T1/secondary) raise fs.chunks autoscale max 1000->~4000 (single partition serves up to 10k RU/s, no shard needed; instantMax=10000) and bring throughput into IaC. (T3/candidate, feasibility A3) offload GridFS large objects to Blob Storage or shard fs.chunks — depends on the third-party Gurobi Cluster Manager supporting it. Verify prod separately.",
+    "fix": "(T2/primary) re-add a 429-RATE page (>5%, per-env backtested) + demote RU gauge to Sev3 + fix its stale 'for more than 5 minutes' description (window is PT15M). (T1/secondary) raise fs.chunks autoscale max 1000->~4000 (single partition serves up to 10k RU/s, no shard needed; instantMax=10000) and bring throughput into IaC. (T3/candidate, feasibility A3) offload GridFS large objects to Blob Storage or shard fs.chunks \u2014 depends on the third-party Gurobi Cluster Manager supporting it. Verify prod separately.",
     "references": [
       "log/employer/eneco/02_on_call_shift/2026_june/2026_06_15_rootly_alert_gurobi-cosmos-normalized-ru-consumption-a/rca.md",
       "log/employer/eneco/02_on_call_shift/2026_june/2026_06_15_rootly_alert_gurobi-cosmos-normalized-ru-consumption-a/fix.md"
@@ -436,7 +436,7 @@
     "category": "investigation-methodology",
     "severity": "medium",
     "confidence": "validated",
-    "summary": "git pull (fetch latest) before trusting an IaC NEGATIVE ('X is not in code'). A stale local clone flips provenance conclusions. STAKES-CLAIM: an 'X not in IaC' read from a stale clone routes the fix to the wrong place (portal/CCoE vs code). 2026-06-15: a Jan-27 gurobi-infrastructure clone (predating the 2026-03-27 RCA) said the NormalizedRU alert was not in IaC => 'externally provisioned'; pulling to the Jun-05 HEAD reversed it — the alert is team-authored (src/locals.tf) and the team had deliberately added it. For Eneco ADO repos the ssh key is loaded via the 'sshwork' alias (ssh-add ~/.ssh/work/eneco/eneco_personal); the MC acc SP login is 'enecotfvppmcloginacc' (1Password), cleared with 'enecotflogout'. FALSIFIER: a case where the freshly-pulled clone STILL lacks the artifact and it genuinely is portal/out-of-IaC. STAKES-CLASS: MEDIUM.",
+    "summary": "git pull (fetch latest) before trusting an IaC NEGATIVE ('X is not in code'). A stale local clone flips provenance conclusions. STAKES-CLAIM: an 'X not in IaC' read from a stale clone routes the fix to the wrong place (portal/CCoE vs code). 2026-06-15: a Jan-27 gurobi-infrastructure clone (predating the 2026-03-27 RCA) said the NormalizedRU alert was not in IaC => 'externally provisioned'; pulling to the Jun-05 HEAD reversed it \u2014 the alert is team-authored (src/locals.tf) and the team had deliberately added it. For Eneco ADO repos the ssh key is loaded via the 'sshwork' alias (ssh-add ~/.ssh/work/eneco/eneco_personal); the MC acc SP login is 'enecotfvppmcloginacc' (1Password), cleared with 'enecotflogout'. FALSIFIER: a case where the freshly-pulled clone STILL lacks the artifact and it genuinely is portal/out-of-IaC. STAKES-CLASS: MEDIUM.",
     "root_cause": "Investigations read whatever HEAD the local clone happens to be at; a months-stale clone is a silent context gap that an evidence-labeled A1 claim ('not in IaC') hides.",
     "fix": "Before any 'not in IaC' / provenance claim: sshwork && git -C <repo> fetch --all && git pull --ff-only && git log -1; cross-check live Azure (az monitor metrics alert show / resource tags) which is more authoritative than the repo for what is deployed now.",
     "references": [
@@ -445,5 +445,135 @@
     "added": "2026-06-15",
     "last_validated": "2026-06-15",
     "task_origin": "2026-06-15-001_gurobi-cosmos-normalized-ru-consumption"
+  },
+  {
+    "id": "LL-028",
+    "scope": "log/employer/eneco/**",
+    "category": "error-pattern",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "Azure App Configuration access failures on MC dev split cleanly by HTTP status AND caller. STATUS: 401 = authentication failed (no/invalid/expired/wrong-tenant Entra token, or a deleted/stale/mis-signed access key); 403 = authorization (missing App Configuration Data role) OR network (application/problem+json type ip-address-rejected / nsp-rejected); timeout = off-VNet. These are mutually exclusive: a missing role is 403 not 401; a blocked VPN is 403/timeout not 401. CALLER: 'the FFs cannot be set' hides THREE callers with three credentials \u2014 (i) interactive user from AVD (your own Entra token), (ii) the FF-apply ADO Terraform pipeline SP eneco-vpp-mc-dev (its Entra token; needs App Configuration Data Owner, granted via group sg-vpp-core-release-masters), (iii) the running FBE/VPP pod reading flags (an access-key connection string from KV secret connectionstrings-app-config via Eneco.Vpp.Configuration.AzureAppConfiguration .Connect(connectionString)). Same status from a different caller = different fix. 'I can see the flags in the portal' is control-plane (ARM Reader) visibility, NOT proof the data-plane call authenticates (and the portal blade can itself 401 on a private-endpoint store in Edge). The store is public_network_access=Disabled + private-endpoint-only ('everything through AVD'); never open public access. Strongest base-rate cause for 'FFs not set' on a slot = the manual approval-gated App Config pipeline never ran/approved (same filer Duncan, FBE Kidu, 2025-09), which predicts NO real 401.",
+    "root_cause": "Two distinct App Config data-plane code paths (access-key connection-string READ; Entra-SP WRITE via the ADO Terraform pipeline) plus three possible callers plus a control-plane portal view independent of both. Conflating the paths/callers, or treating a rusty filer's paraphrased '401' as a captured status line, routes the fix to the wrong layer. The 18-Jun VPN-timeout ticket (resolved by-design: private endpoint, use AVD) is a DIFFERENT layer from a 401-on-AVD.",
+    "fix": "Capture the EXACT status + WWW-Authenticate/problem+json body + WHICH caller before acting (it is AVD-gated). 401 Bearer (you) -> az login refresh to the dev-mc tenant; 401 Bearer (pipeline SP) -> rotate the eneco-vpp-mc-dev ADO service-connection secret (NOT a personal login); 401 HMAC (FBE pod) -> check live disableLocalAuth, then re-run the App Config IaC pipeline so Terraform rewrites connectionstrings-app-config (a manual 'az keyvault secret set' on that IaC-managed secret DRIFTS and is silently reverted by the next apply; if unavoidable use a READ key, non-empty guard, --file/stdin not --value, capture prior value); 403 no body -> grant least data role: a DIRECT App Configuration Data Reader for a read, Data Owner via the IaC group ONLY for the apply SP (never add a reader to sg-vpp-core-release-masters \u2014 it is store-wide Data Owner + release-master authority); 403 problem+json -> use AVD / link private DNS, never enable public network access; no error -> approve+run the FF pipeline. 'az role assignment list' is a control-plane read needing ARM Reader \u2014 a command error there is not 'no role'. Verify by EFFECT (failing op returns 200 / slot reads flag), never exit code or portal view. Member of the LL-006 credential/access class.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_003_feature_flags_fbe_duncan/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_003_feature_flags_fbe_duncan/how-to-fix.md"
+    ],
+    "added": "2026-06-22",
+    "last_validated": "2026-06-22",
+    "task_origin": "2026-06-22-006_fbe-duncan-rca-deliverables"
+  },
+  {
+    "id": "LL-029",
+    "scope": "log/employer/eneco/**",
+    "category": "error-pattern",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "agg.<env>.vpp.eneco.com '<svc>fn/...' 404 from AVD = nginx ingress PREFIX mount with NO rewrite-target, NOT a network/AVD/whitelist problem. Triage by status shape: a clean 404 over a completed TLS handshake + a working SIBLING path (e.g. /api/siteregistry=200) => path routing, not network (network gives timeout/refused; WAF gives 403). The *fn test functions are prefix-mounted (/telemetryfunctiontestsfn/) but the Azure-Functions backend serves /healthz at ROOT, so the unstripped prefixed path 404s; siteregistry works only because it is mounted at /. Born from the AGIC->nginx migration (appgw backend-path-prefix dropped, nginx rewrite-target never added). App Gateway vpp-agw-d is pass-through (urlPathMaps:[]). This RECURRED 2026-06-22 (telemetryfunctiontestsfn, blocking Anasthasia's release e2e) because the 2026-06-02 fix was never merged: canonical chart on ADO default branch 'development' still has annotations:{} after ~15 redeploys (release v215->v230). A diagnosed fix in an RCA file is not a fix until merged+deployed.",
+    "root_cause": "Reverse-proxy prefix mount without a path rewrite: the backend has no PathBase for the mount prefix, so the proxy must strip it. nginx-ingress rewrite-target was never added when dev migrated from AGIC to standalone nginx. Recurrence cause is organizational: the documented fix was never landed into the Helm chart, so every redeploy re-rendered the broken ingress.",
+    "fix": "TWO-file Helm chart change in Eneco.Vpp.Aggregation (azure-pipeline/Helm/<svc>/): (1) values.yaml -> path: /<svc>(/|$)(.*) + annotations nginx.ingress.kubernetes.io/use-regex:'true' and rewrite-target:/$2 ; (2) templates/ingress.yaml -> pathType: Prefix => ImplementationSpecific. pathType change is MANDATORY: nginx admission webhook REJECTS a regex path under pathType:Prefix ('cannot be used with pathType Prefix') - proven live. use-regex does NOT rescue Prefix. Verify by EFFECT: edge curl /<svc>/healthz=200 AND /api/siteregistry stays 200 AND decoded live Helm release ingress.annotations != {} (else you kubectl-edited and it will drift). Immediate unblock: kubectl -n vpp-agg port-forward svc/<svc> 8080:8080 then curl localhost:8080/healthz=200 (needs AKS vpp-aks01-d access AVD has). Do NOT kubectl edit the managed ingress (Helm-managed, overwritten next deploy). Do NOT chase whitelist/VNET/PE/new-image. NOTE per-fn health path differs: telemetryfunctiontestsfn serves /healthz=200 at root; deliveryreportfn serves /=200 but /healthz=404 (use /<svc>/ for its liveness). agg.dev-mc (OpenShift Route) already has the correct rewrite but is internal-only (NXDOMAIN public; needs AVD whitelist).",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_005_azfunctions_avd_not_visible/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_005_azfunctions_avd_not_visible/how-to-fix.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_02_vpp_aggregation_az_functions_not_visible_avd/rca.md"
+    ],
+    "added": "2026-06-22",
+    "last_validated": "2026-06-22",
+    "task_origin": "2026-06-22-009_azfunctions-avd-not-visible-rca",
+    "stakes_claim": "If a responder treats 'agg *fn not visible from AVD' as a network/whitelist issue, the fix targets the wrong layer and the release stays blocked; the real fix is the two-file ingress rewrite with pathType ImplementationSpecific.",
+    "falsifier": "A prefixed *fn path returning 200 with no rewrite-target present, OR a values-only rewrite (pathType:Prefix) being accepted by the admission webhook. Neither occurred (proven evidence/02, evidence/09).",
+    "stakes_class": "HIGH"
+  },
+  {
+    "id": "LL-030",
+    "scope": "log/employer/eneco/**",
+    "category": "error-pattern",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "An Azure Key Vault certificate is a composite of cert+key+SECRET sharing one name. If a certificate is imported (e.g. by hand) with the same name as a Terraform-managed azurerm_key_vault_secret, the cert's backing secret 'captures' it and `terraform destroy` fails with 403 SecretManagedByKeyVault ('delete the corresponding certificate'). FBE thor stuck-deletion run 1.",
+    "root_cause": "Importing a KV certificate auto-creates a managed secret + key of the same name. Terraform can DeleteSecret a plain secret but not a certificate-owned (managed=true) one. The collision is invisible to terraform plan because the cert is not in state.",
+    "fix": "Delete the CERTIFICATE (az keyvault certificate delete), not the secret \u2014 this removes the backing secret. Verify `az keyvault certificate list`=[] and `az keyvault secret list --query \"[?managed]\"`=[]; then the 403 class cannot recur and destroy proceeds (404-on-refresh on the absent secret is graceful).",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_004_tiago_thor_fbe_failed_deletion/rca.md"
+    ],
+    "added": "2026-06-22",
+    "last_validated": "2026-06-22",
+    "task_origin": "2026-06-22-008_fbe-failed-deletion",
+    "stakes_claim": "If a responder deletes the colliding SECRET (or re-runs destroy) to clear the 403, it cannot work \u2014 only deleting the CERTIFICATE removes the managed backing secret.",
+    "falsifier": "A successful `az keyvault secret delete` on a managed (cert-backed) secret, or destroy succeeding while a same-named certificate still exists. Neither is possible per Azure KV semantics; live probe confirmed cert+secret both gone after the cert was deleted.",
+    "stakes_class": "HIGH"
+  },
+  {
+    "id": "LL-031",
+    "scope": "log/employer/eneco/**",
+    "category": "error-pattern",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "The FBE 'Feature Branch Environment - Delete' pipeline is non-idempotent. After a partial teardown a re-run fails EARLIER: Preparation resolves a now-deleted resource name to empty (az appconfig list contains(name,'<slot>')=>'') and DestroyAppConfiguration runs `az appconfig feature list -n ''` => 'argument --name/-n: expected one argument' before reaching DestroyInfra. The slot stays 'used' because 'Release environment' is the last step of DestroyInfra.",
+    "root_cause": "Resolve-then-use stages assume the resource still exists. 'Stages to run -> DestroyInfra only' also fails: DestroyInfra has no explicit dependsOn + no stage condition, so ADO's default stage succeeded() cascade-skips it when the deselected predecessor is Skipped.",
+    "fix": "Guard DestroyAppConfiguration to succeed-noop when appconfig is empty (job-level condition ne(variables['appconfig'],'') via the existing stageDependencies var, or a bash exit 0); give DestroyInfra explicit dependsOn + condition in(dependencies.DestroyAppConfiguration.result,'Succeeded','Skipped'); then full re-run. Witness success by featurebranchenvdetails row active='unused', NOT a green build. Verify empty appconfig tfstate (~184B) before relying on the skip.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_02_22_004_tiago_thor_fbe_failed_deletion/quick-fix.md"
+    ],
+    "added": "2026-06-22",
+    "last_validated": "2026-06-22",
+    "task_origin": "2026-06-22-008_fbe-failed-deletion",
+    "stakes_claim": "If a responder 'just re-runs' the delete pipeline (whole, or DestroyInfra-only), the slot stays stuck: whole-run fails again at DestroyAppConfiguration; DestroyInfra-only silently cascade-skips.",
+    "falsifier": "A whole-pipeline re-run completing past DestroyAppConfiguration with the store absent, OR a DestroyInfra-only run actually executing terraform destroy with the predecessor deselected. Build 1683370 + ADO stage semantics show neither happens.",
+    "stakes_class": "HIGH"
+  },
+  {
+    "id": "LL-032",
+    "scope": "log/employer/eneco/**",
+    "category": "access-management",
+    "severity": "medium",
+    "confidence": "validated",
+    "summary": "An ADO request to 'grant me edit rights for Project Settings -> Notifications' to get build-completion emails is usually an XY problem. ADO notifications have THREE scopes with different edit-permission: PERSONAL (User settings -> Notifications) needs NO elevated rights (role 'User'/project member) and delivers to the requester's own inbox; TEAM-level shared subs are editable by a Team Administrator; PROJECT-level shared subs require Project Administrators (there is NO narrow 'edit notifications' toggle -- the grant == Project Admin membership). Default resolution: tell the filer to self-serve a personal subscription (zero grant); grant Team Administrator (least-privilege, NOT Project Admin) only if a shared/DL recipient is genuinely needed. Event type = ms.vss-build.build-completed-event (legacy '...-legacy-event' variants reject custom subs). No native 'az devops notification' command -> use 'az rest' POST _apis/notification/subscriptions?api-version=7.1 with audience GUID 499b84ac-1321-427f-aa17-267ca6975798; resolve project id via 'az rest .../_apis/projects/<name>' (az login token, no extension/PAT -- 'az devops project show' needs the azure-devops extension's separate auth). The pipeline-id filter clause is undocumented -- build it in the portal and GET the sub back to copy criteria.clauses; never guess it.",
+    "root_cause": "ADO surfaces the shared (admin) Notifications page prominently, so requesters assume it is the only door and ask for project-level edit rights (= Project Administrators); the personal self-serve route is less discoverable. The required permission is a consequence of the subscriber/audience, not a prerequisite.",
+    "fix": "Triage with one question: 'who receives the email -- just you, or a team/shared list?' Just-you => personal sub, no grant (User settings -> Notifications -> New subscription -> Build -> 'A build completes', scope project, filter Build pipeline). Team => grant Team Administrator + shared sub. Project-wide => Project Administrators (last resort). Close on the RECEIVED email, never the HTTP 201 / green save (a sub with a dead filter, or a mailbox-less caller identity such as a service principal, returns 201 and delivers nothing). Full how-to + runbook in references.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_007_email_notifications_pipeline_ado/how-to-enable-ado-build-email-notifications.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_007_email_notifications_pipeline_ado/runbook-ado-build-completion-notifications.md"
+    ],
+    "added": "2026-06-22",
+    "last_validated": "2026-06-22",
+    "task_origin": "2026-06-22-011_email-notifications-pipeline-ado",
+    "stakes_claim": "If on-call grants the literally-requested 'edit Project Settings -> Notifications' rights for a personal-email need, they grant Project Administrators membership (over-privilege) to solve a zero-permission self-serve task; the least-privilege grant for a genuinely shared sub is Team Administrator.",
+    "falsifier": "An ADO tenant where personal notification subscriptions are disabled org-wide (so the personal route is unavailable), or where a narrow 'edit notifications' permission exists separate from Project Administrators. Microsoft Learn permission tables (notifications/about-notifications#notification-types) show neither for current azure-devops.",
+    "stakes_class": "MEDIUM"
+  },
+  {
+    "id": "LL-033",
+    "scope": "log/employer/eneco/**",
+    "category": "ado-pipeline-identity",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "In an Azure DevOps pipeline, setting env AZURE_DEVOPS_EXT_PAT=$(System.AccessToken) does NOT guarantee `az boards`/`az repos` run as the Build Service identity. If an earlier step did `az login` (e.g. azure-login.yml service-principal login for Terraform), that az login session takes PRECEDENCE over AZURE_DEVOPS_EXT_PAT, so the boards/repos call runs as the SP. BTM tagging failed because it ran as mcc-btm-deployment-dta-sp (no board read) not the Build Service. Confirmed: invalid-PAT local test still succeeds via az login; pipeline --debug shows ServicePrincipalCredential.acquire_token (ext 1.0.4).",
+    "root_cause": "azure-devops CLI credential resolution prefers an existing az login session over the PAT env var; a job that logs in as an SP hijacks the identity of all subsequent az boards/az repos calls in that job.",
+    "fix": "Run the boards/repos step in its OWN job WITHOUT the az login step (so only AZURE_DEVOPS_EXT_PAT/System.AccessToken is present -> Build Service identity), keeping the same MS-hosted pool. Alt: `az logout` before the call. A separate-job fix on the same pool needs no extra runner. (This is why sibling PR 178802's 'pool switch' worked: the new job dropped azure-login.yml = identity change, not pool.)",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_006_btm_scripts_ado/rca.md",
+      "build 1668639 log#19"
+    ],
+    "added": "2026-06-22",
+    "last_validated": "2026-06-22",
+    "task_origin": "2026-06-22-010"
+  },
+  {
+    "id": "LL-034",
+    "scope": "log/employer/eneco/**",
+    "category": "ado-permissions-tooling",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "Two read-only ADO permission tools LIE about a SUBJECT's effective permission. `az devops security permission show` -> resolvedPermissions[].effectivePermission reports 'Not set' for SERVICE/GROUP descriptors even when they DO have the permission via inheritance (reported the project Build Service as 'Not set' for View work items despite effAllow=241). `POST _apis/security/permissionevaluationbatch` IGNORES the subject descriptor and evaluates the CALLER (a garbage descriptor returns true). Trusting either can flip a diagnosis.",
+    "root_cause": "permission show does not resolve inherited group grants for non-user identities; permissionevaluationbatch evaluates the authenticated caller, not the passed subject.",
+    "fix": "Use GET _apis/accesscontrollists/{namespaceId}?token=<token>&includeExtendedInfo=true and read acesDictionary[descriptor].extendedInfo.effectiveAllow (a bitmask). For CSS (area path) namespace 83e28ad4-2d72-4ceb-97b0-c7726d5502c3: bit16=View work items, bit32=Edit work items. Discriminator proof: a user with effAllow=3 shows ViewWI=False; Build Service effAllow=241 shows ViewWI=True.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_006_btm_scripts_ado/rca.md#l9",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_006_btm_scripts_ado/how-to-fix.md"
+    ],
+    "added": "2026-06-22",
+    "last_validated": "2026-06-22",
+    "task_origin": "2026-06-22-010"
   }
 ]

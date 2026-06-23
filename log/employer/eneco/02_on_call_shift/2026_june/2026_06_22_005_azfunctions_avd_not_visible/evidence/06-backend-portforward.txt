@@ -1,0 +1,19 @@
+# Backend port-forward proof (bypass nginx, hit pod directly) — 2026-06-22T13:33:22Z UTC
+
+port-forward PID=70012; log:
+Forwarding from 127.0.0.1:18080 -> 8080
+Forwarding from [::1]:18080 -> 8080
+
+Backend route probes (what the Azure Functions host serves at the pod):
+  /                                   -> HTTP 200
+  /healthz                            -> HTTP 200
+  /telemetryfunctiontestsfn/healthz   -> HTTP 404
+  /api/siteregistry                   -> HTTP 404
+  /admin/host/status                  -> HTTP 401
+
+Body of root and /healthz (what the host returns):
+  GET /        => <!DOCTYPE html><html><head>    <title>Your Azure Function App is up and running.
+  GET /healthz => Healthy
+
+INTERPRETATION: /healthz=200 at ROOT but /telemetryfunctiontestsfn/healthz=404 at backend
+  => app has no PathBase for the prefix; the prefix MUST be stripped at the ingress.
