@@ -1,0 +1,32 @@
+{
+  "task_id": "2026-06-24-001",
+  "slug": "renewal-argocd-pat-all-envs-cmc",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-06-24-001_renewal-argocd-pat-all-envs-cmc",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_24_renewal_argocd_pat_all_envs_cmc"
+  ],
+  "created": "2026-06-24T09:25:44Z",
+  "modified": "2026-06-24T10:37:36Z",
+  "external_writes": [
+    {
+      "path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_24_renewal_argocd_pat_all_envs_cmc/context.md",
+      "purpose": "sanitized context and initial PAT inventory"
+    },
+    {
+      "path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_24_renewal_argocd_pat_all_envs_cmc/work-log.md",
+      "purpose": "chronological sanitized work log"
+    },
+    {
+      "path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_24_renewal_argocd_pat_all_envs_cmc/rotation-status.md",
+      "purpose": "per-token sanitized status tracker"
+    },
+    {
+      "path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_24_renewal_argocd_pat_all_envs_cmc/slack-summary.md",
+      "purpose": "Slack-ready sanitized completion summary"
+    }
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}

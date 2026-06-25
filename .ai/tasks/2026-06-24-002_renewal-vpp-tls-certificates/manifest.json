@@ -1,0 +1,11 @@
+{
+  "task_id": "2026-06-24-002",
+  "slug": "renewal-vpp-tls-certificates",
+  "task_root": ".ai/tasks/2026-06-24-002_renewal-vpp-tls-certificates",
+  "allowed_external_paths": ["/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_24_renewal_vpp_tls_certificates"],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}

@@ -1,0 +1,8 @@
+{
+  "task_id": "2026-06-25-001",
+  "slug": "tls-cert-rotation-prod",
+  "task_root": ".ai/tasks/2026-06-25-001_tls-cert-rotation-prod",
+  "phase": 5,
+  "preflight_complete": true,
+  "session_id": "54a87eab-1ae0-479e-9970-5f1609c63a53"
+}

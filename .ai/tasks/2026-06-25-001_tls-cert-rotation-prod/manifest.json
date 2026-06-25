@@ -1,0 +1,32 @@
+{
+  "task_id": "2026-06-25-001",
+  "slug": "tls-cert-rotation-prod",
+  "task_root": ".ai/tasks/2026-06-25-001_tls-cert-rotation-prod",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_24_renewal_vpp_tls_certificates",
+    "/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/platform-documentation/platform-documentation/2026-06-25-001-update-tls-certificate-renewal-process/internal/How-To-Guides/Certificates/tls-certificates-renewal.md"
+  ],
+  "external_writes": [
+    "/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/platform-documentation/platform-documentation/2026-06-25-001-update-tls-certificate-renewal-process/internal/How-To-Guides/Certificates/tls-certificates-renewal.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    {
+      "claim": "manual-path reliability",
+      "witness": "adversarial/el-demoledor-manual-break.md",
+      "verdict": "NO-GO-as-written; 3 BLOCKING; fixes applied in runbook"
+    },
+    {
+      "claim": "manual-path assumptions/verifiability",
+      "witness": "adversarial/socrates-manual-assumptions.md",
+      "verdict": "NO-GO-as-written; C1 + H2/H3/H4 re-verifies; fixes applied"
+    },
+    {
+      "claim": "agent-execution cognition",
+      "witness": "adversarial/kant-manual-cognition.md",
+      "verdict": "CONDITIONAL; G1/G2/G5 BLOCKING; fixes applied"
+    }
+  ]
+}

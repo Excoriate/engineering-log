@@ -1,0 +1,13 @@
+{
+  "task_id": "2026-06-24-003",
+  "slug": "monitor-sealed-secrets-upgrade",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-06-24-003_monitor-sealed-secrets-upgrade",
+  "allowed_external_paths": [],
+  "created": "2026-06-24T00:00:00+02:00",
+  "modified": "2026-06-24T00:00:00+02:00",
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}

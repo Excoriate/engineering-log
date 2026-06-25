@@ -1,0 +1,4 @@
+# Private TLS key material — MUST NOT be committed.
+# Files remain on disk but are excluded from git.
+*
+!.gitignore

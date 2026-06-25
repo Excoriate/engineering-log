@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the VPP *.vpp.eneco.com TLS Rotation Works</title>
+<style>
+  :root { --fg:#1b1f24; --muted:#5b636d; --line:#e1e4e8; --accent:#0b6bcb; --warn:#b34700; --ok:#1a7f37; --bad:#cf222e; --code:#f4f6f8; }
+  * { box-sizing:border-box; }
+  body { font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--fg); max-width:920px; margin:0 auto; padding:2rem 1.25rem 5rem; }
+  h1 { font-size:1.9rem; line-height:1.2; border-bottom:2px solid var(--line); padding-bottom:.5rem; }
+  h2 { font-size:1.35rem; margin-top:2.2rem; border-bottom:1px solid var(--line); padding-bottom:.3rem; }
+  h3 { font-size:1.1rem; margin-top:1.5rem; }
+  code { background:var(--code); padding:.1rem .35rem; border-radius:4px; font-size:.86em; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  pre { background:var(--code); border:1px solid var(--line); border-radius:8px; padding:1rem; overflow-x:auto; font-size:.82rem; line-height:1.45; }
+  pre.mermaid { background:#fff; text-align:center; }
+  table { border-collapse:collapse; width:100%; margin:1rem 0; font-size:.9rem; }
+  th,td { border:1px solid var(--line); padding:.5rem .6rem; text-align:left; vertical-align:top; }
+  th { background:#f6f8fa; }
+  blockquote { border-left:4px solid var(--accent); margin:1rem 0; padding:.4rem 1rem; background:#f0f6ff; color:#0a3d6b; border-radius:0 6px 6px 0; }
+  .contract { background:#f0f6ff; border:1px solid #cfe3ff; border-radius:8px; padding:.5rem 1.25rem; }
+  .tldr { background:#fffbe6; border:1px solid #f0e6a6; border-radius:8px; padding:.5rem 1.25rem; }
+  .meta { color:var(--muted); font-size:.85rem; }
+  .ok{color:var(--ok);font-weight:600} .bad{color:var(--bad);font-weight:600} .warn{color:var(--warn);font-weight:600}
+  h2 .tag{font-size:.7rem;font-weight:600;vertical-align:middle;margin-left:.5rem;padding:.1rem .4rem;border-radius:4px;background:#eef;color:#334}
+</style>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad:true, theme:"neutral", securityLevel:"loose", flowchart:{useMaxWidth:true} });
+</script>
+</head>
+<body>
+
+<h1>How the VPP <code>*.vpp.eneco.com</code> TLS Rotation Works — and Why Only Production</h1>
+<p class="meta">Status: review · Author: Alex Torres (paired with Claude) · 2026-06-24 · Audience: VPP on-call / platform engineer with no prior context on this cert</p>
+
+<p>This is the <em>understanding</em> companion to <code>rotation-execution-spec.md</code>. The spec tells you <strong>what to run</strong>; this tells you <strong>why it works</strong>, so you (or the next on-call) can reason about it, spot a wrong turn, and defend the scope under questioning.</p>
+
+<h2>Knowledge Contract</h2>
+<div class="contract">
+<p>After reading this, you will be able to:</p>
+<ol>
+  <li><strong>draw</strong> the full path from the PFX Networking4All sent us to a browser TLS handshake on <code>agg.vpp.eneco.com</code>;</li>
+  <li><strong>explain</strong> why we import a <em>new version of an existing Key Vault object</em> (not a new object), and why a <em>versionless</em> secret URI makes that safe;</li>
+  <li><strong>trace</strong>, in order, what happens on import — and why an empty <code>az network application-gateway update</code> does <strong>not</strong> propagate it;</li>
+  <li><strong>predict</strong> which environments this wildcard can/cannot serve, and <strong>defend</strong> "production-only" with a label-counting argument;</li>
+  <li><strong>reject</strong> three shortcuts that look correct but cause outages, by naming the mechanism that breaks each;</li>
+  <li><strong>name</strong> the single probe that would prove the scope wrong.</li>
+</ol>
+</div>
+
+<h2>TL;DR</h2>
+<div class="tldr">
+<p>We received a renewed wildcard certificate for <code>*.vpp.eneco.com</code>. Live inspection proved it renews exactly <strong>one</strong> object — <code>wildcard-vpp-eneco-com</code> in the <strong>production</strong> Key Vault <code>vpp-appsec-p</code> — whose current cert <strong>expires 2026-07-01</strong>. App Gateway <code>vpp-ag-p</code> reads that object through a <em>versionless</em> link, so we add a new version, force one refresh, and four production sub-domains serve the new cert. dev and acc use <em>different</em> certificates and are untouched.</p>
+</div>
+
+<h2>How we know this — the live inspections</h2>
+<p>The TL;DR says "live inspection proved." Here is exactly what was run, why, and what came back — nothing is asserted from memory or the runbook. Each probe answers one question and feeds the next.</p>
+
+<h3>1. What certificate do we actually hold? (local, no Azure)</h3>
+<p>Rationale: everything downstream depends on the cert's identity (its SAN names + validity). The PFX is password-protected and legacy-encrypted, so OpenSSL needs <code>-legacy</code> and reads the password from the file (never echoed).</p>
+<pre>openssl pkcs12 -in 26061584690-_-vpp-eneco-com.pfx -nokeys -clcerts \
+  -passin file:certificate_password.txt -legacy \
+  | openssl x509 -noout -subject -issuer -enddate -ext subjectAltName</pre>
+<p><strong>Found:</strong> <code>subject=CN=*.vpp.eneco.com</code>; SAN <code>*.vpp.eneco.com, vpp.eneco.com</code>; issuer <code>Trust Provider B.V.</code>; <code>notAfter=Dec 30 2026</code>. The private key was confirmed to match the leaf — a complete, importable key-pair.</p>
+
+<h3>2. Which App Gateway and which Key Vault object? (control-plane, no firewall change)</h3>
+<p>Rationale: the colleague's runbook gave three <em>different</em> gateway names, so names had to be resolved live. The gateway's SSL-cert config carries the <code>keyVaultSecretId</code>, which reveals the exact object each listener binds — readable without opening any firewall.</p>
+<pre>az network application-gateway list -g mcprd-rg-vpp-p-res --subscription &lt;prod&gt; --query "[].name" -o tsv
+az network application-gateway ssl-cert list --gateway-name vpp-ag-p -g mcprd-rg-vpp-p-res \
+  --subscription &lt;prod&gt; --query "[].{name:name, kvSecretId:keyVaultSecretId}" -o json
+az network application-gateway http-listener list --gateway-name vpp-ag-p -g mcprd-rg-vpp-p-res \
+  --subscription &lt;prod&gt; --query "[?sslCertificate!=null].{host:hostName, sslCertId:sslCertificate.id}" -o json</pre>
+<p><strong>Found:</strong> the real gateway is <code>vpp-ag-p</code> (the runbook's <code>vpp-agw-p</code>/<code>vpp-appgw-p</code> were both wrong). Its listeners <code>agg/gurobi/apollo/flex-trade-optimizer.vpp.eneco.com</code> bind ssl-cert <code>wildcard-vpp-frontend-https</code>, whose <code>keyVaultSecretId</code> is the <strong>versionless</strong> URI <code>…/secrets/wildcard-vpp-eneco-com</code>. So the object to rotate is <code>wildcard-vpp-eneco-com</code>.</p>
+
+<h3>3. Does the object actually hold <em>our</em> cert? (data-plane — needs a brief, surgical whitelist)</h3>
+<p>Rationale: names are not proof. The only certainty is reading the cert bytes the object holds today and comparing to the PFX. The KV firewall denies by default, so the operator IP is whitelisted only for the read, then removed.</p>
+<pre>az keyvault network-rule add --name vpp-appsec-p -g mcprd-rg-vpp-p-res --subscription &lt;prod&gt; --ip-address &lt;myip&gt;/32
+sleep 25
+az keyvault certificate show --vault-name vpp-appsec-p --name wildcard-vpp-eneco-com --query cer -o tsv \
+  | openssl base64 -d -A | openssl x509 -noout -subject -enddate -ext subjectAltName
+az keyvault network-rule remove --name vpp-appsec-p -g mcprd-rg-vpp-p-res --subscription &lt;prod&gt; --ip-address &lt;myip&gt;/32</pre>
+<p><strong>Found (prod):</strong> <code>CN=*.vpp.eneco.com</code>, SAN <code>*.vpp.eneco.com, vpp.eneco.com</code>, <code>notAfter=Jul 1 2026</code> — same names + CA as the held PFX, expiring imminently, i.e. the <em>old</em> version of what we hold. The same reads on <strong>dev</strong> and <strong>acc</strong> returned <code>dev-mc.vpp.eneco.com</code>/<code>*.dev-mc.vpp.eneco.com</code> and <code>acc.vpp.eneco.com</code>/<code>*.acc.vpp.eneco.com</code> — different certs. After every read the whitelist was removed and residual rules re-checked as zero.</p>
+
+<h3>4. Who can do the rotation? (identity + permissions)</h3>
+<p>Rationale: the actor needs two <em>different</em> permissions — write the KV firewall (control-plane) and import a certificate (data-plane access policy). Your own account lacks acc/prod rights; the MC service principal has both.</p>
+<pre># As the human user, on acc/prd:
+az keyvault network-rule add --name vpp-appsec-p ...   # → AuthorizationFailed (no Microsoft.KeyVault/vaults/write)
+# As the prd service principal (cached from 1Password):
+az keyvault network-rule add --name vpp-appsec-p ...   # → succeeds
+az keyvault show -n vpp-appsec-p -g mcprd-rg-vpp-p-res --subscription &lt;prod&gt; \
+  --query "properties.accessPolicies[?objectId=='&lt;sp-object-id&gt;'].permissions.certificates"</pre>
+<p><strong>Found:</strong> the human user has <strong>no</strong> active role on acc/prd (hence the SP workaround). The prd SP's access policy includes <code>Get, List, Create, Import, Update, Delete</code> on certificates — so it can both whitelist and import.</p>
+
+<h3>5. Is the App Gateway the only thing using this cert in production?</h3>
+<p>Rationale: a wildcard could be consumed elsewhere (another gateway, Front Door, API Management, AKS ingress). Any such consumer left on the old cert would break at the Jul 1 expiry, so the whole production subscription was swept.</p>
+<pre>az network application-gateway list --subscription &lt;prod&gt; --query "[].{name:name,rg:resourceGroup}" -o table
+az graph query -q "resources | where subscriptionId=='&lt;prod&gt;' | where type in~ (
+  'microsoft.network/frontdoors','microsoft.cdn/profiles','microsoft.apimanagement/service',
+  'microsoft.web/sites','microsoft.containerservice/managedclusters') | project type,name,resourceGroup"</pre>
+<p><strong>Found:</strong> exactly <strong>one</strong> App Gateway in the prod subscription (<code>vpp-ag-p</code>) and <strong>zero</strong> Front Door / CDN / API Management / App Service / AKS resources. So within production this cert has a single consumer.</p>
+
+<h3>6. Will a manual import fight terraform? (drift check)</h3>
+<p>Rationale: if the cert object or its gateway binding is terraform-managed, a manual import could be reverted by CI or cause plan drift.</p>
+<pre>rg -l --glob '*.tf' 'azurerm_key_vault_certificate' /path/to/eneco-src          # → no matches
+rg 'wildcard-vpp-eneco-com' /path/to/MC-VPP-Infrastructure/main/configuration/prd.tfvars</pre>
+<p><strong>Found:</strong> no <code>azurerm_key_vault_certificate</code> resource anywhere — the cert object is <strong>not</strong> terraform-managed. The gateway binding is in terraform but uses the <strong>versionless</strong> URI, so importing a new version leaves the configured value unchanged → no drift; and the prod pipeline is <code>trigger: none</code> (no surprise auto-apply).</p>
+
+<h3>7. How does propagation actually work? (Microsoft documentation)</h3>
+<p>Rationale: the draft assumed an empty <code>az network application-gateway update</code> would force a refresh. That had to be confirmed — if wrong, the new cert would sit unserved until expiry.</p>
+<p><strong>Found</strong> (Microsoft Learn, App Gateway ↔ Key Vault troubleshooting, "Resolution E"): <em>"Application Gateway refetches the certificate from Key Vault only when the configured <code>keyVaultSecretId</code> changes. … running an empty <code>az network application-gateway update</code> command … doesn't force the gateway to pull the newer Key Vault version."</em> So the documented force-refresh points the binding at the <em>versioned</em> URI and then back to versionless — exactly what the spec does.</p>
+
+<p>These seven steps are the chain behind every claim in this document and the spec.</p>
+
+<h2>First principles (the ladder)</h2>
+<p>Before any command, six small truths the change rests on:</p>
+<pre>
+Term            → what it is
+  TLS cert      → public key + the names it is valid for, signed by a CA; proves "I am *.vpp.eneco.com"
+  CN            → Common Name: the cert's single primary name (legacy). Here: *.vpp.eneco.com
+  SAN           → Subject Alternative Name: the FULL list of names/wildcards a cert is valid for.
+                  Modern browsers validate the hostname against the SAN list (CN alone is ignored).
+                  OUR cert's SAN = { *.vpp.eneco.com , vpp.eneco.com } — the field we compared in Key Vault.
+  Wildcard      → a SAN entry like *.vpp.eneco.com that matches EXACTLY ONE left label (host.vpp.eneco.com)
+  PFX (PKCS#12) → one file: leaf cert + chain + PRIVATE key, password-protected
+Primitive       → what must exist first
+  Key Vault     → stores the cert as an OBJECT that holds many VERSIONS over time
+  Secret URI    → how a consumer references it; "versionless" = no version GUID on the end
+Invariant       → what can't change without changing the thing
+  AGW binding   → the listener points at the versionless URI → "latest enabled version" wins
+Mechanism       → how they interact over time
+  Rotation      → add a new VERSION under the same object → versionless consumers pick it up
+Consequence     → what the user sees
+  Served cert   → the handshake on host.vpp.eneco.com presents whatever AGW last pulled
+Failure         → what breaks an invariant
+  Stale serve   → if AGW never re-pulls, it serves the OLD version until expiry → TLS errors
+</pre>
+<p>The key line is the wildcard one: <code>*.vpp.eneco.com</code> matches <code>agg.vpp.eneco.com</code> (one label) but <strong>not</strong> <code>apollo.acc.vpp.eneco.com</code> (two labels). That single fact is the whole "why only production" argument.</p>
+
+<h2>The topology — what exists and how it connects</h2>
+<p>The chain the certificate travels, from the Networking4All email to the browser handshake — read it as "who hands the cert to whom."</p>
+<pre class="mermaid">
+flowchart LR
+  N4A["Networking4All<br/>(issues + emails PFX via Zivver)"] -->|PFX + password| OP["1Password<br/>Trade Platform vault"]
+  OP -->|import new version| OBJ["KV object<br/>vpp-appsec-p / wildcard-vpp-eneco-com"]
+  OBJ -->|holds N versions| V1["v(old) exp 2026-07-01"]
+  OBJ --> V2["v(new) exp 2026-12-30"]
+  OBJ -.versionless secret URI.-> SSL["AGW ssl-cert<br/>vpp-ag-p / wildcard-vpp-frontend-https"]
+  SSL --> L1["listener agg.vpp.eneco.com"]
+  SSL --> L2["listener gurobi.vpp.eneco.com"]
+  SSL --> L3["listener apollo.vpp.eneco.com"]
+  SSL --> L4["listener flex-trade-optimizer.vpp.eneco.com"]
+  L1 --> U["End-user browser TLS handshake"]
+</pre>
+<p>What you are looking at: the PFX flows into <strong>one</strong> Key Vault object, which accumulates <strong>versions</strong>. The App Gateway does <strong>not</strong> point at a version — it points at the object through a <em>versionless</em> link (dotted). So the moment a new version becomes latest-enabled, every downstream listener is eligible to serve it. All four listeners share the <strong>same</strong> AGW ssl-cert resource (<code>wildcard-vpp-frontend-https</code>) — which is why one rotation covers all four, and why a check on any one is evidence for all. Keep this picture: <strong>object holds versions; the consumer references the object, not a version.</strong></p>
+<blockquote>The two-name trap: the <strong>KV object</strong> is <code>wildcard-vpp-eneco-com</code>, but the <strong>AGW ssl-cert resource</strong> referencing it is <code>wildcard-vpp-frontend-https</code>. Different names for different things — commands that confuse them fail with "not found."</blockquote>
+
+<h2>The mechanism over time — what happens, in order</h2>
+<p>Topology shows what exists; this shows causality — the order that makes it safe, and the one place it silently fails.</p>
+<pre class="mermaid">
+sequenceDiagram
+  participant Op as Operator (prd SP)
+  participant KV as Key Vault object
+  participant AGW as App Gateway
+  participant Cli as Browser
+  Op->>KV: import new version (DISABLED)
+  Note over KV: exists but not "latest enabled"
+  Op->>KV: read new thumbprint
+  Op->>Op: compare to held PFX (gate)
+  Op->>KV: enable new version
+  Note over KV: versionless URI now resolves to NEW
+  Op->>AGW: repoint ssl-cert to NEW versioned URI
+  Note over AGW: a keyVaultSecretId CHANGE forces re-pull
+  AGW->>KV: fetch NEW cert
+  Op->>AGW: restore versionless URI (keeps autorotation + matches terraform)
+  Cli->>AGW: TLS handshake
+  AGW-->>Cli: presents NEW cert (exp 2026-12-30)
+</pre>
+<p>We import <strong>disabled</strong> first so a wrong cert can never go live before the thumbprint gate passes — verification happens <em>before</em> exposure. Only then do we enable it. The subtle part: a newer latest-enabled version is <strong>not enough to serve it now</strong> — the App Gateway caches its copy and only re-fetches when its <em>configured</em> <code>keyVaultSecretId</code> <strong>changes</strong> (or on its slow 4-hour poll). So we change the link to the <em>versioned</em> URI to force an immediate re-pull, then change it <strong>back</strong> to versionless so future renewals auto-rotate and the config still matches terraform. Takeaway: <strong>propagation is triggered by a config change, not by the import.</strong></p>
+
+<h2>The dangerous shortcut, by mechanism</h2>
+<p>The most expensive mistake is invisible on the day you make it.</p>
+<pre>
+"I imported the new version, now refresh the gateway."
+  ├─ run `az network application-gateway update` with no changes
+  │     → exit 0, looks done
+  │     → BUT a no-delta update does NOT change keyVaultSecretId
+  │     → AGW does NOT re-pull → keeps serving the OLD cert
+  │     → silent until 2026-07-01, then ALL four hosts TLS-expired → outage
+  │     ✗ WRONG  (Microsoft docs, Resolution E)
+  └─ change keyVaultSecretId (versioned), then restore versionless
+        → AGW re-pulls immediately → serves NEW
+        ✓ CORRECT
+</pre>
+<p>Why it fools people: the command succeeds, so the feedback says "done." The real success signal is not exit code — it is a <strong>TLS handshake presenting the new expiry</strong>. That's why the spec makes a handshake witness mandatory and treats <code>az</code> exit 0 as meaningless alone.</p>
+<p>Two more shortcuts to reject the same way:</p>
+<ul>
+  <li><strong>Pinning to a versioned URI and leaving it</strong>: serves the right cert today but turns off autorotation — the <em>next</em> renewal silently won't propagate, and it drifts from terraform (which stores the versionless URI). Use versioned only as a momentary force, then restore versionless.</li>
+  <li><strong>Rolling back after the old cert expires</strong>: rollback points back at the old version, which is only useful while it's still valid. After 2026-07-01 the "safe" fallback is itself expired → a late rollback is a <em>second</em> outage. Hence margin in days, not hours.</li>
+</ul>
+
+<h2>Why only production (the part to defend)</h2>
+<p>The challenge: "It's a wildcard — surely it's used everywhere?" The answer is label-counting backed by live reads.</p>
+<pre>
+Held cert SAN:  *.vpp.eneco.com   +   vpp.eneco.com
+                 │                      │
+   matches  X.vpp.eneco.com (ONE label)  and the apex
+                 │
+   does NOT match  X.dev-mc.vpp.eneco.com   (two labels)
+   does NOT match  X.acc.vpp.eneco.com      (two labels)
+
+Live Key Vault contents (read 2026-06-24):
+   prod  vpp-appsec-p : wildcard-vpp-eneco-com  = *.vpp.eneco.com        ← MATCH (exp Jul 1)
+   acc   vpp-appsec-a : wildcard-...            = *.acc.vpp.eneco.com    (different cert)
+   acc   vpp-appsec-a : vpp-eneco-com           = acc.vpp.eneco.com      (single host)
+   dev   vpp-appsec-d : wildcard-dev-mc-...     = *.dev-mc.vpp.eneco.com (different cert)
+   dev   vpp-appsec-d : d-vpp-eneco-com         = dev-mc.vpp.eneco.com   (single host)
+</pre>
+<p>acc and dev terminate TLS with their <strong>own</strong> certificates — env-specific wildcards plus single-host certs. None is a <code>*.vpp.eneco.com</code> cert, and a <code>*.vpp.eneco.com</code> wildcard can't serve their two-label sub-domains anyway. So the renewal belongs to production and nowhere else. Honest boundary: proven across the <em>production subscription</em> (where <code>vpp-ag-p</code> is the <em>only</em> consumer); <strong>not</strong> swept across Sandbox/iactest — see Challenge.</p>
+
+<h2>Failure modes (trigger → symptom)</h2>
+<table>
+<tr><th>Failure</th><th>Trigger</th><th>Symptom</th><th>Defense</th></tr>
+<tr><td>Silent non-propagation</td><td>empty AGW <code>update</code> as "refresh"</td><td>old cert served till Jul 1, then mass TLS-expired</td><td>force via versioned-URI change; verify by handshake</td></tr>
+<tr><td>Listener disabled</td><td>AGW can't fetch cert (firewall/permission/disabled version)</td><td>host stops serving HTTPS entirely</td><td>always keep an enabled, resolvable version; watch AGW Resource Health</td></tr>
+<tr><td>Rollback too late</td><td>bad cert found after Jul 1</td><td>rollback restores an expired cert = 2nd outage</td><td>schedule ≥4 days before expiry; else fix-forward</td></tr>
+<tr><td>Verify-after-live</td><td>enable then check</td><td>wrong cert briefly live before the gate</td><td>import disabled, gate, then enable</td></tr>
+<tr><td>Firewall left open</td><td>whitelist-on without guaranteed off</td><td>standing exposure on prod KV</td><td>real <code>trap</code> removes IP on any exit; residual check</td></tr>
+</table>
+
+<h2>Evidence ledger</h2>
+<table>
+<tr><th>#</th><th>Claim</th><th>Status</th><th>Source</th></tr>
+<tr><td>1</td><td>Held cert = <code>*.vpp.eneco.com</code>+<code>vpp.eneco.com</code>, exp 2026-12-30</td><td class="ok">FACT</td><td><code>openssl</code> on the PFX</td></tr>
+<tr><td>2</td><td>prod <code>wildcard-vpp-eneco-com</code> = same CN/SAN, exp 2026-07-01</td><td class="ok">FACT</td><td><code>az keyvault certificate show</code></td></tr>
+<tr><td>3</td><td>acc/dev hold only <code>*.acc.*</code>/<code>*.dev-mc.*</code>/single-host certs</td><td class="ok">FACT</td><td>data-plane reads of <code>vpp-appsec-a</code>/<code>-d</code></td></tr>
+<tr><td>4</td><td><code>vpp-ag-p</code> is the only AGW / consumer in the prod sub</td><td class="ok">FACT</td><td>AGW list + Resource-Graph (0 others)</td></tr>
+<tr><td>5</td><td>Empty <code>az ... application-gateway update</code> does NOT force re-pull</td><td class="ok">FACT</td><td>MS Docs — AGW Key Vault troubleshooting, Resolution E</td></tr>
+<tr><td>6</td><td>Cert not terraform-managed; AGW binding versionless</td><td class="ok">FACT</td><td>IaC grep (no <code>azurerm_key_vault_certificate</code>; versionless URI in <code>prd.tfvars</code>)</td></tr>
+<tr><td>7</td><td>Cross-sub (Sandbox/iactest) usage of this wildcard</td><td class="bad">UNVERIFIED</td><td>not swept; low risk by the env-specific-cert pattern</td></tr>
+</table>
+
+<h2>Challenge — defend it</h2>
+<ul>
+  <li><strong>"How do you know it's the renewal, not coincidence?"</strong> Same CN, same SAN, same CA; the live prod object expires exactly when a renewal is due (Jul 1) and the new one starts mid-June — a textbook overlap.</li>
+  <li><strong>"What would prove the scope wrong?"</strong> One consumer of a <code>*.vpp.eneco.com</code> cert outside <code>vpp-ag-p</code> — another subscription, or a non-AGW consumer (ingress/Front Door/APIM). The settling probe is a cross-subscription Resource-Graph sweep as a multi-sub identity.</li>
+  <li><strong>"Where does the abstraction leak?"</strong> Versionless autorotation has a ~4h lag and the empty-update no-op quirk — exactly why we force with the versioned toggle.</li>
+</ul>
+
+<h2>Self-test (rebuild the reasoning)</h2>
+<ol>
+  <li>Draw PFX → browser handshake from memory; name the two differently-named middle resources.</li>
+  <li>Explain why importing the version isn't enough to serve it, and what actually triggers propagation.</li>
+  <li>A teammate says "I'll just <code>az network application-gateway update</code> to refresh." What do you tell them, and why?</li>
+  <li>Why can this cert serve <code>agg.vpp.eneco.com</code> but not <code>apollo.acc.vpp.eneco.com</code>?</li>
+  <li>It's June 30 and the new cert looks wrong. What's your move — and what changes if it's July 2?</li>
+</ol>
+<p>Success: you can answer all five without rereading — especially #3 and #5.</p>
+
+<h2>Durable principle</h2>
+<p>A certificate rotation is not "done" when the import succeeds; it is done when something <strong>downstream presents the new cert</strong>. Reference the object, not the version; force the re-pull deliberately; verify by handshake, not exit code; and never let your rollback expire before your change window closes.</p>
+
+</body>
+</html>

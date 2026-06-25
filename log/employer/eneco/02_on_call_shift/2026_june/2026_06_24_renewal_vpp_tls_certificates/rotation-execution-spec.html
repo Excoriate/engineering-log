@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Alex Torres (paired with Claude)" />
+  <title>PROD *.vpp.eneco.com Wildcard TLS Rotation — Execution Spec</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <style>
+  body{font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:940px;margin:0 auto;padding:2rem 1.25rem 5rem;color:#1b1f24}
+  h1{font-size:1.9rem;line-height:1.2;border-bottom:2px solid #e1e4e8;padding-bottom:.4rem}
+  h2{font-size:1.35rem;margin-top:2rem;border-bottom:1px solid #e1e4e8;padding-bottom:.3rem}
+  h3{font-size:1.08rem;margin-top:1.4rem}
+  code{background:#f4f6f8;padding:.1rem .35rem;border-radius:4px;font-size:.86em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  pre{background:#f4f6f8;border:1px solid #e1e4e8;border-radius:8px;padding:1rem;overflow-x:auto;font-size:.82rem;line-height:1.45}
+  pre code{background:none;padding:0}
+  table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.9rem}
+  th,td{border:1px solid #e1e4e8;padding:.5rem .6rem;text-align:left;vertical-align:top}
+  th{background:#f6f8fa}
+  blockquote{border-left:4px solid #b34700;background:#fff8f0;margin:1rem 0;padding:.4rem 1rem;border-radius:0 6px 6px 0}
+  nav#TOC,#TOC{background:#f6f8fa;border:1px solid #e1e4e8;border-radius:8px;padding:.5rem 1.5rem;font-size:.9rem}
+  strong{color:#0a3d6b}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">PROD *.vpp.eneco.com Wildcard TLS Rotation — Execution
+Spec</h1>
+<p class="author">Alex Torres (paired with Claude)</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#prod-.vpp.eneco.com-wildcard-tls-rotation-execution-spec"
+id="toc-prod-.vpp.eneco.com-wildcard-tls-rotation-execution-spec">PROD
+<code>*.vpp.eneco.com</code> Wildcard TLS Rotation — Execution Spec</a>
+<ul>
+<li><a href="#scope-100-confirmed" id="toc-scope-100-confirmed">Scope
+(100% confirmed)</a></li>
+<li><a href="#the-mechanism-in-one-paragraph-so-the-steps-make-sense"
+id="toc-the-mechanism-in-one-paragraph-so-the-steps-make-sense">The
+mechanism in one paragraph (so the steps make sense)</a></li>
+<li><a href="#scheduling-gate-hard" id="toc-scheduling-gate-hard">⏱️
+Scheduling gate (HARD)</a></li>
+<li><a href="#safety-gates-apply-throughout"
+id="toc-safety-gates-apply-throughout">Safety gates (apply
+throughout)</a></li>
+<li><a href="#preconditions-verify-nothing-is-mutated-here"
+id="toc-preconditions-verify-nothing-is-mutated-here">Preconditions
+(verify; nothing is mutated here)</a></li>
+</ul></li>
+<li><a href="#execution-mode-a-scripted-recommended"
+id="toc-execution-mode-a-scripted-recommended">Execution — Mode A:
+Scripted (recommended)</a></li>
+<li><a href="#execution-mode-b-manual-each-step-explained-probe-gated"
+id="toc-execution-mode-b-manual-each-step-explained-probe-gated">Execution
+— Mode B: Manual (each step explained + probe-gated)</a>
+<ul>
+<li><a href="#monitoring-watch-live-during-the-window"
+id="toc-monitoring-watch-live-during-the-window">Monitoring (watch live
+during the window)</a></li>
+<li><a href="#notes-residual" id="toc-notes-residual">Notes /
+residual</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="prod-.vpp.eneco.com-wildcard-tls-rotation-execution-spec">PROD
+<code>*.vpp.eneco.com</code> Wildcard TLS Rotation — Execution Spec</h1>
+<blockquote>
+<p><strong>GATE: DO NOT RUN until Alex gives GO.</strong> Every step
+below is written so an operator or agent with <strong>no prior
+context</strong> can run it: <em>what it does · why · the command · a
+probe that proves it worked · what could go wrong · what to do</em>. Two
+modes — <strong>Scripted</strong> (<code>rotate_tls.go</code>,
+recommended) and <strong>Manual</strong> (you run the <code>az</code>
+commands by hand). Read <code>how-the-vpp-tls-rotation-works.md</code>
+first for the mental model.</p>
+</blockquote>
+<h2 id="scope-100-confirmed">Scope (100% confirmed)</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Environment</td>
+<td><strong>PRODUCTION only</strong> (dev/acc use different certs)</td>
+</tr>
+<tr>
+<td>Subscription</td>
+<td><code>f007df01-9295-491c-b0e9-e3981f2df0b0</code></td>
+</tr>
+<tr>
+<td>Key Vault</td>
+<td><code>vpp-appsec-p</code> (RG <code>mcprd-rg-vpp-p-res</code>)</td>
+</tr>
+<tr>
+<td>KV cert <strong>object</strong> (import a new version here)</td>
+<td><code>wildcard-vpp-eneco-com</code></td>
+</tr>
+<tr>
+<td>App Gateway</td>
+<td><code>vpp-ag-p</code></td>
+</tr>
+<tr>
+<td>AGW <strong>ssl-cert resource</strong> (≠ KV object name)</td>
+<td><code>wildcard-vpp-frontend-https</code></td>
+</tr>
+<tr>
+<td>Listeners served</td>
+<td><code>agg.</code> / <code>gurobi.</code> / <code>apollo.</code> /
+<code>flex-trade-optimizer.vpp.eneco.com</code></td>
+</tr>
+<tr>
+<td>Out of scope</td>
+<td>apex <code>vpp.eneco.com</code> (<code>p-vpp-eneco-com</code>, exp
+Jul 20 — separate window)</td>
+</tr>
+<tr>
+<td>Old cert expiry (the driver)</td>
+<td><strong>2026-07-01</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-mechanism-in-one-paragraph-so-the-steps-make-sense">The
+mechanism in one paragraph (so the steps make sense)</h2>
+<p>The App Gateway does not hold the certificate; it
+<strong>references</strong> the Key Vault object through a
+<em>versionless</em> link and serves whatever the latest
+<strong>enabled</strong> version is. So rotating = <strong>import a new
+version under the same object name</strong>, prove it’s the right cert,
+enable it, then <strong>force the gateway to re-pull</strong> (a no-op
+<code>update</code> does <em>not</em> refresh — only changing the link
+does). Every step is gated by a probe so you advance only on proven
+success.</p>
+<h2 id="scheduling-gate-hard">⏱️ Scheduling gate (HARD)</h2>
+<p>Execute <strong>no later than 2026-06-27</strong>. The rollback
+restores the <em>old</em> cert, which is only valid until <strong>Jul
+1</strong>. After ~Jun 29, a bad-cert rollback would restore an
+already-expired cert (a second outage) → treat any late attempt as
+<strong>fix-forward-only</strong>. Earlier is strictly safer.</p>
+<h2 id="safety-gates-apply-throughout">Safety gates (apply
+throughout)</h2>
+<ul>
+<li><strong>No one-way door</strong> — importing a cert <em>version</em>
+is reversible data-plane (not a KV ForceNew/rename, not SQL
+immutability, not terraform).</li>
+<li><strong>Right identity, right subscription</strong> — every
+<code>az</code> call passes <code>--subscription</code>; the SP session
+is verified before any mutation.</li>
+<li><strong>Whitelist-off is a <code>finally</code></strong> — the
+scripted mode guarantees it; in manual mode <em>you</em> must run Step 8
+even on failure.</li>
+<li><strong>Success = EFFECT</strong> — a TLS handshake serving the new
+cert, not <code>az</code> exit 0.</li>
+<li><strong>Regression → escalate</strong> — if a listener serves a
+broken/old cert, roll back (before Jul 1); do not blind-retry.</li>
+</ul>
+<h2 id="preconditions-verify-nothing-is-mutated-here">Preconditions
+(verify; nothing is mutated here)</h2>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">test</span> <span class="at">-s</span> /tmp/mc-production.env <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;PC1 creds ok&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">PFX</span><span class="op">=</span><span class="st">&quot;.../certificate_to_renovate/26061584690-_-vpp-eneco-com.pfx&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">PW</span><span class="op">=</span><span class="st">&quot;.../certificate_to_renovate/certificate_password.txt&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">test</span> <span class="at">-s</span> <span class="st">&quot;</span><span class="va">$PFX</span><span class="st">&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">test</span> <span class="at">-s</span> <span class="st">&quot;</span><span class="va">$PW</span><span class="st">&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;PC2 artifacts ok&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">openssl</span> pkcs12 <span class="at">-in</span> <span class="st">&quot;</span><span class="va">$PFX</span><span class="st">&quot;</span> <span class="at">-nokeys</span> <span class="at">-clcerts</span> <span class="at">-passin</span> <span class="st">&quot;file:</span><span class="va">$PW</span><span class="st">&quot;</span> <span class="at">-legacy</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">|</span> <span class="ex">openssl</span> x509 <span class="at">-noout</span> <span class="at">-subject</span> <span class="at">-enddate</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># expect: subject=CN=*.vpp.eneco.com ; notAfter=Dec 30 ... 2026</span></span></code></pre></div>
+<ul>
+<li><strong>PC3</strong> (manual): confirm no in-flight prd
+<code>terraform apply</code> / open prd PR touching the AGW — an AGW
+apply mid-change re-pulls Key Vault and could race your rollback.</li>
+<li><strong>PC4</strong> (manual): confirm you have an <strong>AVD /
+internal-network path</strong> that can reach the AGW
+<strong>private</strong> frontend <code>10.9.32.4:443</code> for the
+verify-effect handshake. (Verified 2026-06-24: every wildcard listener
+except <code>gurobi</code>’s public one is <strong>private-frontend
+only</strong>, and the AGW public IP <code>132.220.123.93</code> is
+<strong>source-restricted</strong> — a direct-IP TLS handshake from a
+normal laptop is blocked, so do <strong>not</strong> rely on it. The
+hostnames also don’t resolve in public DNS.) <strong>No AVD/internal
+path → NO-GO</strong> (the change would be unverifiable).</li>
+<li><strong>PC5</strong> (manual): today is before
+<strong>2026-06-27</strong>.</li>
+</ul>
+<hr />
+<h1 id="execution-mode-a-scripted-recommended">Execution — Mode A:
+Scripted (recommended)</h1>
+<p>The orchestrator is <strong><code>rotate_tls.go</code></strong> — a
+single Go CLI that runs the Steps below as small, composable,
+<strong>probe-gated</strong> functions. It is <strong>dry-run by
+default</strong> (pass <code>-execute</code> to act) and removes the
+firewall rule on every exit path (<code>defer</code>). Each scripted
+step performs the same <em>action + probe</em> explained in the matching
+Manual step — read those for the full rationale.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># build once, then run the static binary</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">go</span> build <span class="at">-o</span> rotate_tls rotate_tls.go          <span class="co"># or: go run rotate_tls.go -step run</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> run                         <span class="co"># SEE the whole plan + every probe (no mutation)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> run <span class="at">-execute</span>                <span class="co"># execute end-to-end, probe-gated, cleanup guaranteed</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># one verified step at a time (same names as Manual Steps 1-8 + rollback):</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> whitelist-on   <span class="at">-execute</span>     <span class="co"># Step 1</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> baseline       <span class="at">-execute</span>     <span class="co"># Step 2</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> import         <span class="at">-execute</span>     <span class="co"># Step 3</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> verify-import  <span class="at">-execute</span>     <span class="co"># Step 4 (aborts on mismatch; new version stays disabled)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> enable         <span class="at">-execute</span>     <span class="co"># Step 5</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> refresh        <span class="at">-execute</span>     <span class="co"># Step 6</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> verify-effect               <span class="co"># Step 7 (prints handshake commands for AVD)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> whitelist-off  <span class="at">-execute</span>     <span class="co"># Step 8</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ex">./rotate_tls</span> <span class="at">-step</span> rollback       <span class="at">-execute</span>     <span class="co"># Rollback</span></span></code></pre></div>
+<hr />
+<blockquote>
+<p><strong>Canonical source of truth:</strong>
+<code>rotate_tls.go</code> is the single source of truth for the
+commands. The Manual-mode commands below are the <em>same</em> commands
+the orchestrator’s dry-run prints — if they ever differ, the
+<strong>dry-run output wins</strong>
+(<code>./rotate_tls -step &lt;step&gt;</code> shows the exact command).
+<strong>Per-step cleanup:</strong> a single step run with
+<code>-execute</code> does <strong>NOT</strong> auto-remove the firewall
+(only <code>run</code> defers whitelist-off). If you step manually,
+always finish with
+<code>./rotate_tls -step whitelist-off -execute</code>.</p>
+</blockquote>
+<h1
+id="execution-mode-b-manual-each-step-explained-probe-gated">Execution —
+Mode B: Manual (each step explained + probe-gated)</h1>
+<blockquote>
+<p>You are the <code>finally</code>: if anything fails after Step 1,
+still run <strong>Step 8</strong>. Never advance until a step’s
+<strong>Probe</strong> returns the expected value. The simplest cleanup
+is the orchestrator’s own idempotent, self-probing step —
+<code>./rotate_tls -step whitelist-off -execute</code> — which works
+even if you ran everything else by hand and tells you loudly if the
+firewall is still open.</p>
+</blockquote>
+<h3 id="session-setup-run-once">Session setup (run once)</h3>
+<p><strong>What it does:</strong> logs in as the production <em>service
+principal</em> in an isolated <code>az</code> config directory, selects
+the production subscription, and defines the variables the later steps
+reuse. <strong>Why:</strong> certificate operations need an identity
+with both Key-Vault-firewall-write and
+certificate-<strong>Import</strong> rights. Your personal account has
+neither on prod (it returned <code>AuthorizationFailed</code>); the MC
+service principal has both. The isolated config
+(<code>AZURE_CONFIG_DIR</code>) keeps your normal <code>az</code>
+session untouched.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">AZURE_CONFIG_DIR</span><span class="op">=</span>/tmp/azsp-prd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> /tmp/mc-production.env</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> login <span class="at">--service-principal</span> <span class="at">-u</span> <span class="st">&quot;</span><span class="va">$ARM_CLIENT_ID</span><span class="st">&quot;</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$ARM_CLIENT_SECRET</span><span class="st">&quot;</span> <span class="at">--tenant</span> <span class="st">&quot;</span><span class="va">$ARM_TENANT_ID</span><span class="st">&quot;</span> <span class="at">-o</span> none <span class="at">--only-show-errors</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> account set <span class="at">-s</span> f007df01-9295-491c-b0e9-e3981f2df0b0</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">SUB</span><span class="op">=</span>f007df01-9295-491c-b0e9-e3981f2df0b0<span class="kw">;</span> <span class="va">RG</span><span class="op">=</span>mcprd-rg-vpp-p-res<span class="kw">;</span> <span class="va">KV</span><span class="op">=</span>vpp-appsec-p</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="va">OBJ</span><span class="op">=</span>wildcard-vpp-eneco-com<span class="kw">;</span> <span class="va">AGW</span><span class="op">=</span>vpp-ag-p<span class="kw">;</span> <span class="va">SSL</span><span class="op">=</span>wildcard-vpp-frontend-https</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="va">VLESS</span><span class="op">=</span><span class="st">&quot;https://vpp-appsec-p.vault.azure.net/secrets/wildcard-vpp-eneco-com&quot;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">PFX</span><span class="op">=</span><span class="st">&quot;.../certificate_to_renovate/26061584690-_-vpp-eneco-com.pfx&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="va">PW</span><span class="op">=</span><span class="st">&quot;.../certificate_to_renovate/certificate_password.txt&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="va">MYIP</span><span class="op">=</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-4</span> <span class="at">-s</span> ifconfig.me<span class="va">)</span><span class="kw">;</span> <span class="bu">:</span> <span class="st">&quot;</span><span class="va">${MYIP</span><span class="op">:?</span>no egress IP<span class="va">}</span><span class="st">&quot;</span></span></code></pre></div>
+<p><strong>Probe (expect <code>f007df01-…</code>):</strong></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> account show <span class="at">--query</span> id <span class="at">-o</span> tsv</span></code></pre></div>
+<p><strong>This proves:</strong> you are authenticated as the right
+identity against the <strong>production</strong> subscription, so
+subsequent commands act where you intend. <strong>What could go wrong /
+what to do:</strong> - Output is <strong>not</strong> the prod sub →
+<strong>STOP</strong> (you’d mutate the wrong environment). Re-run
+<code>az account set -s …</code>. - <code>az login</code> fails /
+<code>MYIP</code> empty → check <code>/tmp/mc-production.env</code>
+exists (re-cache from 1Password) and your network; do not proceed.</p>
+<h3 id="step-1-open-the-kv-firewall-surgical">Step 1 — open the KV
+firewall (surgical)</h3>
+<p><strong>What it does:</strong> adds your current public IP to the Key
+Vault’s firewall allow-list, then waits ~25 s for the rule to propagate.
+<strong>Why:</strong> the vault’s network default is
+<strong>Deny</strong>; without your IP, reading or importing a
+certificate fails with <code>403</code>. We add only the KV (not the
+broad storage/SQL alias) to keep the blast radius minimal.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> keyvault network-rule add <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">-g</span> <span class="st">&quot;</span><span class="va">$RG</span><span class="st">&quot;</span> <span class="at">--subscription</span> <span class="st">&quot;</span><span class="va">$SUB</span><span class="st">&quot;</span> <span class="at">--ip-address</span> <span class="st">&quot;</span><span class="va">${MYIP}</span><span class="st">/32&quot;</span> <span class="at">-o</span> none <span class="kw">&amp;&amp;</span> <span class="fu">sleep</span> 25</span></code></pre></div>
+<p><strong>Probe (expect <code>1</code>):</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> keyvault show <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">-g</span> <span class="st">&quot;</span><span class="va">$RG</span><span class="st">&quot;</span> <span class="at">--subscription</span> <span class="st">&quot;</span><span class="va">$SUB</span><span class="st">&quot;</span> <span class="at">--query</span> <span class="st">&quot;length(networkAcls.ipRules[?value==&#39;</span><span class="va">${MYIP}</span><span class="st">/32&#39;])&quot;</span> <span class="at">-o</span> tsv</span></code></pre></div>
+<p><strong>This proves:</strong> the firewall now allows your IP, so the
+data-plane steps (read/import) can reach the vault. <strong>What could
+go wrong / what to do:</strong> - <code>AuthorizationFailed</code> → the
+identity lacks KV write (you’re not the SP — redo Session setup). -
+Probe returns <code>0</code> → the rule didn’t apply or your egress IP
+changed; re-check <code>MYIP</code> and re-run. - Data-plane still 403
+in later steps → propagation not finished; wait and retry (don’t widen
+the rule).</p>
+<h3 id="step-2-record-the-old-version-rollback-baseline">Step 2 — record
+the OLD version (rollback baseline)</h3>
+<p><strong>What it does:</strong> captures the current (old) certificate
+version’s secret identifier and thumbprint into shell variables.
+<strong>Why:</strong> rollback works by repointing the gateway at
+<em>this exact old version</em>. You must capture it
+<strong>before</strong> importing the new one. If your shell dies you
+lose these — so echo and write them down.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="va">OLD_SID</span><span class="op">=</span><span class="va">$(</span><span class="ex">az</span> keyvault certificate show <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--query</span> sid <span class="at">-o</span> tsv<span class="va">)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="va">OLD_THUMB</span><span class="op">=</span><span class="va">$(</span><span class="ex">az</span> keyvault certificate show <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--query</span> x509ThumbprintHex <span class="at">-o</span> tsv <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39;A-Z&#39;</span> <span class="st">&#39;a-z&#39;</span><span class="va">)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;OLD_SID=</span><span class="va">$OLD_SID</span><span class="st">   OLD_THUMB=</span><span class="va">$OLD_THUMB</span><span class="st">&quot;</span>   <span class="co"># WRITE THESE DOWN</span></span></code></pre></div>
+<p><strong>Probe (expect <code>OK enabled=true</code>):</strong></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="st">&quot;</span><span class="va">$OLD_SID</span><span class="st">&quot;</span> <span class="kw">in</span> <span class="pp">*</span><span class="ss">/secrets/</span><span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span><span class="ss">/</span><span class="pp">*</span><span class="kw">)</span> <span class="va">E</span><span class="op">=</span><span class="va">$(</span><span class="ex">az</span> keyvault certificate show <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--query</span> attributes.enabled <span class="at">-o</span> tsv<span class="va">)</span><span class="kw">;</span> <span class="bu">echo</span> <span class="st">&quot;OK enabled=</span><span class="va">$E</span><span class="st">&quot;</span><span class="cf">;;</span> <span class="pp">*</span><span class="kw">)</span> <span class="bu">echo</span> <span class="st">&quot;BAD OLD_SID — STOP&quot;</span><span class="cf">;;</span> <span class="cf">esac</span></span></code></pre></div>
+<p><strong>This proves:</strong> you have a valid, <em>enabled</em>,
+versioned rollback target for this exact object. <strong>What could go
+wrong / what to do:</strong> - <code>BAD OLD_SID</code> → wrong
+object/KV name in Session setup → <strong>STOP</strong> and fix. -
+<code>enabled=false</code> → the old version isn’t enabled, so a
+disable-based fallback couldn’t resolve to it. Don’t rely on rollback;
+make sure an enabled prior version exists before continuing.</p>
+<h3 id="step-3-import-the-new-version-disabled-not-live-yet">Step 3 —
+import the new version, DISABLED (not live yet)</h3>
+<p><strong>What it does:</strong> imports the new PFX as a <strong>new
+version</strong> of the existing object, created in the
+<strong>disabled</strong> state. <strong>Why:</strong> importing under
+the <em>same object name</em> (not a new object) is what the versionless
+gateway link will pick up. Creating it <strong>disabled</strong> means a
+wrong cert can never go live before the Step-4 thumbprint gate passes —
+verification happens <em>before</em> exposure.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">IMP</span><span class="op">=</span><span class="va">$(</span><span class="ex">az</span> keyvault certificate import <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--file</span> <span class="st">&quot;</span><span class="va">$PFX</span><span class="st">&quot;</span> <span class="at">--password</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">cat</span> <span class="st">&quot;</span><span class="va">$PW</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span> <span class="at">--disabled</span> <span class="at">-o</span> json<span class="va">)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">NEW_SID</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$IMP</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="ex">jq</span> <span class="at">-r</span> .sid<span class="va">)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="va">NEW_VER</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$IMP</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="ex">jq</span> <span class="at">-r</span> .id <span class="kw">|</span> <span class="fu">awk</span> <span class="at">-F</span>/ <span class="st">&#39;{print $NF}&#39;</span><span class="va">)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="va">NEW_THUMB</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$IMP</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="ex">jq</span> <span class="at">-r</span> .x509ThumbprintHex <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39;A-Z&#39;</span> <span class="st">&#39;a-z&#39;</span><span class="va">)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;NEW_SID=</span><span class="va">$NEW_SID</span><span class="st">   NEW_VER=</span><span class="va">$NEW_VER</span><span class="st">   NEW_THUMB=</span><span class="va">$NEW_THUMB</span><span class="st">&quot;</span></span></code></pre></div>
+<p><strong>Probe (expect <code>false</code>):</strong></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> keyvault certificate show <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--version</span> <span class="st">&quot;</span><span class="va">$NEW_VER</span><span class="st">&quot;</span> <span class="at">--query</span> attributes.enabled <span class="at">-o</span> tsv</span></code></pre></div>
+<p><strong>This proves:</strong> the new certificate bytes are in the
+vault but <strong>not serving anything yet</strong> — safe to inspect.
+<strong>What could go wrong / what to do:</strong> - Import errors with
+HTTP <code>400</code> / “invalid PKCS12 / unsupported algorithm” → the
+<strong>service</strong> rejected the legacy-encrypted PFX. Re-encode to
+a modern PKCS12 (see Notes) and import that instead. (The local
+<code>-legacy</code> need does <strong>not</strong> by itself cause this
+— <code>az</code> ships raw bytes.) - Probe returns <code>true</code> →
+the <code>--disabled</code> flag didn’t apply; immediately disable that
+version before continuing, or you’ve lost the gate-before-exposure
+guarantee.</p>
+<h3 id="step-4-gate-imported-thumbprint-must-equal-the-held-pfx">Step 4
+— GATE: imported thumbprint must equal the held PFX</h3>
+<p><strong>What it does:</strong> computes the SHA1 thumbprint of the
+held PFX and compares it (case-normalized) to the thumbprint the vault
+recorded for the imported version. <strong>Why:</strong> this proves the
+bytes now in the vault are <strong>exactly</strong> the certificate you
+intended — not a stale, truncated, or wrong import. It is the safety
+gate before anything goes live.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">EXPECT</span><span class="op">=</span><span class="va">$(</span><span class="ex">openssl</span> pkcs12 <span class="at">-in</span> <span class="st">&quot;</span><span class="va">$PFX</span><span class="st">&quot;</span> <span class="at">-nokeys</span> <span class="at">-clcerts</span> <span class="at">-passin</span> <span class="st">&quot;file:</span><span class="va">$PW</span><span class="st">&quot;</span> <span class="at">-legacy</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">|</span> <span class="ex">openssl</span> x509 <span class="at">-noout</span> <span class="at">-fingerprint</span> <span class="at">-sha1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/.*=//; s/://g&#39;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39;A-Z&#39;</span> <span class="st">&#39;a-z&#39;</span><span class="va">)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="va">$EXPECT</span><span class="st">&quot;</span> <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="bu">[</span> <span class="st">&quot;</span><span class="va">$EXPECT</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;</span><span class="va">$NEW_THUMB</span><span class="st">&quot;</span> <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;✅ MATCH&quot;</span> <span class="kw">||</span> <span class="bu">echo</span> <span class="st">&quot;❌ MISMATCH — STOP&quot;</span></span></code></pre></div>
+<p><strong>This proves:</strong> the vault holds your exact new
+certificate (identity confirmed by cryptographic fingerprint).
+<strong>What could go wrong / what to do:</strong> -
+<code>❌ MISMATCH</code> → do <strong>NOT</strong> enable. The new
+version stays disabled (harmless). Investigate (wrong file? truncated
+upload?), then go to <strong>Step 8</strong> to clean up the firewall. -
+<code>EXPECT</code> empty → openssl couldn’t read the PFX (wrong
+password file) → fix and re-run; do not proceed.</p>
+<h3 id="step-5-enable-the-new-version-only-if-step-4-matched">Step 5 —
+enable the new version (only if Step 4 matched)</h3>
+<p><strong>What it does:</strong> enables the imported version, making
+it the <strong>latest enabled</strong> version of the object.
+<strong>Why:</strong> the gateway’s versionless link resolves to the
+<em>latest enabled</em> version. Enabling is what makes the new
+certificate the one the vault will hand out.</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> keyvault certificate set-attributes <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--version</span> <span class="st">&quot;</span><span class="va">$NEW_VER</span><span class="st">&quot;</span> <span class="at">--enabled</span> true <span class="at">-o</span> none</span></code></pre></div>
+<p><strong>Probe (expect <code>true</code>, then a thumbprint equal to
+<code>$NEW_THUMB</code>):</strong></p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> keyvault certificate show <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--version</span> <span class="st">&quot;</span><span class="va">$NEW_VER</span><span class="st">&quot;</span> <span class="at">--query</span> attributes.enabled <span class="at">-o</span> tsv</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="va">LATEST</span><span class="op">=</span><span class="va">$(</span><span class="ex">az</span> keyvault certificate show <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--query</span> x509ThumbprintHex <span class="at">-o</span> tsv <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39;A-Z&#39;</span> <span class="st">&#39;a-z&#39;</span><span class="va">)</span><span class="kw">;</span> <span class="bu">echo</span> <span class="st">&quot;latest=</span><span class="va">$LATEST</span><span class="st"> new=</span><span class="va">$NEW_THUMB</span><span class="st">&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">[</span> <span class="st">&quot;</span><span class="va">$LATEST</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;</span><span class="va">$NEW_THUMB</span><span class="st">&quot;</span> <span class="bu">]</span> <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;✅ versionless now resolves to NEW&quot;</span> <span class="kw">||</span> <span class="bu">echo</span> <span class="st">&quot;❌ STOP&quot;</span></span></code></pre></div>
+<p><strong>This proves:</strong> a versionless read of the object now
+returns your new certificate — i.e. the vault side of the rotation is
+complete. <strong>What could go wrong / what to do:</strong> -
+<code>latest != new</code> → a different/newer version exists or was
+imported in parallel. List versions, sort out which should be
+latest-enabled, and do <strong>not</strong> refresh the gateway until
+this resolves to <code>new</code>.</p>
+<h3
+id="step-6-force-the-app-gateway-to-re-pull-empty-update-does-not-work">Step
+6 — force the App Gateway to re-pull (empty <code>update</code> does NOT
+work)</h3>
+<p><strong>What it does:</strong> briefly points the gateway’s ssl-cert
+at the <strong>versioned</strong> new URI (a real config change), then
+restores the <strong>versionless</strong> URI. <strong>Why:</strong>
+Microsoft documents that the gateway re-fetches <strong>only when its
+configured <code>keyVaultSecretId</code> changes</strong> — an empty
+<code>az network application-gateway update</code> finishes successfully
+but does <strong>not</strong> refresh. The versioned→versionless toggle
+forces an immediate pull; restoring versionless keeps auto-rotation
+working and matches what terraform stores (so no drift).</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> network application-gateway ssl-cert update <span class="at">-g</span> <span class="st">&quot;</span><span class="va">$RG</span><span class="st">&quot;</span> <span class="at">--gateway-name</span> <span class="st">&quot;</span><span class="va">$AGW</span><span class="st">&quot;</span> <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$SSL</span><span class="st">&quot;</span> <span class="at">--key-vault-secret-id</span> <span class="st">&quot;</span><span class="va">$NEW_SID</span><span class="st">&quot;</span> <span class="at">-o</span> none</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> network application-gateway ssl-cert update <span class="at">-g</span> <span class="st">&quot;</span><span class="va">$RG</span><span class="st">&quot;</span> <span class="at">--gateway-name</span> <span class="st">&quot;</span><span class="va">$AGW</span><span class="st">&quot;</span> <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$SSL</span><span class="st">&quot;</span> <span class="at">--key-vault-secret-id</span> <span class="st">&quot;</span><span class="va">$VLESS</span><span class="st">&quot;</span> <span class="at">-o</span> none</span></code></pre></div>
+<p><strong>Probe (expect <code>Succeeded</code>, then a URI ending
+<code>/secrets/wildcard-vpp-eneco-com</code>):</strong></p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> network application-gateway show <span class="at">-g</span> <span class="st">&quot;</span><span class="va">$RG</span><span class="st">&quot;</span> <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$AGW</span><span class="st">&quot;</span> <span class="at">--query</span> provisioningState <span class="at">-o</span> tsv</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> network application-gateway ssl-cert show <span class="at">-g</span> <span class="st">&quot;</span><span class="va">$RG</span><span class="st">&quot;</span> <span class="at">--gateway-name</span> <span class="st">&quot;</span><span class="va">$AGW</span><span class="st">&quot;</span> <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$SSL</span><span class="st">&quot;</span> <span class="at">--query</span> keyVaultSecretId <span class="at">-o</span> tsv</span></code></pre></div>
+<p><strong>This proves:</strong> the gateway accepted the change
+(healthy) and is back on the versionless link (auto-rotation preserved,
+no terraform drift). <strong>What could go wrong / what to do:</strong>
+- <code>provisioningState=Failed</code> → the gateway couldn’t access
+the vault/cert (permission, network, or cert state). Check the gateway’s
+Resource Health; the listener may be auto-disabled — fix the vault
+access before anything else. - The second probe still shows a
+<strong>version GUID</strong> → the restore didn’t apply; re-run the
+restore line, or auto-rotation stays off and terraform will show
+drift.</p>
+<h3
+id="step-7-verify-the-effect-run-from-avd-internal-listeners-are-private">Step
+7 — verify the EFFECT (run from AVD / internal — listeners are
+private)</h3>
+<p><strong>What it does:</strong> opens a real TLS handshake to each of
+the four hosts and reads the served certificate’s expiry and thumbprint.
+<strong>Why:</strong> this is the <strong>only</strong> proof the
+rotation actually took effect end-to-end. <code>az</code> exit 0 only
+proves a control-plane write; it does <strong>not</strong> prove the
+gateway is serving the new leaf. The listeners are private, so this must
+run from AVD or the internal network.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> h <span class="kw">in</span> agg.vpp.eneco.com gurobi.vpp.eneco.com apollo.vpp.eneco.com flex-trade-optimizer.vpp.eneco.com<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">&quot;== </span><span class="va">$h</span><span class="st"> ==&quot;</span><span class="kw">;</span> <span class="bu">echo</span> <span class="kw">|</span> <span class="ex">openssl</span> s_client <span class="at">-connect</span> <span class="st">&quot;</span><span class="va">$h</span><span class="st">:443&quot;</span> <span class="at">-servername</span> <span class="st">&quot;</span><span class="va">$h</span><span class="st">&quot;</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="kw">|</span> <span class="ex">openssl</span> x509 <span class="at">-noout</span> <span class="at">-enddate</span> <span class="at">-fingerprint</span> <span class="at">-sha1</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
+<p><strong>Probe (expect on ALL four):</strong>
+<code>notAfter=Dec 30 23:59:59 2026 GMT</code>, <strong>and</strong> the
+served fingerprint equals the new cert. The handshake prints
+<code>SHA1 Fingerprint=AA:BB:…</code> (upper-case, colons) while
+<code>$NEW_THUMB</code> is lower-case no-colons — normalize before
+comparing:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># served fingerprint, normalized to match $NEW_THUMB (lower-case, no colons)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="kw">|</span> <span class="ex">openssl</span> s_client <span class="at">-connect</span> agg.vpp.eneco.com:443 <span class="at">-servername</span> agg.vpp.eneco.com <span class="dv">2</span><span class="op">&gt;</span>/dev/null <span class="dt">\</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="ex">openssl</span> x509 <span class="at">-noout</span> <span class="at">-fingerprint</span> <span class="at">-sha1</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/.*=//; s/://g&#39;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39;A-Z&#39;</span> <span class="st">&#39;a-z&#39;</span>   <span class="co"># == $NEW_THUMB</span></span></code></pre></div>
+<p><strong>This proves:</strong> real clients now receive the new
+certificate — the rotation is genuinely done. <strong>What could go
+wrong / what to do:</strong> - Still the <strong>old</strong> expiry →
+the re-pull didn’t propagate. Re-run Step 6, wait a minute, re-check;
+inspect the gateway’s Resource Health. - Hosts
+<strong>unreachable</strong> → you are not on AVD/internal (the
+listeners are on the private frontend <code>10.9.32.4</code>; the public
+frontend is source-restricted) → success is
+<strong>unverifiable</strong> → do <strong>not</strong> declare done;
+get on AVD/internal and re-check. As an interim from-this-machine signal
+you still have the control-plane proxies (KV latest-enabled thumbprint
+== new, AGW <code>provisioningState=Succeeded</code>, ssl-cert on the
+versionless URI, Resource Health = Available) — strong for a
+like-for-like renewal, but not a substitute for the wire handshake.</p>
+<h3 id="step-8-remove-the-whitelist-mandatory-your-finally">Step 8 —
+remove the whitelist (MANDATORY — your <code>finally</code>)</h3>
+<p><strong>What it does:</strong> removes your IP from the Key Vault
+firewall. <strong>Why:</strong> leaving it open is a standing security
+exposure and a terraform drift. Run this <strong>even if an earlier step
+failed</strong>.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> keyvault network-rule remove <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">-g</span> <span class="st">&quot;</span><span class="va">$RG</span><span class="st">&quot;</span> <span class="at">--subscription</span> <span class="st">&quot;</span><span class="va">$SUB</span><span class="st">&quot;</span> <span class="at">--ip-address</span> <span class="st">&quot;</span><span class="va">${MYIP}</span><span class="st">/32&quot;</span> <span class="at">-o</span> none</span></code></pre></div>
+<p><strong>Probe (expect <code>0</code>):</strong></p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> keyvault show <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">-g</span> <span class="st">&quot;</span><span class="va">$RG</span><span class="st">&quot;</span> <span class="at">--subscription</span> <span class="st">&quot;</span><span class="va">$SUB</span><span class="st">&quot;</span> <span class="at">--query</span> <span class="st">&quot;length(networkAcls.ipRules[?value==&#39;</span><span class="va">${MYIP}</span><span class="st">/32&#39;])&quot;</span> <span class="at">-o</span> tsv</span></code></pre></div>
+<p><strong>This proves:</strong> the vault firewall is back to its
+locked baseline; no residual exposure or drift. <strong>What could go
+wrong / what to do:</strong> - Non-zero → the remove didn’t apply;
+re-run until it returns <code>0</code>. - Your IP changed mid-session →
+the remove targeted the wrong value; list all rules
+(<code>… --query "networkAcls.ipRules[].value"</code>) and remove the
+stale one.</p>
+<h3
+id="rollback-emergency-only-useful-while-the-old-cert-is-unexpired-before-jul-1">Rollback
+(emergency — only useful while the OLD cert is unexpired, before Jul
+1)</h3>
+<p><strong>What it does:</strong> repoints the gateway directly at the
+OLD version’s URI and disables the new version. <strong>Why:</strong> if
+the new cert serves wrong/broken, this restores the previous working
+cert immediately. It is only safe while the old cert is still valid
+(before <strong>Jul 1</strong>).</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R-4: confirm the OLD version is STILL enabled NOW before pointing prod at it.</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Pointing AGW at a disabled/unresolvable version =&gt; listener auto-disable =&gt; outage.)</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="va">OLD_VER</span><span class="op">=</span><span class="st">&quot;</span><span class="va">${OLD_SID</span><span class="op">##</span><span class="pp">*</span>/<span class="va">}</span><span class="st">&quot;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> keyvault certificate show <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--version</span> <span class="st">&quot;</span><span class="va">$OLD_VER</span><span class="st">&quot;</span> <span class="at">--query</span> attributes.enabled <span class="at">-o</span> tsv   <span class="co"># MUST be &#39;true&#39;; if not → STOP, fix forward (do NOT repoint)</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># then repoint + park the new version:</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> network application-gateway ssl-cert update <span class="at">-g</span> <span class="st">&quot;</span><span class="va">$RG</span><span class="st">&quot;</span> <span class="at">--gateway-name</span> <span class="st">&quot;</span><span class="va">$AGW</span><span class="st">&quot;</span> <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$SSL</span><span class="st">&quot;</span> <span class="at">--key-vault-secret-id</span> <span class="st">&quot;</span><span class="va">$OLD_SID</span><span class="st">&quot;</span> <span class="at">-o</span> none</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> keyvault certificate set-attributes <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--version</span> <span class="st">&quot;</span><span class="va">$NEW_VER</span><span class="st">&quot;</span> <span class="at">--enabled</span> false <span class="at">-o</span> none</span></code></pre></div>
+<p><strong>Probe (expect ssl-cert == <code>$OLD_SID</code>, new version
+<code>false</code>):</strong></p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> network application-gateway ssl-cert show <span class="at">-g</span> <span class="st">&quot;</span><span class="va">$RG</span><span class="st">&quot;</span> <span class="at">--gateway-name</span> <span class="st">&quot;</span><span class="va">$AGW</span><span class="st">&quot;</span> <span class="at">-n</span> <span class="st">&quot;</span><span class="va">$SSL</span><span class="st">&quot;</span> <span class="at">--query</span> keyVaultSecretId <span class="at">-o</span> tsv   <span class="co"># == $OLD_SID</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">az</span> keyvault certificate show <span class="at">--vault-name</span> <span class="st">&quot;</span><span class="va">$KV</span><span class="st">&quot;</span> <span class="at">--name</span> <span class="st">&quot;</span><span class="va">$OBJ</span><span class="st">&quot;</span> <span class="at">--version</span> <span class="st">&quot;</span><span class="va">$NEW_VER</span><span class="st">&quot;</span> <span class="at">--query</span> attributes.enabled <span class="at">-o</span> tsv     <span class="co"># == false</span></span></code></pre></div>
+<p><strong>This proves:</strong> the gateway is back on the old
+(working) certificate and the new one is parked. <strong>What could go
+wrong / what to do:</strong> - After <strong>Jul 1</strong> the old cert
+is expired → rollback would restore an expired cert (a second outage) →
+<strong>fix forward</strong> with a re-issued PFX instead. - The gateway
+is now pinned to a versioned URI (temporary terraform drift) → once a
+good cert is staged, restore the <strong>versionless</strong> URI (Step
+6’s restore line) and re-verify (Step 7).</p>
+<hr />
+<h2 id="monitoring-watch-live-during-the-window">Monitoring (watch live
+during the window)</h2>
+<ul>
+<li><code>vpp-ag-p</code> <code>provisioningState</code> =
+<code>Succeeded</code>; Resource Health = <code>Available</code>.</li>
+<li>The gateway <strong>disables a listener</strong> if it cannot fetch
+the cert → watch Resource Health + the repo alert
+<code>terraform/metric-alert-app-gateway.tf</code> / Rootly for ~1 poll
+cycle after the change.</li>
+</ul>
+<h2 id="notes-residual">Notes / residual</h2>
+<ul>
+<li><strong>Legacy PFX</strong>: <code>az ... import</code> sends the
+raw PFX bytes to the Key Vault <em>service</em> (it does not parse them
+client-side), so the local <code>-legacy</code> requirement does not
+affect import. Re-encode to a modern PKCS12 <strong>only if</strong> the
+service returns an HTTP 400 PKCS12/algorithm error:
+<code>openssl pkcs12 -in "$PFX" -legacy -nodes -passin "file:$PW" -out /tmp/c.pem &amp;&amp; openssl pkcs12 -export -in /tmp/c.pem -keypbe AES-256-CBC -certpbe AES-256-CBC -out /tmp/modern.pfx -passout pass:TMP &amp;&amp; shred -u /tmp/c.pem</code>
+then import <code>/tmp/modern.pfx</code> with
+<code>--password TMP</code>.</li>
+<li><strong>Password in <code>ps</code></strong>:
+<code>--password "$(cat …)"</code> is briefly visible in the process
+table — acceptable on this single-operator laptop; not on a shared
+host.</li>
+<li><strong>Cross-subscription completeness (bounded residual)</strong>:
+proven complete for the prod subscription; a Sandbox/iactest sweep needs
+your multi-sub identity (<code>az login</code> as yourself + a
+Resource-Graph query) — low risk, optional, before claiming org-wide
+completeness.</li>
+</ul>
+</body>
+</html>
