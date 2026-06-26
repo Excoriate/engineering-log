@@ -1,0 +1,12 @@
+{
+  "task_id": "2026-06-26-004",
+  "slug": "enrich-jupiter-fbe-appconfig-probe",
+  "task_root": ".ai/tasks/2026-06-26-004_enrich-jupiter-fbe-appconfig-probe",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_003_feature_flags_fbe_duncan/rca.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_003_feature_flags_fbe_duncan/how-to-fix.md",
+    "/Users/alextorresruiz/Documents/obsidian/llm-wiki/learnings/lessons/fbe-feature-flags-browser-direct-appconfig-per-slot-store.md",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/eneco_fbe_browser_appconfig.md",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/MEMORY.md"
+  ]
+}

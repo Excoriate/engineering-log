@@ -1,0 +1,22 @@
+{
+  "task_id": "2026-06-26-003",
+  "slug": "apeprediction-deployment-qa",
+  "task_root": ".ai/tasks/2026-06-26-003_apeprediction-deployment-qa",
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_26_003_apeprediction_deployment_setup"
+  ],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_26_003_apeprediction_deployment_setup/deployment-qa-answers.html",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_26_003_apeprediction_deployment_setup/deployment-qa-summary.html"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "adversarial_receipts": ["context/adversarial-receipt.md — sre-maniac: central mechanism UPHELD (Lanes 1-3); 4 corrections ACCEPTED + applied (cluster=A3, no prod-env toggle, trigger:none, var-group≠desired-state)"],
+  "runtime_attacks": [],
+  "gate_witnesses": [
+    "A1 az pipelines variable-group show id 604 -> test/acc/prod-env all true (live 2026-06-26)",
+    "A1 azurepipelines.yml:168 Update values-override step has no condition; :187 for i in dev acc prod; :219 HelmDeploy gated to develop",
+    "A1 values.vppcore.{acc,prod}.yaml syncPolicy no automated; automated only in devmc:23/sandbox:31",
+    "goal-fidelity: 3 verbatim questions all present in deployment-qa-answers.html"
+  ]
+}

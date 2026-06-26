@@ -1,0 +1,11 @@
+{
+  "task_id": "2026-06-26-001",
+  "slug": "remove-acc-collection",
+  "task_root": ".ai/tasks/2026-06-26-001_remove-acc-collection",
+  "allowed_external_paths": [],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}

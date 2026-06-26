@@ -1,8 +1,9 @@
 ---
-title: "RCA — Jupiter FBE feature flags fail with 401 on Azure App Configuration (dev-mc)"
-description: "Holistic root-cause analysis of Slack-Lists Rec0BC1FTLV35 — Duncan Teegelaar's Jupiter FBE getting HTTP 401 from App Configuration while on AVD, distinct from his earlier by-design VPN network ticket."
+title: "RCA — Jupiter FBE feature flags fail with 401 on Azure App Configuration (RESOLVED — FBE per-slot Sandbox store, browser-direct HMAC)"
+description: "Holistic root-cause analysis of Slack-Lists Rec0BC1FTLV35 — Duncan Teegelaar's Jupiter FBE getting HTTP 401 from App Configuration while on AVD. RESOLVED 2026-06-26: the FBE reads its own per-slot Sandbox store (vpp-appconfig-fbe-jupiter-qvc), not the dev-mc vpp-applicationconfig-d originally analyzed; the failing caller is the browser SPA over HMAC. Self-resolved after frontend rebuild; Duncan confirmed 401→200."
 timestamp: 2026-06-22T15:10:00+02:00
-status: review
+updated: 2026-06-26T12:20:00+02:00
+status: complete
 category: on-call-rca
 authors: ["Alex Torres Ruiz (with Claude Code)"]
 task_id: 2026-06-22-006
@@ -10,6 +11,14 @@ agent: coordinator
 output_package: minimal
 adversarial_review: external
 summary: >-
+  RESOLVED 2026-06-26 — Duncan confirmed the failing calls now return 200 (browser DevTools). CORRECTION
+  (live-probe enrichment, task 2026-06-26-004): the Jupiter FBE reads its OWN per-slot Sandbox App Config
+  store vpp-appconfig-fbe-jupiter-qvc.azconfig.io (RG rg-vpp-app-sb-401), NOT the shared dev-mc
+  vpp-applicationconfig-d this document originally analyzed; the failing caller is the BROWSER SPA calling
+  .appconfig.featureflag/* over HMAC (connection string injected into a browser-served appconfig.js). The
+  store/key were healthy throughout; the 401 was a provisioning-window credential-freshness condition that
+  self-resolved when the frontend pod rebuilt. The dev-mc hypothesis set (H0–H3) below targets the wrong
+  store and is retained only as the original pre-probe reasoning trail. ORIGINAL SUMMARY FOLLOWS.
   Duncan Teegelaar (frontend engineer, returning to VPP) reports that his Jupiter FBE slot, viewed
   through AVD, gets HTTP 401 from Azure App Configuration (vpp-applicationconfig-d, dev-mc) so feature
   flags "cannot be set," even though he can see the flag values in the portal. A 401 on AVD is an
@@ -27,17 +36,35 @@ summary: >-
   paraphrase and must be confirmed first. The how-to-fix is a safety-gated decision tree, not a blind fix.
 ---
 
-# RCA — Jupiter FBE feature flags fail with 401 on Azure App Configuration (dev-mc)
+# RCA — Jupiter FBE feature flags fail with 401 on Azure App Configuration (RESOLVED)
 
-> **Status: `review` — awaiting independent challenge AND one AVD-gated discriminator probe.**
-> The causal mechanism is a deliberately-preserved **hypothesis set**: the single probe that would
-> collapse it (the exact failing call + its HTTP status and `WWW-Authenticate`/`problem+json` body,
-> plus the live `disableLocalAuth` and data-plane role state on `vpp-applicationconfig-d`) requires an
-> AVD session against Managed Cloud dev, which the analysis environment cannot reach
-> (`mc-avd-execution-boundary`). This document is honest about that gap: it ranks the hypotheses, names
-> the one probe that decides between them, and ships a branch-structured repair plan in
-> [`how-to-fix.md`](./how-to-fix.md). The companion how-to-fix is written to the Feynman teaching
-> contract.
+> **Status: `complete` — RESOLVED 2026-06-26. Root cause confirmed by live probe of the running FBE and
+> by Duncan's own browser capture (401 → 200 on the `.appconfig.featureflag/*` calls).**
+>
+> **CORRECTION — read this before the L1–L12 body.** The body below analyzes the **dev-mc shared store
+> `vpp-applicationconfig-d`**. That was the wrong target. Direct probing of the live Jupiter FBE in the
+> **Sandbox** AKS cluster (`vpp-aks01-d`, RG `rg-vpp-app-sb-401`) on 2026-06-26 established:
+>
+> 1. **The Jupiter FBE reads its OWN per-slot store** `vpp-appconfig-fbe-jupiter-qvc.azconfig.io`
+>    (Sandbox), **not** `vpp-applicationconfig-d`. (Resolves the previously-blocked **C17**.) "I can see
+>    the FFs set properly in the app config" = Duncan was looking at the wrong store (his earlier ticket's
+>    dev-mc URL).
+> 2. **The failing caller is the browser SPA.** The frontend init container injects the store's connection
+>    string into a browser-served file — `window.VUE_APP_AZ_CONFIG_CONNECTION_STRING` in
+>    `/etc/nginx/html/appconfig/appconfig.js` — and the SPA calls `…/.appconfig.featureflag%2F*` directly
+>    over **HMAC**. Duncan's screenshot shows exactly those requests, now 200.
+> 3. **The store and key were healthy the whole time** (`disableLocalAuth=false`, keys present, CORS `*`,
+>    and the FBE's exact connection string returns 200 + real flags). So the leading dev-mc hypotheses —
+>    H0 pipeline approval, H1/H1-SP token, H2 key disabled, H3 RBAC — are **refuted/irrelevant** for the
+>    real caller. (Resolves the previously-blocked **C16**.)
+> 4. **Mechanism:** a **provisioning-window credential-freshness** condition. Store created 09:29 UTC,
+>    flags written 10:03, Duncan tested ~10:49 against a 23-min-old frontend pod; the healthy pod serving
+>    a valid `appconfig.js` was rebuilt at 20:17 — after which the calls return 200. **Self-resolved.**
+>
+> Full live-probe evidence + reproduction commands:
+> `.ai/tasks/2026-06-26-004_enrich-jupiter-fbe-appconfig-probe/findings.md`. The L1–L12 analysis below is
+> **retained unchanged as the original pre-probe reasoning trail** and is superseded by this correction
+> wherever it names `vpp-applicationconfig-d`, the dev-mc network boundary, or the H0–H3 ranking.
 >
 > **Package scope (`output_package: minimal`):** by request, this incident ships two deliverables — this
 > RCA and the comprehensive Feynman [`how-to-fix.md`](./how-to-fix.md) (which serves as the RCA's
@@ -673,8 +700,12 @@ sidecars under `.ai/tasks/2026-06-22-006_fbe-duncan-rca-deliverables/context/`.
 | C13 | Precedent: Duncan's earlier "FF not showing" (2025-09) = App Config pipeline **awaiting approval** | A1 | `slack-harvest.md` §3 |
 | C14 | The 22 Jun symptom is most consistent with a **data-plane auth gap for the AVD identity**, not the network cause | A2 | reasoning over C2+C6+C8 |
 | C15 | "Can see the flags in the portal" is *consistent with* control-plane-only access — but it is weak evidence, not proof: the portal flag blade may itself read the data plane, and the view may be cached/stale | A2 | reasoning over C10+C1; the portal-blade read plane is unconfirmed |
-| C16 | **Exact failing-call status/body + live `disableLocalAuth`/RBAC state** | A3 — blocked: AVD-gated | L11 Steps 2/4/5 from an AVD session |
-| C17 | Whether Jupiter FBE reads the shared `vpp-applicationconfig-d` or an FBE-specific store; read vs MI auth for the FBE | A3 — blocked: FBE service code not read | L11 Step 6 (read FBE `Program.cs`/Helm) |
+| C16 | **RESOLVED.** Exact failing call = browser GET `…/.appconfig.featureflag%2F*` to the FBE store; was 401 (`WWW-Authenticate: HMAC-SHA256, Bearer`), now 200. Store `disableLocalAuth=false`, keys enabled, reachable. | A1 (was A3 — the AVD-gated assumption was wrong; the FBE store is Sandbox, not AVD-gated) | Live probe + Duncan browser capture (2026-06-26); `findings.md` P6–P9 |
+| C17 | **RESOLVED.** Jupiter FBE reads its **own** Sandbox store `vpp-appconfig-fbe-jupiter-qvc.azconfig.io` (RG `rg-vpp-app-sb-401`), via an **access-key connection string** injected into a browser-served `appconfig.js` — not the shared `vpp-applicationconfig-d`, and not MI. | A1 | `kubectl -n jupiter` probe of `application-secret` + `frontend` deploy; `findings.md` P2–P5 |
+| C19 | The FBE's exact connection string returns **200 + real feature flags** (`AdditionalAssetPlanningSeries`, …) on the HMAC path → the access key is valid (refutes H2 for the real store). | A1 | `az appconfig kv list --connection-string` (2026-06-26); `findings.md` P7 |
+| C20 | azconfig.io serves **CORS** (`access-control-allow-origin: *`) on the preflight and the 401, so the browser is not blocked and renders the literal 401. | A1 | `curl -i -H Origin:` (2026-06-26); `findings.md` P8 |
+| C21 | Timeline: store created 09:29:36Z, flags 10:03:42Z, frontend RS 10:26:31Z, Duncan filed ~10:49Z, healthy frontend pod rebuilt 20:17:18Z → 401 occurred against a 23-min-old pod, self-resolved on rebuild. | A1 | `az`/`kubectl` timestamps; `findings.md` Timeline |
+| C22 | Duncan confirmed (2026-06-26, browser DevTools) the `.appconfig.featureflag/*` calls now return **200** ("before these were giving 401's … now it's not a problem anymore"). | A1 | Slack-Lists Rec0BC1FTLV35 reply + screenshot |
 | C18 | Whether Duncan's pending ArgoCD dev-mc access gap is linked to the 401 | A3 — blocked: no evidence links them | ask platform / check the CMC ticket |
 
 ## Confidence
@@ -688,6 +719,14 @@ Jupiter using the shared store (C17); the branch-gated decision tree holds eithe
 *single* hypothesis is **deliberately not asserted**, and after adversarial review the ranking now leads
 with **H0** (unapplied/unapproved pipeline) on base-rate grounds. The fastest way to raise confidence:
 run **L11 Step 2** and paste the exact status + body + which caller produced it.
+
+**RESOLUTION UPDATE (2026-06-26):** the discriminator was run — not via AVD, but by directly probing the
+live FBE in Sandbox AKS, which the original analysis wrongly assumed was AVD-gated. It resolved C16 and
+C17: the real store is the FBE-specific `vpp-appconfig-fbe-jupiter-qvc` (healthy), the caller is the
+browser SPA over HMAC, and the 401 was a provisioning-window freshness condition that self-resolved.
+Duncan confirmed 401 → 200. The single asserted root cause is now **the per-slot FBE store + browser-direct
+HMAC, transiently failing during FBE provisioning** — not any dev-mc auth/RBAC/network/pipeline cause.
+Confidence: **high** (runtime-witnessed + user-confirmed). `status: complete`.
 
 ## Mutation log
 
@@ -729,3 +768,10 @@ run **L11 Step 2** and paste the exact status + body + which caller produced it.
   - Mirror patches applied to `how-to-fix.md` (caller pre-question, Branch A split, Branch B IaC-drift
     HALT + guard + stdin + read-key, Branch C read-vs-SP split + ARM-Reader note, Branch E/F effect-only
     verification, anti-pattern row for IaC-managed-secret drift).
+- 2026-06-26T12:20 — **RESOLVED + corrected (live-probe enrichment, task 2026-06-26-004).** Direct probe
+  of the running Jupiter FBE in Sandbox AKS (`vpp-aks01-d`) resolved C16/C17: the FBE uses its own store
+  `vpp-appconfig-fbe-jupiter-qvc` (healthy), the caller is the browser SPA over HMAC, and the 401 was a
+  provisioning-window freshness condition. Duncan confirmed 401 → 200 in browser DevTools. Added the
+  correction banner, resolved ledger rows C16/C17 + new C19–C22, updated Confidence and frontmatter
+  (`status: complete`). The dev-mc L1–L12 body is retained as the original reasoning trail. NOTE:
+  `rca.html` is now stale relative to this `.md`. Durable lesson captured as `LL-036`.

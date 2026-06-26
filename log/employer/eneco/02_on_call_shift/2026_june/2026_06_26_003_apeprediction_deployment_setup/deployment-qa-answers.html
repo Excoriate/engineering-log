@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APE-Prediction · ACC/PROD Deployment Setup — Answers</title>
+<style>
+  :root{
+    --bg:#0f1419; --panel:#171d26; --panel2:#1d2530; --ink:#e6edf3; --muted:#9aa7b4;
+    --line:#2a3542; --acc:#4ea1ff; --green:#3fb950; --amber:#d29922; --red:#f85149;
+    --code:#0b0f14; --chip:#243041;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:920px;margin:0 auto;padding:40px 22px 80px}
+  h1{font-size:27px;line-height:1.25;margin:0 0 6px}
+  h2{font-size:20px;margin:38px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+  h3{font-size:16px;margin:20px 0 8px;color:var(--acc)}
+  p{margin:10px 0}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 22px}
+  .lead{font-size:17px}
+  code{background:var(--code);padding:1px 6px;border-radius:5px;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:#cdd9e5}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:9px;padding:14px 16px;overflow:auto;font-size:13px;line-height:1.5}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0}
+  .contract{background:linear-gradient(180deg,#15202b,#141a22);border:1px solid #27405c}
+  .q{background:var(--panel2);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:10px;padding:16px 18px;margin:18px 0}
+  .qtext{font-style:italic;color:#cdd9e5;margin:0 0 10px}
+  .badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.3px;border-radius:20px;padding:3px 11px;margin-bottom:8px}
+  .b-yes{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.4)}
+  .b-warn{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(210,153,34,.4)}
+  .b-info{background:rgba(78,161,255,.13);color:var(--acc);border:1px solid rgba(78,161,255,.4)}
+  .verdict{font-weight:650}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+  th{background:var(--chip);font-weight:650}
+  .ev{font-size:12.5px;color:var(--muted)}
+  .tag{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;padding:1px 6px;border-radius:5px;background:var(--chip)}
+  .a1{color:var(--green);font-weight:700}.a2{color:var(--amber);font-weight:700}.a3{color:var(--red);font-weight:700}
+  .feyn{border-left:3px solid #6b7785;padding:4px 0 4px 16px;color:#c4cdd6;font-size:15px}
+  .diagram{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:18px;overflow:auto;font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.45;white-space:pre;color:#cdd9e5}
+  .hl{color:var(--amber);font-weight:700}
+  .ok{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}
+  ul{margin:8px 0 8px 2px;padding-left:20px}li{margin:5px 0}
+  .self li{margin:9px 0}
+  details{margin:7px 0}summary{cursor:pointer;color:var(--acc)}
+  .foot{margin-top:40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
+  a{color:var(--acc);text-decoration:none;border-bottom:1px dotted #3a4a5c}
+  a:hover{border-bottom-color:var(--acc)}
+  .src td{font-size:13px}
+  .repos li{margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>APE-Prediction — Is ACC really separated from PROD?</h1>
+  <p class="sub">On-call answer to the Asset Scheduling (Team&nbsp;Green) deployment-setup request · 2026-06-26 · explained Feynman-style, evidence-labelled
+    (<span class="a1">A1</span>&nbsp;witnessed&nbsp;·&nbsp;<span class="a2">A2</span>&nbsp;inferred&nbsp;·&nbsp;<span class="a3">A3</span>&nbsp;blocked).</p>
+
+  <div class="panel repos">
+    <strong>Repositories &amp; live sources (Azure DevOps · project <em>Myriad - VPP</em>)</strong>
+    <ul>
+      <li><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction">ape-prediction</a> — application + CI pipeline (<a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain"><code>azurepipelines.yml</code></a>)</li>
+      <li><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration">VPP-Configuration</a> — GitOps desired-state: <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction&amp;version=GBmain"><code>Helm/apeprediction/</code></a> + ArgoCD app-of-apps <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps&amp;version=GBmain"><code>vpp-core-app-of-apps/</code></a></li>
+      <li><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/Myriad%20-%20VPP?path=/azure-pipeline/Helm/apeprediction&amp;version=GBdevelopment">Myriad - VPP</a> — the Helm <em>chart</em> (<code>azure-pipeline/Helm/apeprediction/</code>, branch <code>development</code>)</li>
+      <li><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_library?itemType=VariableGroups&amp;view=VariableGroupView&amp;variableGroupId=604">Variable group <code>ape-prediction</code> (id&nbsp;604)</a> — the live <code>test/acc/prod-env</code> flag control (ADO Library)</li>
+    </ul>
+  </div>
+
+  <div class="panel contract">
+    <strong>What you'll be able to say after reading this</strong>
+    <ul>
+      <li>Exactly how an APE-Prediction commit becomes a running pod in dev, acc, and prod — the three hops.</li>
+      <li>Where ACC and PROD <em>are</em> isolated (config, cluster, downstream Event Hub) and where they are <em>not</em>.</li>
+      <li>The one real mechanism by which an ACC-intended change reaches the PROD desired-state — and the single setting that controls it.</li>
+    </ul>
+  </div>
+
+  <h2>The whole system in one picture</h2>
+  <p class="feyn">Think of one printed book (the Docker image). Three library branches each keep an
+    <em>order card</em> saying which edition to stock — but all three cards live in one shared catalog (the
+    <code>VPP-Configuration</code> repo, branch <code>main</code>). A librarian at each branch (ArgoCD) only restocks when
+    its card changes <strong>and</strong> someone says "restock". Dev &amp; Sandbox librarians restock automatically;
+    <strong>ACC and PROD restock only by hand</strong>. The publisher's clerk (the CI pipeline) rewrites the order cards after each print run —
+    and right now the clerk's instructions say <span class="hl">rewrite all three cards at once</span>.</p>
+
+  <div class="diagram">  ape-prediction repo  ──(branch decides tag)──▶  Docker image  vppacra.azurecr.io/eneco-vpp/apeprediction:&lt;tag&gt;
+        │  azurepipelines.yml  (trigger: none)
+        ▼
+  CI "Update values-override.yaml" step  ── reads variable group <span class="hl">ape-prediction</span> (id 604) ──┐
+        │   for env in dev/acc/prod:  if <env>-env == "true"  →  write tag into that folder, ONE commit       │
+        ▼                                                                                                      ▼
+  ┌─────────────────────  VPP-Configuration repo · branch main  (one shared catalog)  ───────────────────────────┐
+  │  Helm/apeprediction/<span class="ok">dev</span>/values-override.yaml   Helm/apeprediction/<span class="warn">acc</span>/...   Helm/apeprediction/<span class="bad">prod</span>/...  │
+  │       tag 1.176                          tag 1.168                 tag 1.168                                   │
+  └──────┬───────────────────────────────────────┬──────────────────────────────────┬───────────────────────────┘
+         ▼ (ArgoCD app-of-apps, per cluster)      ▼                                   ▼
+   <span class="ok">DEV cluster</span>  ArgoCD                       <span class="warn">ACC cluster</span> ArgoCD                <span class="bad">PROD cluster</span> ArgoCD
+   sync: AUTO (dev-mc/sandbox)             sync: <span class="warn">MANUAL</span>                     sync: <span class="bad">MANUAL</span>
+   → Event Hub ape-a-101                   → Event Hub <span class="warn">ape-a-101</span>             → Event Hub <span class="bad">ape-p-001</span> (prod IoT)
+
+  current flags in variable group 604:   test-env=<span class="hl">true</span>   acc-env=<span class="hl">true</span>   prod-env=<span class="hl">true</span>   ← all three</div>
+  <p class="ev">⚠ The three ArgoCD blocks must be <strong>separate instances/clusters</strong> for isolation to hold — that is an out-of-repo invariant, <em>not</em> provable from the gitops repo (see Q1). Builds are manual (<code>trigger: none</code>), so "every build" means "every build that runs".</p>
+
+  <!-- Q1 -->
+  <h2>Q1 — Separate configuration paths and deployment targets?</h2>
+  <div class="q">
+    <p class="qtext">"ACC and PROD are using separate configuration paths and deployment targets."</p>
+    <span class="badge b-yes">YES for config &amp; downstream</span> <span class="badge b-warn">cluster isolation = invariant to confirm</span>
+    <p class="verdict">Config files and downstream Event Hubs are genuinely separate. Whether they run on separate clusters is <em>not</em> provable from the repo — it relies on ACC and PROD being distinct ArgoCD instances (note under the table).</p>
+  </div>
+  <p class="feyn">Simply: ACC and PROD never share a config file and don't talk to the same Event Hub. The one thing the repo can't show you is that they run on different clusters — that has to be true outside git.</p>
+  <table>
+    <tr><th>Layer</th><th>ACC</th><th>PROD</th><th>Separate?</th></tr>
+    <tr><td>Config path (GitOps)</td><td><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction/acc&amp;version=GBmain"><code>Helm/apeprediction/acc/</code></a></td><td><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction/prod&amp;version=GBmain"><code>Helm/apeprediction/prod/</code></a></td><td class="ok">Yes — distinct folders</td></tr>
+    <tr><td>Downstream Event Hub <span class="ev">(<code>values.yaml</code> hostAlias)</span></td><td><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction/acc/values.yaml&amp;version=GBmain&amp;line=18&amp;lineEnd=18&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2"><code>ape-a-101</code></a> (10.7.224.78)</td><td><a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction/prod/values.yaml&amp;version=GBmain&amp;line=18&amp;lineEnd=18&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2"><code>ape-p-001</code></a> (10.9.32.79)</td><td class="ok">Yes — prod IoT</td></tr>
+    <tr><td>ArgoCD Application</td><td><code>apeprediction-eneco-vpp</code> (acc app-of-apps)</td><td>same name, <em>prod</em> app-of-apps</td><td class="ok">Yes — separate instances</td></tr>
+    <tr><td>Target cluster</td><td><code>kubernetes.default.svc</code></td><td><code>kubernetes.default.svc</code></td><td class="warn">Relies on separate ArgoCD instances — see note</td></tr>
+  </table>
+  <div class="panel" style="border-left:4px solid var(--amber)"><strong>⚠ One thing the repo can't prove.</strong> Both <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.acc.yaml&amp;version=GBmain&amp;line=7&amp;lineEnd=7&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2"><code>values.vppcore.acc.yaml:7</code></a> and <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.prod.yaml&amp;version=GBmain&amp;line=7&amp;lineEnd=7&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2"><code>values.vppcore.prod.yaml:7</code></a> set <code>cluster.url = https://kubernetes.default.svc</code> ("the cluster this ArgoCD runs in"), and the app-of-apps <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/templates/application.yaml&amp;version=GBmain&amp;line=55&amp;lineEnd=57&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2"><code>template:55-57</code></a> wires <code>destination.server</code> to it, with the <em>identical</em> Application name <code>apeprediction-eneco-vpp</code> and namespace <code>eneco-vpp</code> across acc/prod. So cluster/runtime isolation is NOT encoded in git — it depends on ACC and PROD being <strong>separate ArgoCD instances</strong>, each fed only its own <code>values.vppcore.&lt;env&gt;.yaml</code>. If both env files were ever applied to the same ArgoCD, the two apps would collide. <span class="ev">Confirm against the ArgoCD/cluster inventory. [<span class="a3">A3 — not provable from the gitops repo</span>]</span></div>
+
+  <!-- Q2 -->
+  <h2>Q2 — Can ACC changes automatically propagate to PROD?</h2>
+  <div class="q" style="border-left-color:var(--amber)">
+    <p class="qtext">"Changes deployed to ACC cannot automatically propagate to PROD."</p>
+    <span class="badge b-warn">NEEDS ATTENTION — true for deploy, NOT true for git state</span>
+    <p class="verdict">Nothing auto-<em>runs</em> in prod — but an ACC build <em>does</em> auto-<em>rewrite</em> the prod desired-state in git. That gap is exactly what your team observed.</p>
+  </div>
+  <p class="feyn">Two different questions hide inside this one. "Does prod auto-<strong>deploy</strong>?" → No. "Does an acc-intended build auto-<strong>change what prod will deploy next</strong>?" → Right now, yes.</p>
+  <h3>What is safe</h3>
+  <ul>
+    <li>ACC and PROD ArgoCD are <strong>manual-sync</strong> — neither <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.acc.yaml&amp;version=GBmain&amp;line=26&amp;lineEnd=29&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">acc</a> nor <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.prod.yaml&amp;version=GBmain&amp;line=26&amp;lineEnd=29&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">prod</a> has an <code>automated:</code> syncPolicy (only <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.devmc.yaml&amp;version=GBmain&amp;line=23&amp;lineEnd=23&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2"><code>dev-mc:23</code></a> and <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.sandbox.yaml&amp;version=GBmain&amp;line=31&amp;lineEnd=31&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2"><code>sandbox:31</code></a> do). So a git change does not roll out on its own; a human must click <em>Sync</em> on the prod cluster. <span class="ev">[<span class="a1">A1</span>]</span></li>
+    <li>The pipeline's only direct-to-cluster <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain&amp;line=217&amp;lineEnd=219&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2"><code>HelmDeploy</code> is gated to the <code>develop</code> branch</a> → the DEV cluster <code>vpp-aks01-d</code>. ACC/PROD never receive a direct push. <span class="ev">[<span class="a1">A1</span>]</span></li>
+  </ul>
+  <h3>What is NOT safe (the real finding)</h3>
+  <p>The CI step <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain&amp;line=168&amp;lineEnd=168&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2"><em>"Update values-override.yaml"</em></a> has <strong>no branch condition</strong> and <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain&amp;line=187&amp;lineEnd=191&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">loops over <code>dev/acc/prod</code></a>, writing the new image tag to every folder whose flag is <code>true</code>, then <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain&amp;line=212&amp;lineEnd=212&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">commits to <code>VPP-Configuration/main</code></a>. (The pipeline is <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain&amp;line=1&amp;lineEnd=1&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2"><code>trigger: none</code></a>, so builds are started manually or by another pipeline — not on every commit — but <em>every build that runs</em> does this.) The flags live in one shared <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_library?itemType=VariableGroups&amp;view=VariableGroupView&amp;variableGroupId=604">variable group <code>ape-prediction</code> (id&nbsp;604)</a>, and today they are:</p>
+  <pre>test-env  = "true"
+acc-env   = "true"
+prod-env  = "true"     # ← every build also stamps the PROD folder
+# (variable group last modified 2026-06-25 — the day before this request)</pre>
+  <p>So a build meant for ACC writes the same tag into <code>prod/values-override.yaml</code> in the <em>same commit</em>. PROD won't <em>run</em> it until someone syncs — but the prod desired-state is already changed, and the prod app shows <span class="warn">OutOfSync</span> with the ACC-intended tag. Any routine prod sync then ships it. <span class="ev">[mechanism <span class="a2">A2</span> from pipeline <span class="a1">A1</span> + live flags <span class="a1">A1</span>]</span></p>
+  <p class="ev"><strong>Source-of-truth note:</strong> ArgoCD reconciles from the git <code>values-override.yaml</code> file, <em>not</em> from the variable group. The group's <code>apeprediction</code> value (last built tag, currently <code>1.193</code>) can run ahead of the git desired-state (<code>≤1.176</code>) — the two are written by separate pipeline steps and are not in lockstep. Read the git override file to know what prod will actually deploy. <span class="ev">[<span class="a1">A1</span>]</span></p>
+
+  <!-- Q3 -->
+  <h2>Q3 — Any automated promotion / sync mechanisms (e.g. Helm)?</h2>
+  <div class="q" style="border-left-color:var(--acc)">
+    <p class="qtext">"Whether there are any automated promotion or synchronization mechanisms between ACC and PROD that we should be aware of (e.g. Helm)."</p>
+    <span class="badge b-info">YES — two, plus one shared chart</span>
+  </div>
+  <table>
+    <tr><th>Mechanism</th><th>What it does</th><th>ACC↔PROD coupling</th></tr>
+    <tr><td>CI values-override writer + variable group flags</td><td>Writes the image tag into each <em>flagged</em> env folder, one commit</td><td class="warn">High — all-true flags promote to all envs at once (not acc→then→prod, but build→all)</td></tr>
+    <tr><td>ArgoCD pull-sync</td><td>Reconciles each cluster to its folder</td><td class="ok">Low — auto on dev-mc/sandbox; <strong>manual</strong> on acc &amp; prod; per-cluster</td></tr>
+    <tr><td>Helm chart <code>apeprediction</code> v0.1.0</td><td>Shared chart from the helm registry; only <em>values</em> differ per env</td><td class="ok">None — Helm does not promote; no cluster-to-cluster Helm</td></tr>
+  </table>
+  <p class="ev">There is <strong>no</strong> acc→prod promotion pipeline and <strong>no</strong> Helm-based cluster-to-cluster sync. The only thing that touches multiple environments together is the shared variable-group flag set. <span class="ev">[<span class="a1">A1</span>]</span></p>
+
+  <!-- Recommendation -->
+  <h2>So what should you do before the breaking changes?</h2>
+  <p class="lead">Your structural separation is sound. The thing to decide is how an ACC build is allowed to touch the PROD desired-state.</p>
+  <p><strong>Don't just flip <code>prod-env=false</code>.</strong> The flags are <em>shared singleton</em> state on group 604, read by every run — toggling them per build is a race (two builds in flight, or a forgotten reset, silently mis-target), and leaving <code>prod-env=false</code> would <em>freeze prod promotion</em> (the prod override would never advance again). The all-true setting is most likely the intended model: one build feeds all envs in git, dev auto-syncs, acc/prod wait for a human.</p>
+  <p>Pick one of these instead:</p>
+  <ol>
+    <li><strong>Make env selection config-as-code or per-run — not shared mutable state.</strong> Split into per-env pipelines/stages each with its own variable group, OR make the env a queue-time pipeline <em>parameter</em>, so an ACC build cannot write the PROD folder by construction.</li>
+    <li><strong>Or keep the model and make the manual prod sync the deliberate, audited gate.</strong> ACC/PROD are already manual-sync. Before each prod sync, review the <code>prod/values-override.yaml</code> diff and the prod <em>OutOfSync</em> view; sync prod only when the tag is the one you intend. Document that the git coupling is intentional and the manual sync IS the control.</li>
+    <li><strong>Confirm the out-of-repo invariants &amp; live state.</strong> Verify ACC and PROD are truly separate ArgoCD instances/clusters (the repo can't prove it; identical app name+namespace would collide if co-located). Re-read from the live pipeline + group — local checkouts here are Nov-2025 pipeline / Apr-2026 config. <span class="ev">[<span class="a3">A3</span>]</span></li>
+  </ol>
+
+  <!-- Ledger -->
+  <h2>Evidence ledger — clickable source map</h2>
+  <p class="ev">Every load-bearing claim links to the exact file (and line) in Azure DevOps. Branch <code>main</code> unless noted. <span class="a1">A1</span>&nbsp;witnessed · <span class="a2">A2</span>&nbsp;inferred · <span class="a3">A3</span>&nbsp;blocked.</p>
+  <table class="src">
+    <tr><th>Claim</th><th></th><th>Source — repo › file:line (click)</th></tr>
+    <tr><td>ACC config → ACC Event Hub; PROD config → PROD Event Hub</td><td class="a1">A1</td><td>VPP-Configuration › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction/acc/values.yaml&amp;version=GBmain&amp;line=18&amp;lineEnd=18&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">acc/values.yaml:18</a> (<code>…ape-a-101</code>) · <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction/prod/values.yaml&amp;version=GBmain&amp;line=18&amp;lineEnd=18&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">prod/values.yaml:18</a> (<code>…ape-p-001</code>)</td></tr>
+    <tr><td>Separate per-env desired-state (image tag) files</td><td class="a1">A1</td><td>VPP-Configuration › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction/acc/values-override.yaml&amp;version=GBmain&amp;line=2&amp;lineEnd=2&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">acc/values-override.yaml:2</a> · <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction/prod/values-override.yaml&amp;version=GBmain&amp;line=2&amp;lineEnd=2&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">prod/values-override.yaml:2</a></td></tr>
+    <tr><td>app-of-apps wires <code>destination.server = global.cluster.url</code>; syncPolicy inherited</td><td class="a1">A1</td><td>VPP-Configuration › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/templates/application.yaml&amp;version=GBmain&amp;line=56&amp;lineEnd=60&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">templates/application.yaml:56-60</a></td></tr>
+    <tr><td>ACC &amp; PROD app-of-apps = MANUAL sync (no <code>automated:</code>)</td><td class="a1">A1</td><td>VPP-Configuration › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.acc.yaml&amp;version=GBmain&amp;line=26&amp;lineEnd=29&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">acc:26</a> · <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.prod.yaml&amp;version=GBmain&amp;line=26&amp;lineEnd=29&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">prod:26</a></td></tr>
+    <tr><td>Auto-sync exists ONLY for dev-mc &amp; sandbox</td><td class="a1">A1</td><td>VPP-Configuration › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.devmc.yaml&amp;version=GBmain&amp;line=23&amp;lineEnd=23&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">devmc:23</a> · <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.sandbox.yaml&amp;version=GBmain&amp;line=31&amp;lineEnd=31&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">sandbox:31</a> (<code>automated:</code>)</td></tr>
+    <tr><td>apeprediction app → its own per-env folder</td><td class="a1">A1</td><td>VPP-Configuration › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.acc.yaml&amp;version=GBmain&amp;line=150&amp;lineEnd=156&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">acc:150</a> (→acc) · <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.prod.yaml&amp;version=GBmain&amp;line=150&amp;lineEnd=156&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">prod:150</a> (→prod)</td></tr>
+    <tr><td>CI writes tag to every flagged env folder, every build, one commit to <code>main</code></td><td class="a1">A1</td><td>ape-prediction › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain&amp;line=187&amp;lineEnd=191&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">azurepipelines.yml:187-191</a> (loop) · <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain&amp;line=212&amp;lineEnd=212&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">:212</a> (push main)</td></tr>
+    <tr><td>Direct cluster deploy only for <code>develop</code> → dev AKS; no auto CI trigger</td><td class="a1">A1</td><td>ape-prediction › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain&amp;line=219&amp;lineEnd=219&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">azurepipelines.yml:219</a> · <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain&amp;line=1&amp;lineEnd=1&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">:1</a> (<code>trigger: none</code>)</td></tr>
+    <tr><td>Env flags <code>test/acc/prod-env</code> = all "true" (mod. 2026-06-25)</td><td class="a1">A1</td><td>ADO Library › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_library?itemType=VariableGroups&amp;view=VariableGroupView&amp;variableGroupId=604">variable group ape-prediction (id 604)</a> · <code>az pipelines variable-group show --group-id 604</code> (live 2026-06-26)</td></tr>
+    <tr><td>ACC-intended build changes PROD desired-state in git</td><td class="a2">A2</td><td>inference from pipeline (187-212) + live flags (604)</td></tr>
+    <tr><td>ACC &amp; PROD on separate clusters / ArgoCD instances</td><td class="a3">A3</td><td>NOT provable from repo — all destinations <code>kubernetes.default.svc</code> (<a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.acc.yaml&amp;version=GBmain&amp;line=7&amp;lineEnd=7&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">acc:7</a>/<a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.prod.yaml&amp;version=GBmain&amp;line=7&amp;lineEnd=7&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">prod:7</a>); identical app name+namespace — confirm via ArgoCD inventory</td></tr>
+    <tr><td>Live current per-env tags</td><td class="a3">A3</td><td>ADO Git REST TF401444 (SP needs web sign-in); SSH key misconfigured — used Apr snapshot</td></tr>
+  </table>
+
+  <!-- Self-test -->
+  <h2>Check yourself</h2>
+  <ol class="self">
+    <li><strong>If a developer merges to ACC and never touches PROD, can PROD's running version change?</strong>
+      <details><summary>answer</summary>Not on its own — prod is manual-sync. But the build will have already written the new tag into <code>prod/values-override.yaml</code> (prod-env=true), so the next prod sync would ship it. The exposure is in git, not in an auto-deploy.</details></li>
+    <li><strong>Where is ACC↔PROD isolation strongest, and where is it weakest?</strong>
+      <details><summary>answer</summary>Strongest at runtime: separate Event Hubs and manual prod sync (and separate ArgoCD instances/clusters — to confirm). Weakest at CI: one shared variable group writes all flagged env folders together.</details></li>
+    <li><strong>What single change most reduces the "ACC appeared in PROD" risk?</strong>
+      <details><summary>answer</summary>Make env selection structural — per-env pipelines/groups or a queue-time parameter — so an ACC build can't write the PROD folder. (Don't just toggle <code>prod-env</code> on the shared group: it races and freezes prod promotion.)</details></li>
+  </ol>
+
+  <p class="foot">Companion: <code>deployment-qa-summary.html</code> (one-page version). Full citations: <code>.ai/tasks/2026-06-26-003_apeprediction-deployment-qa/context/evidence-ledger.md</code>. Source request: <code>slack-request.md</code>.</p>
+
+</div>
+</body>
+</html>

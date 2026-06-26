@@ -575,5 +575,46 @@
     "added": "2026-06-22",
     "last_validated": "2026-06-22",
     "task_origin": "2026-06-22-010"
+  },
+  {
+    "id": "LL-035",
+    "scope": "log/employer/eneco/**",
+    "category": "tool-gotcha",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "Destructive `az` ops on this machine MUST pin `--subscription <id>` ON THE COMMAND ITSELF — the az CLI default (shared ~/.azure/azureProfile.json) can be flipped mid-task by a CONCURRENT session's `az account set`, and ARM_* env vars from the MC login do NOT govern az CLI resolution. 2026-06-26 deleting acc Cosmos collection AssetMonitor_FlexReservation: the read-only probe ran on acc (b524d084) but by the delete the default had drifted to Sandbox (7b1ba02e); the unpinned `az cosmosdb mongodb collection delete` targeted Sandbox and returned AuthorizationFailed (acc SP has no Sandbox rights) — a SAFE no-op but a wrong-target near-miss. TELL: an AuthorizationFailed whose error SCOPE subscription != your target is DRIFT, not a permissions gap. Cosmos collection delete is ARM control-plane (management.azure.com), governed by RBAC — it works WITHOUT the bootstrap-SA IP whitelist and is NOT blocked by a private-endpoint-only account. ALSO: before deleting to 'unblock' an IaC apply, check for an existing NON-destructive team fix — here a 2026-06-25 PR adopts the same collection via moves.tf (mongodb_collection -> mongodb_collection_shared_throughput) + use_shared_throughput=true (0 destroy); the '404/already exists' was a throughput-model mismatch (shared-db-throughput collection vs Terraform-declared collection-level autoscale). Surface the divergence; don't silently delete.",
+    "root_cause": "az CLI subscription context is process-external shared state (azureProfile.json) mutable by any concurrent session; sre-safety-preflight.sh passing in one Bash batch does NOT hold into the next. Deleting the live collection unblocks the apply but loses data and (with current config) recreates it with the wrong dedicated throughput; the PR's adopt-via-moves.tf is the durable fix.",
+    "fix": "For any destructive az op: (1) re-run `az account show --query id` AND pass explicit `--subscription <target>` on the destructive command (never rely on a default set in an earlier batch); (2) if the AuthorizationFailed scope subscription != target, it's DRIFT — `az account set` + re-pin, do not assume missing RBAC; (3) Cosmos collection delete = `az cosmosdb mongodb collection delete --subscription <id> --account-name <acct> -g <rg> --database-name <db> --name <coll> --yes` (control-plane, no whitelist); (4) witness NotFound + siblings before==after (H-EFFECT-1); (5) before deleting to unblock an apply, grep the repo for an existing moves.tf/import fix.",
+    "references": [
+      ".ai/tasks/2026-06-26-001_remove-acc-collection/verification/phase-8-results.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_26_remove_acc_collection/outcome.md"
+    ],
+    "added": "2026-06-26",
+    "last_validated": "2026-06-26",
+    "task_origin": "2026-06-26-001_remove-acc-collection",
+    "stakes_claim": "If a responder runs a destructive az op relying on the default subscription (set earlier or by the MC login) instead of pinning --subscription, a concurrent session's az account set can silently retarget it at the WRONG subscription; here only the target SP's lack of rights in Sandbox prevented a wrong-env deletion.",
+    "falsifier": "An `az cosmosdb mongodb collection delete` with no --subscription provably honoring the intended sub while azureProfile.json default points elsewhere, OR the same delete being blocked by the Cosmos account's private-endpoint/IP-whitelist. Neither occurred: the unpinned call hit Sandbox; the pinned call succeeded on acc.",
+    "stakes_class": "HIGH"
+  },
+  {
+    "id": "LL-036",
+    "scope": "log/employer/eneco/**",
+    "category": "domain-knowledge",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "An FBE 'feature-flag 401' is almost never the dev-mc shared App Config store. Each FBE slot reads its OWN per-slot Sandbox store vpp-appconfig-fbe-<slot>-<rand>.azconfig.io (RG rg-vpp-app-sb-401), and the VPP frontend init container injects that store's access-key CONNECTION STRING into a browser-served file (window.VUE_APP_AZ_CONFIG_CONNECTION_STRING in /etc/nginx/html/appconfig/appconfig.js). So the failing 'app configuration calls' are the BROWSER SPA calling .appconfig.featureflag%2F* directly over HMAC, visible in DevTools. 'I can see the FFs set properly in the app config' usually means looking at the WRONG store (the dev-mc vpp-applicationconfig-d from an earlier ticket). For Jupiter (Rec0BC1FTLV35) the store/key were healthy throughout; the 401 was a provisioning-window freshness condition (store created 09:29Z, flags 10:03Z, Duncan tested ~10:49Z against a 23-min-old frontend pod, healthy pod rebuilt 20:17Z) that self-resolved — Duncan confirmed 401->200.",
+    "root_cause": "Per-slot FBE App Config store + browser-direct HMAC read of feature flags; transient credential/appconfig.js freshness during FBE provisioning. The dev-mc vpp-applicationconfig-d framing is a misdirection inherited from the earlier (by-design) VPN-network ticket.",
+    "fix": "Probe the LIVE FBE, not dev-mc. kubectl ctx vpp-aks01-d (Sandbox): endpoint = `kubectl -n <slot> get secret application-secret -o jsonpath='{.data.connectionstrings_appconfig}' | base64 -d | grep -oiE 'Endpoint=[^;]+'`. Validate the key: `CS=...; az appconfig kv list --connection-string \"$CS\" --top 1` (200 = key valid -> not a key/RBAC problem). Have the user hard-refresh and capture the DevTools request (host=which store, Authorization Id=, status, Date). Provisioning-window 401s self-resolve on the frontend rebuild; do NOT touch dev-mc keys/RBAC/pipeline. Incidental: the connection string (Primary write key) is exposed to the browser - separate hardening follow-up.",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_003_feature_flags_fbe_duncan/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_june/2026_06_22_003_feature_flags_fbe_duncan/how-to-fix.md",
+      ".ai/tasks/2026-06-26-004_enrich-jupiter-fbe-appconfig-probe/findings.md"
+    ],
+    "added": "2026-06-26",
+    "last_validated": "2026-06-26",
+    "task_origin": "2026-06-26-004_enrich-jupiter-fbe-appconfig-probe",
+    "stakes_claim": "If the next on-call routes an 'FBE feature-flag 401' to the dev-mc vpp-applicationconfig-d store (chasing keys/RBAC/the FF-apply pipeline), they fix the wrong resource: the real caller is the browser hitting the per-slot Sandbox store, and the fault is usually transient provisioning freshness that self-heals.",
+    "falsifier": "An FBE whose frontend appconfig.js Endpoint= points at vpp-applicationconfig-d rather than a per-slot vpp-appconfig-fbe-<slot> store, OR a persistent FBE 401 where `az appconfig kv list --connection-string` against the FBE's own store also fails. Neither held for Jupiter: endpoint was vpp-appconfig-fbe-jupiter-qvc and the connection string returned 200 + real flags.",
+    "stakes_class": "HIGH"
   }
 ]

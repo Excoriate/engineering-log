@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APE-Prediction · ACC/PROD Deployment — One-Page Summary</title>
+<style>
+  :root{--bg:#0f1419;--panel:#171d26;--ink:#e6edf3;--muted:#9aa7b4;--line:#2a3542;
+    --acc:#4ea1ff;--green:#3fb950;--amber:#d29922;--red:#f85149;--code:#0b0f14;--chip:#243041;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:820px;margin:0 auto;padding:40px 22px 70px}
+  h1{font-size:25px;margin:0 0 4px}
+  h2{font-size:18px;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 22px}
+  code{background:var(--code);padding:1px 6px;border-radius:5px;font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;color:#cdd9e5}
+  .tldr{background:linear-gradient(180deg,#15202b,#141a22);border:1px solid #27405c;border-radius:12px;padding:18px 20px;font-size:16.5px}
+  .tldr b{color:#fff}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:var(--chip);font-weight:650}
+  .badge{display:inline-block;font-size:11px;font-weight:700;border-radius:20px;padding:2px 9px}
+  .b-yes{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.4)}
+  .b-warn{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(210,153,34,.4)}
+  .b-info{background:rgba(78,161,255,.13);color:var(--acc);border:1px solid rgba(78,161,255,.4)}
+  .diagram{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:16px;overflow:auto;
+    font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;line-height:1.45;white-space:pre;color:#cdd9e5}
+  .ok{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}.hl{color:var(--amber);font-weight:700}
+  ol{padding-left:20px}li{margin:6px 0}
+  .feyn{border-left:3px solid #6b7785;padding:4px 0 4px 16px;color:#c4cdd6}
+  .foot{margin-top:34px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:12px}
+  .a1{color:var(--green);font-weight:700}.a2{color:var(--amber);font-weight:700}.a3{color:var(--red);font-weight:700}
+  a{color:var(--acc);text-decoration:none;border-bottom:1px dotted #3a4a5c}a:hover{border-bottom-color:var(--acc)}
+  .src{font-size:13px}.src td{border:1px solid var(--line);padding:7px 10px;vertical-align:top}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>APE-Prediction ACC/PROD deployment — the short answer</h1>
+  <p class="sub">For Asset Scheduling (Team Green) · 2026-06-26 · one-page fold of all three questions</p>
+
+  <div class="tldr">
+    <b>The structure is sound; the CI flags are the risk.</b> ACC and PROD use separate config folders, separate clusters,
+    and separate Event Hubs, and prod only deploys on a <b>manual</b> ArgoCD sync. But the CI pipeline writes the new image
+    tag into <b>every environment folder whose flag is <code>true</code></b> in one commit — and today
+    <code>test-env</code>, <code>acc-env</code> and <code>prod-env</code> are <span class="hl">all true</span> (<a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_library?itemType=VariableGroups&amp;view=VariableGroupView&amp;variableGroupId=604">group&nbsp;604</a>). So an ACC-intended
+    build also rewrites the <b>PROD</b> desired-state in git. Nothing auto-runs in prod, but the prod app goes
+    <span class="warn">OutOfSync</span> with the ACC change — which is the "ACC appeared in PROD" you saw.
+    <b>Fix before breaking changes: don't just flip the shared <code>prod-env</code> flag — it's a race and would freeze prod promotion. Make env selection a per-env pipeline/parameter, or treat the manual prod sync as the deliberate, audited gate.</b>
+  </div>
+
+  <h2>One picture</h2>
+  <p class="feyn">One image (the "book"); three per-env order cards in one shared catalog (<code>VPP-Configuration/main</code>); a per-cluster librarian (ArgoCD) that restocks acc/prod only by hand. The CI clerk currently rewrites all three cards at once.</p>
+  <div class="diagram">build ─▶ image  ─▶ CI writes tag to <span class="ok">dev</span>/<span class="warn">acc</span>/<span class="bad">prod</span> folders (per flag)  ─▶ ONE commit to VPP-Configuration/main
+                                   │ flags now: test=<span class="hl">true</span> acc=<span class="hl">true</span> prod=<span class="hl">true</span>
+        ┌──────────────────────────┼──────────────────────────┐
+   <span class="ok">DEV</span> cluster (auto sync)   <span class="warn">ACC</span> cluster (<span class="warn">manual</span>)   <span class="bad">PROD</span> cluster (<span class="bad">manual</span>)
+   → EH ape-a-101            → EH ape-a-101         → EH <span class="bad">ape-p-001 (prod)</span></div>
+
+  <h2>The three questions, folded</h2>
+  <table>
+    <tr><th>Question</th><th>Verdict</th><th>Why</th></tr>
+    <tr><td>Separate config paths &amp; deploy targets?</td><td><span class="badge b-yes">YES*</span></td><td>Distinct folders + prod→prod Event Hub (confirmed). *Cluster isolation relies on acc/prod being separate ArgoCD instances — confirm; not provable from the repo.</td></tr>
+    <tr><td>ACC changes can't auto-propagate to PROD?</td><td><span class="badge b-warn">PARTLY</span></td><td>No auto-<em>deploy</em> (manual prod sync), but CI auto-<em>rewrites</em> prod's git state when <code>prod-env=true</code>.</td></tr>
+    <tr><td>Any auto promotion/sync (e.g. Helm)?</td><td><span class="badge b-info">YES, 2</span></td><td>CI values-writer driven by shared env-flag group; ArgoCD pull-sync (auto dev-mc/sandbox, manual acc/prod). Shared Helm chart, per-env values; no cluster-to-cluster Helm.</td></tr>
+  </table>
+
+  <h2>Do this before rolling out</h2>
+  <ol>
+    <li><b>Make env selection structural, not a shared flag</b> — split per-env pipelines/groups or use a queue-time parameter. Avoid toggling <code>prod-env</code> on shared group 604 per build (race + freezes prod promotion).</li>
+    <li><b>Gate on the git commit</b> — review the <code>prod/values-override.yaml</code> diff; keep prod ArgoCD sync manual; check the prod OutOfSync diff before syncing.</li>
+    <li><b>Confirm live</b> — read from local checkouts (pipeline Nov-2025, config Apr-2026) + a live flag query; re-verify current pipeline/flags before changing. <span class="a3">[A3]</span></li>
+  </ol>
+
+  <h2>Sources (click through to Azure DevOps)</h2>
+  <table class="src">
+    <tr><td>Pipeline writes all flagged env folders + commits to <code>main</code></td><td>ape-prediction › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/ape-prediction?path=/azurepipelines.yml&amp;version=GBmain&amp;line=187&amp;lineEnd=212&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">azurepipelines.yml:187-212</a></td></tr>
+    <tr><td>Live env flags <code>test/acc/prod-env</code> = all true</td><td>ADO Library › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_library?itemType=VariableGroups&amp;view=VariableGroupView&amp;variableGroupId=604">variable group ape-prediction (604)</a></td></tr>
+    <tr><td>ACC vs PROD config (→ acc vs prod Event Hub)</td><td>VPP-Configuration › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction/acc/values.yaml&amp;version=GBmain&amp;line=18&amp;lineEnd=18&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">acc/values.yaml:18</a> · <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/apeprediction/prod/values.yaml&amp;version=GBmain&amp;line=18&amp;lineEnd=18&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">prod/values.yaml:18</a></td></tr>
+    <tr><td>ACC/PROD = MANUAL sync; auto only on dev-mc/sandbox</td><td>VPP-Configuration › <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.prod.yaml&amp;version=GBmain&amp;line=26&amp;lineEnd=29&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">prod:26</a> vs <a href="https://dev.azure.com/enecomanagedcloud/Myriad%20-%20VPP/_git/VPP-Configuration?path=/Helm/vpp-core-app-of-apps/values.vppcore.devmc.yaml&amp;version=GBmain&amp;line=23&amp;lineEnd=23&amp;lineStartColumn=1&amp;lineEndColumn=1&amp;type=2">devmc:23</a></td></tr>
+    <tr><td>Full grounded source map</td><td>see <code>deployment-qa-answers.html</code> → "Evidence ledger — clickable source map"</td></tr>
+  </table>
+
+  <p class="foot">Evidence: <span class="a1">A1</span> separate folders/flags/pipeline · <span class="a2">A2</span> acc→prod git-coupling inference · <span class="a3">A3</span> separate clusters not provable from repo + live tags blocked (TF401444). Full detail in <code>deployment-qa-answers.html</code> and <code>.ai/tasks/2026-06-26-003_apeprediction-deployment-qa/context/evidence-ledger.md</code>.</p>
+
+</div>
+</body>
+</html>

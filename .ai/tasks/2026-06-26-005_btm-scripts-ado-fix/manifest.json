@@ -1,0 +1,35 @@
+{
+  "task_id": "2026-06-26-005",
+  "slug": "btm-scripts-ado-fix",
+  "task_root": ".ai/tasks/2026-06-26-005_btm-scripts-ado-fix",
+  "domain_class": "implementation+investigation+review",
+  "control_plane_artifact": false,
+  "compression_mode": "Full",
+  "crubvg": {"C": 1, "R": 1, "U": 2, "B": 2, "V": 1, "G": 2, "total": 9},
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/Eneco.Vpp.BehindTheMeter/azure-pipelines/deploy-terraform.pipeline.yml",
+    "/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/Eneco.Vpp.BehindTheMeter/azure-pipelines/steps/azure-boards-add-tag.sh"
+  ],
+  "external_writes": [
+    "/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/Eneco.Vpp.BehindTheMeter/azure-pipelines/deploy-terraform.pipeline.yml",
+    "/Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/Eneco.Vpp.BehindTheMeter/azure-pipelines/steps/azure-boards-add-tag.sh"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "adversarial_resolved": [
+    {"agent": "sre-maniac", "artifact": "adversarial/sre-pipeline-review.md", "verdict": "FIX-FIRST", "blocking_findings_resolved": ["M2-over-harvest"]},
+    {"agent": "el-demoledor", "artifact": "adversarial/demoledor-script-review.md", "verdict": "FIX-FIRST", "high_findings_resolved": ["M4-clobber"], "medium_resolved": ["M6-unset-TAG"], "residual_resolved": ["M1-stray-digits"]}
+  ],
+  "runtime_attacks": [
+    "shellcheck CLEAN + bash -n OK on hardened script",
+    "YAML parse OK; jobs-per-stage shows ApplyTag*(dependsOn=Apply*)",
+    "functional test-harness (stubbed az/git, GNU grep): scoped harvest, clobber-guard, non-blocking unset-TAG all pass"
+  ],
+  "gate_witnesses": [
+    {"claim": "tag job runs as Build Service identity (fix keystone)", "witness": "prior task 2026-06-22-010 el-demoledor: Build:a7ef9a24 effAllow=241 ViewWI+EditWI on area 6393 (A1)"},
+    {"claim": "diagnosis matches live code", "witness": "deploy-terraform.pipeline.yml:63/100/137 inline tag steps after azure-login.yml; original script defects confirmed by Read"},
+    {"claim": "area 6393 readable, no TF401019", "witness": "live az boards query length=929 (probe #1)"},
+    {"claim": "over-harvest real; git log -1 scopes correctly", "witness": "git log probe: each merge commit carries 1 PR's Related-work-items; test-harness T1/T2"},
+    {"claim": "no clobber on read failure", "witness": "test-harness T3: show fails -> no update emitted, tags preserved"}
+  ]
+}

@@ -2,7 +2,8 @@
 title: "How to fix — Jupiter FBE feature flags failing with 401 on Azure App Configuration (dev-mc), Feynman mastery"
 description: "First-principles, safety-gated repair guide for an App Configuration 401 on dev-mc: teaches the auth model, then a discriminator-gated decision tree with one branch per hypothesis."
 timestamp: 2026-06-22T15:40:00+02:00
-status: review
+updated: 2026-06-26T12:20:00+02:00
+status: complete
 category: on-call-how-to-fix
 authors: ["Alex Torres Ruiz (with Claude Code)"]
 task_id: 2026-06-22-006
@@ -20,6 +21,15 @@ summary: >-
 ---
 
 # How to fix — Jupiter FBE feature flags failing with 401 on Azure App Configuration (dev-mc)
+
+> **RESOLVED 2026-06-26 — read the corrected diagnosis in [`rca.md`](./rca.md) first.** Live probing of
+> the running FBE showed this guide targets the **wrong store**: the Jupiter FBE reads its own Sandbox
+> store `vpp-appconfig-fbe-jupiter-qvc` (not dev-mc `vpp-applicationconfig-d`), and the failing caller is
+> the **browser SPA** calling `.appconfig.featureflag/*` over HMAC. The store/key were healthy; the 401
+> was a provisioning-window freshness condition that self-resolved on the frontend pod rebuild (Duncan
+> confirmed 401 → 200). The closest branch below is **Branch B (access-key read path)**, but the key was
+> never broken — so the durable repair was simply the FBE finishing provisioning. The decision tree below
+> remains a sound *general* App Config 401 guide; for THIS incident it is superseded by the RCA correction.
 
 **Companion to:** [`rca.md`](./rca.md) (the full root-cause analysis). The RCA explains *what happened*
 and *why the cause is a hypothesis set*; this document teaches you to **drive the failing call to a

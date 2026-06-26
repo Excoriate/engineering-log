@@ -1,0 +1,39 @@
+{
+  "task_id": "2026-06-26-002",
+  "slug": "free-thor-fbe-vpp-core",
+  "task_root": ".ai/tasks/2026-06-26-002_free-thor-fbe-vpp-core",
+  "allowed_external_paths": [
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_26_free_thor_fbe_vpp_core_hein/sre-intake.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_26_free_thor_fbe_vpp_core_hein/slack-answer.md",
+    "log/employer/eneco/02_on_call_shift/2026_june/2026_06_26_free_thor_fbe_vpp_core_hein/how-to-feynman.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/pattern-fbe-delete-pipeline-stall-blocks-slot-release.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/recipe-manually-free-stuck-fbe-slot.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/2026-06-26-thor-delete-pipeline-stall-and-manual-slot-release.md",
+    "/Users/alextorresruiz/Documents/obsidian/2-areas/work-eneco/eneco-vpp-platform/fbe-errors/_index.md"
+  ],
+  "external_writes": [
+    "log/.../2026_06_26_free_thor_fbe_vpp_core_hein/sre-intake.md",
+    "log/.../2026_06_26_free_thor_fbe_vpp_core_hein/slack-answer.md",
+    "log/.../2026_06_26_free_thor_fbe_vpp_core_hein/how-to-feynman.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [
+    "socrates-contrarian review -> CLAIM1 forced build-log read (inference->FACT); receipts.md"
+  ],
+  "gate_witnesses": [
+    "slot row read-back: env=thor active=unused createdby='' (FACT) -> Hein unblocked",
+    "whole-sub sweep: zero thor resources (FACT)",
+    "az keyvault show vpp-fbe-thor-vuo -> NotFound (FACT)",
+    "ETag-guarded merge (--if-match) + env-reconfirm + no-inflight-build (sre-maniac guards applied)",
+    "el-demoledor: 5/7 orphan classes verified clean via shared-parent probes; manual < pipeline-rerun risk",
+    "V1 AAD app-reg = UNVERIFIED[blocked] -> state-blob deletion DEFERRED"
+  ],
+  "cloud_mutations": [
+    "az keyvault delete vpp-fbe-thor-vuo (Sandbox) -> gone (show=NotFound, list-deleted=empty)",
+    "az resource delete smartDetectorAlertRules 'Failure Anomalies - vpp-insights-fbe-thor' -> gone",
+    "az storage entity merge featurebranchenvdetails PK=3/RK=3 active=unused createdby='' branch='' --if-match <etag> -> slot RELEASED",
+    "DEFERRED: delete terraform.thor state blob (gated on V1 AAD app-reg probe; backed up to task dir)"
+  ],
+  "authorization": "user explicit: 'release that FBE slot, and delete thiago's one' + 'do it on his behalf'"
+}
