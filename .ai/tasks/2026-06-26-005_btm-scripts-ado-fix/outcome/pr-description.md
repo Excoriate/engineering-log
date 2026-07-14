@@ -31,7 +31,7 @@ For each environment, the inline tag step was removed from the `deployment` job 
 
 - **Identity-safe** by design (must run in a job without `az login`; documented in the header).
 - Passes `--organization/--project/--detect false` to `az boards query` (no `/vsts/info` auto-detect → no `TF401019`); `--organization/--detect false` to `work-item show/update` (they reject `--project`).
-- **Scopes work-item harvest to the triggering commit** (`git log -1`, the PR merge/squash commit) and extracts only `#NNN` ids — the original walked the whole shallow checkout and would tag work items from dozens of unrelated PRs.
+- Looks back over the deployed commits (the shallow checkout — `fetchDepth` 10 in dev, 100 in acc+prd, matching the team's heuristic: dev deploys every commit while acc/prd batch several) and extracts only `#NNN` ids, so stray dates/PR-ids on the marker line aren't mistaken for work items.
 - Reads each item's current tags and writes the **union**; if that read fails, it **skips the item** rather than clobbering its existing tags.
 - Guards the empty work-item list (an empty `IN ()` is a WIQL parse error).
 - Surfaces failures with `##vso[task.logissue]` + `SucceededWithIssues` — loud but **non-blocking**; a cosmetic tag must never fail a deployment (including a missing `TAG`).
@@ -52,7 +52,7 @@ After this merges and a deploy runs on a branch whose commits reference a Team B
    # GO = output contains DEV (and any tags it had before)
    ```
 
-The script logic was validated locally with a stubbed `az`/`git` harness (GNU grep): scoped harvest, tag-union with no clobber, clobber-skip on read failure, and non-blocking on missing `TAG` all behave as intended.
+The script logic was validated locally with a stubbed `az`/`git` harness (GNU grep): `#NNN` id extraction, tag-union with no clobber, clobber-skip on read failure, and non-blocking on missing `TAG` all behave as intended.
 
 ## Risk / rollback
 
