@@ -1,0 +1,65 @@
+############### Run pre-commit log 52 ###############
+2026-07-17T10:40:48.8628142Z ContinueOnError: False
+
+############### Run pre-commit log 60 ###############
+2026-07-17T10:41:15.8016858Z [INFO] Installing environment for https://github.com/pre-commit/pre-commit-hooks.
+2026-07-17T10:41:22.2278646Z [INFO] Installing environment for https://github.com/igorshubovych/markdownlint-cli.
+2026-07-17T10:41:39.9986108Z Terraform validate with tflint...........................................Failed
+2026-07-17T10:41:39.9986791Z - hook id: terraform_tflint
+2026-07-17T10:41:39.9988537Z [0m[31mCommand 'tflint --init' failed:[0m
+2026-07-17T10:41:39.9988957Z Installing "azurerm" plugin...
+2026-07-17T10:41:39.9989743Z Panic: runtime error: invalid memory address or nil pointer dereference
+2026-07-17T10:41:39.9990584Z  -> 1: runtime.gopanic: /panic.go(860)
+2026-07-17T10:41:39.9990986Z  -> 2: runtime.panicmem: /panic.go(336)
+2026-07-17T10:41:39.9991391Z  -> 3: runtime.sigpanic: /signal_unix.go(931)
+2026-07-17T10:41:39.9991839Z  -> 4: github.com/sigstore/sigstore-go/pkg/bundle.(*Bundle).TlogEntries: /bundle.go(300)
+2026-07-17T10:41:39.9992342Z  -> 5: github.com/sigstore/sigstore-go/pkg/verify.VerifyTlogEntry: /tlog.go(40)
+2026-07-17T10:41:39.9992840Z  -> 6: github.com/sigstore/sigstore-go/pkg/verify.(*Verifier).VerifyTransparencyLogInclusion: /signed_entity.go(809)
+2026-07-17T10:41:39.9993345Z  -> 7: github.com/sigstore/sigstore-go/pkg/verify.(*Verifier).Verify: /signed_entity.go(606)
+2026-07-17T10:41:39.9993839Z  -> 8: github.com/terraform-linters/tflint/plugin.(*SignatureChecker).VerifyAttestations: /signature.go(136)
+2026-07-17T10:41:39.9994333Z  -> 9: github.com/terraform-linters/tflint/plugin.(*InstallConfig).Install: /install.go(134)
+2026-07-17T10:41:39.9995077Z  -> 10: github.com/terraform-linters/tflint/cmd.(*CLI).init.func1: /init.go(49)
+2026-07-17T10:41:39.9995553Z  -> 11: github.com/terraform-linters/tflint/cmd.(*CLI).withinChangedDir: /cli.go(200)
+2026-07-17T10:41:39.9996013Z  -> 12: github.com/terraform-linters/tflint/cmd.(*CLI).init: /init.go(23)
+2026-07-17T10:41:39.9996461Z  -> 13: github.com/terraform-linters/tflint/cmd.(*CLI).Run: /cli.go(108)
+2026-07-17T10:41:39.9998388Z TFLint crashed... :(
+2026-07-17T10:41:39.9998885Z Please attach an output log, describe the situation and version that occurred and post an issue to https://github.com/terraform-linters/tflint/issues
+2026-07-17T10:41:40.0263738Z ##[error]Bash exited with code '1'.
+
+############### Run pre-commit log 63 ###############
+2026-07-17T10:40:58.5095421Z Fetching latest Cosign version from [https://api.github.com/repos/sigstore/cosign/releases/latest]
+2026-07-17T10:40:58.7628414Z Downloading Cosign v3.1.1 from [https://github.com/sigstore/cosign/releases/download/v3.1.1/cosign-linux-amd64]
+2026-07-17T10:41:00.1228364Z ##[section]Starting: Install TFLint - [latest]
+2026-07-17T10:41:00.2962027Z Fetching latest TFLint version from [https://api.github.com/repos/terraform-linters/tflint/releases/latest]
+2026-07-17T10:41:00.5303130Z Downloading TFLint v0.63.1 from [BASE_URL]
+2026-07-17T10:41:02.1200137Z Flag --signature has been deprecated, please use --bundle to provide a signature
+2026-07-17T10:41:02.9036555Z tflint_linux_amd64.zip: OK
+2026-07-17T10:41:02.9045596Z Unpacking and Installing...
+2026-07-17T10:41:02.9443240Z Archive:  /tmp/tmp.kLlowR3SwD/tflint_linux_amd64.zip
+2026-07-17T10:41:03.2857100Z   inflating: /tmp/tmp.kLlowR3SwD/tflint  
+2026-07-17T10:41:03.3211479Z ##[section]Finishing: Install TFLint - [latest]
+2026-07-17T10:41:12.2189552Z Installing collected packages: distlib, pyyaml, platformdirs, nodeenv, identify, filelock, cfgv, python-discovery, virtualenv, pre-commit
+2026-07-17T10:41:15.8016895Z [INFO] Installing environment for https://github.com/pre-commit/pre-commit-hooks.
+2026-07-17T10:41:22.2278755Z [INFO] Installing environment for https://github.com/igorshubovych/markdownlint-cli.
+2026-07-17T10:41:39.9986141Z Terraform validate with tflint...........................................Failed
+2026-07-17T10:41:39.9986809Z - hook id: terraform_tflint
+2026-07-17T10:41:39.9988542Z [0m[31mCommand 'tflint --init' failed:[0m
+2026-07-17T10:41:39.9988961Z Installing "azurerm" plugin...
+2026-07-17T10:41:39.9989761Z Panic: runtime error: invalid memory address or nil pointer dereference
+2026-07-17T10:41:39.9990587Z  -> 1: runtime.gopanic: /panic.go(860)
+2026-07-17T10:41:39.9990989Z  -> 2: runtime.panicmem: /panic.go(336)
+2026-07-17T10:41:39.9991394Z  -> 3: runtime.sigpanic: /signal_unix.go(931)
+2026-07-17T10:41:39.9991843Z  -> 4: github.com/sigstore/sigstore-go/pkg/bundle.(*Bundle).TlogEntries: /bundle.go(300)
+2026-07-17T10:41:39.9992346Z  -> 5: github.com/sigstore/sigstore-go/pkg/verify.VerifyTlogEntry: /tlog.go(40)
+2026-07-17T10:41:39.9992844Z  -> 6: github.com/sigstore/sigstore-go/pkg/verify.(*Verifier).VerifyTransparencyLogInclusion: /signed_entity.go(809)
+2026-07-17T10:41:39.9993348Z  -> 7: github.com/sigstore/sigstore-go/pkg/verify.(*Verifier).Verify: /signed_entity.go(606)
+2026-07-17T10:41:39.9993842Z  -> 8: github.com/terraform-linters/tflint/plugin.(*SignatureChecker).VerifyAttestations: /signature.go(136)
+2026-07-17T10:41:39.9994579Z  -> 9: github.com/terraform-linters/tflint/plugin.(*InstallConfig).Install: /install.go(134)
+2026-07-17T10:41:39.9995081Z  -> 10: github.com/terraform-linters/tflint/cmd.(*CLI).init.func1: /init.go(49)
+2026-07-17T10:41:39.9995556Z  -> 11: github.com/terraform-linters/tflint/cmd.(*CLI).withinChangedDir: /cli.go(200)
+2026-07-17T10:41:39.9996016Z  -> 12: github.com/terraform-linters/tflint/cmd.(*CLI).init: /init.go(23)
+2026-07-17T10:41:39.9996464Z  -> 13: github.com/terraform-linters/tflint/cmd.(*CLI).Run: /cli.go(108)
+2026-07-17T10:41:39.9998392Z TFLint crashed... :(
+2026-07-17T10:41:39.9998889Z Please attach an output log, describe the situation and version that occurred and post an issue to https://github.com/terraform-linters/tflint/issues
+2026-07-17T10:41:40.0263766Z ##[error]Bash exited with code '1'.
+

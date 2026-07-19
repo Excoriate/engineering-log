@@ -1,0 +1,17 @@
+{
+  "task_id": "2026-07-19-003",
+  "slug": "vpp-fbe-feature-flags-401-rca",
+  "task_root": ".ai/tasks/2026-07-19-003_vpp-fbe-feature-flags-401-rca",
+  "domain_class": "investigation+implementation",
+  "control_plane_artifact": false,
+  "compression_mode": "full",
+  "crubvg": 8,
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_001_vpp_frontend_fbe_feature_flags_401"
+  ],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}

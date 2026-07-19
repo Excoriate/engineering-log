@@ -1,0 +1,11 @@
+{
+  "task_id": "2026-07-19-002",
+  "slug": "acc-prometheus-alert-rules-pr",
+  "task_root": ".ai/tasks/2026-07-19-002_acc-prometheus-alert-rules-pr",
+  "allowed_external_paths": [],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}

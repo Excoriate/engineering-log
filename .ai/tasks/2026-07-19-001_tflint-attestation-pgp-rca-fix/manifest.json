@@ -1,0 +1,13 @@
+{
+  "task_id": "2026-07-19-001",
+  "slug": "tflint-attestation-pgp-rca-fix",
+  "task_root": ".ai/tasks/2026-07-19-001_tflint-attestation-pgp-rca-fix",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_003_tflint_attestation_pgp_workaround"
+  ],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}

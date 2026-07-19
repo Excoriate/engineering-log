@@ -1,0 +1,19 @@
+=== downloading tflint v0.63.1 (darwin_arm64) ===
+using: TFLint version 0.63.1
+GITHUB_TOKEN set: yes
+############## CASE: default (line: '<none>') ##############
+Installing "azurerm" plugin...
+Installed "azurerm" (source: github.com/terraform-linters/tflint-ruleset-azurerm, version: 0.28.0)
+----- exit: 0 -----
+
+############## CASE: pgp (line: 'signature = "pgp"') ##############
+Installing "azurerm" plugin...
+The plugin was signed using a legacy PGP signing key. Please update the plugin to the latest version
+Installed "azurerm" (source: github.com/terraform-linters/tflint-ruleset-azurerm, version: 0.28.0)
+----- exit: 0 -----
+
+############## CASE: force_keyless (line: 'signature = "keyless"') ##############
+Failed to load TFLint config; plugin "azurerm": "keyless" is invalid signature. Allowed values are: auto, attestation, pgp, none
+----- exit: 1 -----
+
+BIN=/tmp/tflint-bin.HmVpj2 WORK=/tmp/tflint-matrix.XgNsWF

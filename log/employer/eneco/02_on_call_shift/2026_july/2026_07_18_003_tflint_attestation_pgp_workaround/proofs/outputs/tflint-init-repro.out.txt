@@ -1,0 +1,32 @@
+tflint: TFLint version 0.61.0
+plugin dir: /tmp/tflint-repro.uIxPhO/plugins
+GITHUB_TOKEN set: yes
+############## CASE: default_attestation ##############
+----- .tflint.hcl -----
+plugin "azurerm" {
+  enabled = true
+  version = "0.28.0"
+  source  = "github.com/terraform-linters/tflint-ruleset-azurerm"
+  
+}
+----- rm plugin cache -----
+----- tflint --init -----
+Installing "azurerm" plugin...
+Installed "azurerm" (source: github.com/terraform-linters/tflint-ruleset-azurerm, version: 0.28.0)
+----- exit code: 0 -----
+
+############## CASE: pgp_workaround ##############
+----- .tflint.hcl -----
+plugin "azurerm" {
+  enabled = true
+  version = "0.28.0"
+  source  = "github.com/terraform-linters/tflint-ruleset-azurerm"
+  signature = "pgp"
+}
+----- rm plugin cache -----
+----- tflint --init -----
+Installing "azurerm" plugin...
+Installed "azurerm" (source: github.com/terraform-linters/tflint-ruleset-azurerm, version: 0.28.0)
+----- exit code: 0 -----
+
+WORKDIR=/tmp/tflint-repro.uIxPhO

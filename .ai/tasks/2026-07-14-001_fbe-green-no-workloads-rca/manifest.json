@@ -1,0 +1,12 @@
+{
+  "task_id": "2026-07-14-001",
+  "slug": "fbe-green-no-workloads-rca",
+  "task_root": ".ai/tasks/2026-07-14-001_fbe-green-no-workloads-rca",
+  "allowed_external_paths": [],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": [],
+  "session_state": "Unknown[blocked]: PI_CODING_AGENT_SESSION_DIR is not exposed; printenv exited 1"
+}

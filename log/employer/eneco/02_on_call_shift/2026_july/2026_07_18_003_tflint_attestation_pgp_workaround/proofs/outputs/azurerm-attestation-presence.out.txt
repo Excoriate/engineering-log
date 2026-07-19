@@ -1,0 +1,5 @@
+### Does tflint-ruleset-azurerm publish GitHub attestations? (probe 2026-07-19T16:46:22Z)
+v0.28.0 linux_amd64: asset=ok digest=efb963655ae41741.. attestations_api_http=404 n_attestations=0 first_none
+v0.28.0 darwin_arm64: asset=ok digest=bce1625af20bdfef.. attestations_api_http=404 n_attestations=0 first_none
+v0.29.0 linux_amd64: asset=ok digest=165b87a401b5f3a6.. attestations_api_http=200 n_attestations=1 first_bundle=object bundle_url=yes
+v0.29.0 darwin_arm64: asset=ok digest=2d7ee8712d62377b.. attestations_api_http=200 n_attestations=1 first_bundle=object bundle_url=yes

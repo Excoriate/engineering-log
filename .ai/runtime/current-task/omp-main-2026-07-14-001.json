@@ -1,0 +1,9 @@
+{
+  "task_id": "2026-07-14-001",
+  "slug": "fbe-green-no-workloads-rca",
+  "task_root": ".ai/tasks/2026-07-14-001_fbe-green-no-workloads-rca",
+  "phase": 1,
+  "preflight_complete": true,
+  "session_id": "omp-main-2026-07-14-001",
+  "session_identity_note": "Local fallback identifier; PI_CODING_AGENT_SESSION_DIR was not exposed"
+}

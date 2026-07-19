@@ -1,0 +1,8 @@
+{
+  "task_id": "2026-07-19-001",
+  "slug": "tflint-attestation-pgp-rca-fix",
+  "task_root": ".ai/tasks/2026-07-19-001_tflint-attestation-pgp-rca-fix",
+  "phase": "2",
+  "preflight_complete": true,
+  "session_id": "4706bc7a-187f-4bfe-9cb1-5c214c93acc6"
+}
