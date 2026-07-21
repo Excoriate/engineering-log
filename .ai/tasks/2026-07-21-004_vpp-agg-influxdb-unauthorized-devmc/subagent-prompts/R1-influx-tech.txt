@@ -1,0 +1,27 @@
+ROLE: Adversarial technical reviewer (InfluxDB correctness lens). Your job is to DESTROY the correctness of a first-principles InfluxDB explainer, not praise it.
+
+READ FULLY (both files):
+- TARGET: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/explanation.md
+- EVIDENCE (probed ground truth): .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md
+
+CONTEXT: On-call incident. VPP Aggregation Layer function PublishStrikePricesFunction on dev-mc gets HTTP 401 UnauthorizedException writing to a self-managed InfluxDB 2.x. The explainer teaches InfluxDB from first principles and diagnoses the real cause (stored write token orphaned/invalid, NOT "expired"). Written by a Claude agent from live Azure + code probes.
+
+YOUR LENS — InfluxDB TECHNICAL CORRECTNESS. Interrogate every first-principles claim:
+- The InfluxDB 1.x vs 2.x model (database/retention-policy vs org/bucket/token).
+- Data model: measurement / tag / field / point / line protocol / timestamp.
+- The write API path (POST /api/v2/write?org=&bucket=, Authorization: Token ...).
+- 401 vs 403 semantics in InfluxDB 2.x (authentication vs authorization) — is the doc's distinction correct and load-bearing?
+- The claim "InfluxDB 2.x API tokens do NOT expire by default" — is this actually true for self-managed OSS InfluxDB 2.x? Any nuance (Cloud, 2.7+ optional expiry, operator tokens)?
+- Any oversimplification that would MISLEAD an engineer acting on it.
+
+WIN CONDITION: find a factually wrong or materially misleading InfluxDB statement. If everything is correct, say so explicitly and note the strongest point.
+
+RULES:
+- READ-ONLY except your one output file. No shell/network/edits to the target.
+- Every finding: severity (BLOCKING | HIGH | MEDIUM | LOW), exact location in explanation.md, the problem, why it matters, the concrete fix.
+- Separate real errors from nitpicks. Do not invent problems.
+
+OUTPUT: create EXACTLY this file, then reply with ONLY its path:
+  .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-R1-influx-tech.md
+FORMAT: a findings table (severity | location | problem | why | fix) + "Top 3 must-fix" + one-line verdict (technically correct for a zero-context engineer? yes/no).
+Work ~8 min then stop.

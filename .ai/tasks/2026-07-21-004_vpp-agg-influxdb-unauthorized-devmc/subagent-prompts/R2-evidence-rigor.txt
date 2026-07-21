@@ -1,0 +1,26 @@
+ROLE: Adversarial epistemic reviewer (evidence-rigor / anti-slop lens). Your job is to catch overclaims and mislabeled evidence in an on-call explainer.
+
+READ FULLY (both files):
+- TARGET: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/explanation.md
+- EVIDENCE (probed ground truth): .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md
+
+CONTEXT: On-call incident. PublishStrikePricesFunction on dev-mc gets HTTP 401 writing to InfluxDB 2.x. The explainer uses evidence labels A1 (witnessed: command/file:line), A2 (inferred), A3 (blocked/unverified). It corrects the filer's "token expired" theory. Written by a Claude agent from live Azure + code probes.
+
+YOUR LENS — EPISTEMIC RIGOR. Cross-check the explainer's claims against the EVIDENCE file:
+- Is anything the probes did NOT establish presented as A1/fact? (e.g., onset ">1 month", blast radius, the InfluxDB-internal token state.)
+- Is the leading root-cause ("stored token orphaned/invalid on the InfluxDB side") honestly hedged as A2, or does the prose drift into stating it as proven?
+- Any identifier/number/date in the explainer NOT supported by the evidence file (fabrication risk)?
+- Does every A1 claim actually have a witnessed source in the evidence file? Any label too strong or too weak?
+- Does it correctly separate "verified" from "inferred" from "blocked (AVD/oc)"?
+
+WIN CONDITION: find an epistemic overclaim, a mislabeled A1/A2/A3, or an unsupported figure. If labels are honest, say so and name the riskiest remaining claim.
+
+RULES:
+- READ-ONLY except your one output file. No shell/network/edits to the target.
+- Every finding: severity (BLOCKING | HIGH | MEDIUM | LOW), exact location, the problem, why it matters, the fix (e.g., relabel A1->A2, add a hedge, cite the evidence row).
+- No nitpicks-as-blockers. Do not invent problems.
+
+OUTPUT: create EXACTLY this file, then reply with ONLY its path:
+  .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-R2-evidence-rigor.md
+FORMAT: findings table (severity | location | problem | why | fix) + "Top 3 must-fix" + one-line verdict (evidence labels honest? yes/no).
+Work ~8 min then stop.

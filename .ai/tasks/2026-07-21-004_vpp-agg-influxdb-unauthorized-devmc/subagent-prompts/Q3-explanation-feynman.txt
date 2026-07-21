@@ -1,0 +1,15 @@
+Final adversarial QA. Score explanation.md out of 100 as a FEYNMAN first-principles teaching document (rich visuals, systems-thinking, comprehensive, defensible). Deduct for any technical inaccuracy, vagueness, missing angle, or weak teaching.
+
+READ FULLY:
+- log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/explanation.md
+- cross-check facts: .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md
+
+Judge:
+- First-principles accuracy: InfluxDB 1.x vs 2.x, org/bucket/token, line protocol, 401 vs 403, tokens-don't-expire — all correct and precise? Any oversimplification that misleads?
+- Evidence rigor: are A1/A2/A3 labels honest (nothing inferred/blocked stated as fact)? Is the leading hypothesis properly hedged vs the alternatives (byte-mismatch, org/bucket loss, proxy)?
+- Visuals: do the two diagrams TEACH (each introduced + read in prose, distinct angles)? Would a 3rd angle add value or is coverage complete?
+- Systems-thinking / completeness: does it cover consumer/operator/failure/verification perspectives? Blast radius (b2b/b2c, other writers)? What would a zero-context reader still not understand?
+- Self-test + glossary: do they build transfer, not recall?
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-Q3-explanation-feynman.md ; reply with ONLY that path.
+Format: SCORE X/100 + itemized deductions (severity, location, issue, fix) + "to reach 100" list + verdict. Efficient; ~10 min; write even if partial.

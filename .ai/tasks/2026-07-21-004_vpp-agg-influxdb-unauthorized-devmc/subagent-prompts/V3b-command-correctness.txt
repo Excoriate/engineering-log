@@ -1,0 +1,18 @@
+You are the command-correctness reviewer of a fix RUNBOOK executed ONE-SHOT by a CONTEXT-FREE agent on the Eneco AVD (WSL linux: oc, kubectl, jq, curl; NO influx CLI on the host) + az to dev-mc. Bar: every command runs correctly first time.
+
+BE EFFICIENT: use your existing knowledge of oc/az/kubectl/influx-2.x/curl syntax. Do NOT browse the web or hunt for examples. Spend your time on the runbook, not research. Prioritize the highest-risk commands.
+
+READ: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+
+Check, in priority order:
+1. Shell-variable lifetime across SEPARATE code blocks: `$INFLUXPOD`, `$ADMIN`, `$ORGID`, `$BUCKETID`, `$MYIP`, `$K8S_SECRET`, `$SECRET_KEY` are set in one block and used in later blocks — a one-shot agent may run each fenced block as a FRESH shell, losing them. Flag every use of a variable defined in an earlier block. (Highest risk.)
+2. `oc exec deploy/NAME -- sh -c '...$VAR...'` — is $InfluxDbOptions__Token expanded in the POD (correct, single-quoted) or locally? Is `oc exec deploy/<name>` valid (picks a pod)? Is `-l app=influxdb2` a plausible label + is the fallback correct?
+3. `influx` 2.x flags run via `oc exec`: `org list`/`bucket list`/`auth list`/`auth create --write-bucket`/`auth delete --id`/`query '<flux>'` — correct flags/positional? `--json` support?
+4. `az`: `az monitor app-insights query` needs the `application-insights` extension (is that noted?); KQL validity; `az keyvault secret set --value` (value in argv → process list/history); `network-rule add/remove`.
+5. `curl` fallback needs a prior `port-forward` — is it present/ordered? jq filters valid (`del(.authorizations[].token)`)?
+6. Portability on WSL: `sha256sum`, `base64 -d`, `printf`, `tr` fine? Any quoting bug?
+
+For each finding: severity (BLOCKING/HIGH/MEDIUM/LOW), exact command/section, what breaks, the corrected command. Confirm correct commands briefly.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-V3-command-correctness.md ; reply with ONLY that path.
+Format: findings table + Top-3 must-fix + verdict (READY-ONE-SHOT | NEEDS-CHANGES | NOT-READY). Finish within 12 minutes; write the file even if partial.

@@ -1,0 +1,12 @@
+Final adversarial QA. Score the RUNBOOK out of 100 for EXECUTION by a human on-call operator running it start-to-finish in ONE AVD WSL shell (both oc and az work there; no influx CLI on host — influx runs via oc exec). Deduct for anything that would make the operator stall, guess, or run a command that errors.
+
+READ FULLY: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+
+This is the 3rd revision; prior rounds fixed the two-plane split, placeholders, jq @sha256, sh <(...) process-subst, --value/--token argv leaks, exception-vs-invocation verification, and made Branch B executable. VERIFY those are truly fixed in the CURRENT text, and find any RESIDUAL:
+- Every fenced bash block: does it run correctly under `set -Eeuo pipefail` in bash (WSL)? Check the `influx_exec`/`ocx` helpers, `read -r ... < <(...)` under errexit, `mapfile`, jq `-er`/`-rje`, the C1 auth-hash loop, the C3 curl probe pod-shell syntax, the C6 rollback download/set, the C7 union KQL `datetime(...)`, the C8 Flux, the C9 selector.
+- Are all shell variables defined before use across the whole top-to-bottom run (INFLUXPOD before influx_exec; ORGID/BUCKETID/NEW_TOKEN/NEW_AUTH_ID/OLD_AUTH_ID/K8S_SECRET/SECRET_KEY/NEW_KV_HASH/OLD_KV_VER)?
+- Does every §5 branch have a concrete decision the operator can read from the output? Any dead-end? Is the §5c-pw (admin-password UI) branch complete enough for a human?
+- Is anything still a bare placeholder or undefined?
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-Q1-runbook-execution.md ; reply with ONLY that path.
+Format: SCORE X/100 + itemized deductions (severity, location, issue, fix) + "to reach 100" list + verdict. Be efficient; ~10 min; write the file even if partial.

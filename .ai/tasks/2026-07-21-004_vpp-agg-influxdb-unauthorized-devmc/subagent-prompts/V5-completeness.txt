@@ -1,0 +1,17 @@
+You are 1 of 5 adversarial reviewers stress-testing a fix RUNBOOK executed ONE-SHOT by a CONTEXT-FREE agent with AVD + az on dev-mc. The bar: the executor is never left at a dead-end, and "done" actually means fixed.
+
+READ FULLY:
+- RUNBOOK: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+- context (to judge completeness against the real system): ./rca.md, ./explanation.md, .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md
+
+YOUR LANE — COMPLETENESS / DECISION-TREE COVERAGE / VERIFICATION SOUNDNESS. Win = find a dead-end, an unhandled outcome, a missed consumer, or a false-passing "fixed".
+- Trace §2→§3→§4→§5→§6→§7→§8→§9 as a graph: does every branch outcome route to a concrete next step? Any state the executor can reach with no instruction (e.g. §5a match but §5b proxy; §5c "token valid" path; §6B repair that never converges)?
+- Blast radius: are ALL InfluxDB writers covered, not just the 3 strikeprice variants? Does §4 reliably enumerate telemetry/data-ingestion writers, and does §7 restart + §8 verify + §9 revoke all use that SAME full set?
+- Verification false-pass: can §8 pass while a variant is still broken, or on a manual write that never exercised the pod path? Is the per-pod / observed-write requirement airtight?
+- Missing prerequisites/ordering: anything §5+ needs that an earlier step didn't produce (org/bucket IDs, the k8s Secret name, the OLD auth ID for revoke, the port-forward for curl)?
+- Rollback: if a rolled deployment comes up unhealthy, is there a stated response? Is there any point of no return without a checkpoint?
+
+For each finding: severity, exact location, the gap/dead-end/false-pass, why it strands or misleads the executor, the concrete fix. Confirm genuinely-complete branches briefly.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-V5-completeness.md ; reply with ONLY that path.
+Format: findings table + Top-3 must-fix + verdict (READY-ONE-SHOT | NEEDS-CHANGES | NOT-READY). ~8 min.

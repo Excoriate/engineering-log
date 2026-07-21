@@ -1,0 +1,17 @@
+You are 1 of 5 adversarial reviewers stress-testing a fix RUNBOOK executed ONE-SHOT and AUTONOMOUSLY by a CONTEXT-FREE agent with AVD + az on dev-mc. The bar: no step can cause an outage, data loss, or secret leak — even if executed literally by an agent that does not stop to think.
+
+READ FULLY:
+- RUNBOOK: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+
+YOUR LANE — SAFETY / ONE-WAY-DOORS / SECRET HYGIENE. Win = find a way an autonomous executor causes harm.
+- Secret leakage: does ANY command print a token/secret to stdout, logs, or shell history? `az keyvault secret set --value "<NEW_TOKEN>"` (value in argv → history/process list); `influx auth create` prints the token; `$ADMIN`/`$ORGID` capture; the `curl` write with the token in the command. Are all of these handled, and is the guidance actually sufficient for an agent that logs its commands?
+- Destructive / irreversible: `influx auth delete` (revoke) — is it gated behind ALL consumers verified? `az keyvault secret set` overwriting the only known-good token before a new one is proven — is create-before-overwrite preserved? Any path to recreate org/bucket? Restarting the wrong workload? Rolling ALL writers when only one was diagnosed?
+- The KV firewall add in §2b — is removal guaranteed (a one-shot agent that errors mid-run may skip §9)? Should it be a trap/finally?
+- Are the STOP conditions truly blocking, and placed BEFORE the dangerous action, not after?
+- Cross-env safety: could the executor act on acc/prd by mistake (wrong oc context / wrong az sub)? Is there a guard?
+- Does §7 restart-before-proving-sync risk anything? Does the "restart once more" loop risk an infinite loop?
+
+For each finding: severity, exact step, the harmful scenario (concrete, what an autonomous agent does), the consequence, the correction. Confirm the genuinely-safe gates briefly.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-V4-safety.md ; reply with ONLY that path.
+Format: findings table + Top-3 must-fix + verdict (READY-ONE-SHOT | NEEDS-CHANGES | NOT-READY). ~8 min.

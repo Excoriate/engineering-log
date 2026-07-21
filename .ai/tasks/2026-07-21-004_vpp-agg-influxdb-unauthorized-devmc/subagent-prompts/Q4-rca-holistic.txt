@@ -1,0 +1,15 @@
+Final adversarial QA. Score rca.md out of 100 as a HOLISTIC RCA that makes a zero-context reader able to draw, trace, reproduce, reject false explanations, repair, and defend the conclusions (Feynman/systems-thinking, rich visuals, evidence-rigorous). Deduct for any incoherence, overclaim, missing layer, weak visual, or undefendable conclusion.
+
+READ FULLY:
+- log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/rca.md
+- cross-check: ./explanation.md, ./how-to-fix.md, .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md
+
+Judge:
+- L1-L12 coverage: is every layer that the incident exercises present and non-hollow? Vocabulary continuity (no term used before introduced)?
+- Evidence rigor: A1/A2/A3 honestly assigned in the ledger; the leading hypothesis labelled a hypothesis (not "Root cause"); confidence statement enumerates every flip condition?
+- Visuals: do the two diagrams (L3 runtime, L6 credential chain) each teach and connect? Is a timeline (L7) present as a table (not the doc spine)? Rich enough?
+- Defensibility: could the reader defend each conclusion from the doc alone? Any A1 that should be A2? Any command in L11 without a rationale/decision-rule?
+- Cross-document coherence: do rca.md, explanation.md, how-to-fix.md agree (same diagnosis, same blast radius, same fix shape)? Any contradiction?
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-Q4-rca-holistic.md ; reply with ONLY that path.
+Format: SCORE X/100 + itemized deductions (severity, location, issue, fix) + "to reach 100" list + verdict. Efficient; ~10 min; write even if partial.

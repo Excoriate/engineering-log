@@ -1,0 +1,17 @@
+You are 1 of 5 adversarial reviewers stress-testing a fix RUNBOOK executed ONE-SHOT by a CONTEXT-FREE agent on the Eneco AVD (WSL linux; has oc, kubectl, jq, curl; NO influx CLI on the host) + az to dev-mc. The bar: every command runs correctly the first time.
+
+READ FULLY:
+- RUNBOOK: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+
+YOUR LANE — COMMAND CORRECTNESS. Win = find a command that fails, errors, or returns the wrong thing.
+- `oc` / `kubectl`: valid subcommands/flags? Is `-l app=influxdb2` a real label (the runbook itself hedges with a fallback — is the fallback correct)? `oc exec deploy/NAME -- ...` form valid? `oc get secretproviderclass` a real resource?
+- `az`: `az monitor app-insights query` (needs the application-insights extension — is that flagged?); KQL syntax valid; `az keyvault secret set/show` flags; `network-rule add/remove` correct.
+- `influx` run via `oc exec` inside the InfluxDB pod: are the flags (`--host`, `--token`, `--org`, `--write-bucket`, `auth create/list/delete`, `query`) correct for InfluxDB 2.x? Does `influx query` take the Flux string as a positional arg?
+- `curl` fallback: does it require a prior `port-forward` that is (or isn't) started? jq filters valid?
+- Portability: `sha256sum`, `base64 -d`, `printf`, `tr` — fine on WSL linux? Any macOS-ism? Any shell-quoting bug (the `$InfluxDbOptions__Token` inside `oc exec -- sh -c '...'` single-quotes — is it expanded in the POD or locally)?
+- Env-var lifetime across separate command invocations (`$INFLUXPOD`, `$ADMIN`, `$ORGID`, `$MYIP`) — does the runbook assume a persistent shell? Flag if steps that use a variable are in separate blocks a one-shot executor might run as separate shells.
+
+For each finding: severity, exact command, what breaks, the corrected command. Confirm the genuinely-correct commands briefly.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-V3-command-correctness.md ; reply with ONLY that path.
+Format: findings table + Top-3 must-fix + verdict (READY-ONE-SHOT | NEEDS-CHANGES | NOT-READY). ~8 min.

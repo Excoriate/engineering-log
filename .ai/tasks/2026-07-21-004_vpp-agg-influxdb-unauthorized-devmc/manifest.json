@@ -1,0 +1,31 @@
+{
+  "task_id": "2026-07-21-004",
+  "slug": "vpp-agg-influxdb-unauthorized-devmc",
+  "task_root": ".ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/eneco_vpp_agg_influxdb_401.md",
+    "/Users/alextorresruiz/.claude/projects/-Users-alextorresruiz-Dropbox--GITHUB--oss-engineering-log/memory/MEMORY.md"
+  ],
+  "external_writes": [
+    "session persistent memory (harness memory contract): eneco_vpp_agg_influxdb_401.md + MEMORY.md pointer"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [
+    {
+      "claim": "The §5c-pw password pipeline leaves the secret available to the parent shell.",
+      "method": "bash --noprofile --norc pipeline reproduction with read -rs",
+      "observed": "Parent-shell variable output was UNSET.",
+      "meaning": "The documented UI fallback cannot supply the password under default Bash pipeline semantics."
+    }
+  ],
+  "gate_witnesses": [
+    {
+      "claim": "The runbook is not safe to approve as written.",
+      "surface": "how-to-fix.md lines 33-36, 155-170, 224-229, and 293-308 plus the clean-Bash runtime attack",
+      "falsifier": "Every mutating and secret-bearing OpenShift call is pinned through ocx; discovery, rollout, verification, and revocation use the same closed consumer set; and per-writer post-rollout effects are non-vacuous and attributable.",
+      "result": "FAILED: raw oc remains on Influx mutations and the tunnel, non-Deployment consumers are advisory-only, and verification admits empty/unattributed paths.",
+      "artifact": ".ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-Q2-runbook-safety.md"
+    }
+  ]
+}

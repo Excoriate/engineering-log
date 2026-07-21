@@ -1,0 +1,16 @@
+You are confirming a REWRITTEN fix RUNBOOK (single fail-closed AVD-WSL shell script) that a context-free agent runs one-shot. The prior prose version was NOT-READY for ambiguity.
+
+READ FULLY: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+
+YOUR LANE — AMBIGUITY / DECISION-COMPLETENESS. CONFIRM closed + find residual:
+- Every command block: does it have a clear DECISION RULE ("if X → §Y / STOP")? Any branch outcome with no concrete next step (dead end)?
+- §5a byte-hash matrix: is "a pair differs → Branch B" now precise (vs the old vague "three differ")? §5b: are all HTTP outcomes (200/InfluxDB-401/proxy-401/other) routed?
+- §3 zero-row case: is the terminal defined?
+- Any soft word ("appropriate/if needed/the relevant/should") leaving a decision undefined?
+- §5c admin-dead → §5c-pw: is the password branch now a complete, executable path (UI steps + capture NEW_TOKEN + rejoin §7), not a dead reference?
+- §8 verification: is "empty = UNKNOWN not zero" explicit and is per-writer attribution unambiguous?
+
+For each finding: severity, exact location, the ambiguity, the disambiguating fix. List which prior ambiguity BLOCKINGs are now CLOSED.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-R2-ambiguity.md ; reply with ONLY that path.
+Format: findings table + closed-list + verdict (READY-ONE-SHOT | NEEDS-CHANGES | NOT-READY). Efficient; 10 min; write even if partial.

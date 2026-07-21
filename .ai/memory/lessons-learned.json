@@ -716,5 +716,27 @@
     "stakes_claim": "If an on-call reads 'metric missing on FBE' as a broken PR or pipeline, they misroute the fix; it is almost always a gated domain metric on an idle env plus an undeployed branch plus an unloaded rule -- three environmental planes, each a separate owner.",
     "falsifier": "An FBE where the metric IS emitted continuously yet is still invisible in Grafana (a genuine pipeline/datasource fault), which would show the three-planes model is incomplete. Here the pipeline was provably alive (114 other series on the same job), so the model held.",
     "stakes_class": "MEDIUM"
+  },
+  {
+    "id": "LL-042",
+    "scope": "log/employer/eneco/**",
+    "category": "investigation-methodology",
+    "severity": "high",
+    "confidence": "validated",
+    "summary": "A VPP-agg InfluxDB 'unauthorized' (HTTP 401) on write is a credential-IDENTITY problem, NOT an expiry. InfluxDB 2.x OSS API tokens do NOT expire by default (the 'expires' field is optional; docs.influxdata.com/influxdb/v2/admin/tokens). The self-managed InfluxDB (ADR AL010 PoC, monitoring-only) lives in OpenShift eneco-vpp-agg (svc influxdb-eneco-vpp-agg-influxdb2, org vpp-agg, bucket aggregation); the write token is KV vpp-agg-appsec-d/influxdb-api-token, injected as env var InfluxDbOptions__Token at POD START (StrikePriceGenerator/Program.cs uses env vars, NO AddAzureAppConfiguration). Consequences: (1) 401 not 403 => credential rejected as authentication (unknown/malformed/stale-delivered/deactivated), NOT under-scoped; (2) a KV change takes effect only after the k8s Secret re-syncs AND the pod restarts (restart alone reloads the OLD token); (3) InfluxDbClientHelper.cs:27 catches+logs the write error with NO rethrow => 401 = SILENT monitoring data loss, function completes, trading unaffected. Before minting a new token you MUST: byte-check the credential chain (length+hash of KV vs k8s Secret vs pod env, never print the value), confirm the 401 came from InfluxDB not an oauth-proxy/service-mesh, and handle the admin token ALSO being orphaned (same 2025-03 vintage => instance re-init => admin PASSWORD login; org/bucket gone => HALT, do not recreate). Verify recovery PER POD (cloud_RoleInstance; b2b+b2c share cloud_RoleName=strikepricefn) by an OBSERVED write, not 'no exception'. Live evidence reachable from a laptop: App Insights (vpp-agg-appinsights-d, appId 9ccf7dac-2934-4dd6-9a98-4058000c1178) + KV metadata; InfluxDB-internal state is AVD-gated (oc).",
+    "root_cause": "Filer assumed 'api-token expired'; InfluxDB 2.x tokens have no default expiry and the KV secret was enabled/no-expiry/static since 2025-03-07, so the real class is an orphaned/stale/mis-delivered write credential (or a proxy 401), confirmed by live App Insights + KV metadata + repo code; the token's validity inside the live instance is AVD-blocked.",
+    "fix": "byte-check the KV->k8s-Secret->pod-env chain (hash, no value) -> confirm 401 origin is InfluxDB (curl pod->svc, check WWW-Authenticate/server header) -> in-AVD 'influx auth list --json | jq' (IDs/scopes only, NEVER the token column) via admin token, fall back to admin PASSWORD if it also 401s -> mint a NEW write-only token (org vpp-agg/bucket aggregation) OR repair delivery OR HALT if org/bucket gone (do not recreate) -> update KV -> PROVE the k8s Secret changed -> 'oc rollout restart' EVERY workload resolving influxdb-api-token (enumerate; b2b+b2c expected, not hardcoded), one at a time -> verify per-pod by an observed write -> revoke old token by ID last. NOTE: the eneco-tools-connect-mc-environments whitelist targets KV vpp-appsec-d (VPP Core), NOT vpp-agg-appsec-d; to read the agg vault add your IP directly ('az keyvault network-rule add --name vpp-agg-appsec-d --ip-address <ip>') and remove+verify after (defaultAction=Deny, RBAC disabled/access-policy, publicNetworkAccess=Enabled).",
+    "references": [
+      "log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/explanation.md",
+      "log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/rca.md",
+      "log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md",
+      ".ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md"
+    ],
+    "added": "2026-07-21",
+    "last_validated": "2026-07-21",
+    "task_origin": "2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc",
+    "stakes_claim": "If on-call rotates the InfluxDB token on a 401 without first byte-checking the credential chain and confirming the 401 came from InfluxDB, they may rotate a credential that was never the fault (a stale k8s Secret or a proxy/mesh 401), or restart the pod before the Secret re-syncs and reload the old token -- the incident then looks worked but is not fixed.",
+    "falsifier": "In-AVD 'influx auth list' shows the pod's exact token present, active, and write-scoped to bucket aggregation -- then the token is fine and the fault is delivery, scope, or a proxy in front of InfluxDB.",
+    "stakes_class": "HIGH"
   }
 ]

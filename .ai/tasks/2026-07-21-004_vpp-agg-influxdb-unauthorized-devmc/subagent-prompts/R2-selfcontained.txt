@@ -1,0 +1,15 @@
+You are confirming a REWRITTEN fix RUNBOOK. The prior prose version was rated NOT-READY for one-shot execution by a context-free agent. It has been rebuilt as a SINGLE fail-closed AVD-WSL shell script (both oc and az run in ONE shell; set -Eeuo pipefail + EXIT trap; variables/arrays discovered and asserted). A context-free agent with that one AVD WSL shell executes it top to bottom.
+
+READ FULLY: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+
+YOUR LANE — SELF-CONTAINEDNESS. CONFIRM these prior gaps are now closed, and find any RESIDUAL:
+- Prior BLOCKING: the two-plane az/oc split broke variable sharing. Now everything is one AVD-WSL shell. Is that actually coherent — does az work from the AVD WSL, and does every variable ($ADMIN/$INFLUX_TOKEN/$NEW_TOKEN/$WRITERS/$OLD_AUTH_ID) stay in-scope across §2–§9 IF run as ONE script? Flag any variable used before it is set, or any block a one-shot agent would run as a fresh shell (losing state).
+- Prior: placeholders (<K8S_SECRET>, <any others>, <NEW_TOKEN>, <OLD_AUTH_ID>) in executable code. Are they ALL now discovered into shell vars? Any remaining literal placeholder?
+- Prior: permission preflight missing. Is §2c's `oc auth can-i` set complete for every verb the runbook later uses?
+- Prior: companion links / escalation not concrete. Do the links resolve; is §11 actionable without outside knowledge?
+- Anything still needed that lives only in explanation.md/rca.md.
+
+For each finding: severity (BLOCKING/HIGH/MEDIUM/LOW), exact section, the issue, the fix. Explicitly list which prior BLOCKINGs are now CLOSED.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-R2-selfcontained.md ; reply with ONLY that path.
+Format: findings table + "prior BLOCKINGs closed?" list + verdict (READY-ONE-SHOT | NEEDS-CHANGES | NOT-READY). Be efficient; finish in 10 min; write the file even if partial.

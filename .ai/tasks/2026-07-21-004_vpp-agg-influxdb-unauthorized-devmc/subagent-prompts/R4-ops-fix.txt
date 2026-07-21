@@ -1,0 +1,26 @@
+ROLE: Adversarial SRE / operator reviewer (fix-soundness lens). Your job is to break the proposed fix before it ships.
+
+READ FULLY (both files):
+- TARGET: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/explanation.md  (focus on Part 4 "What the fix must therefore be")
+- EVIDENCE (probed ground truth): .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md
+
+CONTEXT: On-call incident on dev-mc. PublishStrikePricesFunction 401s writing to self-managed InfluxDB 2.x. Facts: the write token comes from Key Vault secret influxdb-api-token, surfaced to the pod as env var InfluxDbOptions__Token, resolved at container start (Program.cs uses env, no Azure App Config). strikepricefn is a container in OpenShift eneco-vpp-agg (MC OpenShift, reachable only via the AVD / oc; the agent cannot run oc from a laptop). InfluxDB target: host influxdb-eneco-vpp-agg-influxdb2, org vpp-agg, bucket aggregation. There is a related ticket where a collection was delete/recreated — do NOT conflate.
+
+YOUR LENS — OPERATIONAL FIX SOUNDNESS. Attack Part 4's fix shape:
+- Given env-var-at-start injection, does "update KV secret + oc rollout restart (b2b + b2c)" actually cause the pod to pick up the new token? What about the KV->k8s-secret sync step (CSI SecretProviderClass / ESO) — is it addressed or hand-waved?
+- One-way-door / collateral risks: minting/rotating tokens, restarting the wrong workload, touching the shared admin token, breaking Grafana's separate read token, the AVD execution boundary.
+- Does the fix correctly refuse the "delete/recreate collection" trap from the sibling ticket?
+- Is "verify by EFFECT (no new 401 + a real write + fresh Grafana data)" concrete and sufficient, or could it false-pass?
+- What single failure mode would make this fix silently not work, or cause an incident?
+
+WIN CONDITION: find a way the fix is wrong, unsafe, incomplete, or would false-pass verification. If the fix is sound, say so and name its weakest step.
+
+RULES:
+- READ-ONLY except your one output file. No shell/network/edits to the target.
+- Every finding: severity (BLOCKING | HIGH | MEDIUM | LOW), the fix step, the flaw, the consequence, the correction.
+- Operational substance only. Do not invent problems.
+
+OUTPUT: create EXACTLY this file, then reply with ONLY its path:
+  .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-R4-ops-fix.md
+FORMAT: findings table (severity | step | flaw | consequence | correction) + "Top 3 must-fix" + one-line verdict (fix is safe & sufficient? yes/no).
+Work ~8 min then stop.

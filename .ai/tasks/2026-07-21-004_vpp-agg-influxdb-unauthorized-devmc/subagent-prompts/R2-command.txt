@@ -1,0 +1,18 @@
+You are the COMMAND-CORRECTNESS reviewer of a REWRITTEN fix RUNBOOK (single fail-closed AVD-WSL bash script). Executor: a context-free agent in ONE AVD WSL shell (linux; has oc, kubectl, jq, curl, az; NO influx CLI on the host — influx runs via `oc exec` into the InfluxDB pod). Bar: every command runs correctly first time.
+
+BE EFFICIENT — use your knowledge of bash/oc/az/kubectl/influx-2.x/jq/curl; do NOT browse the web. Focus on the highest-risk commands. Write your file within 11 minutes even if partial.
+
+READ: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+
+Check in priority order:
+1. bash strictness interactions: does `set -Eeuo pipefail` break any intended-to-fail command (e.g. the `az keyvault secret show ... 2>/dev/null` in §2d inside an `if !`; the `|| true` guards)? Any place `pipefail`+`head -1` in a process substitution causes SIGPIPE/exit? `mapfile`/`read < <(...)` process-substitution correctness under errexit?
+2. jq: are the filters valid — §4a secretObjects/data extraction, §4b `any(test(...))`, §5c the `@sha256`/`@base64d` token-hash match (is `@sha256` a real jq builtin? if NOT, flag and give the correct approach), §8 filters?
+3. `oc exec deploy/NAME -- sh -c '...$InfluxDbOptions__Token...'` — expanded in the POD (single-quoted, correct)? `oc exec "$INFLUXPOD" -- env INFLUX_TOKEN="$INFLUX_TOKEN" influx ...` — does passing the token via `env VAR=... ` on the exec argv expose it in the pod's process args (a leak)? Is there a safer form (stdin)? `curl -H @<(printf ...)` process-substitution inside `oc exec sh -c` — valid in the pod's `sh` (dash may not support `<(...)`)?
+4. `influx` 2.x flags: `org list/bucket list/auth list/auth create --write-bucket/auth inactive --id/write/query` — correct flags + `--json` support? Does `influx write` take line protocol as positional? Does `influx query` take Flux as positional?
+5. `az`: `az monitor app-insights query` extension; `--file` vs `--value` on secret set; `datetime('$SINCE')` KQL literal syntax; `network-rule add/remove` flags.
+6. Portability/quoting: `date -u -d '-10 min'` (GNU date — fine on WSL); `sha256sum`, `base64 -d`, `awk '{print $1}'`, `mktemp`, `printf`. Any quoting bug that would send the wrong bytes.
+
+For each finding: severity (BLOCKING/HIGH/MEDIUM/LOW), exact command, what breaks, the corrected command. The `@sha256` jq check and the `env INFLUX_TOKEN=` argv exposure are high-value — scrutinize them.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-R2-command.md ; reply with ONLY that path.
+Format: findings table + Top-3 must-fix + verdict (READY-ONE-SHOT | NEEDS-CHANGES | NOT-READY).

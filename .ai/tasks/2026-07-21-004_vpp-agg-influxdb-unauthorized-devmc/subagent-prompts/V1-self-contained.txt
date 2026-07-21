@@ -1,0 +1,16 @@
+You are 1 of 5 adversarial reviewers stress-testing a fix RUNBOOK. A CONTEXT-FREE agent — no knowledge of the authoring session — WITH Eneco AVD access (can run oc against MC OpenShift) AND az access to dev-mc will execute this ONE-SHOT to fix an InfluxDB 401. The bar: ZERO vagueness, fully executable by someone who has read NOTHING else.
+
+READ FULLY:
+- RUNBOOK under test: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+- ONLY to check the runbook is self-sufficient (the executor will NOT read these): ./explanation.md, ./rca.md, and .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md
+
+YOUR LANE — SELF-CONTAINEDNESS / CONTEXT-FREENESS. Win = find any place the runbook silently assumes knowledge the executor does not have.
+- Does every step rely ONLY on §1 identifiers or a command that discovers the value? Any bare "the secret", "the pod", "the deployment" that was never defined or discovered?
+- Are the companion-document links (explanation.md, rca.md, evidence ledger) correct RELATIVE paths that resolve from the runbook's location? Does the runbook depend on the executor actually reading them (it must NOT)?
+- Is anything needed to execute present ONLY in explanation.md/rca.md but MISSING from the runbook?
+- Does it state its prerequisites (AVD, az, access rights) clearly enough that the executor knows immediately if it cannot proceed?
+
+For each finding: severity (BLOCKING/HIGH/MEDIUM/LOW), exact section, the missing/assumed knowledge, why it stalls a context-free one-shot run, the concrete fix (what to add). If airtight, say so.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-V1-self-contained.md ; reply with ONLY that path.
+Format: findings table + Top-3 must-fix + verdict (READY-ONE-SHOT | NEEDS-CHANGES | NOT-READY). ~8 min.

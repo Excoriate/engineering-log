@@ -1,0 +1,15 @@
+You are confirming the SAFETY of a REWRITTEN fix RUNBOOK (single fail-closed AVD-WSL script) executed one-shot and autonomously by a context-free agent. Prior version was NOT-READY (token leaks, wrong-env mutation, irreversible delete, firewall drift).
+
+READ FULLY: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+
+YOUR LANE — SAFETY / SECRET HYGIENE / ONE-WAY-DOORS. CONFIRM the prior CRITICALs are closed + find residual:
+- Secret leakage: is the token EVER in argv/stdout/history now? Scrutinize `az keyvault secret set --file` (good), `export INFLUX_TOKEN=$(...)` then `oc exec ... env INFLUX_TOKEN="$INFLUX_TOKEN" influx` — does the token now appear in the POD's process argv (env on exec argv) or in the AVD process list? The `echo "$NEW_TOKEN" | oc exec -i` write-probe; `read -rs`; `set +o history`; the EXIT trap unset. Any residual exposure path?
+- Environment pinning: is `$SUB` on every az and the `$DEV_API` assertion before every mutation now fail-closed (exit, not comment)? Can it still act on acc/prd?
+- Irreversibility: is `auth delete` fully replaced by reversible `auth inactive`, gated on a bijective OLD_AUTH_ID + all-writers-green? Is create-before-overwrite preserved with proof-before-promotion and a KV rollback on failed rollout?
+- Firewall: EXIT-trap removal, only-if-this-run-added, verified? Port-forward killed in trap?
+- Blast radius: does it roll/verify/inactivate over the SAME discovered $WRITERS set (incl telemetryingestionfn), not a hardcoded pair?
+
+For each finding: severity, exact step, the harmful scenario, the correction. List which prior CRITICALs are now CLOSED.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-R2-safety.md ; reply with ONLY that path.
+Format: findings table + closed-list + verdict (READY-ONE-SHOT | NEEDS-CHANGES | NOT-READY). Efficient; 11 min; write even if partial.

@@ -1,0 +1,26 @@
+ROLE: Adversarial completeness critic. Your job is to find what is MISSING from an on-call explainer for a zero-context next-shift engineer.
+
+READ FULLY (both files):
+- TARGET: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/explanation.md
+- EVIDENCE (probed ground truth): .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md
+
+CONTEXT: On-call incident. PublishStrikePricesFunction on dev-mc gets HTTP 401 writing to self-managed InfluxDB 2.x. The explainer teaches InfluxDB from first principles then diagnoses the real cause. Written by a Claude agent from live Azure + code probes. There is a related prior ticket Rec0BGG7SPERE (Johnson deleting/recreating an InfluxDB collection on dev-mc/acc due to a datatype mismatch).
+
+YOUR LENS — COMPLETENESS / MISSING ANGLES. Assume the reader must ACT. What is absent?
+- Blast radius: are OTHER InfluxDB writers (telemetry/data-ingestion functions) considered? The doc notes strikepricefn has b2b + b2c variants — is that fully addressed?
+- Competing hypotheses NOT eliminated: InfluxDB pod down/unhealthy, network/DNS to the in-cluster service, token whitespace/newline/encoding corruption in the KV secret, org "vpp-agg" or bucket "aggregation" DELETED (vs token deleted), admin vs api token confusion, clock/precision issues. Does the doc acknowledge and rank these?
+- The unconfirmed onset (">1 month") — is the uncertainty and how to resolve it stated?
+- Does the reader know EXACTLY what to check first, and what a zero-context person still cannot do from this doc?
+- Any missing definition/acronym a newcomer would trip on?
+
+WIN CONDITION: find a material omission that would slow or mislead the next engineer. If coverage is complete, say so and name the single most valuable addition.
+
+RULES:
+- READ-ONLY except your one output file. No shell/network/edits to the target.
+- Every finding: severity (BLOCKING | HIGH | MEDIUM | LOW), where it belongs, the gap, why it matters, the concrete content to add.
+- Prioritize gaps over style. Do not invent problems.
+
+OUTPUT: create EXACTLY this file, then reply with ONLY its path:
+  .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-R3-completeness.md
+FORMAT: findings table (severity | location | gap | why | add) + "Top 3 must-add" + one-line verdict (complete for a zero-context reader? yes/no).
+Work ~8 min then stop.

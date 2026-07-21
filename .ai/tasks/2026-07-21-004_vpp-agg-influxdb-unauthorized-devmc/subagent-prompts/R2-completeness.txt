@@ -1,0 +1,16 @@
+You are confirming COMPLETENESS of a REWRITTEN fix RUNBOOK (single fail-closed AVD-WSL script), one-shot, context-free. Prior version was NOT-READY (dead-ends, false-pass verification, missing consumers, no rollback).
+
+READ FULLY: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+context (to judge against the real system): ./rca.md, .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md
+
+YOUR LANE — COMPLETENESS / DECISION-TREE COVERAGE / VERIFICATION SOUNDNESS. CONFIRM closed + find residual:
+- Trace §2→§9 as a graph: does EVERY branch outcome (5a match/diverge, 5b 200/InfluxDB-401/proxy/other, 5c admin-ok/admin-dead/token-valid, 6A/6B/6C, 7 rollout-ok/fail/hash-mismatch, 8 pass/fail/unknown, 9 known/unknown OLD_AUTH_ID) route to a concrete next step? Any state with no instruction?
+- Blast radius: does §4b reliably build the FULL writer set and do §7/§8/§9 all use it? Are CronJobs/Jobs/StatefulSets (not just Deployments) that write InfluxDB covered, or is that a gap?
+- Verification false-pass: can §8 pass while a variant is still broken? Is the diagnostic/probe point excluded (the §6A write-probe is tagged run=Rec0BJKDCC4CT and §8 filters it out — is that airtight)? Is "empty=UNKNOWN" enforced?
+- Rollback: is there a real recovery path if a rollout fails mid-loop (KV restore + which subset)? Any point of no return without a checkpoint?
+- Prereqs/order: does §5+ have everything an earlier step produced (ORGID/BUCKETID/OLD_AUTH_ID/K8S_SECRET/INFLUXPOD)?
+
+For each finding: severity, exact location, the gap/dead-end/false-pass, the fix. List which prior gaps are now CLOSED.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-R2-completeness.md ; reply with ONLY that path.
+Format: findings table + closed-list + verdict (READY-ONE-SHOT | NEEDS-CHANGES | NOT-READY). Efficient; 11 min; write even if partial.

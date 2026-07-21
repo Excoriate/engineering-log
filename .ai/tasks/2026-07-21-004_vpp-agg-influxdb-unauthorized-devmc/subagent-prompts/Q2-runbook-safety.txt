@@ -1,0 +1,15 @@
+Final adversarial QA. Score the RUNBOOK out of 100 for SAFETY + VERIFICATION SOUNDNESS when a human operator (with judgment) runs it on dev-mc. Deduct for any path that risks an outage, data loss, secret leak, or a false "fixed".
+
+READ FULLY: log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_002_johnson_vpp_agg_influxdb_unauthorized_devmc/how-to-fix.md
+context: ./rca.md, .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/context/01-live-evidence.md
+
+Verify these are handled and find residual:
+- Secret hygiene: is a token EVER in argv/stdout/history now (the influx_exec stdin helper, az --file, read -rs, the EXIT trap, set +o history)? Any residual exposure (e.g. INFLUX_TOKEN env visible to same-UID processes — is that acknowledged/bounded)?
+- One-way doors: reversible `auth inactive` (not delete) gated on a UNIQUE OLD_AUTH_ID + all-writers-green; create-before-overwrite; KV rollback via file on failure (the trap); org/bucket HALT; never recreate.
+- Env pinning: `$SUB` on every az; the `ocx` wrapper re-asserts dev before each oc mutation. Is any oc MUTATION NOT routed through ocx?
+- Blast radius: §4 discovers the full writer set (incl telemetryingestionfn + a check for CronJob/StatefulSet/Job); §7 rolls, §8 verifies, §9 revokes over the SAME set. Any writer that could be missed → still 401 after fix, or broken on revoke?
+- Verification: per-pod invocations>0 AND unauthorized==0 AND fresh non-probe bucket point; empty=UNKNOWN. Can it still false-close?
+- Firewall/port-forward: only-if-added removal, verified; kill+wait on the tunnel.
+
+OUTPUT: write to EXACTLY .ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc/subagent-outputs/omp-Q2-runbook-safety.md ; reply with ONLY that path.
+Format: SCORE X/100 + itemized deductions (severity, location, scenario, fix) + "to reach 100" list + verdict. Efficient; ~10 min; write even if partial.

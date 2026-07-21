@@ -1,0 +1,8 @@
+{
+  "task_id": "2026-07-21-004",
+  "slug": "vpp-agg-influxdb-unauthorized-devmc",
+  "task_root": ".ai/tasks/2026-07-21-004_vpp-agg-influxdb-unauthorized-devmc",
+  "phase": 1,
+  "preflight_complete": true,
+  "session_id": "9f602c28-04fa-4c61-acca-44c903a58131"
+}
