@@ -9,9 +9,29 @@
   "allowed_external_paths": [
     "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_001_vpp_frontend_fbe_feature_flags_401"
   ],
-  "external_writes": [],
-  "git_mutations": [],
-  "pending_adversarial_dispatches": [],
-  "runtime_attacks": [],
-  "gate_witnesses": []
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_001_vpp_frontend_fbe_feature_flags_401/output/rca.md",
+    "log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_001_vpp_frontend_fbe_feature_flags_401/output/how-to-fix.md"
+  ],
+  "git_mutations": [
+    "git pull --ff-only (read-latest, user-authorized): Myriad - VPP/development, VPP - Infrastructure/main, VPP.GitOps/main — no local commits, no push"
+  ],
+  "pending_adversarial_dispatches": [
+    "sre-maniac: fix viability/reliability -> adversarial/sre-maniac-receipt.md",
+    "socrates-contrarian: goal-fidelity/assumptions/fabrication -> adversarial/socrates-receipt.md",
+    "terraform-oraculum: IaC claim correctness -> adversarial/terraform-oraculum-receipt.md",
+    "codex(cross-family): mechanism -> subagent-outputs/codex-mechanism-receipt.md",
+    "codex(cross-family): fix -> subagent-outputs/codex-fix-receipt.md"
+  ],
+  "runtime_attacks": [
+    "cross-slot frozen-snapshot drift test (baked appconfig.js vs current application-secret) — 5/7 slots DRIFT",
+    "az store existence check — baked stores GONE from Azure",
+    "unauth HTTP GET on live vs deleted store endpoint — 401 vs connection-fail discriminator"
+  ],
+  "gate_witnesses": [
+    "live kubectl: init-myservice writes appconfig.js to emptyDir from application-secret (frozen-once)",
+    "live: 5/7 FBE frontends serve a connection string whose store is deleted in Azure",
+    "live: CSI --enable-secret-rotation=true 2s keeps application-secret current while pod stays stale",
+    "source: random_string keeper stable per slot -> store recreate only on state teardown (2629->2412)"
+  ]
 }

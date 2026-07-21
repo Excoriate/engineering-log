@@ -1,0 +1,9 @@
+flowchart LR
+    W["Deployment or StatefulSet"] -->|"creates/replaces"| P["Pod"]
+    P --> C["Container processes"]
+    C -->|"readiness probe passes"| R["Pod Ready condition"]
+    S["Service selector"] -->|"matches labels"| R
+    R -->|"published when eligible"| E["EndpointSlice ready backend"]
+    E -->|"routes traffic"| CLIENT["Argo CD client/component"]
+    P -. "wrong labels" .-> MISS["Not selected"]
+    R -. "backend missing/unready" .-> GAP["Ready but not serving through Service"]

@@ -1,0 +1,25 @@
+flowchart LR
+    CLIENTS["Argo CD components"] --> HPASVC["Redis HA Service"]
+    HPASVC --> H1["HAProxy 1"]
+    HPASVC --> H2["HAProxy 2"]
+    HPASVC --> H3["HAProxy 3"]
+
+    H1 --> RLEADER["Redis ordinal: current writable role"]
+    H2 --> RLEADER
+    H3 --> RLEADER
+
+    subgraph RS["Redis StatefulSet — stable ordinals"]
+        R0["Redis 0 + Sentinel"]
+        R1["Redis 1 + Sentinel"]
+        R2["Redis 2 + Sentinel"]
+    end
+
+    RLEADER --- R0
+    RLEADER --- R1
+    RLEADER --- R2
+    R0 <-. "Sentinel observation / election information" .-> R1
+    R1 <-. "Sentinel observation / election information" .-> R2
+    R2 <-. "Sentinel observation / election information" .-> R0
+    RS -. "role information updates routing" .-> H1
+    RS -. "role information updates routing" .-> H2
+    RS -. "role information updates routing" .-> H3

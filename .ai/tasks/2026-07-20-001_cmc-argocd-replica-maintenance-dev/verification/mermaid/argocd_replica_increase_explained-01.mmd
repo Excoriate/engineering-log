@@ -1,0 +1,31 @@
+flowchart LR
+    subgraph HumanBoundary["Human / CMC responsibility boundary"]
+        SRE["SRE observer"]
+        CMC["CMC change operator"]
+    end
+
+    subgraph AVD["Windows App / Developer Desktop"]
+        WSL["Ubuntu / WSL shell"]
+        KC["Shared kubeconfig contexts"]
+    end
+
+    subgraph DEV["DEV OpenShift API boundary"]
+        DEVAPI["api.eneco-vpp-dev.ceap.nl"]
+        DEVNS["eneco-vpp-argocd"]
+    end
+
+    subgraph ACC["ACC OpenShift API boundary"]
+        ACCAPI["api.eneco-vpp-acc.ceap.nl"]
+        ACCNS["eneco-vpp-argocd"]
+    end
+
+    GIT["Git desired application manifests"]
+    SRE -->|"read-only oc"| WSL
+    CMC -->|"authorized change"| WSL
+    WSL --> KC
+    KC -->|"DEV context"| DEVAPI
+    KC -->|"ACC context"| ACCAPI
+    DEVAPI --> DEVNS
+    ACCAPI --> ACCNS
+    GIT --> DEVNS
+    GIT --> ACCNS

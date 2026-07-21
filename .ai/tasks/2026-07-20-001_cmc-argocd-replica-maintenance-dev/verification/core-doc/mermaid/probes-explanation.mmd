@@ -1,0 +1,10 @@
+flowchart LR
+    CMC["CMC changes a replica setting"] --> CR["ArgoCD CR or HPA: desired intent"]
+    CR --> OP["GitOps operator reconciles"]
+    OP --> WL["Deployment or StatefulSet"]
+    WL --> POD["New pod starts and becomes Ready"]
+    POD --> NODE["Scheduler places it on a node"]
+    NODE --> COST["Requests reserve capacity; runtime consumes CPU/memory"]
+    POD --> SERVICE["Argo CD component becomes useful"]
+    SERVICE --> APPS["Application reconciliation remains healthy"]
+    APPS -. "failure evidence changes the decision" .-> CMC

@@ -1,0 +1,30 @@
+You are an INDEPENDENT adversarial reviewer (cross-family, non-Claude). Your job is to try to BREAK
+the root-cause mechanism of an Eneco VPP on-call RCA — not to confirm it. Be skeptical and specific.
+You run sandboxed (workspace-write, no network) so you CANNOT reach the live cluster; review the
+written artifacts and the local source files only. Do not fabricate; if you cannot verify, say so.
+
+READ:
+- RCA: /Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_001_vpp_frontend_fbe_feature_flags_401/output/rca.md
+- Evidence ledger: /Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-19-003_vpp-fbe-feature-flags-401-rca/context/live-probe-findings.md
+- Local source (verify identifiers/line refs): /Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/ (VPP - Infrastructure/terraform/fbe/, Myriad%20-%20VPP/development/azure-pipeline/Helm/frontend/, VPP-Configuration/Helm/frontend/sandbox/values.yaml)
+
+ATTACK these load-bearing claims (mechanism only — a separate reviewer owns the fix):
+1. The 401 is a stale HMAC connection string frozen in appconfig.js (init-once emptyDir), NOT RBAC 403,
+   network 403, clock skew, disableLocalAuth, or CORS. Is the RCA's evidence sufficient? Any alternative
+   cause it dismissed too quickly?
+2. The store-identity mechanism: does a slot delete->recreate (random_string regenerate) really produce a
+   new store name + new keys while a surviving frontend pod keeps a frozen credential? Check common.tf
+   keeper stability and app-config.tf. Is the "ArgoCD sees no manifest diff, never rolls the pod" claim
+   sound?
+3. The RCA distinguishes Duncan's clean 401 (store still resolves, credential rejected) from the aged-
+   fleet drift (store deleted, connection error / HTTP 000). Is this reconciliation honest, or is the
+   fleet drift being passed off as reproducing Duncan's exact 401 when it may be a different failure?
+4. The timing note (boltz store -tec created 07-08 13:24 but pod at 14:48 baked the deleted -qzz). Does
+   the RCA over-claim a clean single-recreate timeline the data does not support? Is the A2/A3 labeling honest?
+5. Any fabricated/incorrect identifier, file path, or line reference you can catch against the local repo.
+
+For EACH: verdict SURVIVES or BROKEN or UNVERIFIABLE, a one-sentence reason, and the discriminating
+check/probe that would settle it.
+
+WRITE your receipt (markdown) to EXACTLY this path, then print only that path and nothing else:
+/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-19-003_vpp-fbe-feature-flags-401-rca/subagent-outputs/codex-mechanism-receipt.md

@@ -1,0 +1,32 @@
+You are an INDEPENDENT adversarial reviewer (cross-family, non-Claude). Your job is to try to BREAK
+the proposed FIX in an Eneco VPP on-call how-to-fix document — not to confirm it. Be skeptical and
+specific. You run sandboxed (workspace-write, no network) so you CANNOT reach the live cluster; review
+the written artifacts and local source files only. Do not fabricate; if unverifiable, say so.
+
+READ:
+- Fix: /Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_001_vpp_frontend_fbe_feature_flags_401/output/how-to-fix.md
+- RCA (context): .../2026_07_18_001_vpp_frontend_fbe_feature_flags_401/output/rca.md
+- Evidence: /Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-19-003_vpp-fbe-feature-flags-401-rca/context/live-probe-findings.md
+- Local source to verify edits are real/correct: /Users/alextorresruiz/Dropbox/@AZUREDEVOPS/eneco-src/enecomanagedcloud/myriad-vpp/ — specifically Myriad%20-%20VPP/development/azure-pipelines-featurebr-env.yml (stage DeployFBEInArgoCD ~line 578, waitDeploy ~638), Myriad%20-%20VPP/development/azure-pipeline/Helm/frontend/templates/deployment.yaml, VPP-Configuration/Helm/frontend/sandbox/values.yaml, VPP - Infrastructure/terraform/fbe/app-config.tf, Eneco.Infrastructure/*/terraform/modules/appconfig/output.tf
+
+ATTACK these load-bearing fix claims (fix only — a separate reviewer owns the mechanism):
+1. P1 (pipeline rollout-restart replacing the blind 180s sleep) actually fixes the recreate case. Race:
+   could the restart run before CSI (2s poll) syncs the new store into application-secret, re-baking a
+   stale value again? Does the create pipeline even run on a *recreate of an existing slot*? Does the
+   DeployFBEInArgoCD job have kube/ArgoCD credentials to run kubectl at all (check the pipeline file)?
+2. P2 (Stakater Reloader + Deployment annotation). Two hard questions: (a) does secrets-store CSI actually
+   UPDATE the Kubernetes application-secret when the KV value rotates, so Reloader's informer fires — or
+   only refresh mounted files? (b) The RCA places the Reloader annotation on Deployment.metadata.annotations
+   and says the chart hardcodes that block so a template edit is needed — is that correct, or would a
+   podAnnotations value suffice (i.e., is the fix instruction right about WHERE the annotation goes)?
+3. P3 (read-only key). Is switching key_vault_secret_value to a read-only key connection string really a
+   value update and NOT a store ForceNew? Does the appconfig module actually expose primary_read_key
+   (check module output.tf/main.tf)? Is the pinned ref=v0.1.0 -> new-tag requirement correctly stated?
+4. Is the recommended fix actually "correct from FBE creation without a manual pod delete" (Duncan's exact
+   ask), or does it still depend on a restart in disguise / miss cases (out-of-band store recreates)?
+5. Any wrong/fabricated file path, line number, or command in how-to-fix.md, checked against the repo.
+
+For EACH: verdict SURVIVES or BROKEN or UNVERIFIABLE, one-sentence reason, and the discriminating check.
+
+WRITE your receipt (markdown) to EXACTLY this path, then print only that path and nothing else:
+/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-19-003_vpp-fbe-feature-flags-401-rca/subagent-outputs/codex-fix-receipt.md

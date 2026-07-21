@@ -1,0 +1,8 @@
+{
+  "task_id": "2026-07-20-001",
+  "slug": "cmc-argocd-replica-maintenance-dev",
+  "lane": "acceptance-runbook-operational-attack",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-20-001_cmc-argocd-replica-maintenance-dev",
+  "artifact": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-20-001_cmc-argocd-replica-maintenance-dev/subagent-outputs/acceptance-runbook-attack.md",
+  "status": "active"
+}

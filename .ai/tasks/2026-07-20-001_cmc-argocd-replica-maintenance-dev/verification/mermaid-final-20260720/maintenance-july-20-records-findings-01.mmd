@@ -1,0 +1,10 @@
+flowchart TD
+    O["Observe and timestamp"] --> B["Compare with preparation baseline and T0"]
+    B --> M["State mechanism and alternative cause"]
+    M --> F["Run discriminating falsifier"]
+    F -->|links changed object/action to CMC| C["CMC-CONFIRMED"]
+    F -->|only overlaps the window| R["CMC-CORRELATED or UNATTRIBUTED"]
+    F -->|cluster/local mechanism independent of CMC| P["PLATFORM or LOCAL-TOOLING"]
+    C --> A["Record impact, owner, action, and recovery"]
+    R --> A
+    P --> A

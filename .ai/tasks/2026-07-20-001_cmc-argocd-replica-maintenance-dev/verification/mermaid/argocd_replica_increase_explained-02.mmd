@@ -1,0 +1,27 @@
+flowchart TB
+    subgraph LoopA["Loop A — OpenShift GitOps operator builds Argo CD"]
+        CR["ArgoCD CR: desired control-plane topology"]
+        OP["OpenShift GitOps operator"]
+        CP["Deployments / StatefulSets / Services"]
+        CPPODS["Argo CD Pods"]
+        CR -->|"watch"| OP
+        OP -->|"create or update"| CP
+        CP -->|"controllers realize"| CPPODS
+        CPPODS -. "status feedback" .-> OP
+    end
+
+    subgraph LoopB["Loop B — Argo CD reconciles applications"]
+        G["Git manifests"]
+        APP["Application object, e.g. solver"]
+        REPO["repo server generates manifests"]
+        CTRL["application controller compares desired/live"]
+        WORK["Application Deployments / Pods / Services"]
+        G --> REPO
+        APP --> REPO
+        REPO --> CTRL
+        CTRL -->|"observe / optionally sync"| WORK
+        WORK -. "health/live feedback" .-> CTRL
+        CTRL -. "sync + health status" .-> APP
+    end
+
+    CPPODS -->|"provide repo/controller/server/Redis functions"| LoopB

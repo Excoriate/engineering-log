@@ -5,9 +5,32 @@
   "allowed_external_paths": [
     "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_003_tflint_attestation_pgp_workaround"
   ],
-  "external_writes": [],
+  "external_writes": [
+    "log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_003_tflint_attestation_pgp_workaround/output/rca.md",
+    "log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_003_tflint_attestation_pgp_workaround/output/fix.md",
+    "log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_003_tflint_attestation_pgp_workaround/output/how-to-fix.md",
+    "log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_003_tflint_attestation_pgp_workaround/output/how-to-recreate-this-rca.md",
+    "log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_003_tflint_attestation_pgp_workaround/output/sre-toil-removal-proposal.md",
+    "log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_003_tflint_attestation_pgp_workaround/antecedents/context-ledger.md",
+    "log/employer/eneco/02_on_call_shift/2026_july/2026_07_18_003_tflint_attestation_pgp_workaround/proofs/"
+  ],
   "git_mutations": [],
   "pending_adversarial_dispatches": [],
-  "runtime_attacks": [],
-  "gate_witnesses": []
+  "adversarial_dispatches_resolved": [
+    {"reviewer": "socrates-contrarian", "verdict": "PROCEED-WITH-CHANGES", "receipt": "reviews/socrates-rca.md"},
+    {"reviewer": "el-demoledor", "verdict": "SHIP-WITH-CHANGES", "receipt": "reviews/demoledor-fix.md"}
+  ],
+  "runtime_attacks": [
+    "Reproduced tflint --init for azurerm 0.28.0 against v0.61.0/v0.63.1/v0.64.0 (default/pgp/attestation)",
+    "Probed azurerm attestation presence by BOTH zip digest (404, wrong) and checksums.txt digest (200, correct)",
+    "Fetched the real build 1721100 pre-commit log (panic frames + resolved tflint v0.63.1)",
+    "Traced tflint install.go/signature.go source at tag v0.63.1"
+  ],
+  "gate_witnesses": [
+    {"claim": "signature=pgp unblocks tflint --init on the exact CI binary v0.63.1", "witness": "proofs/outputs/tflint-0631-matrix.out.txt (exit 0)"},
+    {"claim": "azurerm 0.28.0 IS attested on its checksums.txt digest (mechanism, not a gap)", "witness": "proofs/outputs/azurerm-attestation-CHECKSUMS-digest.out.txt (HTTP 200, tlog 2025-03-21)"},
+    {"claim": "failure site is Eneco.Infrastructure not Dispatching.Infrastructure", "witness": "az pipelines build show --id 1721100 -> repo=Eneco.Infrastructure"},
+    {"claim": "fix release = v0.64.0; no v0.63.2", "witness": "GitHub releases API (external)"},
+    {"claim": "PR diff (pin v0.64.0 + remove pgp) is green end-to-end", "witness": "el-demoledor independent verification: reviews/demoledor-fix.md"}
+  ]
 }

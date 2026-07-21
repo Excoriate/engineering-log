@@ -1,0 +1,14 @@
+stateDiagram-v2
+    [*] --> T0
+    T0 --> IntentObserved
+    IntentObserved --> Converging
+    Converging --> Failure: Pending, revision lag, restart, warning
+    Converging --> Serving: revision and Ready converge
+    Serving --> Failure: EndpointSlice incomplete
+    Serving --> OutcomeObserved
+    OutcomeObserved --> Failure: new Degraded or stale reconciliation
+    OutcomeObserved --> EvidenceFloor
+    EvidenceFloor --> Failure: late regression
+    EvidenceFloor --> StableAsObserved: all available gates and late checkpoint pass
+    Failure --> Converging: condition recovers; preserve finding
+    StableAsObserved --> CompleteAsIntended: signed intent also matches

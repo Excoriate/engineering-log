@@ -1,0 +1,15 @@
+stateDiagram-v2
+    [*] --> Preparation
+    Preparation --> T0: start signal and fresh identity
+    T0 --> IntentDetected: authorized change appears
+    IntentDetected --> Converging
+    Converging --> FailedEvidence: generation lag / Pending / restart / warning
+    Converging --> Serving: new revision Ready and backends published
+    Serving --> FailedEvidence: EndpointSlice gap
+    Serving --> OutcomeChecked
+    OutcomeChecked --> FailedEvidence: Degraded / stale reconciliation
+    OutcomeChecked --> Stabilizing
+    Stabilizing --> FailedEvidence: late restart / resource or app regression
+    FailedEvidence --> Converging: recovered; finding preserved
+    Stabilizing --> StableObserved: evidence floor + late checkpoint pass
+    StableObserved --> CompleteIntended: authoritative intent also matches

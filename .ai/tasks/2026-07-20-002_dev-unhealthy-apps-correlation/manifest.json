@@ -1,0 +1,41 @@
+{
+  "task_id": "2026-07-20-002",
+  "slug": "dev-unhealthy-apps-correlation",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-20-002_dev-unhealthy-apps-correlation",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_20_001_cmc_argocd_replica_increase_maintenance_dev_acc/maintenance-july-20-records-findings.md"
+  ],
+  "created": "2026-07-20T11:37:00+02:00",
+  "modified": "2026-07-20T12:08:00+02:00",
+  "external_writes": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_20_001_cmc_argocd_replica_increase_maintenance_dev_acc/maintenance-july-20-records-findings.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [
+    "wrong-environment context rejected before DEV proof",
+    "shared-red-badge hypothesis tested against both leaf pod events",
+    "maintenance-trigger hypothesis tested against Application revisions and ReplicaSet creation",
+    "green-pipeline hypothesis tested against the exact task log and generated Git diff"
+  ],
+  "gate_witnesses": [
+    {
+      "gate": "causal-mechanism",
+      "claim": "both app failures share a configuration-delivery generator",
+      "witness_type": "external-agent-artifact",
+      "witness_path": ".ai/tasks/2026-07-20-002_dev-unhealthy-apps-correlation/subagent-outputs/repo-context.md"
+    },
+    {
+      "gate": "maintenance-relation",
+      "claim": "the replica-maintenance hypothesis survived an explicit attack only as an unobserved alternative and was then falsified by live source-driven rollout evidence",
+      "witness_type": "external-agent-artifact",
+      "witness_path": ".ai/tasks/2026-07-20-002_dev-unhealthy-apps-correlation/subagent-outputs/causal-attack.md"
+    },
+    {
+      "gate": "operator-failure-path",
+      "claim": "Synced does not prove workload health and current control-plane green cannot replace child-resource evidence",
+      "witness_type": "external-agent-artifact",
+      "witness_path": ".ai/tasks/2026-07-20-002_dev-unhealthy-apps-correlation/subagent-outputs/operator-attack.md"
+    }
+  ]
+}

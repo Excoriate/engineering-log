@@ -1,0 +1,35 @@
+flowchart LR
+    CMC["Authorized maintenance party"]
+    OP["OpenShift GitOps operator"]
+    GIT["Git application sources"]
+    USERS["UI / CLI clients"]
+    APPS["Managed application resources"]
+
+    subgraph DEVNS["DEV namespace: eneco-vpp-argocd"]
+        CR["ArgoCD/eneco-vpp custom resource"]
+        SERVERSVC["server Service + EndpointSlice"]
+        SERVER["server Deployment: 3"]
+        REPOSVC["repo Service + EndpointSlice"]
+        REPO["repo-server Deployment: 2"]
+        CTRL["application-controller StatefulSet: 1"]
+        DEX["Dex Deployment: 1"]
+        REDISSVC["Redis Service + EndpointSlice"]
+        HAP["redis-ha-haproxy Deployment: 3"]
+        REDIS["redis-ha-server StatefulSet: 3\nRedis + Sentinel containers"]
+    end
+
+    CMC -->|"changes replica / HA intent"| CR
+    CR --> OP
+    OP --> SERVER
+    OP --> REPO
+    OP --> CTRL
+    OP --> DEX
+    OP --> HAP
+    OP --> REDIS
+    USERS --> SERVERSVC --> SERVER
+    GIT -->|"read / render"| REPOSVC --> REPO
+    REPO -->|"manifests"| CTRL
+    CTRL -->|"reconcile and assess"| APPS
+    SERVER -. "cache client" .-> REDISSVC
+    CTRL -. "cache client" .-> REDISSVC
+    REDISSVC --> HAP --> REDIS

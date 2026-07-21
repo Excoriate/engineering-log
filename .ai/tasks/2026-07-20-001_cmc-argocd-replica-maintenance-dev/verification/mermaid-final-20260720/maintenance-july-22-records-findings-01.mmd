@@ -1,0 +1,9 @@
+flowchart LR
+    B["Acceptance T0 baseline"] --> C["CMC changes ArgoCD CR/topology"]
+    C --> W["Deployments and StatefulSets converge"]
+    W --> P["Pods Ready on healthy nodes"]
+    P --> E["Endpoints/component service present"]
+    E --> A["Applications stay or return Healthy"]
+    A --> S{"Stable with no new events/restarts?"}
+    S -->|yes| OK["Evidence supports completion"]
+    S -->|no| HOLD["Continue, challenge CMC, or escalate"]

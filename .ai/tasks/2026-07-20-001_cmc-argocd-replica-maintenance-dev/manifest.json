@@ -1,0 +1,77 @@
+{
+  "task_id": "2026-07-20-001",
+  "slug": "cmc-argocd-replica-maintenance-dev",
+  "task_root": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-20-001_cmc-argocd-replica-maintenance-dev",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_20_001_cmc_argocd_replica_increase_maintenance_dev_acc/argocd-openshift-command-probes.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_20_001_cmc_argocd_replica_increase_maintenance_dev_acc/maintenance-july-20-records-findings.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_20_001_cmc_argocd_replica_increase_maintenance_dev_acc/probes-explanation.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_20_001_cmc_argocd_replica_increase_maintenance_dev_acc/maintenance-july-22-records-findings.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_20_001_cmc_argocd_replica_increase_maintenance_dev_acc/argocd-replica-increase-acceptance-runbook.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_20_001_cmc_argocd_replica_increase_maintenance_dev_acc/argocd_replica_increase_explained.md",
+    "/Users/alextorresruiz/Documents/Codex/2026-07-20/your/outputs/argocd-maintenance-delivery-index.md"
+  ],
+  "created": "2026-07-20T09:20:00+02:00",
+  "modified": "2026-07-20T13:08:00+02:00",
+  "external_writes": [
+    "probes-explanation.md",
+    "argocd-openshift-command-probes.md",
+    "maintenance-july-20-records-findings.md",
+    "maintenance-july-22-records-findings.md",
+    "argocd-replica-increase-acceptance-runbook.md",
+    "argocd_replica_increase_explained.md",
+    "/Users/alextorresruiz/Documents/Codex/2026-07-20/your/outputs/argocd-maintenance-delivery-index.md"
+  ],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [
+    "wrong-target and empty-field negative controls",
+    "desired-only versus ready-available-pod reconciliation",
+    "fixed-replica versus HPA route",
+    "current-host versus eligible-node versus actual-placement comparison",
+    "metrics unavailable capability downgrade",
+    "Lens import versus same-time live CLI parity",
+    "preparation baseline versus start-gated T0 freshness",
+    "fresh-reader novel false-green scenario",
+    "current-byte Bash and zsh guard/source/freshness/selector/backend/Application regression harness",
+    "stale Freelens catalog row versus freshly exported PowerShell current-context row"
+  ],
+  "gate_witnesses": [
+    {
+      "gate": "technical-verification",
+      "claim": "The published ACC structured sample fails closed for guard, source, freshness, selector, backend, and Application-fleet faults.",
+      "witness_type": "external-agent-artifact",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-20-001_cmc-argocd-replica-maintenance-dev/subagent-outputs/final-operational-recheck2.md"
+    },
+    {
+      "gate": "goal-fidelity",
+      "claim": "The six-document package satisfies the original new-SRE, Feynman, DEV-record, ACC-runbook, incident-transfer, and Lens-last requests at document scope.",
+      "witness_type": "external-agent-artifact",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-20-001_cmc-argocd-replica-maintenance-dev/subagent-outputs/final-goal-fidelity-recheck2.md"
+    },
+    {
+      "gate": "reader-transfer",
+      "claim": "The connected system model and causal explanations survive source and document-transfer review.",
+      "witness_type": "external-agent-artifact",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-20-001_cmc-argocd-replica-maintenance-dev/subagent-outputs/final-fresh-reader-recheck2.md"
+    },
+    {
+      "gate": "assurance",
+      "claim": "The receipt chain is complete and its remaining AVD, Wednesday, and human-reader risks are explicit rather than promoted to completion.",
+      "witness_type": "external-agent-artifact",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-20-001_cmc-argocd-replica-maintenance-dev/subagent-outputs/final-receipt-grade.md"
+    },
+    {
+      "gate": "live-runtime",
+      "claim": "DEV topology, convergence, observed stability, and the unrelated application-delivery incident are recorded from live read-only evidence.",
+      "witness_type": "external-runtime-output",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_20_001_cmc_argocd_replica_increase_maintenance_dev_acc/maintenance-july-20-records-findings.md"
+    },
+    {
+      "gate": "current-byte-regression",
+      "claim": "The exact current runbook function passes Bash and zsh wrong-variant regression fixtures.",
+      "witness_type": "external-runtime-output",
+      "witness_path": "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/.ai/tasks/2026-07-20-001_cmc-argocd-replica-maintenance-dev/verification/test-acc-structured-sample.sh"
+    }
+  ]
+}

@@ -16,6 +16,15 @@ summary: |
 
 # Upstream TFLint Attestation / PGP Facts — Source Verification
 
+> **CORRECTION (2026-07-19, post-adversarial-review):** §5's conclusion "azurerm v0.28.0 has NO GitHub
+> attestations (API 404)" is **WRONG** — it hashed the plugin **zip** digest. tflint's
+> `fetchArtifactAttestations` hashes the **`checksums.txt` contents** (`install.go`: `hash.Write(artifact)`
+> where `artifact` = checksums.txt bytes). azurerm 0.28.0's `checksums.txt` digest
+> (`b48c684c…`) returns **HTTP 200 with 1 attestation, signed 2025-03-21** (release day). So **0.28.0 IS
+> attested**, the intake's "azurerm 0.28.0" attribution is **correct**, and the panic needs no "transient
+> anomaly": the window returned that attestation with a `null` bundle → nil deref. Verified in
+> `../../../log/…/proofs/outputs/azurerm-attestation-CHECKSUMS-digest.out.txt`. Read §5 with this correction.
+
 **Verifier:** librarian subagent · **Date of verification:** 2026-07-19
 **Method:** `gh` CLI v2.96.0 (authenticated, live GitHub REST) + WebFetch of official docs.
 **Epistemic note:** The load-bearing facts (July 2026 PR merges, release tags, dates) are

@@ -30,6 +30,10 @@ node_modules/
 # Task proof output captures (often full Terraform state, AAD client secrets, tokens).
 # GitHub push protection rejects these — keep files locally; do not track.
 .ai/tasks/**/proofs/outputs/
+# Terraform provider/plugin caches from local probes (provider binaries exceed GitHub 100MB limit).
+.ai/tasks/**/.terraform/
+.ai/tasks/**/.terraform-data/
+.ai/tasks/**/.terraform-local/
 # Terraform state / backups downloaded during probes (AAD client secrets, keys).
 .ai/tasks/**/terraform*.backup.json
 .ai/tasks/**/*.tfstate

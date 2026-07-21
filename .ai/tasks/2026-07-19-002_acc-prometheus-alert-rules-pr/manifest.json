@@ -2,8 +2,16 @@
   "task_id": "2026-07-19-002",
   "slug": "acc-prometheus-alert-rules-pr",
   "task_root": ".ai/tasks/2026-07-19-002_acc-prometheus-alert-rules-pr",
-  "allowed_external_paths": [],
-  "external_writes": [],
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Documents/obsidian/llm-wiki/learnings/lessons/promql-absent-aware-deadman-alert-two-alert-split.md",
+    "/Users/alextorresruiz/Documents/obsidian/llm-wiki/learnings/gotchas/fbe-missing-metric-is-three-planes-not-a-pr-bug.md",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/build-ledgers/2026-07-19-acc-prometheus-alert-fbe-metric.md"
+  ],
+  "external_writes": [
+    "/Users/alextorresruiz/Documents/obsidian/llm-wiki/learnings/lessons/promql-absent-aware-deadman-alert-two-alert-split.md",
+    "/Users/alextorresruiz/Documents/obsidian/llm-wiki/learnings/gotchas/fbe-missing-metric-is-three-planes-not-a-pr-bug.md",
+    "/Users/alextorresruiz/Documents/obsidian/.ai/build-ledgers/2026-07-19-acc-prometheus-alert-fbe-metric.md"
+  ],
   "git_mutations": [],
   "pending_adversarial_dispatches": [],
   "runtime_attacks": [],

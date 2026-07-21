@@ -1,0 +1,65 @@
+### CRITICAL re-probe: tflint queries the CHECKSUMS.TXT digest, not the zip (2026-07-19T17:15:15Z)
+v0.28.0 checksums.txt digest = b48c684c74f163dc478c95ccc37a2625f18250f5413d23ad99a8afdbedcf8a31
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    d=json.load(sys.stdin)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 361, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ~~~~~~~~~~~~~~^^^^^^^^
+json.decoder.JSONDecodeError: Invalid control character at: line 7 column 1329 (char 1842)
+v0.29.0 checksums.txt digest = ecbb5fb53639b8ee04f0f0bc481e6456b48ad4f3d2b0b5ba3581a866c93962dc
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    d=json.load(sys.stdin)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py", line 361, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ~~~~~~~~~~~~~~^^^^^^^^
+json.decoder.JSONDecodeError: Invalid control character at: line 13 column 1425 (char 7313)
+
+### tflint source: what digest does fetchArtifactAttestations hash? (install.go v0.63.1)
+3:		return assets, nil, nil, nil, fmt.Errorf("Failed to download checksums.txt: %s", err)
+5:	checksum, err := io.ReadAll(checksumsFile)
+7:		return assets, nil, nil, nil, fmt.Errorf("Failed to read checksums.txt: %s", err)
+13:		return assets, checksum, nil, nil, nil
+15:	attestations, err := c.fetchArtifactAttestations(ctx, client, checksum)
+21:			return assets, checksum, nil, nil, nil
+23:			return assets, checksum, nil, nil, fmt.Errorf("Failed to download artifact attestations: %s", err)
+29:		return assets, checksum, attestations, nil, fmt.Errorf("Failed to get GitHub repository metadata: %s", err)
+32:	return assets, checksum, attestations, repo, nil
+58:// fetchArtifactAttestations fetches GitHub Artifact Attestations based on the given artifact.
+59:func (c *InstallConfig) fetchArtifactAttestations(ctx context.Context, client *github.Client, artifact []byte) ([]*github.Attestation, error) {
+60:	hash := sha256.New()
+61:	if _, err := hash.Write(artifact); err != nil {
+64:	digest := hex.EncodeToString(hash.Sum(nil))
+66:	resp, _, err := client.Repositories.ListAttestations(ctx, c.SourceOwner, c.SourceRepo, "sha256:"+digest, nil)
+### CLEAN confirm: azurerm 0.28.0 checksums.txt digest attestation (2026-07-19T17:15:42Z)
+checksums.txt digest: b48c684c74f163dc478c95ccc37a2625f18250f5413d23ad99a8afdbedcf8a31
+HTTP status: 200
+<stdin>:13: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+n_attestations: 1
+bundle present today (non-null): True
+bundle_url present: True
+bundle_url: https://tmaproduction.blob.core.windows.net/attestations/245765621/2025/03/21/5745209.json.sn?se=202
+tlog integratedTime: 1742569342 = 2025-03-21T15:02:22Z

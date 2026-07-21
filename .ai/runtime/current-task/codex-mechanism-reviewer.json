@@ -1,0 +1,10 @@
+{
+  "task_id": "2026-07-19-003",
+  "slug": "vpp-fbe-feature-flags-401-rca",
+  "task_root": ".ai/tasks/2026-07-19-003_vpp-fbe-feature-flags-401-rca",
+  "agent": "codex-mechanism-reviewer",
+  "session_id": "codex-mechanism-reviewer",
+  "preflight_complete": true,
+  "status": "active",
+  "phase": "1"
+}

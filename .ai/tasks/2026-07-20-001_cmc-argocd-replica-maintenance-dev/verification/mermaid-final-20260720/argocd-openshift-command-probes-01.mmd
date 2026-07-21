@@ -1,0 +1,9 @@
+flowchart LR
+    I["Identity guard"] --> D["CR/HPA desired state"]
+    D --> W["Workload ready/available"]
+    W --> P["Pods and placement"]
+    P --> R["Resource and event evidence"]
+    R --> S["Component/application outcome"]
+    S --> V{"Stable through observation window?"}
+    V -->|yes| OK["Evidence supports success"]
+    V -->|no| ESC["Continue, challenge, escalate, or cannot verify"]
