@@ -19,6 +19,8 @@
 
 ## Tuesday 2026-07-21
 
+- An incident was assigned to us, a call from CMC was received, and this incident was re-assigned to our group: [INC0264497](https://eneco.service-now.com/esc?id=ticket&sys_id=246b4c90c3d20b10478b409dc0013146&table=incident&view=ess). Apparently, it's related to a certificate issue impacting VPP on production (frontend).
+
 ## Wednesday 2026-07-22
 
 ## Thursday 2026-07-23
