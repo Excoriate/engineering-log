@@ -1,0 +1,14 @@
+[
+  {
+    "kvSecretId": "https://vpp-appsec-p.vault.azure.net/secrets/vpp-eetpv-com",
+    "name": "vpp-prd-eetpv-com"
+  },
+  {
+    "kvSecretId": "https://vpp-appsec-p.vault.azure.net/secrets/wildcard-vpp-eneco-com",
+    "name": "wildcard-vpp-frontend-https"
+  },
+  {
+    "kvSecretId": "https://vpp-appsec-p.vault.azure.net/secrets/p-vpp-eneco-com",
+    "name": "vpp-frontend-https"
+  }
+]

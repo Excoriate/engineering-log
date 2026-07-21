@@ -1,0 +1,24 @@
+{
+  "task_id": "2026-07-21-002",
+  "slug": "vpp-eneco-com-cert-date-invalid-inc0264497",
+  "task_root": ".ai/tasks/2026-07-21-002_vpp-eneco-com-cert-date-invalid-inc0264497",
+  "allowed_external_paths": [
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/proofs/outputs/kv-cert-inventory-20260721.txt",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/output/rca.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/output/how-to-fix.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/output/how-to-recreate-this-rca.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/output/sre-toil-removal-proposal.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/troubleshooting.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/output/postmortem.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/output/adr-001-apex-tls-certificate-lifecycle.md",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/proofs/outputs/apex-wire-and-dns-20260721.txt",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/proofs/outputs/apex-cert-prefix-state-20260721.txt",
+    "/Users/alextorresruiz/Dropbox/@GITHUB/@oss/engineering-log/log/employer/eneco/02_on_call_shift/2026_july/2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/proofs/outputs/kv-firewall-state-20260721.txt"
+  ],
+  "external_writes": [],
+  "git_mutations": [],
+  "pending_adversarial_dispatches": [],
+  "runtime_attacks": [],
+  "gate_witnesses": []
+}

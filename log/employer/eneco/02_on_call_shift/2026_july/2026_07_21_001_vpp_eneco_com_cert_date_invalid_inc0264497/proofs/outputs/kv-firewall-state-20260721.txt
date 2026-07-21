@@ -1,0 +1,18 @@
+# vpp-appsec-p Key Vault firewall (networkAcls.ipRules) — operator whitelist lifecycle, 2026-07-21.
+# Persisted post-hoc (adversarial review F7). The whitelist open->import->close is a temporary,
+# reversible data-plane opening; the security-relevant claim is "restored to default-deny baseline".
+
+## Baseline (Step 0, BEFORE the fix) — 6 pre-existing rules that MUST be preserved:
+132.220.123.93/32   20.8.40.144/32   40.118.58.239/32   40.67.207.92/32   62.145.36.17/32   82.174.84.43/32
+# count = 6
+
+## Step 1 — operator IP added for the data-plane import:  84.86.32.39/32     (count -> 7)
+## Step 8 — operator IP removed (mandatory finally):       84.86.32.39/32 absent (count -> 6, baseline)
+## Cross-check turn — re-opened for the inventory read, then re-closed:        count -> 6
+## LIVE re-verification (post-teardown, ambient Reader account, 2026-07-21):
+$ az keyvault show -n vpp-appsec-p -g mcprd-rg-vpp-p-res --subscription f007df01-... \
+    --query "properties.networkAcls.ipRules[].value" -o tsv
+40.118.58.239/32   62.145.36.17/32   40.67.207.92/32   82.174.84.43/32   20.8.40.144/32   132.220.123.93/32
+# count = 6 ; 84.86.32.39/32 ABSENT
+
+=> KV firewall restored to its exact 6-IP default-deny baseline; operator IP removed; no drift. [A1 — this session]

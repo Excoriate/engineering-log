@@ -1,0 +1,28 @@
+# Apex vpp.eneco.com reachability + served leaf — 2026-07-21
+# Persisted post-hoc (adversarial review F1/F6): these were observed this session but not originally saved.
+
+## (a) PRE-FIX reachability from operator laptop (public DNS resolver) — host does NOT resolve publicly
+$ dig +short vpp.eneco.com A            ->  (empty)
+$ nc -vz -G 5 vpp.eneco.com 443         ->  nc: getaddrinfo: nodename nor servname provided, or not known
+$ echo | openssl s_client -connect vpp.eneco.com:443 -servername vpp.eneco.com
+   ->  BIO_lookup_ex: system lib ... nodename nor servname provided, or not known
+=> vpp.eneco.com is NOT resolvable from public DNS (operator laptop, 2026-07-21). [A1 — this session]
+   The apex listener is named `vpp-frontend-https-private`. [A1 — the NAME]
+   That the frontend is private-only (AVD/internal reach) is [A2 INFER] from the listener name + the
+   June antecedent PC4 (which proved private frontend 10.9.32.4 for the WILDCARD listeners, not the apex).
+
+## (b) POST-FIX wire handshake — run by operator (Thomas O'Brien) on AVD (Ubuntu-24.04 WSL), 2026-07-21
+##     Source: operator screenshot in the incident thread (SCR-20260721-ixbe). Transcribed verbatim:
+$ echo | openssl s_client -connect vpp.eneco.com:443 -servername vpp.eneco.com 2>/dev/null \
+    | openssl x509 -noout -subject -enddate -fingerprint -sha1
+subject=CN = *.vpp.eneco.com
+notAfter=Dec 30 23:59:59 2026 GMT
+sha1 Fingerprint=B8:20:2D:E2:0B:E7:FB:3F:B3:7E:6D:51:41:97:52:82:BF:33:BD:E7
+=> Apex serves the reused wildcard leaf, valid to 30 Dec 2026, thumb B8202DE2...BDE7. [A1 — operator-witnessed on AVD]
+   This is the ONLY definition of done; the AGW does not expose publicCertData for KV-referenced certs
+   (proofs/outputs/agw-served-certs-decoded.txt = "no publicCertData"), so control-plane cannot substitute.
+
+## NOT YET VERIFIED (adversarial review D2 — recommended before ServiceNow closure)
+#   A post-fix navigation that a valid cert alone does not prove: that vpp.eneco.com reaches the real
+#   VPP login/OAuth page and NOT /forbidden. /forbidden was seen only after "Continue (unsafe)" during the
+#   outage; it is most likely just the untrusted-channel landing, but an independent cause was not ruled out.

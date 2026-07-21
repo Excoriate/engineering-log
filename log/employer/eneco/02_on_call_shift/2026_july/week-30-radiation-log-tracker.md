@@ -19,7 +19,7 @@
 
 ## Tuesday 2026-07-21
 
-- An incident was assigned to us, a call from CMC was received, and this incident was re-assigned to our group: [INC0264497](https://eneco.service-now.com/esc?id=ticket&sys_id=246b4c90c3d20b10478b409dc0013146&table=incident&view=ess). Apparently, it's related to a certificate issue impacting VPP on production (frontend).
+- An incident was assigned to us, a call from CMC was received, and this incident was re-assigned to our group: [INC0264497](https://eneco.service-now.com/esc?id=ticket&sys_id=246b4c90c3d20b10478b409dc0013146&table=incident&view=ess). Apparently, it's related to a certificate issue impacting VPP on production (frontend). Intake: [2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497](./2026_07_21_001_vpp_eneco_com_cert_date_invalid_inc0264497/slack-intake.md) (`NET::ERR_CERT_DATE_INVALID`; hypothesis: apex `p-vpp-eneco-com` exp Jul 20, out of June wildcard rotation). It was indeed a P2, which I have to fix. 
 
 ## Wednesday 2026-07-22
 

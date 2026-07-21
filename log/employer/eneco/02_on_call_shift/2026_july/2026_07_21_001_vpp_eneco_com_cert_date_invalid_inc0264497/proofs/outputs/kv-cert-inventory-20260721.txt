@@ -1,0 +1,29 @@
+# vpp-appsec-p certificate inventory — captured 2026-07-21 (prod SP, control-plane read)
+# Command: az keyvault certificate list/show --vault-name vpp-appsec-p
+# Purpose: post-fix cross-check — confirm no other imminent expiries on the gateway; surface residue.
+
+NAME                          ENABLED  EXPIRES                     THUMB(SHA1)                               SUBJECT
+activationmfrr-eneco-signing  true     2027-03-16T23:59:59+00:00   3FFA6D7571A9CC4B3598A143293585BC1E23211A  CN=pv@eetpv.com (EET signing)
+d-vpp-eneco-com               true     2024-07-22T23:59:59+00:00   23884DBCC69758CE7B6DEC939CBCA6F85E7D7C20  CN=vpp.eneco.com        <- EXPIRED, still enabled
+esp-eet-vpp-prd-streaming     true     2023-07-20T23:59:59+00:00   01BE99A43E30CF920C104D7670B3EBA98E7BA7DD  CN=esp-eet-vpp-prd.streaming.eneco.com  <- EXPIRED
+p-vpp-eneco-com               true     2026-12-30T23:59:59+00:00   B8202DE20BE7FB3FB37E6D5141975282BF33BDE7  CN=*.vpp.eneco.com      <- APEX (FIXED 2026-07-21)
+prd-vpp-eneco-com             true     2023-07-21T23:59:59+00:00   AC86C4544D59627CC8E56FEFAE60BE56752AA92D  CN=vpp.eneco.com        <- EXPIRED
+prd1-vpp-eneco-com            true     2023-07-21T23:59:59+00:00   AC86C4544D59627CC8E56FEFAE60BE56752AA92D  CN=vpp.eneco.com        <- EXPIRED (dup thumb of prd-)
+tms-eetpv-com                 true     2025-09-07T23:59:59+00:00   01DCB72B0906C6CF121AA5F0C706BF6EB011F609  CN=tms.eetpv.com        <- EXPIRED
+vpp-2023-2024                 true     2024-07-22T23:59:59+00:00   23884DBCC69758CE7B6DEC939CBCA6F85E7D7C20  CN=vpp.eneco.com        <- EXPIRED (dup thumb of d-)
+vpp-eetpv-com                 true     2026-11-29T23:59:59+00:00   D590C44C783F3F6E8756B9BAD1D7E2500831F4F2  CN=vpp.prd.eetpv.com    <- AGW-bound (eetpv listener)
+vpp-eneco-com                 true     2024-07-22T23:59:59+00:00   23884DBCC69758CE7B6DEC939CBCA6F85E7D7C20  CN=vpp.eneco.com        <- EXPIRED
+vpp-p                         true     2026-12-15T04:38:26+00:00   0F713DC5C98EBB94379FFF75E759D7A3205F8DCE  CN=test.-mc.vpp.eneco.com  <- test cert, unbound
+wildcard-vpp-eneco-com        true     2026-12-30T23:59:59+00:00   B8202DE20BE7FB3FB37E6D5141975282BF33BDE7  CN=*.vpp.eneco.com      <- AGW-bound (4 subdomains); same leaf now reused by apex
+
+# AGW vpp-ag-p listener -> ssl-cert -> KV object (control-plane, 2026-07-21):
+#   vpp.eneco.com                       -> vpp-frontend-https        -> p-vpp-eneco-com      (30 Dec 2026)  FIXED
+#   agg/apollo/gurobi/flex-trade-opt    -> wildcard-vpp-frontend-https -> wildcard-vpp-eneco-com (30 Dec 2026)
+#   vpp.prd.eetpv.com                   -> vpp-prd-eetpv-com         -> vpp-eetpv-com        (29 Nov 2026)
+#
+# FINDINGS:
+# 1. All three AGW-bound certs are valid. Nearest expiry = vpp-eetpv-com, 29 Nov 2026 (~4 months). No imminent repeat.
+# 2. Governance residue: 8 expired certs still enabled=true; five are CN=vpp.eneco.com apex certs under 5 different
+#    object names (vpp-eneco-com, prd-vpp-eneco-com, prd1-vpp-eneco-com, d-vpp-eneco-com, vpp-2023-2024).
+#    The apex certificate has been re-created under a NEW name almost every renewal = naming sprawl.
+#    This sprawl is why "which object serves the apex, and when does it expire" was unclear and got deferred in June.

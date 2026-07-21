@@ -1,0 +1,16 @@
+# AGW served-cert decode (control-plane publicCertData) — Tue Jul 21 07:06:36 UTC 2026
+# gateway=vpp-ag-p sub=f007df01-9295-491c-b0e9-e3981f2df0b0  identity=Alex.Torres@eneco.com
+
+############ ssl-cert: vpp-frontend-https ############
+keyVaultSecretId: https://vpp-appsec-p.vault.azure.net/secrets/p-vpp-eneco-com
+(no publicCertData on AGW)
+
+############ ssl-cert: wildcard-vpp-frontend-https ############
+keyVaultSecretId: https://vpp-appsec-p.vault.azure.net/secrets/wildcard-vpp-eneco-com
+(no publicCertData on AGW)
+
+############ ssl-cert: vpp-prd-eetpv-com ############
+keyVaultSecretId: https://vpp-appsec-p.vault.azure.net/secrets/vpp-eetpv-com
+(no publicCertData on AGW)
+
+=== NOW (UTC): Tue Jul 21 07:06:36 UTC 2026 ===

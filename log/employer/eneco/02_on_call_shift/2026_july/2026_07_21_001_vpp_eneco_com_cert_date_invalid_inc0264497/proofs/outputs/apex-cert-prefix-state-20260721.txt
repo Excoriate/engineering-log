@@ -1,0 +1,30 @@
+# PRE-FIX state of KV object p-vpp-eneco-com — captured 2026-07-21 BEFORE the fix (this session).
+# Persisted post-hoc (adversarial review F2/D7): observed this session but not originally saved.
+#
+# CRITICAL: the fix imported a NEW version INTO this SAME object. A data-plane read of p-vpp-eneco-com
+# AFTER the fix returns the POST-fix cert (B8202DE2..., 30 Dec 2026). THIS capture is the ONLY record of
+# the expired state — a cold-replay (how-to-recreate steps 3-4) run today reads the fixed cert, not this.
+
+## (a) Step-2 baseline data-plane read (prod SP), before import:
+$ az keyvault certificate show --vault-name vpp-appsec-p --name p-vpp-eneco-com \
+    --query "{thumb:x509ThumbprintHex, exp:attributes.expires, enabled:attributes.enabled}" -o json
+{
+  "enabled": true,
+  "exp": "2026-07-20T23:59:59+00:00",
+  "thumb": "8332A22FC7BD77D3473204F822FEAD84D154E098"
+}
+
+## (b) Portal "Listener TLS certificates" blade — operator (Thomas O'Brien) screenshot, 2026-07-21:
+#   Certificate name : vpp-frontend-https
+#   Type             : Key Vault
+#   Key vault ID     : https://vpp-appsec-p.vault.azure.net/secrets/p-vpp-eneco-...
+#   Status           : Expired
+#   Expiry           : 20 Jul 2026
+#   SHA-1 Thumbprint : 8332A22FC7BD77D3473204F822FEAD84D1...  (truncated in blade; full = ...54E098 per (a))
+#   Subject CN       : vpp.eneco.com
+#   Issuer CN        : Trust Provider B.V. TLS RSA CA G1
+#   SAN              : vpp.eneco.com
+#   Associated listener : vpp-frontend-https-private
+
+=> Root-cause object served a single-host CN/SAN=vpp.eneco.com leaf, EXPIRED 20 Jul 2026,
+   thumb 8332A22F...54E098. [A1 — this session, pre-fix; two independent surfaces (data-plane + portal)]

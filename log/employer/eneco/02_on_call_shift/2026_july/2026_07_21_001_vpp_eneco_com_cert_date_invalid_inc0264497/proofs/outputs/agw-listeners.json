@@ -1,0 +1,44 @@
+[
+  {
+    "host": "agg.vpp.eneco.com",
+    "hostNames": [],
+    "listener": "agg-vpp-frontend-https-private",
+    "sslCert": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/Microsoft.Network/applicationGateways/vpp-ag-p/sslCertificates/wildcard-vpp-frontend-https"
+  },
+  {
+    "host": "apollo.vpp.eneco.com",
+    "hostNames": [],
+    "listener": "apollo-https-private",
+    "sslCert": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/Microsoft.Network/applicationGateways/vpp-ag-p/sslCertificates/wildcard-vpp-frontend-https"
+  },
+  {
+    "host": "flex-trade-optimizer.vpp.eneco.com",
+    "hostNames": [],
+    "listener": "flex-trade-optimizer-https-private",
+    "sslCert": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/Microsoft.Network/applicationGateways/vpp-ag-p/sslCertificates/wildcard-vpp-frontend-https"
+  },
+  {
+    "host": "gurobi.vpp.eneco.com",
+    "hostNames": [],
+    "listener": "gurobi-vpp-frontend-https-private",
+    "sslCert": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/Microsoft.Network/applicationGateways/vpp-ag-p/sslCertificates/wildcard-vpp-frontend-https"
+  },
+  {
+    "host": "gurobi.vpp.eneco.com",
+    "hostNames": [],
+    "listener": "gurobi-vpp-frontend-https-public",
+    "sslCert": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/Microsoft.Network/applicationGateways/vpp-ag-p/sslCertificates/wildcard-vpp-frontend-https"
+  },
+  {
+    "host": "vpp.eneco.com",
+    "hostNames": [],
+    "listener": "vpp-frontend-https-private",
+    "sslCert": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/Microsoft.Network/applicationGateways/vpp-ag-p/sslCertificates/vpp-frontend-https"
+  },
+  {
+    "host": "vpp.prd.eetpv.com",
+    "hostNames": [],
+    "listener": "vpp-eetpv-frontend-https-private",
+    "sslCert": "/subscriptions/f007df01-9295-491c-b0e9-e3981f2df0b0/resourceGroups/mcprd-rg-vpp-p-res/providers/Microsoft.Network/applicationGateways/vpp-ag-p/sslCertificates/vpp-prd-eetpv-com"
+  }
+]
